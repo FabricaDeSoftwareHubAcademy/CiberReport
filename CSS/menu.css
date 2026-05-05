@@ -1,5 +1,11 @@
 *{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+#sideBar{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--cor-azul-primaria);
+    height: 100vh;
+    width: 20rem;
 }
