@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SideBar</title>
     <!-- scripts -->
-    <script src="../JAVASCRIPT/menu.js"></script>
+    <script src="../JAVASCRIPT/menu.js" defer></script>
     <!-- links -->
     <link rel="stylesheet" href="../CSS/reset.css">
     <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/menuSuperior.css">
     <link rel="stylesheet" href="../CSS/menu.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-ref  errer" />
 </head>
 <body>
     <nav id="sideBar">
         <div class="sidebar_content">
             <div class="logo">
-                <!-- <div class="logo-nome">
+                <div class="logo-nome">
                     <img src="../IMG/image-removebg-preview.svg" alt="">
-                </div>
-                <div class="logo-security">
                     <img src="../IMG/Logo Baikal.svg" alt="">
-                </div> -->
+                </div>
                 <div class="logo-imagem">
                     <img src="../IMG/Logo Baikal-1.svg" alt="">
                 </div>
+
             </div>
             <ul id="side_itens">
                 <li class="side_item">
@@ -39,7 +39,7 @@
                         <span class="item_description">Pentest</span>
                     </a>
                 </li>
-                <!-- <li class="side_item">
+                <li class="side_item">
                     <a href="#">
                         <i class="fa-solid fa-list-check"></i>
                         <span class="item_description">Vulnerabilidades</span>
@@ -68,7 +68,7 @@
                         <i class="fa-solid fa-users"></i>
                         <span class="item_description">Usuários</span>
                     </a>
-                </li> -->
+                </li>
                 <li class="side_item">
                     <a href="#">
                         <i class="fa-solid fa-book-open"></i>
@@ -89,7 +89,7 @@
                 </li>
             </ul>
             <button id="open_btn">
-                <i class="fa-solid fa-chevron-right" class="open_btn_icon"></i>
+                <i class="fa-solid fa-chevron-right" id="open_btn_icon"></i>
             </button>
         </div>
         <div id="logout">
@@ -101,8 +101,25 @@
             </button>
         </div>
     </nav>
-    <main>
-        <P>TEXO</P>
-    </main>
+    <header>
+        <div id="menu-superior">
+            <h1>Titulo da pagina</h1>
+            <div class="input-container">
+                <button>
+                    <i class="fa-brands fa-sistrix"></i>
+                </button>
+                <input type="text" placeholder="">
+            </div>
+
+            <div class="perfis">
+                    <i class="fa-regular fa-bell"></i>
+                <img class="imagem-usuario" src="../IMG/fotoDePerfil.jpg" alt="">
+                    <div class="description-user">
+                        <p>Marcos antonio</p>
+                        <p>Gerente</p>
+                    </div>
+            </div>
+        </div>
+    </header>
 </body>
 </html>
