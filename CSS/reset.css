@@ -7,7 +7,8 @@
 
 /* 2. Remove default margin */
 *:not(dialog) {
-    margin: 0;
+    padding: 0; /* adicionei o reset do padding */
+    margin: 0; 
 }
 
 /* 3. Enable keyword animations */
@@ -20,6 +21,8 @@
 body {
     /* 4. Increase line-height */
     line-height: 1.5;
+    min-height: 100vh; /*adicionei altura minima de 100vh para pegar o valor inteiro no eixo y*/
+    display: flex;
     /* 5. Improve text rendering */
     -webkit-font-smoothing: antialiased;
 }
