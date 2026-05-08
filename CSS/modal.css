@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
+body {
+    background-color: #F1F1F1;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    color: #515A6E;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+#abrir-modal:checked ~ .modal {
+    display: flex;
+}
+
+
+.box {
+    background-color:  #FFFFFF;
+    width: 70%;
+    max-width: 900px;
+    border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.10);
+}
+
+
+.area-titulo {
+    background-color: #003F6B;
+    padding: 2.4rem 3.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:  #FFFFFF;
+    border-radius: 16px 16px 0px 0px;
+}
+
+.titulo-flex { 
+    display: flex; 
+    align-items: center; 
+    gap: 1.6rem; 
+}
+
+.titulo-modal h2 { 
+    font-size: 2.2rem; 
+    margin: 0; 
+}
+
+
+.titulo-modal p { 
+    font-size: 1.2rem; 
+    opacity: 0.8; 
+    margin: 0; 
+}
+
+.fechar { 
+    cursor: pointer; 
+    font-size: 2rem; 
+}
+
+
+.corpo-form {
+    padding: 2.4rem 3.2rem;
+}
+
+.secao-label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #003F6B;
+    border-bottom: 1px solid  #E5E5E4;
+    padding-bottom: 0.4rem;
+    margin: 2.4rem 0 1.6rem;
+}
+
+.secao-label h3 { 
+    font-size: 1.6rem;
+    margin: 0; 
+}
+
+.form-row {
+    display: flex;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+}
+
+.area-dados-cliente {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.area-dados-cliente label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+
+/* oiroeiutoweutioeuro */
+.container-tel {
+    /* padding: 0.8rem; */
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* problema com a posição do ícone */
+.container-tel input {
+    padding: 0.8rem 0.8rem 0.8rem 1rem;
+    border: 1px solid  #d6d6d5;
+    border-radius: 4px;
+    font-size: 1.4rem;
+}
+
+.container{
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+/* oiroeiutoweutioeuro */
+
+
+
+.input-wrapper {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #444;
+    border-radius: 16px;
+}
+
+.input-wrapper i{
+    color: #fff;
+    cursor: pointer;
+}
+
+.input-wrapper input{
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+}
+
+.input-wrapper input:focus-visible {
+    outline: none;
+}
+
+/* trabalhando aqui */
+.area-dados-cliente input {
+    padding: 0.8rem;
+    border: 1px solid  #d6d6d5;
+    border-radius: 4px;
+    font-size: 1.4rem;
+}
+
+.area-numero {
+    flex: 0.3; 
+    min-width: 80px;
+}
+
+
+.botoes-form {
+    background-color:  #FFFFFF;
+    padding: 1.6rem 3.2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.6rem;
+    border-radius: 0px 0px 16px 16px;
+    border-top: 1px solid #E5E5E4;
+}
+
+.btn-cancelar {
+    background-color:  #FFFFFF;
+    color: #003F6B;
+    padding: 0.8rem  2.4rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    border: 1px solid  #003F6B;
+}
+
+.btn-salvar {
+    background-color: #43B75D;
+    color: #FFFFFF;
+    padding: 0.8rem 2.4rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-abrir-sistema {
+    background-color:  #006AB5;
+    color:  #FFFFFF;
+    padding: 1.6rem 3.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+
+
+
