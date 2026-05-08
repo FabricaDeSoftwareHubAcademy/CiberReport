@@ -1,17 +1,15 @@
-#menu-superior{
+#menu-superior {
     display: flex;
-    position: fixed;
-    justify-content: space-around;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    justify-content: space-between;
     align-items: center;
-    height: 100px;
+    height: var(--altura-menu-superior);
     background-color: var(--cor-cinza-terciario);
-    width: auto;
-    overflow: hidden;
-    z-index: -1;
-    left: 82px;
-    right: 0;
 }
-.input-container{
+
+.input-container {
     display: flex;
     background-color: aliceblue;
     width: 280px;
@@ -20,33 +18,26 @@
     align-items: center;
     justify-content: center;
 }
-.input-container input{
+
+.input-container input {
     padding: 4px;
     margin: 2px;
 }
-.imagem-usuario{
+
+.imagem-usuario {
     height: 70px;
     width: 70px;
     object-fit: cover;
     border-radius: 50%;
 }
-.perfis{
+
+.perfis {
     display: flex;
     align-items: center;
     gap: 20px;
     text-align: center;
 }
-/* Estado padrão (sidebar fechado) */
-/* #menu-superior {
-    left: 82px;
-    right: 0;
-    width: auto;
-    transition: transform 0.3s ease;
-} */
 
-/* Quando sidebar está aberto */
-/* #sideBar.open-sidebar ~ header #menu-superior,
-body.open-sidebar #menu-superior {
-    transform: ;
-    left: 15%;
-} */
+#menu-superior h1 {
+    padding-left: var(--espaco-lg);
+}

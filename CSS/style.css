@@ -101,6 +101,13 @@ html {
     --transicao-base: 250ms ease;
     --transicao-devagar: 400ms ease;
 
+    /* --- Sidebar --- */
+    --sidebar-fechado: 5%;
+    --sidebar-aberto: 15%;
+
+    /* --- Menu superior --- */
+    --altura-menu-superior: 100px;
+
 }
 
 
@@ -114,4 +121,11 @@ body {
     color: var(--cor-texto-primario);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
