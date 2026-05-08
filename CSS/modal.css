@@ -1,0 +1,20 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--fonte-texto);
+    font-weight: var(--peso-normal);
+    line-height: 1.5;
+    background-color: var(--cor-fundo-pagina);
+    color: var(--cor-texto-primario);
+}
+.modal{
+    position: fixed;
+    top: 10px;
+    width: 99%;
+    height: 100%;
+    background-color: var(--cor-fundo-pagina);
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    display: flex;
+}
