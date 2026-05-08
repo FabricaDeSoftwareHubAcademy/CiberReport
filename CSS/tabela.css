@@ -8,12 +8,13 @@ table {
     overflow: hidden;
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
-    box-shadow: var(--sombra-xs);
+    margin: auto;
+    margin-top: 10px;
 }
 
 th,
 td {
-    padding: var(--espaco-md);
+    padding: var(--espaco-sm);
     text-align: left;
     vertical-align: middle;
     border-bottom: 1px solid var(--cor-borda-padrao);
@@ -28,7 +29,9 @@ th {
 }
 
 tbody tr:hover {
-    background-color: var(--cor-fundo-pagina);
+    background-color: var(--cor-cinza-hover);
+    box-shadow: var(--sombra-sm);
+    transition: var(--transicao-rapida);
 }
 
 td {
@@ -76,7 +79,6 @@ td {
     color: var(--cor-vermelho-destaque);
 }
 
-.acoes svg {
-    width: 1.8rem;
-    height: 1.8rem;
+.acoes .btn-editar:hover {
+    color: var(--cor-amarelo);
 }
