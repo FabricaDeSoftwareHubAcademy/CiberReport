@@ -9,16 +9,13 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="CSS/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <script src="JS/modal.js"></script>
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
 <body>
-    <input type="checkbox" id="abrir-modal" style="display: none;">
+    <input type="checkbox" id="abrir-modal-edicao" style="display: none;">
 
-    <label for="abrir-modal" class="btn-abrir-sistema">Novo Cadastro</label>
+    <label for="abrir-modal" class="btn-abrir-sistema-edicao"><i class="fa-solid fa-pen-to-square"></i></label>
 
     <div class="modal">
         <div class="box">
@@ -26,14 +23,14 @@
                 <div class="titulo-flex">
                     <img src="IMG/icone_empresa.svg" alt="Empresa" class="icone-topo">
                     <div class="titulo-modal">
-                        <h2>Cadastro de Empresa</h2>
+                        <h2>Edição de Cadastro</h2>
                         <p>Informações da empresa contratante e do responsável técnico</p>
                     </div>
                 </div>
                 <label for="abrir-modal" class="fechar"><i class="fa-solid fa-xmark"></i></label>
             </div>
 
-            <form action="" class="div-form">
+            <form action="">
                 <div class="corpo-form">
 
                     <div class="secao-label">
@@ -44,7 +41,7 @@
                     <div class="form-row">
                         <div class="area-dados-cliente">
                             <label>Nome da Empresa</label>
-                            <input type="text" placeholder="Digite o nome da Empresa">
+                            <input type="text" placeholder="Tech Solutions">
                         </div>
                         <div class="area-dados-cliente-tel">
                             <label>Telefone</label>
@@ -57,7 +54,7 @@
                             <label>E-mail</label>
                             <div class="campo-email">
                                 <i class="fa-solid fa-envelope"></i>
-                                <input type="email" placeholder="email@.com">
+                                <input type="email" placeholder="andre@gmail.com">
                             </div>
                         </div>
                         <div class="area-dados-cliente">
@@ -67,36 +64,36 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="area-dados-cliente area-numero">
-                            <label>CEP</label>
-                            <input type="text" id="cep" placeholder="12345-678">
+                        <div class="area-dados-cliente">
+                            <label>Estado</label>
+                            <input type="text" placeholder="São Paulo">
                         </div>
                         <div class="area-dados-cliente">
-                            <label>Endereço</label>
-                            <input type="text" id="endereco" placeholder="Digite o endereço">
-                        </div>
-                        <div class="area-dados-cliente area-numero">
-                            <label>Número</label>
-                            <input type="text" placeholder="0000">
+                            <label>Cidade</label>
+                            <input type="text" placeholder="Osasco">
                         </div>
                         <div class="area-dados-cliente">
-                            <label>Complemento</label>
-                            <input type="text" placeholder="Complemento">
+                            <label>Bairro</label>
+                            <input type="text" placeholder="Bairro da Liberdade">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="area-dados-cliente">
-                            <label>Bairro</label>
-                            <input type="text" id="cidade" placeholder="Digite o bairro">
+                            <label>Endereço</label>
+                            <input type="text" placeholder="Rua São Paulo">
+                        </div>
+                        <div class="area-dados-cliente area-numero">
+                            <label>Número</label>
+                            <input type="text" placeholder="1080">
                         </div>
                         <div class="area-dados-cliente">
-                            <label>Cidade</label>
-                            <input type="text" id="cidade" placeholder="Selecione uma Cidade">
+                            <label>Complemento</label>
+                            <input type="text" placeholder="Complemento">
                         </div>
-                        <div class="area-dados-cliente">
-                            <label>Estado</label>
-                            <input type="text" id="estado" placeholder="Selecione um Estado">
+                        <div class="area-dados-cliente area-numero">
+                            <label>CEP</label>
+                            <input type="text" placeholder="12345-678">
                         </div>
                     </div>
 
@@ -108,7 +105,7 @@
                     <div class="form-row">
                         <div class="area-dados-cliente">
                             <label>Nome do Responsável</label>
-                            <input type="text" placeholder="Digite o nome">
+                            <input type="text" placeholder="André Freitas">
                         </div>
                         <div class="area-dados-cliente-tel">
                             <label>Telefone</label>
@@ -121,12 +118,12 @@
                             <label>E-mail</label>
                             <div class="campo-email">
                                 <i class="fa-solid fa-envelope"></i>
-                                <input type="email" placeholder="email@.com">
+                                <input type="email" placeholder="andre@gmail.com">
                             </div>
                         </div>
                         <div class="area-dados-cliente">
                             <label>CPF</label>
-                            <input type="text" placeholder="000.000.000-00">
+                            <input type="text" placeholder="123.456.789-01">
                         </div>
                     </div>
                 </div>
@@ -138,12 +135,5 @@
             </form>
         </div>
     </div>
-
-
-
-
-
 </body>
-
-
 </html>

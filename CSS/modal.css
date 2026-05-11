@@ -31,9 +31,6 @@ body {
     display: flex;
 }
 
-#abrir-modal-edicao:checked ~ .modal{
-    display:flex ;
-}
 
 
 .box {
@@ -227,12 +224,15 @@ body {
 
 .botoes-form {
     background-color:  #FFFFFF;
-    padding: 1.6rem 3.2rem;
+    padding: 1.6rem 2.4rem 2.4rem 2.4rem;
     display: flex;
     justify-content: flex-end;
     gap: 1.6rem;
     border-radius: 0px 0px 16px 16px;
     border-top: 1px solid #E5E5E4;
+    border-bottom: 1px solid  #E5E5E4;
+    padding-bottom: 2.4rem;
+    margin: 2.4rem 0 0rem;
 }
 
 .btn-cancelar {
