@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import 'reset.css';
-@import 'menu.css';
+@import './reset.css';
+@import './menu-lateral.css';
+@import './menu-superior.css';
+
 
 
 
@@ -35,6 +37,7 @@ html {
     --cor-cinza-primario: #808080;
     --cor-cinza-secundario: #C0C0C0;
     --cor-cinza-terciario: #E5E5E4;
+    --cor-cinza-hover: #f8f8f8;
 
     /* --- Baikal (Ciano) --- */
     --cor-baikal-1: #30D9E4;
@@ -122,7 +125,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+main{
+    margin: var(--espaco-md);
+}
 .main-content {
     flex: 1;
     min-width: 0;

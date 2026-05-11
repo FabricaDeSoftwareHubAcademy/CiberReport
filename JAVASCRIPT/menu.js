@@ -9,3 +9,9 @@ const submenu = document.getElementById('submenu');
 document.getElementById('dropdown').addEventListener('click', function(){
     submenu.classList.toggle('open_submenu');
 })
+
+const dropdown = document.getElementById("dropdown")
+
+document.getElementById('dropdown').addEventListener('click', function(){
+    dropdown.classList.toggle('open_dropdown');
+})

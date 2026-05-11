@@ -6,12 +6,12 @@
     justify-content: space-between;
     align-items: center;
     height: var(--altura-menu-superior);
-    background-color: var(--cor-cinza-terciario);
+    background-color: var(--cor-branco-primario);
 }
 
 .input-container {
     display: flex;
-    background-color: var(--cor-branco-primario);
+    background-color: var(--cor-cinza-terciario);
     width: 280px;
     height: 40px;
     border-radius: 20px;
@@ -65,4 +65,7 @@
     display: flex;
     font-size: 20px;
     color: var(--cor-azul-destaques);
+}
+.description-user{
+    padding-right: var(--espaco-md);
 }
