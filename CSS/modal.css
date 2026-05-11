@@ -9,8 +9,8 @@ body {
     margin: 0;
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: 30px;
+    align-items: flex-start;
 }
 
 
@@ -31,19 +31,23 @@ body {
     display: flex;
 }
 
+#abrir-modal-edicao:checked ~ .modal{
+    display:flex ;
+}
+
 
 .box {
     background-color:  #FFFFFF;
-    width: 70%;
-    max-width: 900px;
-    border-radius: 20px;
+    width: 62%;
+    max-width: 760px;
+    border-radius: 19px;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.10);
 }
 
 
 .area-titulo {
     background-color: #003F6B;
-    padding: 2.4rem 3.2rem;
+    padding: 1.6rem 2.4rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,13 +62,13 @@ body {
 }
 
 .titulo-modal h2 { 
-    font-size: 2.2rem; 
+    font-size: 1.8rem; 
     margin: 0; 
 }
 
 
 .titulo-modal p { 
-    font-size: 1.2rem; 
+    font-size: 1rem; 
     opacity: 0.8; 
     margin: 0; 
 }
@@ -76,7 +80,7 @@ body {
 
 
 .corpo-form {
-    padding: 2.4rem 3.2rem;
+    padding: 1.6rem 2.4rem;
 }
 
 .secao-label {
@@ -96,8 +100,8 @@ body {
 
 .form-row {
     display: flex;
-    gap: 1.6rem;
-    margin-bottom: 1.6rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .area-dados-cliente {
@@ -113,30 +117,76 @@ body {
 }
 
 
-/* oiroeiutoweutioeuro */
-.container-tel {
-    /* padding: 0.8rem; */
-    font-size: 1.4rem;
+
+
+.area-dados-cliente-tel {
+    flex: 0.75;
+    display: flex;
+    flex-direction: column;
+}
+.area-dados-cliente-tel label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+.campo-telefone {
     display: flex;
     align-items: center;
-    gap: 5px;
-}
-
-/* problema com a posição do ícone */
-.container-tel input {
-    padding: 0.8rem 0.8rem 0.8rem 1rem;
-    border: 1px solid  #d6d6d5;
+    border: 1px solid #d6d6d5;
     border-radius: 4px;
-    font-size: 1.4rem;
+    padding: 0 0.8rem;
+    background-color: #FFFFFF;
 }
 
-.container{
-    padding: 8px 12px;
+.campo-telefone i {
+    color: #808695;
+    font-size: 1.2rem;
+}
+
+.campo-telefone input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.6rem;
+    font-size: 1.2rem;
+    background-color: transparent;
+}
+
+
+
+
+.area-dados-cliente-email {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.area-dados-cliente-email label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+.campo-email {
     display: flex;
     align-items: center;
-    gap: 6px;
+    border: 1px solid #d6d6d5;
+    border-radius: 4px;
+    padding: 0 0.8rem;
+    background-color: #FFFFFF;
 }
-/* oiroeiutoweutioeuro */
+
+.campo-email i {
+    color: #808695;
+    font-size: 1.2rem;
+}
+
+.campo-email input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.6rem;
+    font-size: 1.2rem;
+    background-color: transparent;
+}
 
 
 
@@ -161,16 +211,12 @@ body {
     font-size: 20px;
 }
 
-.input-wrapper input:focus-visible {
-    outline: none;
-}
 
-/* trabalhando aqui */
 .area-dados-cliente input {
-    padding: 0.8rem;
+    padding: 0.6rem 0.8rem;
     border: 1px solid  #d6d6d5;
     border-radius: 4px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 .area-numero {
@@ -192,21 +238,23 @@ body {
 .btn-cancelar {
     background-color:  #FFFFFF;
     color: #003F6B;
-    padding: 0.8rem  2.4rem;
+    padding: 0.6rem  1.8rem;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     border: 1px solid  #003F6B;
+    font-size: 1.2rem;
 }
 
 .btn-salvar {
     background-color: #43B75D;
     color: #FFFFFF;
-    padding: 0.8rem 2.4rem;
+    padding: 0.6rem 1.8rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 1.2rem;
 }
 
 .btn-abrir-sistema {
@@ -217,7 +265,91 @@ body {
     cursor: pointer;
 }
 
+.btn-abrir-sistema-edicao {
+    align-items: center ;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
 
 
 
+
+@media screen and (max-width: 768px) {
+
+    .box {
+        width: 95%;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    .area-titulo {
+        padding: 1.2rem;
+    }
+
+    .titulo-modal h2 {
+        font-size: 1.5rem;
+    }
+
+    .titulo-modal p {
+        font-size: 0.9rem;
+    }
+
+    .icone-topo {
+        width: 45px;
+    }
+
+    .corpo-form {
+        padding: 1.2rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .area-dados-cliente{
+        width: 100%;
+    }
+
+    .area-dados-cliente-tel{
+        width: 100%;
+    }
+
+    .area-dados-cliente-email {
+        width: 100%;
+    }
+
+    .area-dados-cliente input{
+        font-size: 1.1rem;
+        padding: 0.7rem;
+    }
+
+    .campo-telefone input{
+        font-size: 1.1rem;
+        padding: 0.7rem;
+    }
+
+    .campo-email input {
+        font-size: 1.1rem;
+        padding: 0.7rem;
+    }
+
+    .secao-label h3 {
+        font-size: 1.4rem;
+    }
+
+    .botoes-form {
+        padding: 1.2rem;
+        flex-direction: column;
+    }
+
+    .btn-cancelar{
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-salvar {
+        width: 100%;
+        text-align: center;
+    }
+}
