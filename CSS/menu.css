@@ -149,6 +149,8 @@
     text-overflow: ellipsis;
     font-size: var(--fonte-apoio);
     transition: width 0.6s;
+    padding-left: 3px;
+
 }
 
 #sideBar.open-sidebar {
