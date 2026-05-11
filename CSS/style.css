@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-@import 'reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import './reset.css';
+@import './menu-lateral.css';
+@import './menu-superior.css';
 
 
 
@@ -34,6 +37,7 @@ html {
     --cor-cinza-primario: #808080;
     --cor-cinza-secundario: #C0C0C0;
     --cor-cinza-terciario: #E5E5E4;
+    --cor-cinza-hover: #f8f8f8;
 
     /* --- Baikal (Ciano) --- */
     --cor-baikal-1: #30D9E4;
@@ -100,6 +104,13 @@ html {
     --transicao-base: 250ms ease;
     --transicao-devagar: 400ms ease;
 
+    /* --- Sidebar --- */
+    --sidebar-fechado: 5%;
+    --sidebar-aberto: 15%;
+
+    /* --- Menu superior --- */
+    --altura-menu-superior: 100px;
+
 }
 
 
@@ -113,4 +124,13 @@ body {
     color: var(--cor-texto-primario);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+main{
+    margin: var(--espaco-md);
+}
+.main-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
