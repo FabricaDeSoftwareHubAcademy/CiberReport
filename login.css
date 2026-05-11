@@ -115,35 +115,97 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.hacker img{
-    transform: translateY(40%);
-    bottom: 35%;
-    padding-left: 17%;
-    width: 60%;
-    height: 70%;
+*{
+    margin: 0%;
 }
 
-/* .logo-report img{
-    width: 50%;
-} */
+.cyber-report img{
+    width: 60%;
+    height: 40%;
+}
 
-.container{
+.hacker{
+    position: absolute;
+    width: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-report{
+    padding-left: 10%;
+}
+
+.cyber-report{
+    justify-content: center;
     display: flex;
+    flex-direction: column;
+    padding-left: 10%;
+}
+
+.hackers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hackers img{
+    width: 50%;
+    height: 60%;
+}
+
+.principal{
+    z-index: 3;
+    padding-left: 14.4%;
+    opacity: 100%;
+    width: 55%;
+    left: 50%;
+}
+
+
+.sombra-esq{
+    z-index: 1;
+    top: 20%;
+    opacity: 0.18;
+    filter: blur(2px);
+}
+
+.sombra-dir{
+    z-index: 1;
+    top: 20%;
+    opacity: 0.18;
+    filter: blur(2px);
+    
+}
+
+.login-topo{
+    margin-bottom: 25px;
+}
+
+.logo-baikal{
+    width: 250px;
+}
+
+.geral{
     width: 100%;
     height: 100vh;
+    display: flex;
 }
 
+/* .container{
+    display: flex;
+} */
+
 .lado-esq{
-    width: 63%;
+    width: 65%;
     background: #0d1b3d;
-    position: relative;
     overflow: hidden;
 }
 
 .lado-dir{
-    width: 36%;
+    width: 35%;
     background: #f4f4f4;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -161,6 +223,7 @@ body {
     text-align: center;
     margin-bottom: 30px;
     color: #1c2745;
+    font-size: 35px;
 }
 
 .login-box form{
