@@ -87,6 +87,4 @@ git commit -m "agora foi"
 git commit -m "nao sei oque fiz"
 ```
 
-Commits com mensagens genéricas **serão pedidos para refazer** antes do merge.
-
 ---
