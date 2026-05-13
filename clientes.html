@@ -9,131 +9,132 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="CSS/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    <script src="JS/modal.js"></script>
+    <script src="JS/modal.js" defer></script>
+    <!-- <script src="JS/clientes.js" defer></script> -->
 </head>
 
 <body>
     <input type="checkbox" id="abrir-modal" style="display: none;">
 
-    <label for="abrir-modal" class="btn-abrir-sistema">Novo Cadastro</label>
+    <label for="abrir-modal" class="modal-clientes-btn-abrir-sistema">Novo Cadastro</label>
 
-    <div class="modal">
-        <div class="box">
-            <div class="area-titulo">
-                <div class="titulo-flex">
-                    <img src="IMG/icone_empresa.svg" alt="Empresa" class="icone-topo">
-                    <div class="titulo-modal">
+    <div class="modal-clientes-modal">
+        <div class="modal-clientes-box">
+            <div class="modal-clientes-area-titulo">
+                <div class="modal-clientes-titulo-flex">
+                    <img src="IMG/icone_empresa.svg" alt="Empresa" class="modal-clientes-icone-topo">
+                    <div class="modal-clientes-titulo-modal">
                         <h2>Cadastro de Empresa</h2>
                         <p>Informações da empresa contratante e do responsável técnico</p>
                     </div>
                 </div>
-                <label for="abrir-modal" class="fechar"><i class="fa-solid fa-xmark"></i></label>
+                <label for="abrir-modal" class="modal-clientes-fechar"><i class="fa-solid fa-xmark"></i></label>
             </div>
 
-            <form action="" class="div-form">
-                <div class="corpo-form">
+            <form action="" class="modal-clientes-div-form">
+                <div class="modal-clientes-corpo-form">
 
-                    <div class="secao-label">
+                    <div class="modal-clientes-secao-label">
                         <i class="fa-solid fa-file-lines"></i>
                         <h3>Dados da Empresa</h3>
                     </div>
 
-                    <div class="form-row">
-                        <div class="area-dados-cliente">
+                    <div class="modal-clientes-form-row">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Nome da Empresa</label>
                             <input type="text" placeholder="Digite o nome da Empresa">
                         </div>
-                        <div class="area-dados-cliente-tel">
+                        <div class="modal-clientes-area-dados-cliente-tel">
                             <label>Telefone</label>
-                            <div class="campo-telefone">
+                            <div class="modal-clientes-campo-telefone">
                                 <i class="fa fa-phone"></i>
                                 <input type="text" placeholder="(11) 9999-9999">
                             </div>
                         </div>
-                        <div class="area-dados-cliente-email">
+                        <div class="modal-clientes-area-dados-cliente-email">
                             <label>E-mail</label>
-                            <div class="campo-email">
+                            <div class="modal-clientes-campo-email">
                                 <i class="fa-solid fa-envelope"></i>
                                 <input type="email" placeholder="email@.com">
                             </div>
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>CNPJ</label>
                             <input type="text" placeholder="23.456.789/0001-01">
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="area-dados-cliente area-numero">
+                    <div class="modal-clientes-form-row">
+                        <div class="modal-clientes-area-dados-cliente area-numero">
                             <label>CEP</label>
-                            <input type="text" id="cep" placeholder="12345-678">
+                            <input type="text" id="cep" placeholder="12345-678" onblur="buscarCep()">
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Endereço</label>
                             <input type="text" id="endereco" placeholder="Digite o endereço">
                         </div>
-                        <div class="area-dados-cliente area-numero">
+                        <div class="modal-clientes-area-dados-cliente area-numero">
                             <label>Número</label>
                             <input type="text" placeholder="0000">
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Complemento</label>
                             <input type="text" placeholder="Complemento">
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="area-dados-cliente">
+                    <div class="modal-clientes-form-row">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Bairro</label>
-                            <input type="text" id="cidade" placeholder="Digite o bairro">
+                            <input type="text" id="bairro" placeholder="Digite o bairro">
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Cidade</label>
                             <input type="text" id="cidade" placeholder="Selecione uma Cidade">
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Estado</label>
                             <input type="text" id="estado" placeholder="Selecione um Estado">
                         </div>
                     </div>
 
-                    <div class="secao-label">
+                    <div class="modal-clientes-secao-label">
                         <i class="fa-solid fa-user"></i>
                         <h3>Dados do Responsável</h3>
                     </div>
 
-                    <div class="form-row">
-                        <div class="area-dados-cliente">
+                    <div class="modal-clientes-form-row">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>Nome do Responsável</label>
                             <input type="text" placeholder="Digite o nome">
                         </div>
-                        <div class="area-dados-cliente-tel">
+                        <div class="modal-clientes-area-dados-cliente-tel">
                             <label>Telefone</label>
-                            <div class="campo-telefone">
+                            <div class="modal-clientes-campo-telefone">
                                 <i class="fa fa-phone"></i>
                                 <input type="text" placeholder="(11)99999-9999">
                             </div>
                         </div>
-                        <div class="area-dados-cliente-email">
+                        <div class="modal-clientes-area-dados-cliente-email">
                             <label>E-mail</label>
-                            <div class="campo-email">
+                            <div class="modal-clientes-campo-email">
                                 <i class="fa-solid fa-envelope"></i>
                                 <input type="email" placeholder="email@.com">
                             </div>
                         </div>
-                        <div class="area-dados-cliente">
+                        <div class="modal-clientes-area-dados-cliente">
                             <label>CPF</label>
                             <input type="text" placeholder="000.000.000-00">
                         </div>
                     </div>
                 </div>
 
-                <div class="botoes-form">
-                    <label for="abrir-modal" class="btn-cancelar">CANCELAR</label>
-                    <button type="submit" class="btn-salvar">SALVAR</button>
+                <div class="modal-clientes-botoes-form">
+                    <label for="abrir-modal" class="modal-clientes-btn-cancelar">CANCELAR</label>
+                    <button type="submit" class="modal-clientes-btn-salvar">SALVAR</button>
                 </div>
             </form>
         </div>
@@ -142,8 +143,132 @@
 
 
 
+    <input type="checkbox" id="abrir-modal-edicao" style="display: none;">
 
+    <label for="abrir-modal-edicao" class="btn-abrir-sistema-edicao"><i class="fa-solid fa-pen-to-square"></i></label>
+
+        <div class="modal-clientes-modal-edicao">
+            <div class="modal-clientes-box">
+                <div class="modal-clientes-area-titulo">
+                    <div class="modal-clientes-titulo-flex">
+                        <img src="IMG/icone_empresa.svg" alt="Empresa" class="modal-clientes-icone-topo">
+                        <div class="modal-clientes-titulo-modal">
+                            <h2>Edição de Cadastro</h2>
+                            <p>Informações da empresa contratante e do responsável técnico</p>
+                        </div>
+                    </div>
+                    <label for="abrir-modal-edicao" class="modal-clientes-fechar"><i class="fa-solid fa-xmark"></i></label>
+                </div>
+
+                <form action="" class="modal-clientes-div-form">
+                    <div class="modal-clientes-corpo-form">
+
+                        <div class="modal-clientes-secao-label">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <h3>Dados da Empresa</h3>
+                        </div>
+
+                        <div class="modal-clientes-form-row">
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Nome da Empresa</label>
+                                <input type="text" placeholder="Digite o nome da Empresa">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente-tel">
+                                <label>Telefone</label>
+                                <div class="modal-clientes-campo-telefone">
+                                    <i class="fa fa-phone"></i>
+                                    <input type="text" placeholder="(11) 9999-9999">
+                                </div>
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente-email">
+                                <label>E-mail</label>
+                                <div class="modal-clientes-campo-email">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <input type="email" placeholder="email@.com">
+                                </div>
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>CNPJ</label>
+                                <input type="text" placeholder="23.456.789/0001-01">
+                            </div>
+                        </div>
+
+                        <div class="modal-clientes-form-row">
+                            <div class="modal-clientes-area-dados-cliente area-numero">
+                                <label>CEP</label>
+                                <input type="text" id="cep" placeholder="12345-678" onblur="buscarCep()">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Endereço</label>
+                                <input type="text" id="endereco" placeholder="Digite o endereço">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente area-numero">
+                                <label>Número</label>
+                                <input type="text" placeholder="0000">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Complemento</label>
+                                <input type="text" placeholder="Complemento">
+                            </div>
+                        </div>
+
+                        <div class="modal-clientes-form-row">
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Bairro</label>
+                                <input type="text" id="bairro" placeholder="Digite o bairro">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Cidade</label>
+                                <input type="text" id="cidade" placeholder="Selecione uma Cidade">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Estado</label>
+                                <input type="text" id="estado" placeholder="Selecione um Estado">
+                            </div>
+                        </div>
+
+                        <div class="modal-clientes-secao-label">
+                            <i class="fa-solid fa-user"></i>
+                            <h3>Dados do Responsável</h3>
+                        </div>
+
+                        <div class="modal-clientes-form-row">
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>Nome do Responsável</label>
+                                <input type="text" placeholder="Digite o nome">
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente-tel">
+                                <label>Telefone</label>
+                                <div class="modal-clientes-campo-telefone">
+                                    <i class="fa fa-phone"></i>
+                                    <input type="text" placeholder="(11)99999-9999">
+                                </div>
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente-email">
+                                <label>E-mail</label>
+                                <div class="modal-clientes-campo-email">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <input type="email" placeholder="email@.com">
+                                </div>
+                            </div>
+                            <div class="modal-clientes-area-dados-cliente">
+                                <label>CPF</label>
+                                <input type="text" placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-clientes-botoes-form">
+                        <label for="abrir-modal" class="modal-clientes-btn-cancelar">CANCELAR</label>
+                        <button type="submit" class="modal-clientes-btn-salvar">SALVAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+    
 </body>
-
-
 </html>
