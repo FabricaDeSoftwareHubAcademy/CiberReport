@@ -20,7 +20,7 @@ body {
     display: none;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(49, 46, 46, 0.7);
     z-index: 100;
 }
 
@@ -28,7 +28,7 @@ body {
     display: flex;
 }
 
-.modal-clientes-modal-edicao {
+.modal-clientes-modal-edicao{
     position: fixed;
     top: 0;
     right: 0;
@@ -37,7 +37,7 @@ body {
     display: none;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(49, 46, 46, 0.7);
     z-index: 100;
 }
 
@@ -49,8 +49,6 @@ body {
 
 .modal-clientes-box {
     width: 76rem;
-    max-height: 85rem;
-    background-color: var(--cor-fundo-branco);
     border-radius: var(--raio-xl);
     box-shadow: var(--sombra-xl);
 }
@@ -93,10 +91,10 @@ body {
 }
 
 
-
-
 .modal-clientes-corpo-form {
-    padding: var(--espaco-lg);
+    padding: var(--espaco-lg);    
+    background-color: var(--cor-fundo-branco);
+    border-radius: 0 0 var(--raio-xl) var(--raio-xl);
 }
 
 
@@ -186,6 +184,7 @@ body {
 
 
 
+
 .modal-clientes-campo-telefone{
     display: flex;
     align-items: center;
@@ -195,30 +194,10 @@ body {
     border-radius: var(--raio-sm);
     background-color: var(--cor-fundo-branco);
 }
-
-.modal-clientes-campo-email {
-    display: flex;
-    align-items: center;
-    gap: var(--espaco-sm);
-    padding: 0 var(--espaco-sm);
-    border: 1px solid var(--cor-borda-padrao);
-    border-radius: var(--raio-sm);
-    background-color: var(--cor-fundo-branco);
-}
-
-
-
 .modal-clientes-campo-telefone i {
     color: var(--cor-texto-secundario);
     font-size: var(--fonte-legenda);
 }
-
-
-.modal-clientes-campo-email i {
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-legenda);
-}
-
 .modal-clientes-campo-telefone input{
     width: 100%;
     padding: 0.6rem 0;
@@ -229,6 +208,31 @@ body {
 }
 
 
+
+
+
+
+.modal-clientes-campo-email {
+    background-image: url(../IMG/icone_email.svg);
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+    padding: 0 var(--espaco-sm);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-sm);
+    background-color: var(--cor-fundo-branco);
+}
+.modal-clientes-campo-email:focus-within {
+    background-image: none;
+}
+.modal-clientes-campo-email i {
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-legenda);
+    background-image: none;
+}
 .modal-clientes-campo-email input {
     width: 100%;
     padding: 0.6rem 0;
@@ -236,7 +240,13 @@ body {
     outline: none;
     background-color: transparent;
     font-size: var(--fonte-legenda);
+    padding-left: 30px;
 }
+
+
+
+
+
 
 
 
@@ -245,9 +255,11 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: var(--espaco-md);
-    padding: var(--espaco-md) var(--espaco-lg);
+    padding: var(--espaco-xl) 0 0 0;
     border-top: 1px solid var(--cor-borda-padrao);
-}
+    background-color: var(--cor-fundo-branco);
+    border-radius: 0 0 0 0;
+} 
 
 .modal-clientes-btn-cancelar{
     padding: 0.6rem 1.8rem;
@@ -255,6 +267,9 @@ body {
     font-size: var(--fonte-legenda);
     font-weight: 600;
     cursor: pointer;
+    background-color: var(--cor-fundo-branco);
+    color: var(--cor-azul-primaria);
+    border: 1px solid var(--cor-azul-primaria);
 }
 
 
@@ -265,19 +280,11 @@ body {
     font-size: var(--fonte-legenda);
     font-weight: 600;
     cursor: pointer;
-}
-
-.modal-clientes-btn-cancelar {
-    background-color: var(--cor-fundo-branco);
-    color: var(--cor-azul-primaria);
-    border: 1px solid var(--cor-azul-primaria);
-}
-
-.modal-clientes-btn-salvar {
     background-color: var(--cor-verde);
     color: var(--cor-fundo-branco);
     border: none;
 }
+
 
 
 
