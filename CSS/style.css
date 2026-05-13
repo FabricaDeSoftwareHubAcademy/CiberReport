@@ -2,6 +2,8 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css');
 @import 'reset.css';
 @import 'tabela.css';
+@import './menu-lateral.css';
+@import './menu-superior.css';
 
 
 
@@ -103,6 +105,13 @@ html {
     --transicao-base: 250ms ease;
     --transicao-devagar: 400ms ease;
 
+    /* --- Sidebar --- */
+    --sidebar-fechado: 5%;
+    --sidebar-aberto: 15%;
+
+    /* --- Menu superior --- */
+    --altura-menu-superior: 100px;
+
 }
 
 
@@ -116,4 +125,13 @@ body {
     color: var(--cor-texto-primario);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+main{
+    margin: var(--espaco-md);
+}
+.main-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
