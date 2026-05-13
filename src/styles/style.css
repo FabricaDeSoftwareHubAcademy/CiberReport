@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import './reset.css';
-@import './menu-lateral.css';
-@import './menu-superior.css';
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css');
+@import url('./reset.css');
+@import url('../components/menu/sidebar.css');
+@import url('../components/menu/topbar.css');
+@import url('../components/tabela/tabela.css');
 
 
 
@@ -125,9 +126,11 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-main{
+
+main {
     margin: var(--espaco-md);
 }
+
 .main-content {
     flex: 1;
     min-width: 0;
