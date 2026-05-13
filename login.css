@@ -124,6 +124,10 @@ body {
     height: 40%;
 }
 
+.principal img{
+    transform: translateY(-95%);
+}
+
 .hacker{
     position: absolute;
     width: 55%;
@@ -151,6 +155,7 @@ body {
 .hackers img{
     width: 50%;
     height: 60%;
+    padding-top: 15%;
 }
 
 .principal{
@@ -174,7 +179,6 @@ body {
     top: 20%;
     opacity: 0.18;
     filter: blur(2px);
-    
 }
 
 .login-topo{
@@ -190,10 +194,6 @@ body {
     height: 100vh;
     display: flex;
 }
-
-/* .container{
-    display: flex;
-} */
 
 .lado-esq{
     width: 65%;
