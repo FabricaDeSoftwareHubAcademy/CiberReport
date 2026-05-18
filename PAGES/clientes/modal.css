@@ -1,12 +1,12 @@
 @import url('reset.css');
 @import url('style.css');
 
-body {
+body{
     background-color: var(--cor-fundo-pagina);
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    /* align-items: center; */
 }
 
 
@@ -288,6 +288,18 @@ body {
 
 
 
+/*trabahando aqui*/
+
+
+.button-cadastro{
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    justify-content: center;
+    position: relative;
+    top: 95px;  
+    left: 790px;
+}
 
 .modal-clientes-btn-abrir-sistema {
     margin-top: var(--espaco-xl);
@@ -296,8 +308,18 @@ body {
     color: var(--cor-fundo-branco);
     border-radius: var(--raio-md);
     cursor: pointer;
+    height: 44px;
+    width: 241px;
+    text-align: center;
 }
 
+.section-tabela{
+    align-items: center;
+    justify-content:center;
+    position: relative;
+    top: 95px;  
+    left: 790px;
+}
 
 
 
@@ -330,3 +352,5 @@ body {
         width: 100%;
     }
 }
+
+
