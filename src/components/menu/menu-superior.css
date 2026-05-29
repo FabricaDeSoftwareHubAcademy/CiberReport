@@ -74,3 +74,10 @@
 .description-user {
     padding-right: var(--espaco-md);
 }
+
+@media(min-width:931px){
+    .logo-menuSuperior{
+        display: none;
+        margin-left: 4rem;
+    }
+}
