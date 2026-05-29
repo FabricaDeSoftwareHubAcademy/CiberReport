@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER REPORT</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+
+<body>
+    <div class="modal-overlay">
+        <div class="conteudo-modal">
+            <header class="cabecalho-modal-projeto">
+                <img src="../icones/icon-modal-projeto.svg" alt="" class="icon-modal-projeto">
+                <div class="textos-cabecalho-modal">
+                    <h1 class="titulo-modal-projeto">Cadastro de Projeto</h1>
+                    <span class="subtitulo-modal-projeto">informações da empresa contratante e do projeto</span>
+                </div>
+                <img src="../icones/x.svg" alt="" class="fechar-modal-projeto">
+            </header>
+            <div class="stepper">
+                <div class="stepper-grupo">
+                    .stepper-
+                    <div class="stepper-item-ativo">
+                        1
+                    </div>
+                    <span class="step-nome">Cadastro</span>
+
+                    <div class="step-linha-separadora"></div>
+
+                    <div class="stepper-item">
+                        2
+                    </div>
+                    <span class="step-nome">Dados do Projeto</span>
+
+                    <div class="step-linha-separadora"></div>
+
+                    <div class="stepper-item">
+                        3
+                    </div>
+                    <span class="step-nome">Alocar Equipe</span>
+
+                    <div class="step-linha-separadora"></div>
+                    
+                    <div class="stepper-item">
+                        4
+                    </div>
+                    <span class="step-nome">Revisão</span>
+                </div>
+            </div>
+            <form class="modal-cadastro-projeto">
+
+                <section class="informacoes-projeto" id="informacoes-cliente">
+                    <div class="container-titulo-projeto" id="container-titulo-cliente">
+                        <img src="../icones/person_add_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="" class="icon-informacoes-cliente">
+                        <span class="titulo-secao" id="titulo-secao-cliente">informações do Cliente</span>
+                    </div>
+                    <div class="container-cliente">
+                        <label for="cliente">Cliente</label>
+                        <input type="text" placeholder="Selecione um cliente" name="cliente" id="cliente">
+                        <img src="../icones/square-plus.svg" alt="" class="icon-adicionar">
+                    </div>
+                    <div class="container-nome-projeto">
+                        <label for="">Nome do Projeto</label>
+                        <input type="search" name="nome-projeto" id="nome-projeto" placeholder="Defina um nome para o projeto">
+                    </div>
+                </section>
+
+                <section class="informacao-projeto" id="informacao-pentest">
+                    <div class="container-titulo-projeto" id="container-titulo-pentest">
+                        <img src="" alt="" class="icon-pentest-projeto">
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
