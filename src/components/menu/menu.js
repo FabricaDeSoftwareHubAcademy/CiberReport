@@ -1,6 +1,10 @@
 const sideBar = document.getElementById('sideBar');
 const suBmenus = document.getElementById('submenu');
 const dropdown = document.getElementById('dropdown');
+const overlay = document. getElementById('overlay-pesquisaMobile');
+const pesquisaMobileBtn = document.querySelector('.pesquisa-mobile button');
+const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
+const logoMenuSuperior = document.querySelector('.logo-menuSuperior');
 
 document.getElementById('open_btn').addEventListener('click', function () {
     const isOpen = sideBar.classList.contains('open-sidebar');
@@ -16,6 +20,20 @@ document.getElementById('open_btn').addEventListener('click', function () {
     } else {
         sideBar.classList.add('open-sidebar');
     }
+});
+
+pesquisaMobileBtn.addEventListener('click', () => {
+    overlayPesquisa.classList.add('active');
+});
+
+overlayPesquisa.addEventListener('click', (e) => {
+    if (!e.target.closest('.barra-pesquisa')) {
+        overlayPesquisa.classList.remove('active');
+    }
+});
+
+logoMenuSuperior.addEventListener('click', () => {
+    sideBar.classList.toggle('open-sidebar');
 });
 
 document.getElementById('dropdown').addEventListener('click', function () {

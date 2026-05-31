@@ -60,7 +60,6 @@
     display: flex;
     gap: var(--espaco-xs);
     flex-direction: column;
-    height: 500px;
 }
 
 .side_item {
@@ -95,11 +94,7 @@
 }
 
 .item-submenu::before {
-    content: "";
-    width: 5px;
-    height: 5px;
-    background-color: var(--cor-branco-primario);
-    border-radius: 50%;
+    content: "-"; 
 }
 
 .item-submenu a {
@@ -281,7 +276,13 @@
 }
 
 @media(max-width: 931px){
-    #sideBar{
-        display: none;
+    #sideBar {
+        position: absolute;
+        transition: transform 0.35s ease;
+        transform: translateX(-150%);
+        height: 100vh;        
+    }
+    #sideBar.open-sidebar{
+        transform: translateX(0);
     }
 }

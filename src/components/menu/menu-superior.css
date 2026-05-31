@@ -9,7 +9,7 @@
     background-color: var(--cor-branco-primario);
 }
 
-.input-container {
+.input-pesquisaSuperior {
     display: flex;
     background-color: var(--cor-cinza-terciario);
     width: 280px;
@@ -19,7 +19,7 @@
     justify-content: center;
 }
 
-.input-container input {
+.input-pesquisaSuperior input {
     padding: 5px;
     margin: 2px;
     border-radius: 20px 0px 0px 20px;
@@ -27,7 +27,7 @@
     background: none;
 }
 
-.input-container button {
+.input-pesquisaSuperior button {
     display: flex;
     cursor: pointer;
     border-radius: 0px 20px 20px 0px;
@@ -39,11 +39,11 @@
     justify-content: center;
 }
 
-.input-container button:focus {
+.input-pesquisaSuperior button:focus {
     outline: none;
 }
 
-.input-container input:focus {
+.input-pesquisaSuperior input:focus {
     outline: none;
 }
 
@@ -75,9 +75,101 @@
     padding-right: var(--espaco-md);
 }
 
-@media(min-width:931px){
+
+@media(min-width:721px){
     .logo-menuSuperior{
         display: none;
-        margin-left: 4rem;
+    }
+    .logo-menuSuperior img {
+        margin-left: 20px;
+        height: 40px;
+        width: 40px;
+    }
+    .pesquisa-mobile{
+        display: none;
+    }
+    
+    .overlay-pesquisaMobile{
+        display: none;
+    }
+}
+
+@media(max-width: 721px){
+    #menu-superior {
+        width: 100vw;
+        max-width: 100%;
+        gap: 8px;
+        justify-content: flex-start;
+        padding: 0 8px;
+        box-sizing: border-box; 
+        overflow: hidden;       
+    }
+
+    #menu-superior h1{
+        font-size: var(--fonte-subsecao);
+        padding: 0;
+        white-space: nowrap;
+        width: 50%;
+    }
+
+    .description-user{
+        display: none;
+    }
+
+    .input-pesquisaSuperior{
+        display: none;
+    }
+
+    .pesquisa-mobile button{
+        border: none;
+        height: 3rem;
+        width: 3rem;
+        flex-shrink: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        background-color: var(--cor-cinza-terciario);
+    }
+
+    .overlay-pesquisaMobile{
+        display: none;
+        justify-content: center;
+        padding: 3.4rem 2rem 0rem 2rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 902;
+        align-items: flex-start;
+        background-color: rgba(0,0,0,0.5);
+        height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+    }
+
+    .overlay-pesquisaMobile.active{
+        display: flex;
+    }
+    .barra-pesquisa{
+        display: flex;
+        width: 90%;
+        height: 4.4rem;
+    }
+    .barra-pesquisa input{
+        width: 100%;
+        border: none;
+        outline: none;
+        padding-left: 2rem;
+        border-radius: 2rem 0rem 0rem 2rem;
+    }
+    .barra-pesquisa button{
+        width: 4rem;
+        height: 4.4rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0rem 2rem 2rem 0rem;
+        background-color: var( --cor-fundo-branco);
     }
 }
