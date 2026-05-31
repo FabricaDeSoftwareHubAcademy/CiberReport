@@ -1,103 +1,123 @@
 @import url('reset.css');
 @import url('style.css');
 
-body{
-    background-color: var(--cor-fundo-pagina);
-    min-height: 100vh;
+
+
+body {
     display: flex;
+    min-height: 100vh;
+    background-color: var(--cor-fundo-pagina);
+}
+
+.main-content {
+    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
+.button-cadastro {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--espaco-md);
+}
+
+.modal-clientes-btn-abrir-sistema {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    /* align-items: center; */
+    gap: var(--espaco-xs);
+    width: 241px;
+    height: 44px;
+    border-radius: var(--raio-md);
+    background-color: var(--cor-azul-destaques);
+    color: var(--cor-fundo-branco);
+    cursor: pointer;
 }
 
 
 
-.modal-clientes-modal {
+.modal-clientes-modal,
+.modal-clientes-modal-edicao {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     display: none;
     justify-content: center;
     align-items: center;
     background-color: rgba(49, 46, 46, 0.7);
     z-index: 100;
 }
+
+
 
 #abrir-modal:checked ~ .modal-clientes-modal {
     display: flex;
-}
-
-.modal-clientes-modal-edicao{
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(49, 46, 46, 0.7);
-    z-index: 100;
 }
 
 #abrir-modal-edicao:checked ~ .modal-clientes-modal-edicao {
     display: flex;
 }
 
-
-
 .modal-clientes-box {
-    width: 76rem;
+    width: 95%;
+    max-width: 76rem;
+    margin: var(--espaco-md);
     border-radius: var(--raio-xl);
     box-shadow: var(--sombra-xl);
+    overflow: hidden;
 }
-
-
 
 
 .modal-clientes-area-titulo {
-    background-color: var(--cor-azul-primaria);
-    color: var(--cor-fundo-branco);
-    padding: var(--espaco-md) var(--espaco-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: var(--raio-xl) var(--raio-xl) 0 0;
+    padding: var(--espaco-md) var(--espaco-lg);
+    background-color: var(--cor-azul-primaria);
+    color: var(--cor-fundo-branco);
+    gap: var(--espaco-sm);
 }
+
+
 
 .modal-clientes-titulo-flex {
     display: flex;
     align-items: center;
-    gap: var(--espaco-md);
+    gap: var(--espaco-sm);
+    flex: 1;
+    min-width: 0;
 }
 
 .modal-clientes-icone-topo {
-    width: 5.5rem;
+    width: 4rem;
+    flex-shrink: 0;
 }
 
+
+
+
 .modal-clientes-titulo-modal h2 {
-    font-size: 1.8rem;
+    font-size: var(--fonte-texto);
+    font-weight: 700;
 }
 
 .modal-clientes-titulo-modal p {
+    opacity: .8;
     font-size: var(--fonte-legenda);
-    opacity: 0.8;
 }
 
 .modal-clientes-fechar {
     cursor: pointer;
-    font-size: 2rem;
+    font-size:  var(--fonte-subsecao);
+    flex-shrink: 0;
+    font-size: 1.5rem;
 }
 
 
 .modal-clientes-corpo-form {
-    padding: var(--espaco-lg);    
+    padding: var(--espaco-lg);
     background-color: var(--cor-fundo-branco);
-    border-radius: 0 0 var(--raio-xl) var(--raio-xl);
 }
-
-
 
 
 
@@ -111,70 +131,57 @@ body{
     color: var(--cor-azul-primaria);
 }
 
-.modal-clientes-secao-label h3 {
-    font-size: var(--fonte-texto);
-}
-
-
-
-
 .modal-clientes-form-row {
     display: flex;
     gap: var(--espaco-md);
     margin-bottom: var(--espaco-md);
+    flex-wrap: wrap;
 }
 
 
 
-.modal-clientes-area-dados-cliente{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-clientes-area-dados-cliente-tel{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-
-.modal-clientes-area-dados-cliente-email {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
+.modal-clientes-area-dados-cliente,
+.modal-clientes-area-dados-cliente-email,
 .modal-clientes-area-dados-cliente-tel {
-    flex: 0.75;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.modal-clientes-area-dados-cliente label{
+.modal-clientes-area-dados-cliente-empresa{
+    flex: 1.4;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-clientes-area-dados-cliente label,
+.modal-clientes-area-dados-cliente-empresa label,
+.modal-clientes-area-dados-cliente-email label,
+.modal-clientes-area-dados-cliente-tel label {
     margin-bottom: var(--espaco-xs);
     font-size: var(--fonte-legenda);
     font-weight: 600;
 }
-.modal-clientes-area-dados-cliente-tel label{
-    margin-bottom: var(--espaco-xs);
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-}
-.modal-clientes-area-dados-cliente-email label {
-    margin-bottom: var(--espaco-xs);
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-}
 
-
-
-
-.modal-clientes-area-dados-cliente input {
+.modal-clientes-area-dados-cliente-empresa input{
     width: 100%;
-    padding: 0.6rem 0.8rem;
+    padding: var(--espaco-sm) var(--espaco-md);
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-sm);
     font-size: var(--fonte-legenda);
 }
+.modal-clientes-area-dados-cliente-empresa input:focus {
+    outline: none;
+    border-color: var(--cor-borda-foco);
+}
+.modal-clientes-area-dados-cliente input {
+    width: 100%;
+    padding: var(--espaco-sm) var(--espaco-md);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-sm);
+    font-size: var(--fonte-legenda);
+}
+
 
 .modal-clientes-area-dados-cliente input:focus {
     outline: none;
@@ -184,173 +191,190 @@ body{
 
 
 
-
-.modal-clientes-campo-telefone{
+.modal-clientes-campo-telefone {
     display: flex;
     align-items: center;
-    gap: var(--espaco-sm);
     padding: 0 var(--espaco-sm);
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-sm);
     background-color: var(--cor-fundo-branco);
 }
-.modal-clientes-campo-telefone i {
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-legenda);
-}
-.modal-clientes-campo-telefone input{
+
+.modal-clientes-campo-telefone input {
     width: 100%;
-    padding: 0.6rem 0;
+    padding:var(--espaco-sm);
     border: none;
     outline: none;
-    background-color: transparent;
+    background: transparent;
     font-size: var(--fonte-legenda);
 }
-
 
 
 
 
 
 .modal-clientes-campo-email {
-    background-image: url(../IMG/icone_email.svg);
-    background-position: 10px center;
-    background-repeat: no-repeat;
-    background-size: 18px;
     display: flex;
     align-items: center;
-    gap: var(--espaco-sm);
     padding: 0 var(--espaco-sm);
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-sm);
     background-color: var(--cor-fundo-branco);
 }
-.modal-clientes-campo-email:focus-within {
-    background-image: none;
-}
-.modal-clientes-campo-email i {
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-legenda);
-    background-image: none;
-}
+
+
 .modal-clientes-campo-email input {
     width: 100%;
-    padding: 0.6rem 0;
+    padding: var(--espaco-sm) var(--espaco-md) var(--espaco-sm);
     border: none;
     outline: none;
-    background-color: transparent;
+    background: transparent;
     font-size: var(--fonte-legenda);
-    padding-left: 30px;
 }
-
-
-
-
-
-
-
 
 
 .modal-clientes-botoes-form {
     display: flex;
     justify-content: flex-end;
     gap: var(--espaco-md);
-    padding: var(--espaco-xl) 0 0 0;
+    padding-top: var(--espaco-xl);
     border-top: 1px solid var(--cor-borda-padrao);
-    background-color: var(--cor-fundo-branco);
-    border-radius: 0 0 0 0;
-} 
+}
 
-.modal-clientes-btn-cancelar{
-    padding: 0.6rem 1.8rem;
+.modal-clientes-btn-cancelar {
+    padding: var(--espaco-sm) var(--espaco-lg);
+    border: 1px solid var(--cor-azul-primaria);
     border-radius: var(--raio-md);
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-    cursor: pointer;
     background-color: var(--cor-fundo-branco);
     color: var(--cor-azul-primaria);
-    border: 1px solid var(--cor-azul-primaria);
+    cursor: pointer;
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
 }
-
-
 
 .modal-clientes-btn-salvar {
-    padding: 0.6rem 1.8rem;
+    padding: var(--espaco-sm) var(--espaco-lg);
+    border: none;
     border-radius: var(--raio-md);
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-    cursor: pointer;
     background-color: var(--cor-verde);
     color: var(--cor-fundo-branco);
-    border: none;
-}
-
-
-
-
-/*trabahando aqui*/
-
-
-.button-cadastro{
-    align-items: center;
-    text-align: center;
-    gap: 1rem;
-    justify-content: center;
-    position: relative;
-    top: 95px;  
-    left: 790px;
-}
-
-.modal-clientes-btn-abrir-sistema {
-    margin-top: var(--espaco-xl);
-    padding: var(--espaco-md) var(--espaco-xl);
-    background-color: var(--cor-azul-destaques);
-    color: var(--cor-fundo-branco);
-    border-radius: var(--raio-md);
     cursor: pointer;
-    height: 44px;
-    width: 241px;
-    text-align: center;
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
 }
 
-.section-tabela{
-    align-items: center;
-    justify-content:center;
-    position: relative;
-    top: 95px;  
-    left: 790px;
+.section-tabela {
+    width: 100%;
+    padding: var(--espaco-md);
+    overflow-x: auto;
+}
+
+.tabela-clientes {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: collapse;
 }
 
 
 
 
-@media screen and (max-width: 768px) {
+@media (max-width: 1200px) {
+
+    .modal-clientes-box {
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+
+    .button-cadastro {
+        justify-content: center;
+    }
+
+    .modal-clientes-btn-abrir-sistema {
+        width: 100%;
+        max-width: 320px;
+    }
 
     .modal-clientes-box {
         width: 95%;
+        margin: 0;
+
         max-height: 95vh;
         overflow-y: auto;
+    }
+
+    .modal-clientes-area-titulo {
+        padding: 1rem;
+    }
+    .modal-clientes-titulo-modal {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .modal-clientes-titulo-modal h2 {
+        font-size: 1.4rem;
+    }
+
+    .modal-clientes-titulo-modal p {
+        font-size: .8rem;
     }
 
     .modal-clientes-form-row {
         flex-direction: column;
     }
 
-    .modal-clientes-corpo-form {
-        padding: var(--espaco-md);
+    .modal-clientes-area-dados-cliente,
+    .modal-clientes-area-dados-cliente-email,
+    .modal-clientes-area-dados-cliente-tel {
+        width: 100%;
     }
 
     .modal-clientes-botoes-form {
         flex-direction: column;
     }
 
-    .modal-clientes-btn-cancelar{
-        width: 100%;
-    }
-
+    .modal-clientes-btn-cancelar,
     .modal-clientes-btn-salvar {
         width: 100%;
     }
 }
+
+
+@media (max-width: 480px) {
+
+    .modal-clientes-area-titulo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-clientes-fechar {
+        align-self: flex-end;
+    }
+
+    .modal-clientes-area-dados-cliente,
+    .modal-clientes-area-dados-cliente-empresa,
+    .modal-clientes-area-dados-cliente-email,
+    .modal-clientes-area-dados-cliente-tel {
+        width: 100%;
+    }
+
+    .modal-clientes-corpo-form {
+        padding: var(--espaco-md);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
