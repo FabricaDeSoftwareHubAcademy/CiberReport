@@ -1,5 +1,12 @@
+.tabela-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
 table {
-    width: 60%;
+    width: 100%;
+    min-width: 900px;
+    max-width: 1200px;
     border-collapse: separate;
     border-spacing: 0;
     background-color: var(--cor-fundo-branco);
@@ -24,6 +31,23 @@ th {
     font-weight: 500;
     font-size: var(--fonte-apoio);
     white-space: nowrap;
+}
+
+.th-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.th-label:hover {
+    opacity: 0.8;
+}
+
+.sort-icon {
+    font-size: 0.65rem;
+    opacity: 0.7;
 }
 
 tbody tr {
@@ -106,7 +130,6 @@ tfoot td.rodape-tabela {
     padding: var(--espaco-sm) var(--espaco-md);
     border-bottom: none;
 }
-
 
 .paginacao {
     display: flex;
