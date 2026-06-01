@@ -63,6 +63,8 @@
 
 #menu-superior h1 {
     padding-left: var(--espaco-lg);
+    padding: 2rem;
+    white-space: nowrap;
 }
 
 .notificacao {
@@ -75,101 +77,135 @@
     padding-right: var(--espaco-md);
 }
 
-
-@media(min-width:721px){
-    .logo-menuSuperior{
-        display: none;
-    }
-    .logo-menuSuperior img {
-        margin-left: 20px;
-        height: 40px;
-        width: 40px;
-    }
-    .pesquisa-mobile{
-        display: none;
-    }
-    
-    .overlay-pesquisaMobile{
-        display: none;
-    }
+.logo-menuSuperior {
+    display: none;
 }
 
-@media(max-width: 721px){
+.overlay-pesquisaMobile {
+    display: none;
+    justify-content: center;
+    padding: 3.4rem 2rem 0rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 902;
+    align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+.barra-pesquisa input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding-left: 2rem;
+    border-radius: 2rem 0rem 0rem 2rem;
+}
+.barra-pesquisa button {
+    width: 4rem;
+    height: 4.4rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0rem 2rem 2rem 0rem;
+    background-color: var(--cor-fundo-branco);
+}
+
+.pesquisa-mobile button {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--cor-cinza-terciario);
+}
+
+.logo-menuSuperior {
+    display: none;
+}
+
+.pesquisa-mobile button {
+    border: none;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--cor-cinza-terciario);
+    display: none;
+}
+
+@media (max-width: 931px) {
     #menu-superior {
         width: 100vw;
         max-width: 100%;
         gap: 8px;
-        justify-content: flex-start;
         padding: 0 8px;
-        box-sizing: border-box; 
-        overflow: hidden;       
-    }
-
-    #menu-superior h1{
-        font-size: var(--fonte-subsecao);
-        padding: 0;
-        white-space: nowrap;
-        width: 50%;
-    }
-
-    .description-user{
-        display: none;
-    }
-
-    .input-pesquisaSuperior{
-        display: none;
-    }
-
-    .pesquisa-mobile button{
-        border: none;
-        height: 3rem;
-        width: 3rem;
-        flex-shrink: 0;
-        border-radius: 50%;
-        cursor: pointer;
-        background-color: var(--cor-cinza-terciario);
-    }
-
-    .overlay-pesquisaMobile{
-        display: none;
-        justify-content: center;
-        padding: 3.4rem 2rem 0rem 2rem;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 902;
-        align-items: flex-start;
-        background-color: rgba(0,0,0,0.5);
-        height: 100vh;
-        width: 100vw;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
-    .overlay-pesquisaMobile.active{
+    #menu-superior h1 {
+        font-size: var(--fonte-subsecao);
+        width: 30%;
+        padding-left: 0;
+    }
+
+    .logo-menuSuperior {
+        display: block;
+        padding-left: 0.4rem;
+    }
+
+    .perfis {
+        gap: 0;
+    }
+
+    .perfis img {
+        height: 50px;
+        width: 50px;
+    }
+
+    .description-user {
+        display: none;
+    }
+
+    .overlay-pesquisaMobile.active {
         display: flex;
     }
-    .barra-pesquisa{
+
+    .barra-pesquisa {
         display: flex;
         width: 90%;
         height: 4.4rem;
     }
-    .barra-pesquisa input{
-        width: 100%;
-        border: none;
-        outline: none;
-        padding-left: 2rem;
-        border-radius: 2rem 0rem 0rem 2rem;
+}
+
+@media (max-width: 700px) {
+    .input-pesquisaSuperior {
+        display: none;
     }
-    .barra-pesquisa button{
-        width: 4rem;
-        height: 4.4rem;
-        border: none;
-        background: none;
-        cursor: pointer;
+
+    .pesquisa-mobile button {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0rem 2rem 2rem 0rem;
-        background-color: var( --cor-fundo-branco);
+    }
+}
+
+@media (max-width: 480px) {
+    #menu-superior {
+        justify-content: space-evenly;
+    }
+
+    #menu-superior h1 {
+        font-size: var(--fonte-apoio);
+        padding-left: 0;
     }
 }

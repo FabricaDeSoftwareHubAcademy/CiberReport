@@ -93,10 +93,6 @@
     align-items: center;
 }
 
-.item-submenu::before {
-    content: "-"; 
-}
-
 .item-submenu a {
     display: flex;
     margin-left: 10px;
