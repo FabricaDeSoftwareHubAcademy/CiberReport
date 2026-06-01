@@ -1,5 +1,11 @@
+.tabela-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
 table {
-  width: 60%;
+  width: 100%;
+  min-width: 700px;
   border-collapse: separate;
   border-spacing: 0;
   background-color: var(--cor-fundo-branco);
