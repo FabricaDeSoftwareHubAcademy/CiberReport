@@ -5,8 +5,7 @@ body{
     background-color: var(--cor-fundo-pagina);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    /* align-items: center; */
+    overflow: hidden;
 }
 
 
@@ -290,18 +289,20 @@ body{
 
 /*trabahando aqui*/
 
-
 .button-cadastro{
-    align-items: center;
-    text-align: center;
-    gap: 1rem;
-    justify-content: center;
-    position: relative;
-    top: 95px;  
-    left: 790px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
 
+
+
+
 .modal-clientes-btn-abrir-sistema {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-sm);
     margin-top: var(--espaco-xl);
     padding: var(--espaco-md) var(--espaco-xl);
     background-color: var(--cor-azul-destaques);
@@ -310,16 +311,24 @@ body{
     cursor: pointer;
     height: 44px;
     width: 241px;
-    text-align: center;
+    text-align: center; 
 }
 
-.section-tabela{
-    align-items: center;
-    justify-content:center;
-    position: relative;
-    top: 95px;  
-    left: 790px;
+.main-content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
+main{
+    padding: var(--espaco-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-lg);
+    height: 100%;
+    
+}
+
 
 
 
@@ -351,6 +360,8 @@ body{
     .modal-clientes-btn-salvar {
         width: 100%;
     }
+    .tabela-clientes{
+        width: 100%;
+    }
+    
 }
-
-
