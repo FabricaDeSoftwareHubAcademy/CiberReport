@@ -1,5 +1,6 @@
 @import url('../../src/styles/style.css');
-.btn-salvar{
+
+.btn-botao-verde{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,7 +11,7 @@
     border-radius: 6px;         
     cursor: pointer;            
     background-color: var(--cor-verde);   
-    color: #ffffff;
+    color: var(--cor-branco-primario);
 }
 .btn-cancelar{
     display: flex;       
@@ -22,10 +23,10 @@
     border: 1px solid #101a40;
     border-radius: 6px;         
     cursor: pointer;            
-    background-color:white;   
+    background-color:var(--cor-branco-primario);   
     color: #101a40;
 } 
-/* perguntar sobre o botão para o fábio */
+
 .btn-novo-cadastro{
     display: flex;
     align-items: center;
@@ -37,7 +38,7 @@
     border-radius: 6px;
     cursor: pointer;
     background-color: #081650;
-    color: white;
+    color: var(--cor-branco-primario);
     gap: 25px;
 }
 .btn-fechar-modal{
@@ -58,6 +59,17 @@
     padding: 5px;
     border: none;
     color: black;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 15px;
+}
+.btn-vermelho-excluir{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: none;
+    color: var(--cor-vermelho-destaque);
     background-color: transparent;
     cursor: pointer;
     font-size: 15px;
@@ -84,42 +96,20 @@
     cursor: pointer;
     font-size: 15px;
 }
+.btn-botao-verde:active,
+.btn-cancelar:active,
+.btn-novo-cadastro:active,
+.btn-fechar-modal:active,
+.btn-excluir:active,
+.btn-vermelho-excluir:active,
+.btn-editar:active,
+.btn-filtro:active,
+.btn-fechar-modal-projeto:active {
+    transform: scale(0.98);      
+}
 
 
 /* Banco de Conhecimento */
-.btn-ver-tudo{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
-    color: rgb(36, 36, 214);
-    cursor: pointer;
-    font-size: 13px ;
-    background-color: transparent;
-}
-.btn-descricao-detalhada{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
-    color: rgb(36, 36, 214);
-    cursor: pointer;
-    font-size: 13px ;
-    background-color: transparent;
-}
-.btn-ver-completo{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
-    color: rgb(36, 36, 214);
-    cursor: pointer;
-    font-size: 13px ;
-    background-color: transparent; 
-}
 .btn-ver-todas{
     display: flex;
     align-items: center;
@@ -131,11 +121,16 @@
     font-size: 13px ;
     background-color: transparent; 
 }
+.btn-ver-todas:hover {
+    color: #1a365d;
+    text-decoration: underline;   
+}
+
+
+
 
 /* Tela de Notificações */
-.btn-notificacao-todas,
-.btn-notificacao-lida,
-.btn-notificacao-nao-lida{
+.btn-link-notificacao{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,20 +143,11 @@
     background-color: transparent; 
     transition: color 0.3s ease, border-color 0.3s ease;
 }
-
-.btn-notificacao-todas:hover,
-.btn-notificacao-lida:hover,
-.btn-notificacao-nao-lida:hover{
+.btn-link-notificacao:hover{
   color: blue;
   border-bottom: 2px solid blue;
 }
-.btn-ver-tudo:hover,
-.btn-descricao-detalhada:hover,
-.btn-ver-completo:hover,
-.btn-ver-todas:hover {
-    color: #1a365d;
-    text-decoration: underline;   
-}
+
 .btn-dropdown{
     display: flex;
     align-items: center;
@@ -174,7 +160,7 @@
     font-size: 15px;
 }
 
-/* Tela Vulnerabilidades_modais de confirmação */
+/* Modais de confirmação */
 .btn-conf-nao-inativacao{
     display: flex;
     align-items: center;
@@ -193,9 +179,11 @@
 .btn-conf-nao-inativacao:hover {
     background-color: #dee2e6;  
 }
-.btn-conf-sim-inativacao,
-.btn-confirmar-exclusao-sim{
-    display: inline-flex;
+.btn-conf-nao-inativacao:active {
+    transform: scale(0.98);      
+}
+.btn-conf-sim-inativacao{
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 12px 24px;
@@ -205,16 +193,17 @@
     border-radius: 6px;        
     cursor: pointer;            
     background-color: #ef4444; 
-    color: #ffffff;             
+    color: var(--cor-branco-primario);             
     transition: background 0.2s ease;
 }
-
 .btn-conf-sim-inativacao:hover {
     background-color: #dc2626;  
 }
+.btn-conf-sim-inativacao:active {
+    transform: scale(0.98);      
+}
 
-.btn-conf-sim-reativacao,
-.btn-confirmar-sim{
+.btn-confirmar{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -226,25 +215,18 @@
     background-color:#BCE4D3;
     border-radius: 6px;
 }
-
-
-/* Tela Gerar usuarios */
-.btn-alterar-foto{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
-    color: rgb(36, 36, 214);
-    cursor: pointer;
-    font-size: 13px ;
-    background-color: transparent; 
+.btn-confirmar:hover{
+    background-color: rgb(142, 199, 142);
+}
+.btn-confirmar:active {
+    transform: scale(0.98);      
 }
 
+
+
+
 /* Tela Gerenciar Perfis */
-.btn-perfil-administrador,
-.btn-perfil-analista,
-.btn-perfil-cliente{
+.btn-opcoes-perfil{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -255,12 +237,13 @@
     border-radius: 6px;
     cursor: pointer;
     background-color: #101a40;
-    color: white;
+    color: var(--cor-branco-primario);
 }
-.btn-perfil-administrador:hover,
-.btn-perfil-analista:hover,
-.btn-perfil-cliente:hover{
+.btn-opcoes-perfil:hover{
   background-color: #FFAE00;
+}
+.btn-opcoes-perfil:active {
+    transform: scale(0.98);      
 }
 
 
@@ -278,35 +261,39 @@
     cursor: pointer;
     background-color:aqua;
 }
+.btn-adicionar-pergunta:active {
+    transform: scale(0.98);      
+}
 
 /* Tela de Gerenciamento de Pentest */
-.btn-avancar,
-.btn-voltar {
-    display: inline-flex;  
+.btn-navegacao {
+    display: flex;  
     align-items: center;
     justify-content: center;
     gap: 8px;                  
     padding: 10px 24px;         
     font-size: 14px;
     font-weight: 700;           
-    background-color: #ffffff;  
+    background-color:var(--cor-branco-primario);  
     border: 1.5px solid #0d237d;
     border-radius: 12px;        
     color: #0d237d;            
     cursor: pointer;
     transition: all 0.2s ease;
 }
-.btn-avancar:hover,
-.btn-voltar:hover {
+.btn-navegacao:hover {
     background-color: #f0f4ff;  
 }
+.btn-navegacao:active {
+    transform: scale(0.98);      
+}
 .btn-adicionar-quadrado {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 80px;                
     height: 65px;                
-    background-color: #ffffff;   
+    background-color:var(--cor-branco-primario);   
     border: none;
     border-radius: 18px;         
     cursor: pointer;
@@ -320,16 +307,18 @@
     height: 38px;
     background-color: #1a365d;   
     border-radius: 10px;         
-    color: #ffffff;              
+    color: var(--cor-branco-primario);              
     font-size: 16px;             
+}
+.btn-adicionar-quadrado:active {
+    transform: scale(0.98);      
 }
 
 /* Tela Gerenciamento Projeto */
 .btn-fechar-modal-projeto {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-width: 180px;            
+    justify-content: center;           
     padding: 12px 32px;          
     font-size: 15px;             
     font-weight: 600;            
@@ -339,11 +328,12 @@
     color: #0d237d;              
     cursor: pointer;
 }
+.btn-fechar-modal-projeto:active {
+    transform: scale(0.98);      
+}
 
-.btn-projeto-horas,
-.btn-projeto-vulnerabilidade,
-.btn-projeto-equipe,
-.btn-projeto-log-atividade{
+
+.btn-aba-projeto{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -356,37 +346,24 @@
     background-color: transparent; 
     transition: color 0.3s ease, border-color 0.3s ease;
 }
-.btn-projeto-horas:hover,
-.btn-projeto-vulnerabilidade:hover,
-.btn-projeto-equipe:hover,
-.btn-projeto-log-atividade:hover{
+.btn-aba-projeto:hover{
   color: rgb(213, 232, 13);
   border-bottom: 2px solid rgb(213, 232, 13);
 }
+.btn-aba-projeto:active {
+    transform: scale(0.98);      
+}
 
-.btn-projeto-baixar{
+
+
+
+.btn-remover-analista {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 80px;
-    padding: 5px 10px; 
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;         
-    cursor: pointer;            
-    background-color: var(--cor-verde);   
-    color: #ffffff;
-}
-
-/* aqui */
-.btn-remover-analista {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* width: 40px;                
-    height: 40px;                 */
-    background-color: #ffffff;   
+    width: 40px;                
+    height: 40px;                 
+    background-color:var(--cor-branco-primario);   
     border: none;
     border-radius: 12px;         
     color: #0d237d;             
@@ -406,28 +383,15 @@
     border-radius: 10px;
     cursor: pointer;
     background-color: #b70f17;
-    color: white;
-    gap: 25px;
-
-}
-.btn-projeto-aprovar{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 17px; 
-    font-weight: 1000;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: var(--cor-verde);
-    color: white;
+    color:var(--cor-branco-primario);
     gap: 25px;
 }
-
+.btn-projeto-devolver:active {
+    transform: scale(0.98);      
+}
 .btn-upload-projeto {
     background-color: #122240; 
-    color: #FFFFFF;
+    color:var(--cor-branco-primario);
     font-size: 11px;          
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -445,21 +409,6 @@
 .btn-upload-projeto:active {
     transform: scale(0.98);
 }
-
-
-.btn-filter-coluna {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-}
 .btn-filter-redefinir:active {
     transform: scale(0.97);
 }
@@ -468,14 +417,14 @@
     font-weight: 500;
     padding: 8px 14px;
     border-radius: 6px;
-    display: inline-flex;
+    display:flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     box-sizing: border-box;
     cursor: pointer;
     transition: all 0.2s ease;
-    background-color: #FFFFFF;
+    background-color:var(--cor-branco-primario);
     color: #A3A3A3;            
     border: 1px solid #D9D9D9; 
 }
@@ -488,29 +437,6 @@
 .btn-filtro-redefinir:active {
     transform: scale(0.97); 
 }
-.btn-filter-coluna {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: #129A62; 
-    color: #FFFFFF;            
-    border: none;
-}
-.btn-filter-coluna:hover {
-    background-color: #0E7E4F; 
-}
-.btn-filter-coluna:active {
-    transform: scale(0.97); 
-}
-
 
 
 
@@ -528,7 +454,7 @@
     font-size: 14px;
     font-weight: 500;
     background-color: #122240;   
-    color: #FFFFFF;
+    color: var(--cor-branco-primario);
     border: none;
     border-radius: 10px;          
     cursor: pointer;
@@ -575,26 +501,27 @@
 
 /* Tela de Dashboard */
 
-.btn-upload-dashboard {
-    display: inline-flex;
+.btn-upload-dashboard{
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px; 
+    padding: 8px 18px; 
     font-size: 13px;
     font-weight: 600;
-    border: 1.5px solid #28a745;
-    border-radius: 6px;         
+    border: 2px solid var(--cor-verde);
+    border-radius: 10px;         
     cursor: pointer;            
-    background-color: #ffffff;   
-    color: #333333;              
-    min-width: 90px;
-    transition: background-color 0.2s;
+    background-color: transparent;   
+    color: var(--cor-texto-primario);
 }
 .btn-upload-dashboard:hover {
     background-color: #f4fbf6;  
 }
-.btn-remover {
-    display: inline-flex;       
+.btn-upload-dashboard:active {
+    transform: scale(0.98);      
+}
+.btn-vermelho {
+    display: flex;       
     align-items: center;        
     justify-content: center;   
     padding: 10px 20px;            
@@ -604,12 +531,15 @@
     border-radius: 6px;         
     cursor: pointer;            
     background-color: #dc3545;  
-    color: #ffffff;
+    color: var(--cor-branco-primario);
     min-width: 90px;
     transition: background-color 0.2s;
 }
-.btn-remover:hover {
+.btn-vermelho:hover {
     background-color: #bd2130;
+}
+.btn-vermelho:active {
+    transform: scale(0.98);      
 }
 
 .btn-visualizar-relatorio{
@@ -622,11 +552,84 @@
     border: 1px solid #101a40;
     border-radius: 6px;         
     cursor: pointer;            
-    background-color:white;   
+    background-color:var(--cor-branco-primario);   
     color: #101a40;
+}
+.btn-visualizar-relatorio:active {
+    transform: scale(0.98);      
 }
 
 
+
+/* Tela Exposição de Vulnerabilidades */
+.btn-vulnerabilidade-todas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; 
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;         
+    cursor: pointer;            
+    background-color: var(--cor-cinza-secundario);   
+    color: var(--cor-texto-primario);
+}
+.btn-vulnerabilidade-todas:active {
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-cinza-primario); 
+}
+.btn-vulnerabilidade-critica {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; 
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;         
+    cursor: pointer;            
+    background-color: var(--cor-cinza-secundario);   
+    color: var(--cor-texto-primario);
+}
+.btn-vulnerabilidade-critica:active {
+    color:var(--cor-branco-primario);
+    background-color: var(--cor-vermelho-destaque);  
+}
+.btn-vulnerabilidade-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; 
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;         
+    cursor: pointer;            
+    background-color: var(--cor-cinza-secundario);   
+    color: var(--cor-texto-primario);
+}
+.btn-vulnerabilidade-media:active {
+    color:var(--cor-branco-primario);
+    background-color: var(--cor-amarelo); 
+}
+.btn-vulnerabilidade-baixa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; 
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;         
+    cursor: pointer;            
+    background-color: var(--cor-cinza-secundario);   
+    color: var(--cor-texto-primario);
+}
+.btn-vulnerabilidade-baixa:active {
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-verde); 
+}
 
 
 /* Opção de Botão para cadastro */
@@ -643,7 +646,7 @@
     border-radius: 12px;         
     cursor: pointer;            
     background-color: #004475; 
-    color: #ffffff;
+    color:var(--cor-branco-primario);
     transition: background-color 0.2s;
 }
 .btn-cadastrar-checklist:hover {
@@ -660,54 +663,134 @@
     justify-content: center;
     font-size: 8px;
     font-weight: bold;
-    border: 2px solid #ffffff;
+    border: 2px solid var(--cor-branco-primario);
     border-radius: 6px;         
-    color: #ffffff;
+    color: var(--cor-branco-primario);
     box-sizing: border-box;
     padding-bottom: 2px;        
 }
 
 
+/* Barra de Pesquisa */
+.container-busca {
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2; 
+  border-radius: 12px;       
+  padding: 8px 16px;         
+  width: 100%;               
+  max-width: 500px;          
+}
+.icone-busca {
+  color: #000000;            
+  font-size: 16px;          
+  margin-right: 10px;        
+}
+.input-busca {
+  border: none;             
+  background: transparent;   
+  outline: none;             
+  font-size: 13px;          
+  color: #666666;            
+  width: 100%;
+}
+.input-busca::placeholder {
+  color: #8e8e8e;            
+  font-weight: 500;
+}
+
+
 /* Checklist */
 
-.btn-container {
-    display: inline-block; 
-    background-color: transparent; 
+.switch input {
+  display: none;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--cor-branco-primario);
+  transition: .1s;
+  border-radius: 50%;
+}
+.switch input:checked + .slider {
+  background-color: var(--cor-azul-destaques);
+}
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
 }
 
-.btn-button {
-    background-color: #7a8294; 
-    width: 60px;
-    height: 32px;
-    border-radius: 32px; 
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 0 4px; 
-    box-sizing: border-box;
-    transition: background-color 0.2s ease;
-    position: relative;
+
+
+
+/* Checkbox do Checklist.*/
+.item-checklist {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  font-size: 14px;
+  color: #101a40;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.meu-checkbox {
+  appearance: none;          
+  -webkit-appearance: none;  
+  width: 18px;               
+  height: 18px;
+  border: 1.5px solid #cccccc; 
+  border-radius: 50%;        
+  background-color:var(--cor-branco-primario);
+  cursor: pointer;
+  display: inline-grid;      
+  place-content: center;
+  transition: all 0.2s ease;
+}
+.meu-checkbox:checked {
+  background-color: #0d237d; 
+  border-color: #0d237d;
+}
+.meu-checkbox:checked::before {
+  content: "";
+  width: 4px;
+  height: 8px;
+  border: solid var(--cor-branco-primario);
+  border-width: 0 2px 2px 0; 
+  transform: rotate(45deg);
+  margin-bottom: 2px;        
 }
 
-.toggle-input {
-    display: none;
-}
 
-.circulo-switch {
-    width: 24px;
-    height: 24px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-}
 
-.toggle-input:checked ~ .btn-button {
-    background-color: #0060b0; 
-}
 
-.toggle-input:checked ~ .btn-button .circulo-switch {
-    transform: translateX(28px); 
-}
+
+
+
+
+
+
+
+
+
+
+
+
 
 

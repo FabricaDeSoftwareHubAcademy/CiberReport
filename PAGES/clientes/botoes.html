@@ -18,88 +18,70 @@
     <div class="btn-botoes-container">
         <div class="grupo-botoes">
             <!-- Tela Gerenciamento de Clientes -->
-            <button class="btn-salvar">Salvar</button>
+            <button class="btn-botao-verde">Botão</button>
             <button class="btn-cancelar">Cancelar</button>
             <button class="btn-novo-cadastro"><i class="fa-solid fa-plus"></i>Novo Cadastro</button>
             <button class="btn-fechar-modal"><i class="fa-solid fa-xmark"></i></button>
             <button class="btn-editar"><i class="fa-solid fa-pen-to-square"></i></button>
             <button class="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn-vermelho-excluir"><i class="fa-solid fa-trash"></i></button>
             <button class="btn-filtro"><i class="fa-solid fa-filter filter-icon"></i></button>
-        </div>
-
-        <div class="grupo-botoes">
             <!-- Tela Banco de Conhecimento -->
             <button class="btn-ver-todas">ver todas</button>
-            <button class="btn-ver-completo">ver completo</button>
-            <button class="btn-ver-tudo">ver tudo</button>
-            <button class="btn-descricao-detalhada">descrição detalhada</button>
-        </div>
-        <div class="grupo-botões">
+
+
             <!-- Tela de Notificação -->
-            <button class="btn-notificacao-todas">Todas as Notificações</button>
-            <button class="btn-notificacao-lida">Notificações Lidas</button>
-            <button class="btn-notificacao-nao-lida">Notificações não Lidas</button>
-            <button class="btn-ver-todas">ver todas</button>
+            <button class="btn-link-notificacao">Todas as Notificações</button>
             <button class="btn-dropdown"><i class="fa-solid fa-angle-down"></i></button>
-            <!-- Tela de Vulnerabilidades -->
+            
+
+
             <!-- Modais de Confirmação -->
-            <!-- Confirmar inativação -->
             <button class="btn-conf-nao-inativacao">Não,voltar</button>
             <button class="btn-conf-sim-inativacao">Sim,inativar</button>
-            <!-- Confirmar Reativação -->
-            <button class="btn-conf-sim-reativacao">Sim,reativar</button>
-            <!-- Para o card de exclusão tela de gerenciar usuarios -->
-            <button class="btn-confirmar-exclusao-sim">Sim,excluir</button>
-            <!-- Para o card de confirmar salvamento -->
-            <button class="btn-confirmar-sim">Sim,salvar</button>
+            <button class="btn-confirmar">Confirmar</button>
 
-            <!-- Gerar usuarios -->
-            <button class="btn-alterar-foto">Alterar Foto</button>
             
 
             <!-- Tela Gerenciar Perfis -->
-            <button class="btn-perfil-administrador">Administrador</button>
-            <button class="btn-perfil-analista">Analista</button>
-            <button class="btn-perfil-cliente">Cliente</button>
+            <button class="btn-opcoes-perfil">Administrador</button>
+
+
 
             <!-- Tela Gerenciar Checklist -->
             <button class="btn-adicionar-pergunta"><i class="fa-solid fa-plus"></i>Adicionar Pergunta</button>
 
+
+
             <!-- Tela Gerenciamento de Pentest -->
-            <button class="btn-avancar">Avançar<i class="fa-solid fa-arrow-right"></i></i></button>
-            <button class="btn-voltar"><i class="fa-solid fa-arrow-left"></i></i>Voltar</button>
+            <button class="btn-navegacao">Avançar<i class="fa-solid fa-arrow-right"></i></i></button>
+            <button class="btn-navegacao"><i class="fa-solid fa-arrow-left"></i></i>Voltar</button>
+
+            
             <button class="btn-adicionar-quadrado">
                 <span class="icone-azul"><i class="fa-solid fa-plus"></i></span>
             </button>
 
+
             <!-- Gerenciar Projetos -->
+            <button class="btn-aba-projeto">Horas</button>
             <button class="btn-fechar-modal-projeto">Fechar</button>
-            <button class="btn-projeto-horas">Horas</button>
-            <button class="btn-projeto-vulnerabilidade">Vulnerabilidade</button>
-            <button class="btn-projeto-equipe">Equipe</button>
-            <button class="btn-projeto-equipe">Checklist</button>
-            <button class="btn-projeto-log-atividade">Log de Atividades</button>
-
-            <button class="btn-projeto-baixar">Baixar</button>
-
             <button class="btn-remover-analista"><i class="fa-solid fa-xmark"></i></button>
             <button class="btn-projeto-devolver">Devolver</button>
-            <button class="btn-projeto-aprovar">Aprovar</button>
-
             <button class="btn-upload-projeto">Selecionar Arquivo</button>
-
-
             <button class="btn-filtro-redefinir">Redefinir</button>
-            <button class="btn-filter-coluna">Aplicar Filtro</button>
+
+
+
             <!-- Tela de Exposição de vulnerabilidades -->
+            <button class="btn-vulnerabilidade-todas">Todas</button>
             <button class="btn-vulnerabilidade-critica">Critico</button>
-            <button class="btn-vulnerabilidade-alta">Alta</button>
             <button class="btn-vulnerabilidade-media">Média</button>
-            <button class="btn-volnerabilidade-baixa">Baixa</button>
+            <button class="btn-vulnerabilidade-baixa">Baixa</button>
 
             <!-- Tela de Dashboard e Testes -->
-            <button type=".btn-upload-dashboard">Upload</button>
-            <button class="btn-remover">Remover</button>
+            <button class="btn-upload-dashboard">Upload</button>
+            <button class="btn-vermelho">Remover</button>
             <button class="btn-visualizar-relatorio">Ver Relatório</button>
 
             <!-- Tela de Login -->
@@ -115,14 +97,24 @@
                 Cadastrar Checklist
             </button>
 
-            <div class="btn-container">
-            <div class="toggle-component">
-                <input type="checkbox" id="switch-1" class="toggle-input">
-                <label for="switch-1" class="btn-button">
-                <span class="circulo-switch"></span>
-                </label>
+
+    
+            <!-- Botão de Ativar e Inativar -->
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+
+            <!-- Barra de Pesquisa -->
+            <div class="container-busca">
+                <i class="fa-solid fa-magnifying-glass icone-busca"></i>
+                <input type="text" class="input-busca" placeholder="Buscar">
             </div>
-            </div>
+            <label class="item-checklist">
+                <input type="checkbox" class="meu-checkbox">
+                Planejamento
+            </label>
+            
         </div>
     </div>
 </body>
