@@ -8,7 +8,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: var(--cor-verde);   
     color: var(--cor-branco-primario);
@@ -21,12 +21,14 @@
     font-size: 13px;           
     font-weight: 600;           
     border: 1px solid #101a40;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
-    background-color:var(--cor-branco-primario);   
+    background-color: var(--cor-branco-primario);   
     color: #101a40;
-} 
-
+}
+.btn-cancelar:hover {
+    background-color: #f0f4ff;  
+}
 .btn-novo-cadastro{
     display: flex;
     align-items: center;
@@ -35,7 +37,7 @@
     font-size: 13px; 
     font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color: #081650;
     color: var(--cor-branco-primario);
@@ -103,13 +105,11 @@
 .btn-excluir:active,
 .btn-vermelho-excluir:active,
 .btn-editar:active,
-.btn-filtro:active,
-.btn-fechar-modal-projeto:active {
+.btn-filtro:active{
     transform: scale(0.98);      
 }
 
 
-/* Banco de Conhecimento */
 .btn-ver-todas{
     display: flex;
     align-items: center;
@@ -128,8 +128,6 @@
 
 
 
-
-/* Tela de Notificações */
 .btn-link-notificacao{
     display: flex;
     align-items: center;
@@ -160,8 +158,8 @@
     font-size: 15px;
 }
 
-/* Modais de confirmação */
-.btn-conf-nao-inativacao{
+
+.btn-inativacao{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -171,37 +169,18 @@
     font-size: 13px;
     font-weight: 500;
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
 }
-.btn-conf-nao-inativacao:hover {
+.btn-inativacao:hover {
     background-color: #dee2e6;  
 }
-.btn-conf-nao-inativacao:active {
+.btn-inativacao:active {
     transform: scale(0.98);      
 }
-.btn-conf-sim-inativacao{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 24px;
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;        
-    cursor: pointer;            
-    background-color: #ef4444; 
-    color: var(--cor-branco-primario);             
-    transition: background 0.2s ease;
-}
-.btn-conf-sim-inativacao:hover {
-    background-color: #dc2626;  
-}
-.btn-conf-sim-inativacao:active {
-    transform: scale(0.98);      
-}
+
 
 .btn-confirmar{
     display: flex;
@@ -213,7 +192,7 @@
     border: none;
     color: var(--cor-cinza-primario);
     background-color:#BCE4D3;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
 }
 .btn-confirmar:hover{
     background-color: rgb(142, 199, 142);
@@ -225,7 +204,7 @@
 
 
 
-/* Tela Gerenciar Perfis */
+
 .btn-opcoes-perfil{
     display: flex;
     justify-content: center;
@@ -234,7 +213,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color: #101a40;
     color: var(--cor-branco-primario);
@@ -248,7 +227,7 @@
 
 
 
-/* Tela Gerenciar Checklist */
+
 .btn-adicionar-pergunta{
     display: flex;
     align-items: center;
@@ -257,7 +236,7 @@
     font-size: 12px;
     font-weight: 500;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color:aqua;
 }
@@ -265,34 +244,13 @@
     transform: scale(0.98);      
 }
 
-/* Tela de Gerenciamento de Pentest */
-.btn-navegacao {
-    display: flex;  
-    align-items: center;
-    justify-content: center;
-    gap: 8px;                  
-    padding: 10px 24px;         
-    font-size: 14px;
-    font-weight: 700;           
-    background-color:var(--cor-branco-primario);  
-    border: 1.5px solid #0d237d;
-    border-radius: 12px;        
-    color: #0d237d;            
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.btn-navegacao:hover {
-    background-color: #f0f4ff;  
-}
-.btn-navegacao:active {
-    transform: scale(0.98);      
-}
+
 .btn-adicionar-quadrado {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 65px;                
+    width: 60px;
+    height: 45px;                
     background-color:var(--cor-branco-primario);   
     border: none;
     border-radius: 18px;         
@@ -303,34 +261,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;                 
-    height: 38px;
+    width: 28px;                 
+    height: 28px;
     background-color: #1a365d;   
     border-radius: 10px;         
     color: var(--cor-branco-primario);              
     font-size: 16px;             
 }
 .btn-adicionar-quadrado:active {
-    transform: scale(0.98);      
+    transform: scale(0.78);      
 }
 
-/* Tela Gerenciamento Projeto */
-.btn-fechar-modal-projeto {
-    display: flex;
-    align-items: center;
-    justify-content: center;           
-    padding: 12px 32px;          
-    font-size: 15px;             
-    font-weight: 600;            
-    background-color: transparent;   
-    border: 1.5px solid #0d237d; 
-    border-radius: 10px;         
-    color: #0d237d;              
-    cursor: pointer;
-}
-.btn-fechar-modal-projeto:active {
-    transform: scale(0.98);      
-}
 
 
 .btn-aba-projeto{
@@ -365,30 +306,14 @@
     height: 40px;                 
     background-color:var(--cor-branco-primario);   
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     color: #0d237d;             
     font-size: 16px;             
     font-weight: 700;            
     cursor: pointer; 
     transition: all 0.2s ease;
 }
-.btn-projeto-devolver{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 17px; 
-    font-weight: 1000;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #b70f17;
-    color:var(--cor-branco-primario);
-    gap: 25px;
-}
-.btn-projeto-devolver:active {
-    transform: scale(0.98);      
-}
+
 .btn-upload-projeto {
     background-color: #122240; 
     color:var(--cor-branco-primario);
@@ -396,7 +321,7 @@
     font-weight: 400;
     letter-spacing: 0.3px;
     padding: 6px 16px;       
-    border-radius: 6px;        
+    border-radius: var(--raio-md);        
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
@@ -416,7 +341,7 @@
     font-size: 11px;
     font-weight: 500;
     padding: 8px 14px;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     display:flex;
     align-items: center;
     justify-content: center;
@@ -445,7 +370,7 @@
 
 
 
-/* Tela de Login */
+
 .btn-login {
     display: flex;
     align-items: center;
@@ -459,7 +384,7 @@
     border-radius: 10px;          
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
-}
+} 
 .btn-login:hover {
     background-color: #1a2f56;    
 }
@@ -499,7 +424,6 @@
 }
 
 
-/* Tela de Dashboard */
 
 .btn-upload-dashboard{
     display: flex;
@@ -528,7 +452,7 @@
     font-size: 13px;           
     font-weight: 600;           
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: #dc3545;  
     color: var(--cor-branco-primario);
@@ -550,7 +474,7 @@
     font-size: 12px;           
     font-weight: 600;           
     border: 1px solid #101a40;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color:var(--cor-branco-primario);   
     color: #101a40;
@@ -561,7 +485,6 @@
 
 
 
-/* Tela Exposição de Vulnerabilidades */
 .btn-vulnerabilidade-todas {
     display: flex;
     align-items: center;
@@ -570,7 +493,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -587,7 +510,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -604,7 +527,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -621,7 +544,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -632,7 +555,7 @@
 }
 
 
-/* Opção de Botão para cadastro */
+
 .btn-cadastrar-checklist {
     display: flex;
     align-items: center;
@@ -643,7 +566,7 @@
     font-weight: 500;
     letter-spacing: 0.5px;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: #004475; 
     color:var(--cor-branco-primario);
@@ -664,19 +587,18 @@
     font-size: 8px;
     font-weight: bold;
     border: 2px solid var(--cor-branco-primario);
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     color: var(--cor-branco-primario);
     box-sizing: border-box;
     padding-bottom: 2px;        
 }
 
 
-/* Barra de Pesquisa */
 .container-busca {
   display: flex;
   align-items: center;
   background-color: #f2f2f2; 
-  border-radius: 12px;       
+  border-radius: var(--raio-lg);     
   padding: 8px 16px;         
   width: 100%;               
   max-width: 500px;          
@@ -700,7 +622,7 @@
 }
 
 
-/* Checklist */
+
 
 .switch input {
   display: none;
@@ -708,8 +630,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 22px;
 }
 .slider {
   position: absolute;
@@ -725,10 +647,10 @@
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
   background-color: var(--cor-branco-primario);
   transition: .1s;
   border-radius: 50%;
@@ -737,13 +659,12 @@
   background-color: var(--cor-azul-destaques);
 }
 .switch input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(18px);
 }
 
 
 
 
-/* Checkbox do Checklist.*/
 .item-checklist {
   display: flex;
   align-items: center;
@@ -779,21 +700,3 @@
   transform: rotate(45deg);
   margin-bottom: 2px;        
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
