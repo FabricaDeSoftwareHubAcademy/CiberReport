@@ -1,5 +1,5 @@
-@import url('reset.css');
-@import url('style.css');
+@import url('../reset.css');
+@import url('../style.css');
 
 
 
@@ -375,7 +375,6 @@ main{
         padding: var(--espaco-md);
     }
 }
-
 
 
 
