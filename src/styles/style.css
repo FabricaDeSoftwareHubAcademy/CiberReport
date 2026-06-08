@@ -4,6 +4,7 @@
 @import url("../components/menu/menu-lateral.css");
 @import url("../components/menu/menu-superior.css");
 @import url("../components/tabela/tabela.css");
+@import url("../components/menuNivel/menuNIvel.css");
 
 /* ⚠️ NUNCA use valores de cor, fonte ou espaçamento direto no CSS.
    Sempre use as variáveis definidas aqui. Caso queira/precise de algo AVISE!!! */
