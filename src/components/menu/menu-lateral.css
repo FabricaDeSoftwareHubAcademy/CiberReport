@@ -271,14 +271,14 @@
     opacity: 1;
 }
 
-@media(max-width: 931px){
+@media (max-width: 931px) {
     #sideBar {
         position: absolute;
         transition: transform 0.35s ease;
         transform: translateX(-150%);
-        height: 100vh;        
+        height: 100vh;
     }
-    #sideBar.open-sidebar{
+    #sideBar.open-sidebar {
         transform: translateX(0);
     }
 }
