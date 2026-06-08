@@ -23,10 +23,12 @@
     border: 1px solid #101a40;
     border-radius: 6px;         
     cursor: pointer;            
-    background-color:var(--cor-branco-primario);   
+    background-color:transparent;   
     color: #101a40;
-} 
-
+}
+.btn-cancelar:hover {
+    background-color: #f0f4ff;  
+}
 .btn-novo-cadastro{
     display: flex;
     align-items: center;
@@ -103,13 +105,11 @@
 .btn-excluir:active,
 .btn-vermelho-excluir:active,
 .btn-editar:active,
-.btn-filtro:active,
-.btn-fechar-modal-projeto:active {
+.btn-filtro:active{
     transform: scale(0.98);      
 }
 
 
-/* Banco de Conhecimento */
 .btn-ver-todas{
     display: flex;
     align-items: center;
@@ -128,8 +128,6 @@
 
 
 
-
-/* Tela de Notificações */
 .btn-link-notificacao{
     display: flex;
     align-items: center;
@@ -160,8 +158,8 @@
     font-size: 15px;
 }
 
-/* Modais de confirmação */
-.btn-conf-nao-inativacao{
+
+.btn-inativacao{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -176,32 +174,13 @@
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
 }
-.btn-conf-nao-inativacao:hover {
+.btn-inativacao:hover {
     background-color: #dee2e6;  
 }
-.btn-conf-nao-inativacao:active {
+.btn-inativacao:active {
     transform: scale(0.98);      
 }
-.btn-conf-sim-inativacao{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 24px;
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;        
-    cursor: pointer;            
-    background-color: #ef4444; 
-    color: var(--cor-branco-primario);             
-    transition: background 0.2s ease;
-}
-.btn-conf-sim-inativacao:hover {
-    background-color: #dc2626;  
-}
-.btn-conf-sim-inativacao:active {
-    transform: scale(0.98);      
-}
+
 
 .btn-confirmar{
     display: flex;
@@ -225,7 +204,7 @@
 
 
 
-/* Tela Gerenciar Perfis */
+
 .btn-opcoes-perfil{
     display: flex;
     justify-content: center;
@@ -248,7 +227,7 @@
 
 
 
-/* Tela Gerenciar Checklist */
+
 .btn-adicionar-pergunta{
     display: flex;
     align-items: center;
@@ -265,7 +244,7 @@
     transform: scale(0.98);      
 }
 
-/* Tela de Gerenciamento de Pentest */
+
 .btn-navegacao {
     display: flex;  
     align-items: center;
@@ -314,23 +293,6 @@
     transform: scale(0.98);      
 }
 
-/* Tela Gerenciamento Projeto */
-.btn-fechar-modal-projeto {
-    display: flex;
-    align-items: center;
-    justify-content: center;           
-    padding: 12px 32px;          
-    font-size: 15px;             
-    font-weight: 600;            
-    background-color: transparent;   
-    border: 1.5px solid #0d237d; 
-    border-radius: 10px;         
-    color: #0d237d;              
-    cursor: pointer;
-}
-.btn-fechar-modal-projeto:active {
-    transform: scale(0.98);      
-}
 
 
 .btn-aba-projeto{
@@ -372,23 +334,7 @@
     cursor: pointer; 
     transition: all 0.2s ease;
 }
-.btn-projeto-devolver{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 17px; 
-    font-weight: 1000;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #b70f17;
-    color:var(--cor-branco-primario);
-    gap: 25px;
-}
-.btn-projeto-devolver:active {
-    transform: scale(0.98);      
-}
+
 .btn-upload-projeto {
     background-color: #122240; 
     color:var(--cor-branco-primario);
@@ -445,7 +391,7 @@
 
 
 
-/* Tela de Login */
+
 .btn-login {
     display: flex;
     align-items: center;
@@ -499,7 +445,6 @@
 }
 
 
-/* Tela de Dashboard */
 
 .btn-upload-dashboard{
     display: flex;
@@ -561,7 +506,6 @@
 
 
 
-/* Tela Exposição de Vulnerabilidades */
 .btn-vulnerabilidade-todas {
     display: flex;
     align-items: center;
@@ -632,7 +576,7 @@
 }
 
 
-/* Opção de Botão para cadastro */
+
 .btn-cadastrar-checklist {
     display: flex;
     align-items: center;
@@ -671,7 +615,6 @@
 }
 
 
-/* Barra de Pesquisa */
 .container-busca {
   display: flex;
   align-items: center;
@@ -700,7 +643,7 @@
 }
 
 
-/* Checklist */
+
 
 .switch input {
   display: none;
@@ -708,8 +651,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 22px;
 }
 .slider {
   position: absolute;
@@ -725,10 +668,10 @@
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
   background-color: var(--cor-branco-primario);
   transition: .1s;
   border-radius: 50%;
@@ -737,13 +680,12 @@
   background-color: var(--cor-azul-destaques);
 }
 .switch input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(18px);
 }
 
 
 
 
-/* Checkbox do Checklist.*/
 .item-checklist {
   display: flex;
   align-items: center;
