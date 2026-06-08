@@ -245,27 +245,6 @@
 }
 
 
-.btn-navegacao {
-    display: flex;  
-    align-items: center;
-    justify-content: center;
-    gap: 8px;                  
-    padding: 10px 24px;         
-    font-size: 14px;
-    font-weight: 700;           
-    background-color:var(--cor-branco-primario);  
-    border: 1.5px solid #0d237d;
-    border-radius: var(--raio-lg);        
-    color: #0d237d;            
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.btn-navegacao:hover {
-    background-color: #f0f4ff;  
-}
-.btn-navegacao:active {
-    transform: scale(0.98);      
-}
 .btn-adicionar-quadrado {
     display: flex;
     align-items: center;
