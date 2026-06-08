@@ -633,7 +633,7 @@
   width: 40px;
   height: 22px;
 }
-.slider {
+.switch-slider {
   position: absolute;
   cursor: pointer;
   top: 0; 
@@ -644,7 +644,7 @@
   transition: .4s;
   border-radius: 34px;
 }
-.slider:before {
+.switch-slider:before {
   position: absolute;
   content: "";
   height: 16px;
@@ -655,10 +655,10 @@
   transition: .1s;
   border-radius: 50%;
 }
-.switch input:checked + .slider {
+.switch input:checked + .switch-slider {
   background-color: var(--cor-azul-destaques);
 }
-.switch input:checked + .slider:before {
+.switch input:checked + .switch-slider:before {
   transform: translateX(18px);
 }
 
