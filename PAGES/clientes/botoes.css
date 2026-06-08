@@ -8,7 +8,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: var(--cor-verde);   
     color: var(--cor-branco-primario);
@@ -21,9 +21,9 @@
     font-size: 13px;           
     font-weight: 600;           
     border: 1px solid #101a40;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
-    background-color:transparent;   
+    background-color: var(--cor-branco-primario);   
     color: #101a40;
 }
 .btn-cancelar:hover {
@@ -37,7 +37,7 @@
     font-size: 13px; 
     font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color: #081650;
     color: var(--cor-branco-primario);
@@ -169,7 +169,7 @@
     font-size: 13px;
     font-weight: 500;
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -192,7 +192,7 @@
     border: none;
     color: var(--cor-cinza-primario);
     background-color:#BCE4D3;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
 }
 .btn-confirmar:hover{
     background-color: rgb(142, 199, 142);
@@ -213,7 +213,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color: #101a40;
     color: var(--cor-branco-primario);
@@ -236,7 +236,7 @@
     font-size: 12px;
     font-weight: 500;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
     background-color:aqua;
 }
@@ -255,7 +255,7 @@
     font-weight: 700;           
     background-color:var(--cor-branco-primario);  
     border: 1.5px solid #0d237d;
-    border-radius: 12px;        
+    border-radius: var(--raio-lg);        
     color: #0d237d;            
     cursor: pointer;
     transition: all 0.2s ease;
@@ -327,7 +327,7 @@
     height: 40px;                 
     background-color:var(--cor-branco-primario);   
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     color: #0d237d;             
     font-size: 16px;             
     font-weight: 700;            
@@ -342,7 +342,7 @@
     font-weight: 400;
     letter-spacing: 0.3px;
     padding: 6px 16px;       
-    border-radius: 6px;        
+    border-radius: var(--raio-md);        
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
@@ -362,7 +362,7 @@
     font-size: 11px;
     font-weight: 500;
     padding: 8px 14px;
-    border-radius: 6px;
+    border-radius: var(--raio-md);
     display:flex;
     align-items: center;
     justify-content: center;
@@ -405,7 +405,7 @@
     border-radius: 10px;          
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
-}
+} 
 .btn-login:hover {
     background-color: #1a2f56;    
 }
@@ -473,7 +473,7 @@
     font-size: 13px;           
     font-weight: 600;           
     border: none;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color: #dc3545;  
     color: var(--cor-branco-primario);
@@ -495,7 +495,7 @@
     font-size: 12px;           
     font-weight: 600;           
     border: 1px solid #101a40;
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color:var(--cor-branco-primario);   
     color: #101a40;
@@ -514,7 +514,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -531,7 +531,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -548,7 +548,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);         
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -565,7 +565,7 @@
     font-size: 13px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: var(--cor-cinza-secundario);   
     color: var(--cor-texto-primario);
@@ -587,7 +587,7 @@
     font-weight: 500;
     letter-spacing: 0.5px;
     border: none;
-    border-radius: 12px;         
+    border-radius: var(--raio-lg);       
     cursor: pointer;            
     background-color: #004475; 
     color:var(--cor-branco-primario);
@@ -608,7 +608,7 @@
     font-size: 8px;
     font-weight: bold;
     border: 2px solid var(--cor-branco-primario);
-    border-radius: 6px;         
+    border-radius: var(--raio-md);         
     color: var(--cor-branco-primario);
     box-sizing: border-box;
     padding-bottom: 2px;        
@@ -619,7 +619,7 @@
   display: flex;
   align-items: center;
   background-color: #f2f2f2; 
-  border-radius: 12px;       
+  border-radius: var(--raio-lg);     
   padding: 8px 16px;         
   width: 100%;               
   max-width: 500px;          
