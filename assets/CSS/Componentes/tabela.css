@@ -1,0 +1,175 @@
+.tabela-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.tabela-wrapper table {
+    width: 100%;
+    min-width: 900px;
+    max-width: 1200px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--cor-fundo-branco);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    overflow: hidden;
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-primario);
+}
+
+.tabela-wrapper th,
+.tabela-wrapper td {
+    padding: var(--espaco-sm);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--cor-borda-padrao);
+}
+
+.tabela-wrapper th {
+    background-color: var(--cor-azul-primaria);
+    color: var(--cor-branco-primario);
+    font-weight: 500;
+    font-size: var(--fonte-apoio);
+    white-space: nowrap;
+}
+
+.tabela-wrapper .th-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tabela-wrapper .th-label:hover {
+    opacity: 0.8;
+}
+
+.tabela-wrapper .sort-icon {
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+
+.tabela-wrapper tbody tr {
+    transition: var(--transicao-rapida);
+}
+
+.tabela-wrapper tbody tr:nth-child(even) {
+    background-color: var(--cor-cinza-hover);
+}
+
+.tabela-wrapper tbody tr:hover {
+    background-color: color-mix(in srgb, var(--cor-azul-destaques) 20%, transparent);
+}
+
+.tabela-wrapper tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-wrapper .status {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--espaco-xs) var(--espaco-sm);
+    border-radius: var(--raio-full);
+    font-size: var(--fonte-apoio);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.tabela-wrapper .status-atrasado {
+    color: var(--cor-vermelho-destaque);
+    background-color: color-mix(in srgb, var(--cor-vermelho-destaque) 15%, transparent);
+}
+
+.tabela-wrapper .status-concluido {
+    color: var(--cor-verde);
+    background-color: color-mix(in srgb, var(--cor-verde) 15%, transparent);
+}
+
+.tabela-wrapper .status-aguardando {
+    color: var(--cor-amarelo);
+    background-color: color-mix(in srgb, var(--cor-amarelo) 15%, transparent);
+}
+
+.tabela-wrapper .acoes {
+    display: flex;
+    gap: var(--espaco-sm);
+    align-items: center;
+}
+
+.tabela-wrapper .acoes button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--espaco-xs);
+    color: var(--cor-texto-secundario);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--raio-sm);
+    transition: var(--transicao-rapida);
+}
+
+.tabela-wrapper .acoes button:hover {
+    color: var(--cor-azul-destaques);
+    background-color: var(--cor-cinza-terciario);
+    border-radius: 100%;
+}
+
+.tabela-wrapper .acoes .btn-excluir:hover {
+    color: var(--cor-vermelho-destaque);
+}
+
+.tabela-wrapper .acoes .btn-editar:hover {
+    color: var(--cor-amarelo);
+}
+
+.tabela-wrapper tfoot td.rodape-tabela {
+    background-color: var(--cor-azul-primaria);
+    color: var(--cor-branco-primario);
+    padding: var(--espaco-sm) var(--espaco-md);
+    border-bottom: none;
+}
+
+.tabela-wrapper .paginacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--espaco-xs);
+}
+
+.tabela-wrapper .pag-btn,
+.tabela-wrapper .pag-num {
+    background-color: var(--cor-fundo-branco);
+    color: var(--cor-texto-primario);
+    border: none;
+    border-radius: var(--raio-full);
+    padding: var(--espaco-xs) var(--espaco-md);
+    font-size: var(--fonte-apoio);
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transicao-rapida);
+}
+
+.tabela-wrapper .pag-num {
+    min-width: 3.2rem;
+    padding: var(--espaco-xs);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabela-wrapper .pag-btn:hover,
+.tabela-wrapper .pag-num:hover {
+    background-color: var(--cor-cinza-terciario);
+}
+
+.tabela-wrapper .pag-num.ativo {
+    background-color: var(--cor-azul-destaques);
+    color: var(--cor-branco-primario);
+}
+
+.tabela-wrapper .pag-num.ativo:hover {
+    background-color: var(--cor-cinza-terciario);
+    color: var(--cor-texto-primario);
+}
