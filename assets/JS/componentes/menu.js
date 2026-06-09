@@ -16,7 +16,7 @@ document.getElementById('open_btn').addEventListener('click', function () {
 
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
-        }, 400); // aguarda o submenu fechar antes
+        }, 100); // aguarda o submenu fechar antes
     } else {
         sideBar.classList.add('open-sidebar');
     }

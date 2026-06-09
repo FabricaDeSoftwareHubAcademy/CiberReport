@@ -91,11 +91,11 @@
     padding: 7px;
     cursor: pointer;
     align-items: center;
+    margin-left: 3rem;
 }
 
 .item-submenu a {
     display: flex;
-    margin-left: 10px;
     align-items: center;
     gap: 10px;
     color: var(--cor-branco-primario);
@@ -107,8 +107,8 @@
     max-height: 1000px;
     padding-left: 26px;
 }
-.side_item.active {
-    background-color: var(--cor-azul-destaques);
+.side_item.active span{
+    color: var(--cor-amarelo);
 }
 
 .side_item:hover:not(.active),
