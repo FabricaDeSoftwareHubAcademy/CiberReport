@@ -38,10 +38,12 @@ btn_voltar.addEventListener('click', (evento) => {
 
 btn_avancar.addEventListener('click', (evento) => {
     evento.preventDefault();
-    if (passoAtual < totalPassos) {
+    if (passoAtual === totalPassos) {
+        return;
+    } else {
         passoAtual++;
         Stepper();
-    }
+    }       
 });
 
 Stepper();
