@@ -30,7 +30,7 @@
     color: #101a40;
 }
 .btn-cancelar:hover {
-    background-color: #517fff; /* Melhorar a cor desse hover */
+    background-color: #517fff; 
 }
 .btn-novo-cadastro{
     display: flex;
@@ -134,8 +134,13 @@
 .btn-ver-todas:active{
     color: rgb(214, 36, 104); 
 }
+.btn-ver-todas:focus {
+    color: blue;
+    border-bottom: 2px solid blue;
+    outline: none; 
+}
 
-/* Trabalhando aqui!!!!!!!! */
+
 
 
 
@@ -156,6 +161,11 @@
   color: blue;
   border-bottom: 2px solid blue;
 }
+.btn-link-notificacao:focus {
+    color: blue;
+    border-bottom: 2px solid blue;
+    outline: none; 
+}
 
 .btn-dropdown{
     display: flex;
@@ -167,6 +177,9 @@
     background-color: transparent;
     cursor: pointer;
     font-size: 15px;
+}
+.btn-dropdown:hover i {
+    color: var(--cor-azul-destaques);
 }
 
 
@@ -204,6 +217,7 @@
     color: var(--cor-cinza-primario);
     background-color:#BCE4D3;
     border-radius: var(--raio-md);
+    cursor: pointer;
 }
 .btn-confirmar:hover{
     background-color: rgb(142, 199, 142);
@@ -229,12 +243,16 @@
     background-color: #101a40;
     color: var(--cor-branco-primario);
 }
-.btn-opcoes-perfil:hover{
-  background-color: #FFAE00;
-}
 .btn-opcoes-perfil:active {
-    transform: scale(0.98);      
+    transform: scale(0.98);
+    color: #101a40; 
+    background-color: #FFAE00;  
 }
+.btn-opcoes-perfil.ativo{
+    color: #101a40;
+    background-color:  #FFAE00;
+}
+
 
 
 
@@ -249,10 +267,13 @@
     border: none;
     border-radius: var(--raio-md);
     cursor: pointer;
-    background-color:aqua;
+    background-color:var(--cor-baikal-1);
 }
 .btn-adicionar-pergunta:active {
     transform: scale(0.98);      
+}
+.btn-adicionar-pergunta:hover {
+    background-color:var(--cor-baikal-3) ;
 }
 
 
@@ -281,6 +302,9 @@
 }
 .btn-adicionar-quadrado:active {
     transform: scale(0.78);      
+}
+.btn-adicionar-quadrado:hover{
+    background-color: #a8c5ee;
 }
 
 
@@ -324,7 +348,9 @@
     cursor: pointer; 
     transition: all 0.2s ease;
 }
-
+.btn-remover-analista:hover {
+    background-color:  #a8c5ee;
+}
 .btn-upload-projeto {
     background-color: #122240; 
     color:var(--cor-branco-primario);
@@ -484,7 +510,7 @@
     padding: 6px 12px;            
     font-size: 12px;           
     font-weight: 600;           
-    border: 1px solid #101a40;
+    border: 1px solid var(--cor-azul-primaria);
     border-radius: var(--raio-md);         
     cursor: pointer;            
     background-color:var(--cor-branco-primario);   
@@ -493,6 +519,10 @@
 .btn-visualizar-relatorio:active {
     transform: scale(0.98);      
 }
+.btn-visualizar-relatorio:hover {
+    background-color: #517fff;
+}
+
 
 
 
@@ -513,6 +543,15 @@
     color: var(--cor-branco-primario);
     background-color: var(--cor-cinza-primario); 
 }
+.btn-vulnerabilidade-todas.ativo{
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-cinza-primario);
+}
+.btn-vulnerabilidade-todas:hover {
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-cinza-primario);
+}
+
 .btn-vulnerabilidade-critica {
     display: flex;
     align-items: center;
@@ -529,6 +568,14 @@
 .btn-vulnerabilidade-critica:active {
     color:var(--cor-branco-primario);
     background-color: var(--cor-vermelho-destaque);  
+}
+.btn-vulnerabilidade-critica.ativo{
+    color: var(--cor-branco-primario);
+    background-color:var(--cor-vermelho-destaque);
+}
+.btn-vulnerabilidade-critica:hover {
+    color: var(--cor-branco-primario);
+    background-color:var(--cor-vermelho-destaque);
 }
 .btn-vulnerabilidade-media {
     display: flex;
@@ -547,6 +594,14 @@
     color:var(--cor-branco-primario);
     background-color: var(--cor-amarelo); 
 }
+.btn-vulnerabilidade-media.ativo{
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-amarelo);
+}
+.btn-vulnerabilidade-media:hover {
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-amarelo);
+}
 .btn-vulnerabilidade-baixa {
     display: flex;
     align-items: center;
@@ -564,6 +619,65 @@
     color: var(--cor-branco-primario);
     background-color: var(--cor-verde); 
 }
+.btn-vulnerabilidade-baixa.ativo{
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-verde);
+}
+.btn-vulnerabilidade-baixa:hover {
+    color: var(--cor-branco-primario);
+    background-color: var(--cor-verde);
+}
+
+.btn-filtro-relatorio {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #e2e8f0; 
+    border-radius: var(--raio-md); 
+    cursor: pointer;            
+    background-color: var(--cor-branco-primario);   
+    color: #4a5568; 
+    gap: 10px; 
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn-filtro-relatorio .icone-database {
+    font-size: 18px; 
+    color: #101a40; 
+}
+.btn-filtro-relatorio .texto-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1; 
+}
+.btn-filtro-relatorio .numeros {
+    font-size: 13px; 
+    font-weight: 700;
+    color: #000000;
+}
+.btn-filtro-relatorio .total {
+    color: #a0aec0;
+    font-weight: 400;
+}
+.btn-filtro-relatorio .rotulo {
+    font-size: 11px; 
+    font-weight: 500;
+    color: #4a5568;
+}
+.btn-filtro-relatorio:hover {
+    background-color: #b6cedd;
+    border-color: #c2d2e7;
+}
+.btn-filtro-relatorio:active {
+    transform: scale(0.98);      
+}
+
+
+
 
 
 
@@ -672,7 +786,14 @@
 .switch input:checked + .switch-slider:before {
   transform: translateX(18px);
 }
+.switch:hover .switch-slider {
+  background-color: #b3b3b3; 
+}
 
+
+.switch:hover input:checked + .switch-slider {
+  filter: brightness(1.2); 
+}
 
 
 
