@@ -181,6 +181,9 @@
 .btn-dropdown:hover i {
     color: var(--cor-azul-destaques);
 }
+.btn-dropdown:active {
+    transform: scale(0.95); 
+}
 
 
 .btn-inativacao{
