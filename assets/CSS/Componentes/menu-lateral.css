@@ -108,7 +108,7 @@
     padding-left: 26px;
 }
 .side_item.active span{
-    color: var(--cor-amarelo);
+    color: var(--cor-baikal-2);
 }
 
 .side_item:hover:not(.active),
@@ -266,6 +266,17 @@
     border-bottom: 8px solid;
 }
 
+.menuOverlay{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 99;
+}
+
 #sideBar:not(.open-sidebar) .side_item:hover .tooltip-item {
     visibility: visible;
     opacity: 1;
@@ -280,5 +291,8 @@
     }
     #sideBar.open-sidebar {
         transform: translateX(0);
+    }
+    .menuOverlay.active{
+        display: block;
     }
 }
