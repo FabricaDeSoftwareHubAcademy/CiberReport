@@ -31,7 +31,7 @@
             </div>    
             <div class="login-box">
                 <h2>LOGIN</h2>
-                <form>
+                <form action="../../Model/login.php" method="POST">
                     <label>E-mail</label>
                     <input type="email" placeholder="email@gmail.com">
                     <label>Senha</label>
@@ -39,6 +39,18 @@
                     <a href="">Esqueceu a senha?</a>
                     <button type="submit">Entrar</button>
                 </form>
+                
+                <script>
+                    const params = new URLSearchParams(window.location.search);
+                    const erro = params.get('erro');
+
+                    if (erro === 'invalido') {
+                        document.querySelector('.login-box').insertAdjacentHTML('beforeend', <p class="erro-login">E-mail ou senha inválidos. Por favor, tente novamente.</p>);
+                    } else if (erro === 'campos') {
+                        document.querySelector('.login-box').insertAdjacentHTML('beforeend', <p class="erro-login">Preencha todos os campos.</p>);
+                    }
+                </script>
+
             </div>
         </section>
         </div>
