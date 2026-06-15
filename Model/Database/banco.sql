@@ -3,13 +3,13 @@ USE cyber_report;
 CREATE TABLE IF NOT EXISTS perfil_acesso (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(60) NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS permissao (
   id INT NOT NULL AUTO_INCREMENT,
   codigo VARCHAR(80) NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS perfil_permissao (
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS usuario (
   telefone VARCHAR(30) DEFAULT NULL,
   cargo VARCHAR(80) DEFAULT NULL,
   especialidade VARCHAR(80) DEFAULT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   ultimo_login DATETIME DEFAULT NULL,
   PRIMARY KEY (id)
   -- FOREIGN KEY (perfil_id) REFERENCES perfil_acesso(id)
@@ -56,15 +56,15 @@ CREATE TABLE IF NOT EXISTS empresa (
   email_contato VARCHAR(150) NOT NULL,
   telefone VARCHAR(20) DEFAULT NULL,
   responsavel VARCHAR(150) NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
-  -- FOREIGN KEY (endereco_id) REFERENCES endereco(id)
+  -- FOREIGN KEY (endereco_id) REFERENCES endereco(id),
   -- FOREIGN KEY (responsavel_id) REFERENCES usuario(id)
 );
 CREATE TABLE IF NOT EXISTS checklist (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(80) NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS checklist_item (
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS checklist_item (
   titulo VARCHAR(80) NOT NULL,
   referencia VARCHAR(120) DEFAULT NULL,
   obrigatorio TINYINT NOT NULL DEFAULT 1,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
 );
@@ -84,9 +84,9 @@ CREATE TABLE IF NOT EXISTS modelo_pentest (
   categoria VARCHAR(80) NOT NULL,
   metodologia VARCHAR(80) NOT NULL,
   framework VARCHAR(80) NOT NULL,
-  nv_risco VARCHAR(80) NOT NULL,
+  nv_risco ENUM('BAIXO', 'MEDIO', 'ALTO', 'CRITICO') NOT NULL,
   descricao TEXT,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
 );
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS projeto (
   alvo TEXT NOT NULL,
   contrato VARCHAR(255) DEFAULT NULL,
   restricao TEXT,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (empresa_id) REFERENCES empresa(id),
   -- FOREIGN KEY (modelo_pentest_id) REFERENCES modelo_pentest(id)
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS projeto_usuario (
   projeto_id INT NOT NULL,
   usuario_id INT NOT NULL,
   papel ENUM('GESTOR', 'LIDER', 'ESPECIALISTA') NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (projeto_id, usuario_id, papel)
   -- FOREIGN KEY (projeto_id) REFERENCES projeto(id),
   -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
@@ -129,21 +129,36 @@ CREATE TABLE IF NOT EXISTS cronometro_registro (
   fim DATETIME DEFAULT NULL,
   pausa DATETIME DEFAULT NULL,
   duracao_minutos INT NOT NULL DEFAULT 0,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (projeto_id) REFERENCES projeto(id)
 );
+CREATE TABLE IF NOT EXISTS cronometro_log (
+  id INT NOT NULL AUTO_INCREMENT,
+  cronometro_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  ip_analista INT NOT NULL,
+  ip_alvo INT NOT NULL,
+  inicio DATETIME NOT NULL,
+  fim DATETIME DEFAULT NULL,
+  PRIMARY KEY (id)
+  -- FOREIGN KEY (cronometro_id) REFERENCES cronometro_registro(id),
+  -- FOREIGN KEY (ip_analista) REFERENCES cronometro_registro(ip_analista),
+  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo), 
+  -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
 CREATE TABLE IF NOT EXISTS vulnerabilidade (
   id INT NOT NULL AUTO_INCREMENT,
   projeto_id INT NOT NULL,
   nome VARCHAR(80) NOT NULL,
-  cvss DECIMAL (3, 1),
+  cvss DECIMAL(3, 1) CHECK (cvss >= 0.0 AND cvss <= 10.0),
   cve VARCHAR (50),
   descricao VARCHAR(255),
   descricao_tecnica TEXT NOT NULL,
   categoria VARCHAR(120) DEFAULT NULL,
   severidade_vulnerabilidade ENUM('BAIXA', 'MEDIA', 'ALTA', 'CRITICA') NOT NULL,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   impacto_negocio TEXT,
   PRIMARY KEY (id)
   -- FOREIGN KEY (projeto_id) REFERENCES projeto(id)
@@ -161,14 +176,12 @@ CREATE TABLE IF NOT EXISTS evidencia (
 CREATE TABLE IF NOT EXISTS banco_conhecimento (
   id INT NOT NULL AUTO_INCREMENT,
   vulnerabilidade_id INT NOT NULL,
-  evidencia_id INT NOT NULL,
   titulo VARCHAR(255) NOT NULL,
   categoria VARCHAR(255) DEFAULT NULL,
   conteudo TEXT NOT NULL,
   tecnica_utilizada TEXT,
   solucao_recomendada TEXT,
-  STATUS TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
-  -- FOREIGN KEY (evidencia_id) REFERENCES evidencia(id)
 );
