@@ -13,6 +13,9 @@
     background-color: var(--cor-verde);   
     color: var(--cor-branco-primario);
 }
+.btn-botao-verde:hover{
+    background-color: rgb(97, 223, 97); /* Melhorar a cor desse hover */
+}
 .btn-cancelar{
     display: flex;       
     align-items: center;        
@@ -27,7 +30,7 @@
     color: #101a40;
 }
 .btn-cancelar:hover {
-    background-color: #f0f4ff;  
+    background-color: #517fff; /* Melhorar a cor desse hover */
 }
 .btn-novo-cadastro{
     display: flex;
@@ -43,6 +46,9 @@
     color: var(--cor-branco-primario);
     gap: 25px;
 }
+.btn-novo-cadastro:hover{
+    background-color:#072188;
+}
 .btn-fechar-modal{
     display: flex;
     align-items: center;
@@ -53,6 +59,9 @@
     background-color: transparent;
     cursor: pointer;
     font-size: 18px;
+}
+.btn-fechar-modal:hover i{
+    color: var(--cor-vermelho-destaque);
 }
 .btn-excluir{
     display: flex;
@@ -65,16 +74,8 @@
     cursor: pointer;
     font-size: 15px;
 }
-.btn-vermelho-excluir{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: none;
+.btn-excluir:hover i{
     color: var(--cor-vermelho-destaque);
-    background-color: transparent;
-    cursor: pointer;
-    font-size: 15px;
 }
 .btn-editar{
     display: flex;
@@ -87,6 +88,9 @@
     cursor: pointer;
     font-size: 15px;
 }
+.btn-editar:hover i{
+    color: var(--cor-azul-destaques);
+}
 .btn-filtro{
     display: flex;
     align-items: center;
@@ -98,12 +102,14 @@
     cursor: pointer;
     font-size: 15px;
 }
+.btn-filtro:hover i{
+    color: var(--cor-azul-destaques);
+}
 .btn-botao-verde:active,
 .btn-cancelar:active,
 .btn-novo-cadastro:active,
 .btn-fechar-modal:active,
 .btn-excluir:active,
-.btn-vermelho-excluir:active,
 .btn-editar:active,
 .btn-filtro:active{
     transform: scale(0.98);      
@@ -125,6 +131,11 @@
     color: #1a365d;
     text-decoration: underline;   
 }
+.btn-ver-todas:active{
+    color: rgb(214, 36, 104); 
+}
+
+/* Trabalhando aqui!!!!!!!! */
 
 
 
@@ -288,8 +299,8 @@
     transition: color 0.3s ease, border-color 0.3s ease;
 }
 .btn-aba-projeto:hover{
-  color: rgb(213, 232, 13);
-  border-bottom: 2px solid rgb(213, 232, 13);
+  color: var(--cor-amarelo);
+  border-bottom: 2px solid var(--cor-amarelo);
 }
 .btn-aba-projeto:active {
     transform: scale(0.98);      
