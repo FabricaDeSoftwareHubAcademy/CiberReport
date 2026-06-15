@@ -33,13 +33,17 @@ input{
 }
 
 /* Progressbar */
+.containerProgress{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--cor-texto-secundario);
+}
 .progressbar{
   position: relative;
   display: flex;
   justify-content: space-between;
   counter-reset: step;
   margin: 2rem 0 4rem;
-  
 }
 
 .progressbar::before, .progress{
@@ -60,8 +64,8 @@ input{
 }
 
 .progress-step{
-  width: 3.4rem;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   background-color: #dcdcdd;
   border-radius: 50%;
   display: flex;
@@ -89,7 +93,7 @@ input{
 
 /*form*/
 .form{
-  width: clamp(320px, 30%, 430px);
+  width: clamp(320px, 90%, 600px);
   margin: 0 auto;
   border: 1px solid #ccc;
   border-radius: 0.35rem;
@@ -104,21 +108,22 @@ input{
   display: block;
 }
 
-.input-group{
+.input-grupo{
   margin: 2rem 0;
 }
 
 /*btn grupo*/
 
-.btns-group{
+.btns-grupo{
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .btn{
   padding: 0.75rem;
   display: inline-block;
-  width: auto;
+  width: 100px;
   border: none;
   font-size: 1rem;
   text-decoration: none;
@@ -130,6 +135,10 @@ input{
   transition: 0.3s;
 }
 
+.next-btn{
+  display: flex;
+  justify-content: flex-end;
+}
 .btn:hover{
   box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 119, 255, 0.514);
 }
