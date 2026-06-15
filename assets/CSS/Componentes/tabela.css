@@ -91,6 +91,14 @@
     background-color: color-mix(in srgb, var(--cor-amarelo) 15%, transparent);
 }
 
+.tabela-wrapper .status-ativo {
+    color: var(--cor-azul-destaques);
+}
+
+.tabela-wrapper .status-inativo {
+    color: var(--cor-texto-primario);
+}
+
 .tabela-wrapper .acoes {
     display: flex;
     gap: var(--espaco-sm);
