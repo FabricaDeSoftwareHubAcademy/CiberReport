@@ -2,7 +2,7 @@
 $host  = "localhost";
 $user  = "root";
 $pass  = "";
-$banco = "cyber-report"; // troque pelo nome do seu banco
+$banco = "cyber-report";
 
 $conexao = new mysqli($host, $user, $pass, $banco);
 
