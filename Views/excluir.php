@@ -12,11 +12,11 @@
     {
         $id_empresa = addslashes($_GET['id_empresa']);
 
-        // primeiro busca a empresa pra saber qual endereco_id ela usa
+        
         $dados_empresa = $empresa->buscarDadosEmpresa($id_empresa);
         $id_endereco = $dados_empresa['endereco_id'];
 
-        // exclui a empresa primeiro (ela depende do endereco, não o contrário)
+        
         $empresa->excluirEmpresa($id_empresa);
         $endereco->excluirEndereco($id_endereco);
     }

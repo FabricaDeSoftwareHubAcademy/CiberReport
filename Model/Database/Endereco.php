@@ -31,7 +31,6 @@
             $sql->bindValue(":pais",$pais);
             $sql->execute();
 
-            // Pega o id que o banco acabou de gerar pra esse endereço
             return $pdo->lastInsertId();
         }
 

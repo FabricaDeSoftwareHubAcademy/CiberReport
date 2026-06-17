@@ -28,10 +28,10 @@
 
         if(!empty($nome_fantasia) && !empty($razao_social) && !empty($telefone) && !empty($email_contato) && !empty($cnpj) && !empty($responsavel) && !empty($cep) && !empty($rua) && !empty($numero) && !empty($bairro) && !empty($cidade) && !empty($estado))
         {
-            // 1º cadastra o endereço e recebe o id gerado
+        
             $id_endereco_novo = $endereco->cadastrarEndereco($cep,$rua,$numero,$complemento,$bairro,$cidade,$estado,$pais);
 
-            // 2º cadastra a empresa usando esse id como endereco_id
+          
             if($empresa->cadastrarEmpresa($id_endereco_novo,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel))
             {
                 header("location:listar.php");
