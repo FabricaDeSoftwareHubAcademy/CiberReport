@@ -1,0 +1,61 @@
+@import url("../style.css");
+
+.form-stepper input{
+  display: flex;
+  width: 10rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-stepper {
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    height: 8rem;
+    flex-shrink: 0;
+    border: 1px solid gray;
+}
+.stepper {
+    display: flex;
+    width: auto;
+    margin-top: 10px;
+    align-items: center;
+    gap: 8px;
+}
+.espaco-stepper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.stepper-numero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cor-texto-titulo);
+    padding: 1rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+}
+.stepper-separador {
+    border: 1px solid #000;
+    width: 120px;
+    margin-bottom: 20px;
+}
+#btn-voltar{
+  display: flex;
+}
+#btn-avancar.active{
+  display: hidden;
+}
+.stepper-numero.active{
+  background-color: green;
+}
+.stepper-numero.estado{
+     border: 1px solid var(--cor-verde);
+}
+.stepper-separador.active{
+  border: 1px solid green;
+}

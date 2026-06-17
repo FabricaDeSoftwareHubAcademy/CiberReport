@@ -1,0 +1,332 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #3f3f3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.modal {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    border: 2px solid #008cff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.area-titulo {
+    background: #004b87;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.icone-titulo {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: #1da1ff;
+    border-radius: 8px;
+}
+
+.titulo-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.titulo-modal h2 {
+    color: #fff;
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.titulo-modal label {
+    color: #cfd8e3;
+    font-size: 14px;
+    display: block;
+}
+
+.fechar {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.area-dados-vulnerabilidade {
+    padding: 35px;
+}
+
+.btn-voltar {
+    text-decoration: none;
+    color: #002b5b;
+    font-size: 30px;
+    margin-bottom: 20px;
+    display: inline-block;
+    line-height: 1;
+}
+
+.secao-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.secao-titulo strong {
+    font-size: 18px;
+    color: #1d1d1d;
+}
+
+.row-3,
+.row-2 {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.row-3 {
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.row-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.input-dados {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.row-3 .input-dados,
+.row-2 .input-dados {
+    margin-bottom: 0;
+}
+
+.input-dados label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    color: #2f2f2f;
+}
+
+.input-dados input,
+.input-dados textarea,
+.input-dados select {
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    padding: 12px 14px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s;
+    background: #fff;
+    font-family: 'Poppins', sans-serif;
+    color: #1d1d1d;
+}
+
+.input-dados input:focus,
+.input-dados textarea:focus,
+.input-dados select:focus {
+    border-color: #008cff;
+    box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.15);
+}
+
+textarea {
+    resize: none;
+    height: 120px;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+.select-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrap select {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.select-wrap::after {
+    content: "▼";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.input-icone-wrap {
+    position: relative;
+}
+
+.icone-input {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.botoes-forms {
+    padding: 20px 35px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancelar,
+.btn-salvar {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-cancelar {
+    background: #fff;
+    border: 1px solid #8aa0b7;
+    color: #4c6177;
+}
+
+.btn-cancelar:hover {
+    background: #f1f5f9;
+}
+
+.btn-salvar {
+    background: #37c96b;
+    color: #fff;
+}
+
+.btn-salvar:hover {
+    background: #2dae5b;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 10px;
+    }
+
+    .box {
+        max-width: 100%;
+    }
+
+    .area-titulo {
+        padding: 15px 20px;
+    }
+
+    .titulo-modal h2 {
+        font-size: 24px;
+    }
+
+    .titulo-modal label {
+        font-size: 12px;
+    }
+
+    .row-3,
+    .row-2 {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .area-dados-vulnerabilidade {
+        padding: 20px;
+    }
+
+    .botoes-forms {
+        padding: 16px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .area-titulo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-right: 50px;
+    }
+
+    .icone-titulo {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+    }
+
+    .titulo-modal h2 {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+
+    .fechar {
+        top: 14px;
+        right: 15px;
+        transform: none;
+        font-size: 24px;
+    }
+
+    .area-dados-vulnerabilidade {
+        padding: 15px;
+    }
+
+    .input-dados input,
+    .input-dados textarea,
+    .input-dados select {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    .botoes-forms {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .btn-cancelar,
+    .btn-salvar {
+        width: 100%;
+    }
+}

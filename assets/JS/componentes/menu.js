@@ -5,6 +5,7 @@ const overlay = document. getElementById('overlay-pesquisaMobile');
 const pesquisaMobileBtn = document.querySelector('.pesquisa-mobile button');
 const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
 const logoMenuSuperior = document.querySelector('.logo-menuSuperior');
+const menuOverlay = document.querySelector('.menuOverlay');
 
 document.getElementById('open_btn').addEventListener('click', function () {
     const isOpen = sideBar.classList.contains('open-sidebar');
@@ -13,10 +14,10 @@ document.getElementById('open_btn').addEventListener('click', function () {
         // Fecha o submenu primeiro, depois fecha o sidebar
         suBmenus.classList.remove('open_submenu');
         dropdown.classList.remove('open_dropdown');
-
+        menuOverlay.classList.remove('active');
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
-        }, 400); // aguarda o submenu fechar antes
+        }, 100); // aguarda o submenu fechar antes
     } else {
         sideBar.classList.add('open-sidebar');
     }
@@ -32,14 +33,28 @@ overlayPesquisa.addEventListener('click', (e) => {
     }
 });
 
+menuOverlay.addEventListener('click', (e) => {
+    if (!e.target.closest('.barra-pesquisa')) {
+        sideBar.classList.remove('open-sidebar');
+        menuOverlay.classList.remove('active');
+    }
+});
+
+logoMenuSuperior.addEventListener('click', () => {
+    menuOverlay.classList.toggle('active');
+});
+
 logoMenuSuperior.addEventListener('click', () => {
     sideBar.classList.toggle('open-sidebar');
 });
 
-document.getElementById('dropdown').addEventListener('click', function () {
+document.getElementById('dropdown_item').addEventListener('click', function () {
     suBmenus.classList.toggle('open_submenu');
     dropdown.classList.toggle('open_dropdown');
 });
+
+
+
 // const popup = document.getElementById('popup_menu');
 // const gatilho = document.querySelector('.pai_popup');
 
