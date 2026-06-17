@@ -176,59 +176,67 @@
                                 <div class="modal-clientes-form-row">
                                         <div class="modal-clientes-area-dados-cliente-empresa">
                                             <label>Nome da Empresa</label>
-                                            <input type="text" placeholder="Digite o nome da Empresa" />
+                                            <input type="text" name="nome_fantasia" placeholder="Digite o nome da Empresa" />
+                                        </div>
+                                        <div class="modal-clientes-area-dados-cliente-racao-empresa">
+                                            <label>Razão Social</label>
+                                            <input type="text" name="razao_social" placeholder="Digite a razão social" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente-tel">
                                             <label>Telefone</label>
                                             <div class="modal-clientes-campo-telefone">
                                                 <i class="fa fa-phone"></i>
-                                                <input type="text" placeholder="(11) 9999-9999" />
+                                                <input type="text" name="telefone" placeholder="(11) 9999-9999" />
                                             </div>
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente-email">
                                             <label>E-mail</label>
                                             <div class="modal-clientes-campo-email">
                                                 <i class="fa-solid fa-envelope"></i>
-                                                <input type="email" placeholder="email@.com" />
+                                                <input type="email" name="email_contato" placeholder="email@.com" />
                                             </div>
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>CNPJ</label>
-                                            <input type="text" placeholder="23.456.789/0001-01" />
+                                            <input type="text" name="cnpj" placeholder="23.456.789/0001-01" />
                                         </div>
                                 </div>
 
                                 <div class="modal-clientes-form-row">
                                         <div class="modal-clientes-area-dados-cliente area-numero">
                                             <label>CEP</label>
-                                            <input type="text" id="cep" placeholder="12345-678" onblur="buscarCep()" />
+                                            <input type="text" name="cep" id="cep" placeholder="12345-678" onblur="buscarCep()" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Endereço</label>
-                                            <input type="text" id="endereco" placeholder="Digite o endereço" />
+                                            <input type="text" name="rua" id="endereco" placeholder="Digite o endereço" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente area-numero">
                                             <label>Número</label>
-                                            <input type="text" placeholder="0000" />
+                                            <input type="text" name="numero" placeholder="0000" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Complemento</label>
-                                            <input type="text" placeholder="Complemento" />
+                                            <input type="text" name="complemento" placeholder="Complemento" />
                                         </div>
                                 </div>
 
                                 <div class="modal-clientes-form-row">
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Bairro</label>
-                                            <input type="text" id="bairro" placeholder="Digite o bairro" />
+                                            <input type="text" name="bairro" id="bairro" placeholder="Digite o bairro" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Cidade</label>
-                                            <input type="text" id="cidade" placeholder="Selecione uma Cidade" />
+                                            <input type="text" name="cidade" id="cidade" placeholder="Selecione uma Cidade" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Estado</label>
-                                            <input type="text" id="estado" placeholder="Selecione um Estado" />
+                                            <input type="text" name="estado" id="estado" placeholder="Selecione um Estado" />
+                                        </div>
+                                        <div class="modal-clientes-area-dados-cliente">
+                                            <label>País</label>
+                                            <input type="text" name="pais" id="pais" value="Brasil" required/>
                                         </div>
                                 </div>
 
@@ -240,25 +248,25 @@
                                 <div class="modal-clientes-form-row">
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>Nome do Responsável</label>
-                                            <input type="text" placeholder="Digite o nome" />
+                                            <input type="text" name="responsavel" placeholder="Digite o nome" />
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente-tel">
                                             <label>Telefone</label>
                                             <div class="modal-clientes-campo-telefone">
                                                 <i class="fa fa-phone"></i>
-                                                <input type="text" placeholder="(11)99999-9999" />
+                                                <input type="text" name="telefone_responsavel" placeholder="(11)99999-9999" />
                                             </div>
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente-email">
                                             <label>E-mail</label>
                                             <div class="modal-clientes-campo-email">
                                                 <i class="fa-solid fa-envelope"></i>
-                                                <input type="email" placeholder="email@.com" />
+                                                <input type="email" name="email_responsavel" placeholder="email@.com" />
                                             </div>
                                         </div>
                                         <div class="modal-clientes-area-dados-cliente">
                                             <label>CPF</label>
-                                            <input type="text" placeholder="000.000.000-00" />
+                                            <input type="text" name="cpf" placeholder="000.000.000-00" />
                                         </div>
                                 </div>
                                 <div class="modal-clientes-botoes-form">

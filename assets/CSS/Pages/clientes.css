@@ -60,7 +60,7 @@ body {
 
 .modal-clientes-box {
     width: 95%;
-    max-width: 76rem;
+    max-width: 96rem;
     margin: var(--espaco-md);
     border-radius: var(--raio-xl);
     box-shadow: var(--sombra-xl);
@@ -153,11 +153,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+.modal-clientes-area-dados-cliente-racao-empresa{
+    flex: 1.4;
+    display: flex;
+    flex-direction: column;
+}
 
 .modal-clientes-area-dados-cliente label,
 .modal-clientes-area-dados-cliente-empresa label,
 .modal-clientes-area-dados-cliente-email label,
-.modal-clientes-area-dados-cliente-tel label {
+.modal-clientes-area-dados-cliente-tel label,
+.modal-clientes-area-dados-cliente-racao-empresa label {
     margin-bottom: var(--espaco-xs);
     font-size: var(--fonte-legenda);
     font-weight: 600;
@@ -171,6 +177,17 @@ body {
     font-size: var(--fonte-legenda);
 }
 .modal-clientes-area-dados-cliente-empresa input:focus {
+    outline: none;
+    border-color: var(--cor-borda-foco);
+}
+.modal-clientes-area-dados-cliente-racao-empresa input{
+    width: 100%;
+    padding: var(--espaco-sm) var(--espaco-md);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-sm);
+    font-size: var(--fonte-legenda);
+}
+.modal-clientes-area-dados-cliente-racao-empresa input:focus{
     outline: none;
     border-color: var(--cor-borda-foco);
 }
@@ -364,6 +381,7 @@ main{
         align-self: flex-end;
     }
 
+    .modal-clientes-area-dados-cliente-racao-empresa,
     .modal-clientes-area-dados-cliente,
     .modal-clientes-area-dados-cliente-empresa,
     .modal-clientes-area-dados-cliente-email,
