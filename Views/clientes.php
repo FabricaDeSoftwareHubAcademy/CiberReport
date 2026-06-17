@@ -8,6 +8,8 @@
     $empresa->conectar("clientesbaikal","localhost","root","");
     $endereco->conectar("clientesbaikal","localhost","root","");
 
+    $dados = $empresa->ListarDados();
+
     if(isset($_POST['nome_fantasia']))
     {
         $nome_fantasia = addslashes($_POST['nome_fantasia']);
@@ -34,7 +36,8 @@
           
             if($empresa->cadastrarEmpresa($id_endereco_novo,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel))
             {
-                header("location:listar.php");
+                header("location:clientes.php");
+                exit;
             }
             else
             {
@@ -343,226 +346,62 @@
                             </tr>
                         </thead>
                         <tbody>
+
+                            <?php foreach($dados as $empresa){ ?>
+
                             <tr>
-                                <td>Tech Solutions</td>
-                                <td>23.651.958.224.65</td>
-                                <td>André</td>
-                                <td>andre@gmail.com</td>
-                                <td>(11)999999999</td>
-                                <td><span class="badge-status ativo">Ativo</span></td>
-                                <td class="coluna-acoes">
-                                    <label class="toggle-switch" title="Ativar/Desativar">
-                                        <input type="checkbox" checked />
-                                        <span class="slider"></span>
-                                    </label>
 
-                                    <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                        ><i class="fa-solid fa-pen-to-square"></i
-                                    ></label>
-
-                                    <button class="btn-acao btn-excluir" title="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                <td>
+                                    <?php echo $empresa['nome_fantasia']; ?>
                                 </td>
+
+                                <td>
+                                    <?php echo $empresa['cnpj']; ?>
+                                </td>
+
+                                <td>
+                                    <?php echo $empresa['responsavel']; ?>
+                                </td>
+
+                                <td>
+                                    <?php echo $empresa['email_contato']; ?>
+                                </td>
+
+                                <td>
+                                    <?php echo $empresa['telefone']; ?>
+                                </td>
+
+                                <td>
+
+                                    <?php
+                                        if($empresa['status'] == 1)
+                                        {
+                                            echo '<span class="badge-status ativo">Ativo</span>';
+                                        }
+                                        else
+                                        {
+                                            echo '<span class="badge-status inativo">Inativo</span>';
+                                        }
+                                    ?>
+
+                                </td>
+
+                                <td class="coluna-acoes">
+
+                                    <a href="editar.php?id_empresa=<?php echo $empresa['id']; ?>">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
+                                    <a href="excluir.php?id_empresa=<?php echo $empresa['id']; ?>">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+
+                                </td>
+
                             </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status inativo">Inativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="switch">
-                                                <input type="checkbox">
-                                                <span class="switch-slider"></span>
-                                            </label>
 
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
+                            <?php } ?>
 
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status inativo">Inativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>          
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
-                            <tr>
-                                        <td>Tech Solutions</td>
-                                        <td>23.651.958.224.65</td>
-                                        <td>André</td>
-                                        <td>andre@gmail.com</td>
-                                        <td>(11)999999999</td>
-                                        <td><span class="badge-status ativo">Ativo</span></td>
-                                        <td class="coluna-acoes">
-                                            <label class="toggle-switch" title="Ativar/Desativar">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-
-                                            <label for="abrir-modal-edicao" class="bt-abrir-sistema-edicao"
-                                                ><i class="fa-solid fa-pen-to-square"></i
-                                            ></label>
-
-                                            <button class="btn-acao btn-excluir" title="Excluir">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
