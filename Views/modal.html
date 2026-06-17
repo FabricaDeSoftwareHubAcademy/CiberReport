@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="py-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal</title>
+    <link rel="stylesheet" href="../assets/CSS/style.css">
+    <script src="../assets/JS/componentes/modal.js"></script>
+</head>
+    <body>
+        <button class="btn btn-primario" data-modal-target="modalExemplo">
+            Abrir Modal
+        </button>
+
+    <div class="modal-overlay" id="modalExemplo">
+        <div class="modal-container">
+            
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <i class="fa-solid fa-shield-halved modal-icon"></i>
+                    <div>
+                        <h2 class="modal-title">Criação de Pentest</h2>
+                        <p class="modal-subtitle">Definição do modelo de pentest e suas características técnicas</p>
+                    </div>
+                </div>
+                <button class="modal-close-btn" data-close-modal>&times;</button>
+            </div>
+
+            <div class="modal-body">
+                
+                <div class="card-interno">
+                    <h3 class="card-interno-titulo">Configuração do Pentest</h3>
+                    
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Modelo de execução</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Defina o nível de acesso ao sistema">
+                                <button type="button" class="btn btn-adicionar"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Digite aqui...">
+                                <button type="button" class="btn btn-adicionar"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Horas para execução do pentest</label>
+                            <input type="time" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    
+                    <div class="card-interno">
+                        <h3 class="card-interno-titulo">Checklists</h3>
+                        <div class="input-group">
+                            <select class="form-control">
+                                <option>Defina o nível de acesso ao sistema alvo.</option>
+                                <option>Opção 2</option>
+                            </select>
+                            <button type="button" class="btn btn-adicionar"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        
+                        <div class="tags-container">
+                            <div class="tag-item">IAM Review <span>&times;</span></div>
+                            <div class="tag-item">Network Security <span>&times;</span></div>
+                            <div class="tag-item">Data Encryption <span>&times;</span></div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: var(--espaco-lg);">
+                        <div class="card-interno">
+                            <h3 class="card-interno-titulo">Governança Técnica</h3>
+                            <div class="form-group" style="margin: 0;">
+                                <label class="form-label">Frameworks</label>
+                                <div class="input-group">
+                                    <select class="form-control"><option>Ex: OWASP</option></select>
+                                    <button type="button" class="btn btn-adicionar"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-interno">
+                            <h3 class="card-interno-titulo">Nível de Profundidade do Teste</h3>
+                            <div class="form-group" style="margin: 0;">
+                                <label class="form-label">Níveis</label>
+                                <div class="input-group">
+                                    <select class="form-control"><option>Ex: Deep Security Assessment</option></select>
+                                    <button type="button" class="btn btn-adicionar"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                    <div class="form-group">
+                        <label class="form-label">Descrição*</label>
+                        <textarea class="form-control" placeholder="Avaliação abrangente de segurança..."></textarea>
+                    </div>
+
+            </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="button" class="btn btn-primario">Salvar</button>
+                </div>
+
+        </div>
+    </div>
+</body>
+</html>

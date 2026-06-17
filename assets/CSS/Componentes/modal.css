@@ -1,0 +1,283 @@
+/* =========================================
+   MODAL OVERLAY & CONTAINER
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(23, 35, 61, 0.6); /* Tom escuro baseado no --cor-texto-titulo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicao-base);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background-color: var(--cor-fundo-pagina);
+    width: 100%;
+    max-width: 900px; /* Largura baseável nas imagens (telas largas) */
+    border-radius: var(--raio-lg);
+    overflow: hidden;
+    box-shadow: var(--sombra-2xl);
+    transform: translateY(-20px);
+    transition: var(--transicao-base);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+/* =========================================
+   HEADER DO MODAL
+   ========================================= */
+.modal-header {
+    background-color: var(--cor-azul-primaria);
+    color: var(--cor-fundo-branco);
+    padding: var(--espaco-lg) var(--espaco-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-md);
+}
+
+.modal-icon {
+    font-size: 3.6rem;
+    color: var(--cor-baikal-1); /* Trazendo a identidade ciano/baikal para os ícones */
+}
+
+.modal-title {
+    margin: 0;
+    font-size: var(--fonte-secao);
+    font-weight: 600;
+}
+
+.modal-subtitle {
+    margin: var(--espaco-xs) 0 0 0;
+    font-size: var(--fonte-apoio);
+    color: var(--cor-cinza-secundario);
+    font-weight: 400;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--cor-fundo-branco);
+    font-size: var(--fonte-titulo);
+    cursor: pointer;
+    transition: var(--transicao-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-btn:hover {
+    transform: scale(1.1);
+    color: var(--cor-vermelho-destaque);
+}
+
+/* =========================================
+   CORPO DO MODAL E CONTAINERS INTERNOS
+   ========================================= */
+.modal-body {
+    padding: var(--espaco-xl);
+    overflow-y: auto;
+    background-color: var(--cor-fundo-branco);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-lg); /* Espaçamento entre os blocos internos */
+}
+
+/* Para os blocos de "Checklists", "Governança Técnica", etc */
+.card-interno {
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    padding: var(--espaco-lg);
+    background-color: var(--cor-fundo-branco);
+}
+
+.card-interno-titulo {
+    font-size: var(--fonte-subsecao);
+    color: var(--cor-texto-titulo);
+    margin-bottom: var(--espaco-md);
+    font-weight: 600;
+}
+
+/* =========================================
+   COMPONENTES DE FORMULÁRIO
+   ========================================= */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--espaco-md);
+}
+
+.form-label {
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+    margin-bottom: var(--espaco-xs);
+}
+
+.form-control {
+    width: 100%;
+    padding: 1.2rem var(--espaco-md);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    font-size: var(--fonte-texto);
+    color: var(--cor-texto-primario);
+    background-color: var(--cor-fundo-branco);
+    font-family: "Poppins", sans-serif;
+    transition: var(--transicao-rapida);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--cor-borda-foco);
+    box-shadow: 0 0 0 3px rgba(0, 106, 181, 0.15); /* Usando o rgb da --cor-azul-destaques */
+}
+
+.form-control::placeholder {
+    color: var(--cor-cinza-secundario);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Select customizado (apenas ajuste fino) */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2317233d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--espaco-md) top 50%;
+    background-size: 1.2rem auto;
+    padding-right: var(--espaco-xl);
+}
+
+/* Input Group (Input + Botão "+" lado a lado) */
+.input-group {
+    display: flex;
+    gap: var(--espaco-sm);
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+/* =========================================
+   BOTÕES
+   ========================================= */
+.btn {
+    padding: 1.2rem var(--espaco-lg);
+    border-radius: var(--raio-md);
+    font-size: var(--fonte-texto);
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transicao-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-sm);
+}
+
+.btn-primario {
+    background-color: var(--cor-verde);
+    color: var(--cor-fundo-branco);
+}
+
+.btn-primario:hover {
+    background-color: #389e50; /* Levemente mais escuro que --cor-verde */
+    box-shadow: var(--sombra-md);
+}
+
+.btn-secundario {
+    background-color: var(--cor-fundo-branco);
+    color: var(--cor-azul-primaria);
+    border-color: var(--cor-azul-primaria);
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+/* Botão "+" (Adicionar) ao lado dos inputs */
+.btn-adicionar {
+    background-color: var(--cor-texto-titulo);
+    color: var(--cor-fundo-branco);
+    border-radius: var(--raio-md);
+    width: 4.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fonte-subsecao);
+}
+
+.btn-adicionar:hover {
+    background-color: var(--cor-azul-primaria);
+}
+
+/* =========================================
+   TAGS / BADGES (Para a área de Checklists)
+   ========================================= */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-sm);
+    margin-top: var(--espaco-md);
+}
+
+.tag-item {
+    background-color: var(--cor-verde);
+    color: var(--cor-fundo-branco);
+    padding: 0.6rem var(--espaco-md);
+    border-radius: var(--raio-full); /* Bordas bem arredondadas como no print */
+    font-size: var(--fonte-apoio);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+}
+
+.tag-item span {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* =========================================
+   RODAPÉ DO MODAL
+   ========================================= */
+.modal-footer {
+    padding: var(--espaco-lg) var(--espaco-xl);
+    background-color: var(--cor-fundo-branco);
+    border-top: 1px solid var(--cor-borda-padrao);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--espaco-md);
+}
+
+/* =========================================
+   SISTEMA DE GRIDS PARA FORMULÁRIOS
+   ========================================= */
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--espaco-md) var(--espaco-lg); }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--espaco-md) var(--espaco-lg); }
+.form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: var(--espaco-md) var(--espaco-lg); }
