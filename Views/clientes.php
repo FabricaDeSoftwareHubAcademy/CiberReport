@@ -410,7 +410,7 @@
                     <div class="modal-clientes-box">
                         <div class="modal-clientes-area-titulo">
                             <div class="modal-clientes-titulo-flex">
-                                <img src="../../assets/img/icone_empresa.svg" alt="Empresa" class="modal-clientes-icone-topo" />
+                                <img src="../assets/img/icone_empresa.svg" alt="Empresa" class="modal-clientes-icone-topo" />
                                 <div class="modal-clientes-titulo-modal">
                                     <h2>Edição de Cadastro</h2>
                                     <p>Informações da empresa contratante e do responsável técnico</p>
