@@ -28,7 +28,7 @@
                 return false;
             }
             else{
-                $empresa = $pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contact,telefone,responsavel,status) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
+                $empresa = $pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contato,telefone,responsavel,status) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
                 $empresa->bindValue(":endereco_id",$endereco_id);
                 $empresa->bindValue(":nome_fantasia",$nome_fantasia);
                 $empresa->bindValue(":razao_social",$razao_social);
@@ -80,7 +80,7 @@
         public function atualizarDadosEmpresa($id_empresa,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel)
         {
             global $pdo;
-            $sql = $pdo->prepare("UPDATE empresa SET nome_fantasia = :nome_fantasia, razao_social = :razao_social, cnpj = :cnpj, email_contact = :email_contato, telefone = :telefone, responsavel = :responsavel WHERE id = :id");
+            $sql = $pdo->prepare("UPDATE empresa SET nome_fantasia = :nome_fantasia, razao_social = :razao_social, cnpj = :cnpj, email_contato = :email_contato, telefone = :telefone, responsavel = :responsavel WHERE id = :id");
             $sql->bindValue(":nome_fantasia",$nome_fantasia);
             $sql->bindValue(":razao_social",$razao_social);
             $sql->bindValue(":cnpj",$cnpj);

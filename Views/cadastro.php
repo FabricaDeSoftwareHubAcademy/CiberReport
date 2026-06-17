@@ -72,7 +72,7 @@
         <input type="text" name="estado" placeholder="Estado">
         <input type="text" name="pais" placeholder="País" value="Brasil">
         <input type="text" name="responsavel" placeholder="Nome do Responsável">
-        <input type="submit" value="CADASTRAR">
+        <button type="submit" class="modal-clientes-btn-salvar">SALVAR</button>
     </form>
 </body>
 </html>
