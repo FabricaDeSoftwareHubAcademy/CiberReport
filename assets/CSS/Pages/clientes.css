@@ -300,7 +300,15 @@ main{
     
 }
 
-
+.modal-clientes-msg-erro {
+    width: 100%;
+    color: #d32f2f;
+    font-size: var(--fonte-legenda);
+    margin-bottom: var(--espaco-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+}
 
 
 

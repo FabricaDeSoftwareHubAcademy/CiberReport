@@ -12,6 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listar Empresas</title>
+    <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
 </head>
 <body>
     <h2 class="titulo-pagina">LISTAR EMPRESAS</h2>
