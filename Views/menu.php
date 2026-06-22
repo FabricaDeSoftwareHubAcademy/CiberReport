@@ -24,9 +24,15 @@
         <nav id="sideBar">
             <div class="sidebar_content">
                 <div class="logo">
+<<<<<<< Updated upstream
                     <div class="logo-nome">
                         <img src="../assets/img/logo-cyber-report.svg" alt="" />
                         <img src="../assets/img/logo-baikal.svg" alt="" />
+=======
+                    <div class="logo-nome">  
+                        <img src="../../../assets/img/logo-cyber-report.svg" alt="" />
+                        <img src="../../../assets/img/logo-baikal.svg" alt="" />
+>>>>>>> Stashed changes
                     </div>
                     <div class="logo-imagem">
                         <img src="../assets/img/logo-baikal-icone.svg" alt="" />
