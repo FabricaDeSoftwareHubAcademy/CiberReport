@@ -293,6 +293,6 @@
         </main>
     </div>
     <script src="../Assets/JS/componentes/tabela.js"></script>
-
+    <script src="../assets/JS/menu.js"></script>
 </body>
 </html>
