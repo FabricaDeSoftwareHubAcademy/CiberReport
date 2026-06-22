@@ -218,43 +218,81 @@
             </div>
 
 
-            <div class="section-tabela">
-                <table class="tabela-clientes">
+            <div class="tabela-wrapper">
+                <table>
                     <thead>
                         <tr>
-                            <th>Nome da Empresa</th>
-                            <th>CNPJ</th>
-                            <th>Responsável</th>
-                            <th>Email</th>
-                            <th>Telefone</th>
-                            <th>Status</th>
+                            <th data-col="0">
+                                <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="1">
+                                <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="2">
+                                <span class="th-label">CNPJ <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="3">
+                                <span class="th-label">Responsável <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="4">
+                                <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="5">
+                                <span class="th-label">Telefone <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
+                            <th data-col="6">
+                                <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                            </th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($dados as $emp){ ?>
                         <tr>
+                            <td>#<?php echo $emp['id']; ?></td>
                             <td><?php echo $emp['nome_fantasia']; ?></td>
                             <td><?php echo $emp['cnpj']; ?></td>
                             <td><?php echo $emp['responsavel']; ?></td>
-                            <td><?php echo $emp['email_contato']; ?></td>
+                            <td><?php echo isset($emp['email_contato']) ? $emp['email_contato'] : '---'; ?></td>
                             <td><?php echo $emp['telefone']; ?></td>
-                            <td><span class="badge-status ativo">Ativo</span></td>
-                            <td class="coluna-acoes">
-                                <a href="editar.php?id_empresa=<?php echo $emp['id']; ?>">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <a href="excluir.php?id_empresa=<?php echo $emp['id']; ?>">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
+                            <td>
+                                <span class="status status-concluido">Ativo</span>
+                            </td>
+                            <td>
+                                <div class="acoes">
+                                    <a href="editar.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a href="excluir.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button><i class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         <?php } ?>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8" class="rodape-tabela">
+                                <div class="paginacao">
+                                    <button class="pag-btn" aria-label="Página anterior">Anterior</button>
+                                    <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
+                                    <button class="pag-num" aria-label="Página 2">2</button>
+                                    <button class="pag-num" aria-label="Página 3">3</button>
+                                    <button class="pag-num" aria-label="Página 4">4</button>
+                                    <button class="pag-num" aria-label="Página 5">5</button>
+                                    <button class="pag-num" aria-label="Página 6">6</button>
+                                    <button class="pag-btn" aria-label="Próxima página">Próximo</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
+
         </main>
     </div>
+    <script src="../Assets/JS/componentes/tabela.js"></script>
 
 </body>
 </html>

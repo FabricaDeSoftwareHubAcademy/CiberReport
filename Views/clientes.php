@@ -8,6 +8,7 @@ $endereco = new Endereco();
 
 $empresa->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
 $endereco->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
+##arrumar isso daqui 
 
 $dados = $empresa->ListarDados();
 
@@ -70,7 +71,6 @@ if(isset($_POST['nome_fantasia']))
         <link rel="stylesheet" href="../assets/CSS/Componentes/menu-lateral.css">
         <link rel="stylesheet" href="../assets/CSS/style.css">
         <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
-        <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
         <link rel="stylesheet" href="../assets/CSS/Pages/clientes.css">
         <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
 
@@ -342,67 +342,77 @@ if(isset($_POST['nome_fantasia']))
                         </form>
                     </div>
                 </div>
-
-                <div class="section-tabela">
-                    <table class="tabela-clientes">
+                <div class="tabela-wrapper">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Nome da Empresa <i class="fa-solid fa-arrow-up-long sort-icon"></i><i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>CNPJ <i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>Responsável <i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>Email <i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>Telefone <i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>Status <i class="fa-solid fa-filter filter-icon"></i></th>
-                                <th>Ações <i class="fa-solid fa-filter filter-icon"></i></th>
+                                <th data-col="0">
+                                    <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="1">
+                                    <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="2">
+                                    <span class="th-label">CNPJ <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="3">
+                                    <span class="th-label">Responsável <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="4">
+                                    <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="5">
+                                    <span class="th-label">Telefone <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="6">
+                                    <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <?php foreach($dados as $empresa){ ?>
-
                             <tr>
-
+                                <td>#<?php echo $empresa['id']; ?></td>
+                                <td><?php echo $empresa['nome_fantasia']; ?></td>
+                                <td><?php echo $empresa['cnpj']; ?></td>
+                                <td><?php echo $empresa['responsavel']; ?></td>
+                                <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
+                                <td><?php echo $empresa['telefone']; ?></td>
                                 <td>
-                                    <?php echo $empresa['nome_fantasia']; ?>
-                                </td>
 
+                                    <span class="status status-concluido">Ativo</span>
+                                </td>
                                 <td>
-                                    <?php echo $empresa['cnpj']; ?>
+                                    <div class="acoes">
+                                        
+                                        <a href="editar.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                            <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </a>
+                                        <a href="excluir.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                            <button><i class="fa-solid fa-trash"></i></button>
+                                        </a>
+                                    </div>
                                 </td>
-
-                                <td>
-                                    <?php echo $empresa['responsavel']; ?>
-                                </td>
-
-                                <td>
-                                    <?php echo $empresa['email_contato']; ?>
-                                </td>
-
-                                <td>
-                                    <?php echo $empresa['telefone']; ?>
-                                </td>
-
-                                <td>
-                                    <span class="badge-status ativo">Ativo</span>
-                                </td>
-
-                                <td class="coluna-acoes">
-
-                                    <a href="editar.php?id_empresa=<?php echo $empresa['id']; ?>">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-
-                                    <a href="excluir.php?id_empresa=<?php echo $empresa['id']; ?>">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
-
-                                </td>
-
                             </tr>
-
                             <?php } ?>
-
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8" class="rodape-tabela">
+                                    <div class="paginacao">
+                                        <button class="pag-btn" aria-label="Página anterior">Anterior</button>
+                                        <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
+                                        <button class="pag-num" aria-label="Página 2">2</button>
+                                        <button class="pag-num" aria-label="Página 3">3</button>
+                                        <button class="pag-num" aria-label="Página 4">4</button>
+                                        <button class="pag-num" aria-label="Página 5">5</button>
+                                        <button class="pag-num" aria-label="Página 6">6</button>
+                                        <button class="pag-btn" aria-label="Próxima página">Próximo</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </main>
