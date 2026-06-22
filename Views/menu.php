@@ -1,3 +1,6 @@
+<!-- Para usar o menu siga as etapas: -->
+<!-- 1º etapa: teu arquivo estar em .php -->
+<!-- 2º etapa: colar na primeira linha do seu arquivo <?php include_once 'menu.php' ?> -->
 <!doctype html>
 <html lang="pt-br">
     <head>
