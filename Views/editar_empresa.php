@@ -44,7 +44,7 @@
         $empresa->atualizarDadosEmpresa($id_empresa,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel);
         $endereco->atualizarDadosEndereco($id_endereco,$cep,$rua,$numero,$complemento,$bairro,$cidade,$estado,$pais);
 
-        header("location:clientes.php");
+        header("location:cliente_empresa.php");
         exit;
     }
 
@@ -260,10 +260,10 @@
                             </td>
                             <td>
                                 <div class="acoes">
-                                    <a href="editar.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                    <a href="editar_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
                                         <button><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
-                                    <a href="excluir.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <a href="excluir_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
                                         <button><i class="fa-solid fa-trash"></i></button>
                                     </a>
                                 </div>

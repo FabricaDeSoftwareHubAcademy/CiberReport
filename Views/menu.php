@@ -175,9 +175,9 @@
                 </div>
             </header>
 
-            <main>
+            <!-- <main>
                 <h2>Conteúdo Principal</h2>
-            </main>
+            </main> -->
         </div>
         <script src="src\components\menu\menu.js"></script>
     </body>

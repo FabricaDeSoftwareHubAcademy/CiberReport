@@ -17,7 +17,7 @@
 <body>
 <h2 class="titulo-pagina">LISTAR EMPRESAS</h2>
 
-    <a href="cadastro.php"><button>CADASTRAR</button></a>
+    <a href="cadastro_empresa.php"><button>CADASTRAR</button></a>
 
     
     <div class="tabela-wrapper">
@@ -78,10 +78,10 @@
 
                     <td>
                         <div class="acoes">
-                            <a href="editar.php?id_empresa=<?php echo $pessoa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                            <a href="editar_empresa.php?id_empresa=<?php echo $pessoa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
                                 <button><i class="fa-solid fa-pen-to-square"></i></button>
                             </a>
-                            <a href="excluir.php?id_empresa=<?php echo $pessoa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                            <a href="excluir_empresa.php?id_empresa=<?php echo $pessoa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
                                 <button><i class="fa-solid fa-trash"></i></button>
                             </a>
                         </div>

@@ -20,6 +20,6 @@
         $endereco->excluirEndereco($id_endereco);
     }
 
-    header("location:clientes.php"); 
+    header("location:clientes_empresa.php");
     exit;
 ?>
