@@ -4,54 +4,99 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../assets/CSS/Componentes/menuNIvel.css" />
+        <link rel="stylesheet" href="../assets/CSS/style.css" />
+        <script src="../assets/JS/componentes/menuNIvel.js" defer></script>
         <title>Document</title>
     </head>
 
     <body>
-        <div action="" id="form-stepper">
-            <div class="container-stepper">
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-1">
-                            <span> 1 </span>
-                        </div>
-                        <span id="descricao-1"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-1"></div>
+        <form action="#" class="form">
+            <!-- Barra de Progressão -->
+            <div class="progressbar">
+                <div class="progress" id="progress"></div>
+                <div class="progress-step progress-step-active" data-title="exemplo"></div>
+                <div class="progress-step" data-title="exemplo"></div>
+                <div class="progress-step" data-title="exemplo"></div>
+                <div class="progress-step" data-title="exemplo"></div>
+            </div>
+            <!-- Steps -->
+            <div class="form-step form-step-active">
+                <div class="input-group">
+                    <label for="username">username</label>
+                    <input type="text"
+                           id="username"
+                           placeholder="Digite seu nome"
+                           >
                 </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-2">
-                            <span> 2 </span>
-                        </div>
-                        <span id="descricao-2"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-2"></div>
+                <div class="input-group">
+                    <label for="position">Position</label>
+                    <input type="text"
+                           id="position"
+                           placeholder="Digite sua posição"
+                           >
                 </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-3">
-                            <span> 3 </span>
-                        </div>
-                        <span id="descricao-3"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-3"></div>
-                </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-4">
-                            <span> 4 </span>
-                        </div>
-                        <span id="descricao-4"> Descrição </span>
-                    </div>
-                    <!-- <div class="stepper-separador" id="separador-1"></div> -->
+                <div class="next-btn">
+                    <a href="#" class="btn btn-next">proximo</a>
                 </div>
             </div>
-            
-            <button  id="btn-voltar">Voltar</button>
-            <button  id="btn-avancar">Avançar</button>
-        </div>
-
-        <script src="../assets/JS/componentes/menuNIvel.js"></script>
+            <div class="form-step ">
+                <div class="input-group">
+                    <label for="phone">Telefone</label>
+                    <input type="text"
+                           id="phone"
+                           placeholder="Digite seu nome"
+                           >
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email"
+                           id="email"
+                           placeholdere="Digite sua posição"
+                           >
+                </div>
+                <div class="btns-grupo">
+                    <a href="#" class="btn btn-prev">Voltar</a>
+                    <a href="#" class="btn btn-next">proximo</a>
+                </div>
+            </div>
+            <div class="form-step ">
+                <div class="input-group">
+                    <label for="date">Data de Nascimento</label>
+                    <input type="date"
+                           id="date"
+                           >
+                </div>
+                <div class="input-group">
+                    <label for="ID">ID</label>
+                    <input type="number"
+                           id="ID"
+                           placeholdere="Digite sua posição"
+                           >
+                </div>
+                <div class="btns-grupo">
+                    <a href="#" class="btn btn-prev">Voltar</a>
+                    <a href="#" class="btn btn-next">proximo</a>
+                </div>
+            </div>
+            <div class="form-step ">
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password"
+                           id="password"
+                           >
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Confirmar Senha</label>
+                    <input type="password"
+                           id="confirmPassword"
+                           placeholdere="Confirme sua Senha"
+                           >
+                </div>
+                <div class="btns-grupo">
+                    <a href="#" class="btn btn-prev">Voltar</a>
+                    <input type="submit" value="submit" class="btn">
+                </div>
+            </div>
+        </form>
     </body>
 </html>
