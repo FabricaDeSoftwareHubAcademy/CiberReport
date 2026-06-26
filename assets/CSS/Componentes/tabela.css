@@ -115,7 +115,7 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--raio-sm);
-    transition: var(--transicao-rapida);
+    transition: background-color var(--transicao-rapida), border-radius var(--transicao-rapida);
 }
 
 .tabela-wrapper .acoes button:hover {
