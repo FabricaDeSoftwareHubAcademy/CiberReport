@@ -1,4 +1,4 @@
-<?php include_once 'menu.php' ?>
+<!--<?php include_once 'menu.php' ?-->
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -10,12 +10,14 @@
     <script src="../assets/JS/componentes/tabela.js" defer></script>
 </head>
     <style>
+        .corpo-ger-projetos{
+            display: block;
+        }
         .group-card-projeto{
             display: flex;
             gap: 20px;
             z-index: 3;
             margin: auto;
-            flex-wrap: wrap;
         }
         .container-card-projetos{
             background-color: var(--cor-fundo-branco);
@@ -37,7 +39,11 @@
             font-size: var(--fonte-texto);
         }
     </style>
-<body>
+<body class="corpo-ger-projetos">
+    <div class="group-btn-projeto">
+        <button class="btn-novo-cadastro">Novo Cadastro</button>
+        <button class=""></button>
+    </div>
     <div class="group-card-projeto">
         <div class="container-card-projetos" id="projeto-ativo">
             <h2 class="title-card-projeto">Projetos Ativos</h2>
