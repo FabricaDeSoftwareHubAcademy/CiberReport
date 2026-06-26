@@ -102,7 +102,7 @@ if(isset($_POST['nome_fantasia']))
                                 <h3>Dados da Empresa</h3>
                             </div>
 
-                            <div class="modal-grade modal-grade--3">
+                            <div class="modal-grade modal-grade--3"> <!-- Mudar aqui está errado para um modal-grade--4 --> 
                                 <div class="campo">
                                     <label class="campo__label">Nome da Empresa</label>
                                     <input type="text" name="nome_fantasia" class="campo__input" placeholder="Digite o nome da Empresa" />
@@ -214,32 +214,6 @@ if(isset($_POST['nome_fantasia']))
 
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
