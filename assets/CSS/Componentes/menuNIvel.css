@@ -25,37 +25,55 @@
 }
 
 .progress{
-  background-color: rgb(0, 119, 255);
+  background-color: var(--cor-azul-primaria);
   width: 0%;
   transition: 0.3s;
 }
 
-.progress-step{
+.progress-step {
   width: 5rem;
   height: 5rem;
-  background-color: #dcdcdd;
+  background-color: var(--cor-cinza-terciario);
+  border: 2px solid var(--cor-borda-padrao);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--cor-texto-secundario);
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
 
-.progress-step::before{
+.progress-step::before {
   counter-increment: step;
   content: counter(step);
 }
 
-.progress-step::after{
+.progress-step::after {
   content: attr(data-title);
   position: absolute;
   top: calc(100% + 0.5rem);
   font-size: 0.85rem;
-  color: #666;
+  color: var(--cor-texto-secundario);
 }
 
-.progress-step-active{
-  background-color: rgb(0, 119, 255);
-  color: #f3f3f3;
+/* Ativo (passo atual) */
+.progress-step-active {
+  background-color: var(--cor-azul-primaria);
+  border-color: var(--cor-azul-primaria);
+  color: #fff;
+}
+
+/* Concluído (há um próximo step também marcado como ativo) */
+.progress-step-active:has(~ .progress-step-active) {
+  background-color: var(--cor-verde);
+  border-color: var(--cor-verde);
+  color: #fff;
+}
+
+.progress-step-active:has(~ .progress-step-active)::before {
+  content: '\2713';
 }
 
 /* Steps do formulário */

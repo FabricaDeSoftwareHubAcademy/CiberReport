@@ -43,10 +43,10 @@
     animation: modal-entrar var(--transicao-base) ease both;
 }
 /* TAMANHO DOS MODAIS: SM-SMALL, MD-MEDIU, LG - LERGE, XL - EXTRA LARGE*/
-.modal--sm  { max-width: 480px; min-width: 320px; }
-.modal--md  { max-width: 680px; }  
-.modal--lg  { max-width: 820px; }  
-.modal--xl  { max-width: 1020px; } 
+.modal--sm  { width: 480px; min-width: 320px; max-width: 95vw; }
+.modal--md  { width: 680px; max-width: 95vw; }
+.modal--lg  { width: 820px; max-width: 95vw; }
+.modal--xl  { width: 1020px; max-width: 95vw; }
 
 .modal--com-stepper {
     min-height: 400px;
