@@ -136,5 +136,4 @@ body {
 
 .main-content > main {
     padding: var(--espaco-xl);
-    margin-left: max(var(--sidebar-fechado), 56px);
 }

@@ -185,3 +185,18 @@ CREATE TABLE IF NOT EXISTS banco_conhecimento (
   PRIMARY KEY (id)
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
 );
+
+CREATE TABLE pentest_tipos (
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    nome              VARCHAR(255) NOT NULL,
+    descricao_breve   VARCHAR(500),
+    descricao_completa TEXT,
+    categoria         VARCHAR(50),
+    modelo            VARCHAR(50),
+    tecnica           VARCHAR(50),
+    frameworks        VARCHAR(500),
+    checklist         VARCHAR(255),
+    nivel_profundidade VARCHAR(50),
+    horas_execucao    INT,
+    habilitado        TINYINT NOT NULL DEFAULT 1
+);
