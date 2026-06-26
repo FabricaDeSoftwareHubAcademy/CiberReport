@@ -61,7 +61,7 @@
     <?php include_once 'menu-lateral.php'; ?> <!-- o menu lateral vem aqui -->
     <div>
         <?php include_once 'menu-superior.php'; ?> <!-- O menu lateral separa posto dentro de uma div -->
-        <main>
+        <main class="main-content">
             <h2 class="titulo-pagina">CADASTRO DE EMPRESA</h2>
             <form method="post">
                 <input type="text" name="nome_fantasia" placeholder="Nome da Empresa">
