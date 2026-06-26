@@ -1,14 +1,173 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-br">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>CYBER REPORT</title>
-        <link rel="stylesheet" href="../assets/CSS/style.css" />
-        <link rel="stylesheet" href="../assets/CSS/Pages/usuario.css" />
+        <title>SideBar</title>
+        <!-- scripts -->
+        <script src="../Assets/JS/componentes/menu.js" defer></script>
+        <!-- links -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="../Assets/CSS/style.css" />
+        <link rel="stylesheet" href="../Assets/CSS/Pages/usuario.css" />
     </head>
 
     <body>
+        <nav id="sideBar">
+            <div class="sidebar_content">
+                <div class="logo">
+                    <div class="logo-nome">
+                        <img src="../../../assets/img/logo-cyber-report.svg" alt="" />
+                        <img src="../../../assets/img/logo-baikal.svg" alt="" />
+                    </div>
+                    <div class="logo-imagem">
+                        <img src="../../../assets/img/logo-baikal-icone.svg" alt="" />
+                    </div>
+                </div>
+                <ul id="side_itens">
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-chart-column"></i>
+                            <span class="item_description">Dashboard</span>
+                        </a>
+                        <div class="tooltip-item"><span>Dashboard</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span class="item_description">Relatórios</span>
+                        </a>
+                        <div class="tooltip-item"><span>Relatórios</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-building-user"></i>
+                            <span class="item_description">Gestão</span>
+                            <i class="fa-solid fa-angle-down" id="dropdown"></i>
+                        </a>
+                        <div class="tooltip-item"><span>Gestão</span></div>
+                    </li>
+                    <ul id="submenu">
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-users"></i>
+                                <span class="item_description">Usuários</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-address-book"></i>
+                                <span class="item_description">Clientes</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-terminal"></i>
+                                <span class="item_description">Projetos</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-user-secret"></i>
+                                <span class="item_description">Pentest</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span class="item_description">Checklist</span>
+                        </a>
+                        <div class="tooltip-item"><span>Checklist</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-bug"></i>
+                            <span class="item_description">Vulnerabilidades</span>
+                        </a>
+                        <div class="tooltip-item"><span>Vulnerabilidades</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span class="item_description">Conhecimento</span>
+                        </a>
+                        <div class="tooltip-item"><span>Conhecimento</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-clipboard"></i>
+                            <span class="item_description">Logs</span>
+                        </a>
+                        <div class="tooltip-item"><span>Logs</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-gear"></i>
+                            <span class="item_description">Perfis de Acesso</span>
+                        </a>
+                        <div class="tooltip-item"><span>Perfis de Acesso</span></div>
+                    </li>
+                </ul>
+                <button id="open_btn">
+                    <i class="fa-solid fa-chevron-right" id="open_btn_icon"></i>
+                </button>
+            </div>
+            <div id="logout">
+                <button id="logout_btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span class="item_description"> Logout </span>
+                </button>
+            </div>
+        </nav>
+        <!-- <p></p> -->
+        <div class="main-content">
+            <header id="menu-superior">
+                <div class="logo-menuSuperior">
+                    <img src="../../../assets/img/logo-baikal-icone.svg" alt=""/>
+                </div>
+                <h1>gerenciamento de usuários</h1>
+                <!-- barra de pesquisa para desktop -->
+                <div class="input-pesquisaSuperior">
+                    <input type="text" placeholder="Buscar..." />
+                    <button>
+                        <i class="fa-brands fa-sistrix"></i>
+                    </button>
+                </div>
+                
+                <!-- pesquisa para formato mobile -->
+                <div class="pesquisa-mobile">
+                    <button>
+                        <i class="fa-brands fa-sistrix"></i>
+                    </button>
+                </div>
+                <!-- overlay-pesquisa -->
+                <div class="overlay-pesquisaMobile">
+                    <div class="barra-pesquisa">
+                        <input type="text" placeholder="Buscar..." />
+                        <button>
+                            <i class="fa-brands fa-sistrix"></i>
+                        </button>
+                    </div>
+                </div>
+
+        <div class="perfis">
+            <i class="fa-regular fa-bell notificacao"></i>
+            <img class="imagem-usuario" src="../../../assets/img/foto-perfil.jpg" alt="" />
+            <div class="description-user">
+                <p>Marcos antonio</p>
+                <p>Gerente</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
         <div class="corpo_card">
             <div class="area-modal">
                 <div class="cabecalho">
@@ -16,14 +175,14 @@
                     <div class="texto-cabecalho">
                         <div class="elemento-cabecalho">
                             <div class="textos-caebecalho">
-                                <h1>Gerenciamento de Usuário</h1>
+                                <h2>Gerenciamento de Usuário</h2>
                                 <span>Informações da empresa contratante e do responsável técnico</span>
                             </div>
                         </div>
                         <span class="fechar">X</span>
                     </div>
                 </div>
-                <h3 style="padding-left: 12px">dados do funcionario</h3>
+                <h4 style="padding-left: 12px">dados do funcionario</h4>
                 <div class="itens_mid">
                     <div class="container-foto">
                         <div class="foto_do_user">
@@ -51,7 +210,7 @@
                     <div class="posicionamento">
                         <div class="container-info">
                             <label>CPF</label> <br />
-                            <input class="imputD" type="number" placeholder="000.000.000-00" />
+                            <input class="imputD" type="text" placeholder="000.000.000-00" />
                         </div>
                         <div class="input-group">
                             <label id="cargo">Cargo</label> <br />
@@ -79,5 +238,7 @@
                 </div>
             </div>
         </div>
-    </body>
+    
 </html>
+</div>
+<script src="src\components\menu\menu.js"></script>

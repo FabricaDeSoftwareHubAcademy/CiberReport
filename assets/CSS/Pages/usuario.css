@@ -35,7 +35,7 @@
   display: flex;
 }
 .fechar{
-  margin-top: 10px;
+  align-items: end;
 }
 .textos-cabecalho{
   display: flex;
