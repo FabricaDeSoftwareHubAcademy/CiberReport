@@ -13,6 +13,10 @@
   margin: 2rem 0 4rem;
 }
 
+.modal__stepper .progressbar {
+  isolation: isolate;
+}
+
 .progressbar::before, .progress{
   content: '';
   position: absolute;
@@ -58,7 +62,7 @@
   color: var(--cor-texto-secundario);
 }
 
-/* Ativo (passo atual) */
+
 .progress-step-active {
   background-color: var(--cor-azul-primaria);
   border-color: var(--cor-azul-primaria);
@@ -76,13 +80,14 @@
   content: '\2713';
 }
 
-/* Steps do formulário */
 .form-step{
   display: none;
 }
 
 .form-step-active{
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
 }
 
 .input-grupo{
