@@ -9,7 +9,7 @@
         {
             global $pdo;
             try{
-                $pdo = new PDO("mysql:dbname=".$nome_banco,$usuario,$senha);
+                $pdo = new PDO("mysql:host=".$host.";dbname=".$nome_banco, $usuario, $senha);
             }
             catch(PDOException $erro){
                 $this->msgErro = $erro->getMessage();

@@ -165,7 +165,7 @@ INSERT INTO banco_conhecimento (vulnerabilidade_id, titulo, categoria, conteudo,
 -- Tipos de Pentest
 -- ---------------------------------------------------------
 
-INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria, modelo, tecnica, frameworks, checklist, nivel_profundidade, horas_execucao, status) VALUES
+INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria, modelo, tecnica, frameworks, checklist, nivel_profundidade, horas_execucao, habilitado) VALUES
 (
     'Web Application Pentest',
     'Teste de penetração completo em aplicações web, incluindo OWASP Top 10 e lógica de negócio.',
@@ -188,7 +188,7 @@ INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria,
     'Social Engineering Campaign',
     'Campanha de engenharia social incluindo phishing, vishing e simulação de ameaças internas.',
     'Simulação controlada de ataques de engenharia social para avaliar a conscientização dos colaboradores. Inclui campanhas de phishing por e-mail, testes de vishing por telefone e simulação de ameaça interna com acesso físico.',
-    'ENG. SOCIAL', 'Gray Box', 'Manual', 'MITRE ATT&CK', 'NIST SP 800-115', 'Standard Security Assessment', 24, 1
+    'ENG. SOCIAL', 'Gray Box', 'Manual', 'MITRE ATT&CK', 'NIST SP 800-115', 'Standard Security Assessment', 24, 0
 ),
 (
     'Red Team Exercise',
@@ -200,7 +200,7 @@ INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria,
     'Network Infrastructure Pentest',
     'Teste de penetração em infraestrutura de rede interna e perimetral, incluindo switches e roteadores.',
     'Avaliação de segurança da infraestrutura de rede cobrindo varredura de portas, análise de protocolos, enumeração de serviços, exploração de vulnerabilidades em dispositivos de rede e segmentação de VLANs.',
-    'WEB', 'Gray Box', 'Híbrida', 'NIST,PTES', 'CIS Benchmarks', 'Standard Security Assessment', 48, 1
+    'WEB', 'Gray Box', 'Híbrida', 'NIST,PTES', 'CIS Benchmarks', 'Standard Security Assessment', 48, 0
 ),
 (
     'API Security Testing',

@@ -198,5 +198,5 @@ CREATE TABLE pentest_tipos (
     checklist         VARCHAR(255),
     nivel_profundidade VARCHAR(50),
     horas_execucao    INT,
-    status            TINYINT DEFAULT 1
+    habilitado        TINYINT NOT NULL DEFAULT 1
 );
