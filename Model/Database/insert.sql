@@ -207,4 +207,34 @@ INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria,
     'Testes de segurança em APIs REST e GraphQL cobrindo o OWASP API Security Top 10.',
     'Análise de segurança focada em interfaces de programação de aplicações, verificando autenticação, autorização em nível de objeto e função, exposição excessiva de dados, limitação de taxa e injeções via endpoints.',
     'WEB', 'Black Box', 'Automatizada', 'OWASP,PTES', 'OWASP API Top 10', 'Deep Security Assessment', 20, 1
+),
+(
+    'IoT Security Assessment',
+    'Avaliação de segurança em dispositivos IoT, firmware e protocolos de comunicação embarcados.',
+    'Análise de firmware, interfaces de hardware, protocolos de comunicação (MQTT, CoAP, Zigbee) e superfícies de ataque em dispositivos IoT industriais e residenciais.',
+    'WEB', 'Gray Box', 'Manual', 'OWASP,NIST', 'OWASP IoT Top 10', 'Deep Security Assessment', 56, 1
+),
+(
+    'Active Directory Pentest',
+    'Teste de penetração focado em ambientes Active Directory, incluindo escalada de privilégios e movimentação lateral.',
+    'Simulação de ataques internos em ambientes Windows Active Directory cobrindo Kerberoasting, Pass-the-Hash, DCSync, abuso de ACLs e caminhos de escalada de domínio.',
+    'RED TEAMS', 'White Box', 'Híbrida', 'MITRE ATT&CK,PTES', 'CIS Benchmarks', 'Advanced Red Team', 80, 1
+),
+(
+    'Phishing Simulation',
+    'Simulação de campanhas de phishing direcionado para medir o índice de conscientização dos colaboradores.',
+    'Execução de campanhas de spear phishing personalizadas por setor, com rastreamento de cliques, coleta de credenciais em ambiente controlado e relatório de exposição por departamento.',
+    'ENG. SOCIAL', 'Black Box', 'Automatizada', 'MITRE ATT&CK', 'NIST SP 800-115', 'Basic Security Assessment', 16, 1
+),
+(
+    'Container & Kubernetes Security Review',
+    'Revisão de segurança em ambientes containerizados Docker e orquestração Kubernetes.',
+    'Auditoria de configurações de containers, imagens Docker, políticas de rede Kubernetes, RBAC, secrets management e exposição de APIs do cluster contra benchmarks CIS.',
+    'CLOUD', 'White Box', 'Automatizada', 'CIS,NIST,MITRE ATT&CK', 'CIS Benchmarks', 'Standard Security Assessment', 36, 0
+),
+(
+    'Thick Client Application Pentest',
+    'Teste de penetração em aplicações desktop (thick client), análise de comunicação e armazenamento local.',
+    'Avaliação de segurança em aplicações desktop cobrindo análise de tráfego entre cliente e servidor, armazenamento inseguro de dados locais, bypass de controles client-side e engenharia reversa de binários.',
+    'WEB', 'Gray Box', 'Manual', 'OWASP,PTES', 'OWASP', 'Deep Security Assessment', 44, 1
 );
