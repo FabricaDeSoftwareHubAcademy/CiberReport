@@ -2,7 +2,7 @@
 $host  = "localhost";
 $user  = "root";
 $pass  = "";
-$banco = "cyber_report";
+$banco = "crud544";
 
 $conexao = new mysqli($host, $user, $pass, $banco);
 
