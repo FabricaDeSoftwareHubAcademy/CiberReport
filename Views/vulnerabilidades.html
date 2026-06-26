@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <?php include_once 'menu.php' ?>
+    <?php $tituloPagina = 'Vulnerabilidades'; include_once 'menu.php'; ?>
     <!-- <p></p> -->
     <div class="main-content">
         <header id="menu-superior">
@@ -396,6 +396,11 @@
 
 
         </main>
+        <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
+             fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
+             o conteúdo quando o menu lateral abre/fecha. -->
+        </div>
+    </div>
 </body>
 
 </html>

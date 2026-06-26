@@ -1,17 +1,16 @@
 <?php
-require_once "../Model/conexao.php";
+require "../bootstrap.php";
 require_once "../Model/Database/Empresa.php";
 require_once "../Model/Database/Endereco.php";
 
 $empresa = new Empresa();
 $endereco = new Endereco();
 
-$empresa->conectar($banco, $host, $user, $pass);
-$endereco->conectar($banco, $host, $user, $pass);
+$empresa->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
+$endereco->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
 
 $dados = $empresa->ListarDados();
-
 $mensagem_erro = "";
 
 if (isset($_POST['nome_fantasia'])) {
@@ -56,7 +55,7 @@ if (isset($_POST['nome_fantasia'])) {
 <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 
-<?php include 'menu.php'; ?>
+<?php $tituloPagina = 'Clientes'; include 'menu.php'; ?>
 <main>
 
 
@@ -288,8 +287,13 @@ if (isset($_POST['nome_fantasia'])) {
         </div>
     </section>
 </main>
+<!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
+     fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
+     o conteúdo quando o menu lateral abre/fecha. -->
+</div>
+</div>
 
-<script src="../Assets/JS/componentes/menu.js"></script>
+
 <script src="../assets/JS/componentes/modal.js"></script>
 
 </html>
