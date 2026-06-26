@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SideBar</title>
+        <!-- scripts -->
+        <script src="../Assets/JS/componentes/menu.js" defer></script>
+        <!-- links -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="../Assets/CSS/style.css" />
+    </head>
+
+    <body>
+        <nav id="sideBar">
+            <div class="sidebar_content">
+                <div class="logo">
+                    <div class="logo-nome">
+                        <img src="../../../assets/img/logo-cyber-report.svg" alt="" />
+                        <img src="../../../assets/img/logo-baikal.svg" alt="" />
+                    </div>
+                    <div class="logo-imagem">
+                        <img src="../../../assets/img/logo-baikal-icone.svg" alt="" />
+                    </div>
+                </div>
+                <ul id="side_itens">
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-chart-column"></i>
+                            <span class="item_description">Dashboard</span>
+                        </a>
+                        <div class="tooltip-item"><span>Dashboard</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span class="item_description">Relatórios</span>
+                        </a>
+                        <div class="tooltip-item"><span>Relatórios</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-building-user"></i>
+                            <span class="item_description">Gestão</span>
+                            <i class="fa-solid fa-angle-down" id="dropdown"></i>
+                        </a>
+                        <div class="tooltip-item"><span>Gestão</span></div>
+                    </li>
+                    <ul id="submenu">
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-users"></i>
+                                <span class="item_description">Usuários</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-address-book"></i>
+                                <span class="item_description">Clientes</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-terminal"></i>
+                                <span class="item_description">Projetos</span>
+                            </a>
+                        </li>
+                        <li class="item-submenu">
+                            <a href="#">
+                                <i class="fa-solid fa-user-secret"></i>
+                                <span class="item_description">Pentest</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span class="item_description">Checklist</span>
+                        </a>
+                        <div class="tooltip-item"><span>Checklist</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-bug"></i>
+                            <span class="item_description">Vulnerabilidades</span>
+                        </a>
+                        <div class="tooltip-item"><span>Vulnerabilidades</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span class="item_description">Conhecimento</span>
+                        </a>
+                        <div class="tooltip-item"><span>Conhecimento</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-clipboard"></i>
+                            <span class="item_description">Logs</span>
+                        </a>
+                        <div class="tooltip-item"><span>Logs</span></div>
+                    </li>
+                    <li class="side_item">
+                        <a href="#">
+                            <i class="fa-solid fa-gear"></i>
+                            <span class="item_description">Perfis de Acesso</span>
+                        </a>
+                        <div class="tooltip-item"><span>Perfis de Acesso</span></div>
+                    </li>
+                </ul>
+                <button id="open_btn">
+                    <i class="fa-solid fa-chevron-right" id="open_btn_icon"></i>
+                </button>
+            </div>
+            <div id="logout">
+                <button id="logout_btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span class="item_description"> Logout </span>
+                </button>
+            </div>
+        </nav>
+        <!-- <p></p> -->
+
+        
+        <button class="btn-novo-cadastro"><i class="fa-solid fa-plus"></i>Novo Cadastro</button>
+        <div class="main-content">
+            <header id="menu-superior">
+                <div class="logo-menuSuperior">
+                    <img src="../../../assets/img/logo-baikal-icone.svg" alt=""/>
+                </div>
+                <h1>Gerenciamento de perfil</h1>
+                <!-- barra de pesquisa para desktop -->
+                <div class="input-pesquisaSuperior">
+                    <input type="text" placeholder="Buscar..." />
+                    <button>
+                        <i class="fa-brands fa-sistrix"></i>
+                    </button>
+                </div>
+                
+                <!-- pesquisa para formato mobile -->
+                <div class="pesquisa-mobile">
+                    <button>
+                        <i class="fa-brands fa-sistrix"></i>
+                    </button>
+                </div>
+                <!-- overlay-pesquisa -->
+                <div class="overlay-pesquisaMobile">
+                    <div class="barra-pesquisa">
+                        <input type="text" placeholder="Buscar..." />
+                        <button>
+                            <i class="fa-brands fa-sistrix"></i>
+                        </button>
+                    </div>
+                </div>
+
+        <div class="perfis">
+            <i class="fa-regular fa-bell notificacao"></i>
+            <img class="imagem-usuario" src="../../../assets/img/foto-perfil.jpg" alt="" />
+            <div class="description-user">
+                <p>Marcos antonio</p>
+                <p>Gerente</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        </body>
+</html>
+
+<div class="tabela-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-col="0">
+                            <span class="th-label">Nome do Usuario <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="1">
+                            <span class="th-label">Cargo <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="2">
+                            <span class="th-label">Resp. Téc <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="3">
+                            <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="4" data-tipo="data">
+                            <span class="th-label">Telefone<i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="5">
+                            <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="6">
+                            <span class="th-label">Ações <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>User_01</td>
+                        <td>Analista</td>
+                        <td>André</td>
+                        <td>user_1@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_02</td>
+                        <td>Analista</td>
+                        <td>Mariana</td>
+                        <td>user_2@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_03</td>
+                        <td>administrador</td>
+                        <td>Rafael</td>
+                        <td>User_03@example.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-inativo">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_04</td>
+                        <td>junior</td>
+                        <td>Beatriz</td>
+                        <td>user_4@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_05</td>
+                        <td>administrador</td>
+                        <td>Lucas</td>
+                        <td>user_5@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-inativo">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_06</td>
+                        <td>Analista</td>
+                        <td>Camila</td>
+                        <td>user_6@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_07</td>
+                        <td>junior</td>
+                        <td>Thiago</td>
+                        <td>user_7@exemplo.com</td>
+                        <td>67 9999-9999</td>
+
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_08</td>
+                        <td>administrador</td>
+                        <td>Júlia</td>
+                        <td>user_8@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_09</td>
+                        <td>administrador</td>
+                        <td>Felipe</td>
+                        <td>user_9@exemplo.com</td>
+                        <td>67 9999-9999</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User_10</td>
+                        <td>Analista</td>
+                        <td>Renata</td>
+                        <td>user_10@example.com</td>
+                        <td>67 0000-0000</td>
+                        <td>
+                            <span class="status status-ativo">Ativo</span>
+                        </td>
+                        <td>
+                            <div class="acoes">
+                                <button title="Visualizar" aria-label="Visualizar">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8" class="rodape-tabela">
+                            <div class="paginacao">
+                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
+                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
+                                <button class="pag-num" aria-label="Página 2">2</button>
+                                <button class="pag-num" aria-label="Página 3">3</button>
+                                <button class="pag-num" aria-label="Página 4">4</button>
+                                <button class="pag-num" aria-label="Página 5">5</button>
+                                <button class="pag-num" aria-label="Página 6">6</button>
+                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <script src="../Assets/JS/componentes/tabela.js"></script>
+    </body>
+</html>
+    </main>
+</div>
+<script src="src\components\menu\menu.js"></script>
