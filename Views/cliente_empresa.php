@@ -1,21 +1,20 @@
 <?php
-require_once "../Model/Database/conexao.php";
+require_once "../Model/conexao.php";
 require_once "../Model/Database/Empresa.php";
 require_once "../Model/Database/Endereco.php";
 
 $empresa = new Empresa();
 $endereco = new Endereco();
 
-$empresa->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
-$endereco->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
+$empresa->conectar($banco, $host, $user, $pass);
+$endereco->conectar($banco, $host, $user, $pass);
 
 
 $dados = $empresa->ListarDados();
 
 $mensagem_erro = "";
 
-if(isset($_POST['nome_fantasia']))
-{
+if (isset($_POST['nome_fantasia'])) {
     $nome_fantasia = addslashes($_POST['nome_fantasia']);
     $razao_social = addslashes($_POST['razao_social']);
     $telefone = addslashes($_POST['telefone']);
@@ -32,22 +31,16 @@ if(isset($_POST['nome_fantasia']))
     $estado = addslashes($_POST['estado']);
     $pais = addslashes($_POST['pais']);
 
-    if(!empty($nome_fantasia) && !empty($razao_social) && !empty($telefone) && !empty($email_contato) && !empty($cnpj) && !empty($responsavel) && !empty($cep) && !empty($rua) && !empty($numero) && !empty($bairro) && !empty($cidade) && !empty($estado))
-    {
-        $id_endereco_novo = $endereco->cadastrarEndereco($cep,$rua,$numero,$complemento,$bairro,$cidade,$estado,$pais);
+    if (!empty($nome_fantasia) && !empty($razao_social) && !empty($telefone) && !empty($email_contato) && !empty($cnpj) && !empty($responsavel) && !empty($cep) && !empty($rua) && !empty($numero) && !empty($bairro) && !empty($cidade) && !empty($estado)) {
+        $id_endereco_novo = $endereco->cadastrarEndereco($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais);
 
-        if($empresa->cadastrarEmpresa($id_endereco_novo,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel))
-        {
+        if ($empresa->cadastrarEmpresa($id_endereco_novo, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)) {
             header("location:clientes.php");
             exit;
-        }
-        else
-        {
+        } else {
             $mensagem_erro = "Empresa já cadastrada!";
         }
-    }
-    else
-    {
+    } else {
         $mensagem_erro = "Preencha todos os campos!";
     }
 }
@@ -66,9 +59,9 @@ if(isset($_POST['nome_fantasia']))
 <?php include 'menu.php'; ?>
 <main>
 
-    
+
     <section class="listar-clientes">
-    
+
 
         <div class="button-cadastro">
             <button class="btn-novo-cadastro btn-modal-novo-cadastro" data-modal-target="modalClientes">
@@ -77,7 +70,7 @@ if(isset($_POST['nome_fantasia']))
         </div>
 
         <div class="modal-overlay" id="modalClientes"
-            <?php if(!empty($mensagem_erro)) echo 'style="visibility:visible;opacity:1;"'; ?>>
+            <?php if (!empty($mensagem_erro)) echo 'style="visibility:visible;opacity:1;"'; ?>>
             <div class="modal modal--xl">
 
                 <div class="modal__header">
@@ -102,7 +95,7 @@ if(isset($_POST['nome_fantasia']))
                                 <h3>Dados da Empresa</h3>
                             </div>
 
-                            <div class="modal-grade modal-grade--3"> <!-- Mudar aqui está errado para um modal-grade--4 --> 
+                            <div class="modal-grade modal-grade--3"> <!-- Mudar aqui está errado para um modal-grade--4 -->
                                 <div class="campo">
                                     <label class="campo__label">Nome da Empresa</label>
                                     <input type="text" name="nome_fantasia" class="campo__input" placeholder="Digite o nome da Empresa" />
@@ -163,7 +156,7 @@ if(isset($_POST['nome_fantasia']))
                                 </div>
                             </div>
                         </div>
-                    
+
                         <div class="modal-secao">
                             <div class="modal-secao__titulo">
                                 <i class="fa-solid fa-user modal-secao__titulo-icone"></i>
@@ -195,12 +188,12 @@ if(isset($_POST['nome_fantasia']))
                                 </div>
                             </div>
                         </div>
-               
+
 
                     </div>
 
                     <div class="modal__footer">
-                        <?php if(!empty($mensagem_erro)): ?>
+                        <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
                                 <?php echo $mensagem_erro; ?>
@@ -219,7 +212,7 @@ if(isset($_POST['nome_fantasia']))
 
 
 
-        
+
         <div class="tabela-wrapper">
             <table>
                 <thead>
@@ -249,30 +242,30 @@ if(isset($_POST['nome_fantasia']))
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($dados as $empresa){ ?>
-                    <tr>
-                        <td>#<?php echo $empresa['id']; ?></td>
-                        <td><?php echo $empresa['nome_fantasia']; ?></td>
-                        <td><?php echo $empresa['cnpj']; ?></td>
-                        <td><?php echo $empresa['responsavel']; ?></td>
-                        <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
-                        <td><?php echo $empresa['telefone']; ?></td>
-                        <td>
-    
-                            <span class="status status-concluido">Ativo</span>
-                        </td>
-                        <td>
-                            <div class="acoes">
-                                
-                                <a href="editar_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
-                                    <button><i class="fa-solid fa-pen-to-square"></i></button>
-                                </a>
-                                <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <button><i class="fa-solid fa-trash"></i></button>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    <?php foreach ($dados as $empresa) { ?>
+                        <tr>
+                            <td>#<?php echo $empresa['id']; ?></td>
+                            <td><?php echo $empresa['nome_fantasia']; ?></td>
+                            <td><?php echo $empresa['cnpj']; ?></td>
+                            <td><?php echo $empresa['responsavel']; ?></td>
+                            <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
+                            <td><?php echo $empresa['telefone']; ?></td>
+                            <td>
+
+                                <span class="status status-concluido">Ativo</span>
+                            </td>
+                            <td>
+                                <div class="acoes">
+
+                                    <a href="editar_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button><i class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                     <?php } ?>
                 </tbody>
                 <tfoot>
@@ -295,11 +288,8 @@ if(isset($_POST['nome_fantasia']))
         </div>
     </section>
 </main>
-    
-    <script src="../Assets/JS/componentes/menu.js"></script> 
-    <script src="../assets/JS/componentes/modal.js"></script>
+
+<script src="../Assets/JS/componentes/menu.js"></script>
+<script src="../assets/JS/componentes/modal.js"></script>
+
 </html>
-
-
-
-

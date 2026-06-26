@@ -1,55 +1,54 @@
 <?php
-    require "../Model/Database/conexao.php";
-    require "../Model/Database/Empresa.php";
-    require "../Model/Database/Endereco.php";
+require "../Model/conexao.php";
+require "../Model/Database/Empresa.php";
+require "../Model/Database/Endereco.php";
 
-    $empresa = new Empresa();
-    $endereco = new Endereco();
+$empresa = new Empresa();
+$endereco = new Endereco();
 
-    $empresa->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
-    $endereco->conectar($nome_banco, $host, $usuario_bd, $senha_bd);
+$empresa->conectar($banco, $host, $user, $pass);
+$endereco->conectar($banco, $host, $user, $pass);
 
-    $dados_empresa = [];
-    $dados_endereco = [];
+$dados_empresa = [];
+$dados_endereco = [];
 
-    if(isset($_GET['id_empresa']))
-    {
-        $id_empresa = addslashes($_GET['id_empresa']);
-        $dados_empresa = $empresa->buscarDadosEmpresa($id_empresa);
-        $dados_endereco = $endereco->buscarDadosEndereco($dados_empresa['endereco_id']);
-    }
+if (isset($_GET['id_empresa'])) {
+    $id_empresa = addslashes($_GET['id_empresa']);
+    $dados_empresa = $empresa->buscarDadosEmpresa($id_empresa);
+    $dados_endereco = $endereco->buscarDadosEndereco($dados_empresa['endereco_id']);
+}
 
-    if(isset($_POST['nome_fantasia']))
-    {
-        $id_empresa = addslashes($_POST['id_empresa']);
-        $id_endereco = addslashes($_POST['id_endereco']);
-        $nome_fantasia = addslashes($_POST['nome_fantasia']);
-        $razao_social = addslashes($_POST['razao_social']);
-        $telefone = addslashes($_POST['telefone']);
-        $email_contato = addslashes($_POST['email_contato']);
-        $cnpj = addslashes($_POST['cnpj']);
-        $responsavel = addslashes($_POST['responsavel']);
+if (isset($_POST['nome_fantasia'])) {
+    $id_empresa = addslashes($_POST['id_empresa']);
+    $id_endereco = addslashes($_POST['id_endereco']);
+    $nome_fantasia = addslashes($_POST['nome_fantasia']);
+    $razao_social = addslashes($_POST['razao_social']);
+    $telefone = addslashes($_POST['telefone']);
+    $email_contato = addslashes($_POST['email_contato']);
+    $cnpj = addslashes($_POST['cnpj']);
+    $responsavel = addslashes($_POST['responsavel']);
 
-        $cep = addslashes($_POST['cep']);
-        $rua = addslashes($_POST['rua']);
-        $numero = addslashes($_POST['numero']);
-        $complemento = addslashes($_POST['complemento']);
-        $bairro = addslashes($_POST['bairro']);
-        $cidade = addslashes($_POST['cidade']);
-        $estado = addslashes($_POST['estado']);
-        $pais = addslashes($_POST['pais']);
+    $cep = addslashes($_POST['cep']);
+    $rua = addslashes($_POST['rua']);
+    $numero = addslashes($_POST['numero']);
+    $complemento = addslashes($_POST['complemento']);
+    $bairro = addslashes($_POST['bairro']);
+    $cidade = addslashes($_POST['cidade']);
+    $estado = addslashes($_POST['estado']);
+    $pais = addslashes($_POST['pais']);
 
-        $empresa->atualizarDadosEmpresa($id_empresa,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel);
-        $endereco->atualizarDadosEndereco($id_endereco,$cep,$rua,$numero,$complemento,$bairro,$cidade,$estado,$pais);
+    $empresa->atualizarDadosEmpresa($id_empresa, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel);
+    $endereco->atualizarDadosEndereco($id_endereco, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais);
 
-        header("location:clientes.php");
-        exit;
-    }
+    header("location:clientes.php");
+    exit;
+}
 
-    $dados = $empresa->ListarDados();
+$dados = $empresa->ListarDados();
 ?>
 <!doctype html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -66,6 +65,7 @@
     <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
     <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 </head>
+
 <body>
 
     <nav id="sideBar"></nav>
@@ -223,26 +223,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($dados as $emp){ ?>
-                        <tr>
-                            <td>#<?php echo $emp['id']; ?></td>
-                            <td><?php echo $emp['nome_fantasia']; ?></td>
-                            <td><?php echo $emp['cnpj']; ?></td>
-                            <td><?php echo $emp['responsavel']; ?></td>
-                            <td><?php echo isset($emp['email_contato']) ? $emp['email_contato'] : '---'; ?></td>
-                            <td><?php echo $emp['telefone']; ?></td>
-                            <td><span class="status status-concluido">Ativo</span></td>
-                            <td>
-                                <div class="acoes">
-                                    <a href="editar_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
-                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </a>
-                                    <a href="excluir_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <button><i class="fa-solid fa-trash"></i></button>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php foreach ($dados as $emp) { ?>
+                            <tr>
+                                <td>#<?php echo $emp['id']; ?></td>
+                                <td><?php echo $emp['nome_fantasia']; ?></td>
+                                <td><?php echo $emp['cnpj']; ?></td>
+                                <td><?php echo $emp['responsavel']; ?></td>
+                                <td><?php echo isset($emp['email_contato']) ? $emp['email_contato'] : '---'; ?></td>
+                                <td><?php echo $emp['telefone']; ?></td>
+                                <td><span class="status status-concluido">Ativo</span></td>
+                                <td>
+                                    <div class="acoes">
+                                        <a href="editar_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                            <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </a>
+                                        <a href="excluir_empresa.php?id_empresa=<?php echo $emp['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                            <button><i class="fa-solid fa-trash"></i></button>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php } ?>
                     </tbody>
                     <tfoot>
@@ -271,4 +271,5 @@
     <script src="../assets/JS/menu.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
+
 </html>
