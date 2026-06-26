@@ -1,3 +1,37 @@
+<?php
+session_start();
+require "../Model/conexao.php";
+
+$erro = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+
+    if (empty($email) || empty($senha)) {
+        $erro = "Preencha todos os campos.";
+    } else {
+        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        if ($resultado->num_rows === 1) {
+            $usuario = $resultado->fetch_assoc();
+
+            if (password_verify($senha, $usuario['senha'])) {
+                $_SESSION['usuario_id']   = $usuario['id'];
+                $_SESSION['usuario_nome'] = $usuario['nome'];
+                header("Location: listarProjeto.html");
+                exit;
+            }
+        }
+
+        $erro = "E-mail ou senha inválidos.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -31,11 +65,14 @@
             </div>    
             <div class="login-box">
                 <h2>LOGIN</h2>
-                <form>
+                <?php if ($erro): ?>
+                    <p class="erro"><?= htmlspecialchars ($erro) ?></p>
+                <?php endif; ?>
+                <form method="POST">
                     <label>E-mail</label>
-                    <input type="email" placeholder="email@gmail.com">
+                    <input type="email" name="email" placeholder="email@gmail.com">
                     <label>Senha</label>
-                    <input type="password" placeholder="senha">
+                    <input type="password" name="senha" placeholder="senha">
                     <a href="">Esqueceu a senha?</a>
                     <button type="submit">Entrar</button>
                 </form>

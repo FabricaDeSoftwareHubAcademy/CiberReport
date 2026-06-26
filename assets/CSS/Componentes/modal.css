@@ -1,0 +1,250 @@
+/* =============================================================================
+   01. OVERLAY & SHELL (O Content)
+   HTML esperado:
+   <div class="modal-overlay" id="modalID">
+       <div class="modal modal--md"> ... </div>
+   </div>
+   ============================================================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--espaco-md);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--transicao-base), visibility var(--transicao-base);
+}
+
+.modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal {
+    position: relative;
+    background-color: var(--cor-fundo-branco);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-2xl);
+    
+    /* --- Ajuste Dinâmico Vertical e Horizontal para o Stepper --- */
+    width: fit-content; 
+    min-width: 600px; 
+    max-width: 95vw; 
+    height: auto; 
+    max-height: 95vh; 
+    
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modal-entrar var(--transicao-base) ease both;
+}
+/* TAMANHO DOS MODAIS: SM-SMALL, MD-MEDIU, LG - LERGE, XL - EXTRA LARGE*/
+.modal--sm  { width: 480px; min-width: 320px; max-width: 95vw; }
+.modal--md  { width: 680px; max-width: 95vw; }
+.modal--lg  { width: 820px; max-width: 95vw; }
+.modal--xl  { width: 1020px; max-width: 95vw; }
+
+.modal--com-stepper {
+    min-height: 400px;
+}
+
+/* =============================================================================
+   02. MODAL HEADER
+   HTML esperado:
+   <div class="modal__header">
+       <div class="modal__header-icone"><i class="fa-solid fa-shield"></i></div>
+       <div class="modal__header-texto">
+           <h2 class="modal__titulo">Título</h2>
+           <p class="modal__subtitulo">Subtítulo</p>
+       </div>
+       <button class="modal__fechar">X</button>
+   </div>
+   ============================================================================= */
+.modal__header {
+    flex-shrink: 0;
+    background-color: var(--cor-azul-primaria);
+    padding: var(--espaco-lg) var(--espaco-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-md);
+    position: relative;
+}
+
+.modal__header-icone {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-baikal-1);
+    font-size: 3.2rem;
+}
+
+.modal__header-icone img,
+.modal__header-icone svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.modal__header-texto {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal__titulo {
+    font-size: var(--fonte-subtitulo);
+    font-weight: 700;
+    color: var(--cor-fundo-branco);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.modal__subtitulo {
+    font-size: var(--fonte-apoio);
+    color: rgba(255, 255, 255, 0.70);
+    margin: var(--espaco-xs) 0 0;
+}
+
+.modal__fechar {
+    position: absolute;
+    top: var(--espaco-md);
+    right: var(--espaco-md);
+    background: none;
+    border: none;
+    color: var(--cor-fundo-branco);
+    font-size: 2.4rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--raio-md);
+    transition: background-color var(--transicao-rapida);
+    line-height: 1;
+}
+
+.modal__fechar:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* =============================================================================
+   03. MODAL BODY
+   HTML esperado:
+   <div class="modal__body"> ... </div>
+   ============================================================================= */
+.modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--espaco-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-lg);
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-cinza-secundario) transparent;
+}
+
+.modal__body::-webkit-scrollbar { width: 6px; }
+.modal__body::-webkit-scrollbar-thumb { background-color: var(--cor-cinza-secundario); border-radius: var(--raio-full); }
+.modal__body--sem-padding { padding: 0; }
+
+/* =============================================================================
+   04. MODAL FOOTER
+   HTML esperado:
+   <footer class="modal__footer"> ... </footer>
+   ============================================================================= */
+.modal__footer {
+    flex-shrink: 0;
+    padding: var(--espaco-md) var(--espaco-xl);
+    border-top: 1px solid var(--cor-borda-padrao);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--espaco-md);
+    background-color: var(--cor-fundo-branco);
+}
+
+.modal__footer--com-info { justify-content: space-between; }
+.modal__footer-info { font-size: var(--fonte-apoio); color: var(--cor-texto-secundario); }
+
+/* =============================================================================
+   05. ZONA DE STEPPER
+   HTML esperado:
+   <div class="modal__stepper"> ... </div>
+   ============================================================================= */
+.modal__stepper {
+    flex-shrink: 0;
+    padding: var(--espaco-md) var(--espaco-xl);
+    border-bottom: 1px solid var(--cor-borda-padrao);
+    background-color: var(--cor-fundo-branco);
+}
+.modal__stepper:empty { display: none; }
+
+/* =============================================================================
+   06. MODAL TABS (Navegação em abas internas)
+   HTML esperado:
+   <nav class="modal-tabs">
+       <button class="modal-tabs__item modal-tabs__item--ativo">Aba <span class="modal-tabs__badge">2</span></button>
+   </nav>
+   ============================================================================= */
+.modal-tabs {
+    border-bottom: 1px solid var(--cor-borda-padrao);
+    display: flex;
+    gap: 0;
+    padding: 0 var(--espaco-xl);
+    background-color: var(--cor-fundo-branco);
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+}
+.modal-tabs::-webkit-scrollbar { display: none; }
+
+.modal-tabs__item {
+    flex-shrink: 0;
+    padding: var(--espaco-md) var(--espaco-sm);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: "Poppins", sans-serif;
+    font-size: var(--fonte-apoio);
+    font-weight: 500;
+    color: var(--cor-texto-secundario);
+    cursor: pointer;
+    transition: color var(--transicao-rapida), border-color var(--transicao-rapida);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    margin-right: var(--espaco-md);
+}
+.modal-tabs__item:hover { color: var(--cor-texto-primario); }
+.modal-tabs__item--ativo { color: var(--cor-azul-destaques); border-bottom-color: var(--cor-amarelo); font-weight: 600; }
+
+.modal-tabs__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--raio-full);
+    background-color: var(--cor-cinza-terciario);
+    color: var(--cor-texto-primario);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.modal-tabs__item--ativo .modal-tabs__badge { background-color: var(--cor-azul-primaria); color: white; }
+
+.modal-tab-painel { display: none; padding: var(--espaco-xl); flex-direction: column; gap: var(--espaco-lg); }
+.modal-tab-painel--ativo { display: flex; }
+
+@keyframes modal-entrar {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
