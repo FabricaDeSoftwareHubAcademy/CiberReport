@@ -1,3 +1,6 @@
+<!-- Para usar o menu siga as etapas: -->
+<!-- 1º etapa: teu arquivo estar em .php -->
+<!-- 2º etapa: colar na primeira linha do seu arquivo <?php include_once 'menu.php' ?> -->
 <!doctype html>
 <html lang="pt-br">
     <head>
@@ -22,11 +25,11 @@
             <div class="sidebar_content">
                 <div class="logo">
                     <div class="logo-nome">
-                        <img src="../../../assets/img/logo-cyber-report.svg" alt="" />
-                        <img src="../../../assets/img/logo-baikal.svg" alt="" />
+                        <img src="../assets/img/logo-cyber-report.svg" alt="" />
+                        <img src="../assets/img/logo-baikal.svg" alt="" />
                     </div>
                     <div class="logo-imagem">
-                        <img src="../../../assets/img/logo-baikal-icone.svg" alt="" />
+                        <img src="../assets/img/logo-baikal-icone.svg" alt="" />
                     </div>
                 </div>
                 <ul id="side_itens">
@@ -45,7 +48,7 @@
                         <div class="tooltip-item"><span>Relatórios</span></div>
                     </li>
                     <li class="side_item">
-                        <a href="#">
+                        <a href="#" id="dropdown_item">
                             <i class="fa-solid fa-building-user"></i>
                             <span class="item_description">Gestão</span>
                             <i class="fa-solid fa-angle-down" id="dropdown"></i>
@@ -125,11 +128,12 @@
                 </button>
             </div>
         </nav>
+        <div class="menuOverlay"></div>
         <!-- <p></p> -->
         <div class="main-content">
             <header id="menu-superior">
                 <div class="logo-menuSuperior">
-                    <img src="../../../assets/img/logo-baikal-icone.svg" alt=""/>
+                    <img src="../assets/img/logo-baikal-icone.svg" alt="" />
                 </div>
                 <h1>Titulo da pagina</h1>
                 <!-- barra de pesquisa para desktop -->
@@ -139,7 +143,7 @@
                         <i class="fa-brands fa-sistrix"></i>
                     </button>
                 </div>
-                
+
                 <!-- pesquisa para formato mobile -->
                 <div class="pesquisa-mobile">
                     <button>
@@ -155,19 +159,20 @@
                         </button>
                     </div>
                 </div>
+                <div class="perfis">
+                    <i class="fa-regular fa-bell notificacao"></i>
+                    <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
+                    <div class="description-user">
+                        <p>Marcos antonio</p>
+                        <p>Gerente</p>
+                    </div>
+                </div>
+            </header>
 
-        <div class="perfis">
-            <i class="fa-regular fa-bell notificacao"></i>
-            <img class="imagem-usuario" src="../../../assets/img/foto-perfil.jpg" alt="" />
-            <div class="description-user">
-                <p>Marcos antonio</p>
-                <p>Gerente</p>
-            </div>
+            <main>
+                <h2>Conteúdo Principal</h2>
+            </main>
         </div>
-    </header>
-
-    <main>
-        <h2>Conteúdo Principal</h2>
-    </main>
-</div>
-<script src="src\components\menu\menu.js"></script>
+        <script src="src\components\menu\menu.js"></script>
+    </body>
+</html>

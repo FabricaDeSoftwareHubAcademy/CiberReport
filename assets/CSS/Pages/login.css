@@ -1,0 +1,203 @@
+
+main{
+    margin: 0;
+}
+
+.cyber-report img{
+    width: 60%;
+    height: 40%;
+}
+
+.principal img{
+    transform: translateY(-95%);
+}
+
+.hacker{
+    position: absolute;
+    width: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-report{
+    padding-left: 10%;
+}
+
+.cyber-report{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10%;
+}
+
+.hackers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hackers img{
+    width: 50%;
+    height: 60%;
+    padding-top: 15%;
+}
+
+.principal{
+    z-index: 3;
+    padding-left: 14.4%;
+    opacity: 100%;
+    width: 85%;
+    left: 50%;
+}
+
+
+.sombra-esq{
+    z-index: 1;
+    top: 20%;
+    opacity: 0.18;
+    filter: blur(2px);
+}
+
+.sombra-dir{
+    z-index: 1;
+    top: 20%;
+    opacity: 0.18;
+    filter: blur(2px);
+}
+
+.login-topo{
+    margin-bottom: 25px;
+}
+
+.logo-baikal{
+    width: 250px;
+}
+
+.geral{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+.lado-esq{
+    width: 65%;
+    background: #0d1b3d;
+    overflow: hidden;
+}
+
+.lado-dir{
+    width: 35%;
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box{
+    width: 350px;
+    padding: 40px;
+    background: #dfe4ec;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    padding-left: 30px;
+}
+
+.login-box h2{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1c2745;
+    font-size: 35px;
+}
+
+.login-box form{
+    display: flex;
+    flex-direction: column;
+}
+
+.login-box label{
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.login-box input{
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #c5c5c5;
+    border-radius: 8px;
+    outline: none;
+}
+
+.login-box a{
+    text-decoration: none;
+    font-size: 13px;
+    color: #1c2745;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.login-box button{
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #13264f;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-box button:hover{
+    background: #1d3870;
+}
+
+@media (max-width: 1024px) {
+    .lado-esq {
+        width: 55%;
+    }
+
+    .lado-dir {
+        width: 45%;
+    }
+
+    .login-box {
+        width: 90%;
+        padding: clamp(20px, 3vw, 40px);
+    }
+}
+
+@media (max-width: 768px) {
+    .geral {
+        flex-direction: column;
+    }
+
+    .lado-esq {
+        display: none;
+    }
+
+    .lado-dir {
+        width: 100%;
+        min-height: 100vh;
+        padding: 40px 20px;
+        justify-content: center;
+    }
+
+    .logo-baikal {
+        width: clamp(140px, 40vw, 220px);
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 400px;
+        padding: clamp(24px, 5vw, 40px);
+    }
+
+    .login-box h2 {
+        font-size: clamp(22px, 6vw, 35px);
+    }
+
+    .login-box input,
+    .login-box button {
+        font-size: clamp(13px, 3.5vw, 15px);
+    }
+}
