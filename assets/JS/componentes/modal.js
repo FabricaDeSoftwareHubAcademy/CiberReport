@@ -5,7 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const modalId = button.getAttribute('data-modal-target');
             const modal = document.getElementById(modalId);
-            if (modal) modal.classList.add('active');
+            if (!modal) return;
+            modal.classList.add('active');
+
+            // Garante que o modal sempre reinicie do step 0, caso seja fechado e reaberto
+            if (modal.querySelector('.form-step') && typeof goToStep === 'function') {
+                goToStep(0);
+            }
         });
     });
 

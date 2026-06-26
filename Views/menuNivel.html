@@ -3,55 +3,83 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/CSS/Componentes/menuNIvel.css" />
-        <title>Document</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="../assets/CSS/style.css" />
+        <link rel="stylesheet" href="../assets/CSS/Componentes/button.css" />
+        <script src="../assets/JS/componentes/menuNIvel.js" defer></script>
+        <title>Template — Stepper de Formulário</title>
     </head>
 
     <body>
-        <div action="" id="form-stepper">
-            <div class="container-stepper">
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-1">
-                            <span> 1 </span>
-                        </div>
-                        <span id="descricao-1"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-1"></div>
+        <form action="#" class="form">
+            <!-- Barra de Progressão -->
+            <div class="progressbar">
+                <div class="progress" id="progress"></div>
+                <div class="progress-step progress-step-active" data-title="Dados Pessoais"></div>
+                <div class="progress-step" data-title="Contato"></div>
+                <div class="progress-step" data-title="Segurança"></div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="form-step form-step-active">
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="username">Nome</label>
+                    <input class="campo__input" type="text" id="username" placeholder="Digite seu nome" />
                 </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-2">
-                            <span> 2 </span>
-                        </div>
-                        <span id="descricao-2"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-2"></div>
+                <div class="campo">
+                    <label class="campo__label" for="position">Cargo</label>
+                    <input class="campo__input" type="text" id="position" placeholder="Digite seu cargo" />
                 </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-3">
-                            <span> 3 </span>
-                        </div>
-                        <span id="descricao-3"> Descrição </span>
-                    </div>
-                    <div class="stepper-separador" id="separador-3"></div>
-                </div>
-                <div class="stepper">
-                    <div class="espaco-stepper">
-                        <div class="stepper-numero" id="numero-4">
-                            <span> 4 </span>
-                        </div>
-                        <span id="descricao-4"> Descrição </span>
-                    </div>
-                    <!-- <div class="stepper-separador" id="separador-1"></div> -->
+                <div class="next-btn" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-botao-verde btn-next">
+                        Próximo <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-            
-            <button  id="btn-voltar">Voltar</button>
-            <button  id="btn-avancar">Avançar</button>
-        </div>
 
-        <script src="../assets/JS/componentes/menuNIvel.js"></script>
+            <!-- Step 2 -->
+            <div class="form-step">
+                <div class="campo">
+                    <label class="campo__label" for="phone">Telefone</label>
+                    <input class="campo__input" type="tel" id="phone" placeholder="(00) 00000-0000" />
+                </div>
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="email">E-mail</label>
+                    <input class="campo__input" type="email" id="email" placeholder="seuemail@exemplo.com" />
+                </div>
+                <div class="btns-grupo" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-cancelar btn-prev">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar
+                    </button>
+                    <button type="button" class="btn-botao-verde btn-next">
+                        Próximo <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3 (último) -->
+            <div class="form-step">
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="password">Senha</label>
+                    <input class="campo__input" type="password" id="password" placeholder="••••••••" />
+                </div>
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="confirmPassword">Confirmar Senha</label>
+                    <input class="campo__input" type="password" id="confirmPassword" placeholder="••••••••" />
+                </div>
+                <div class="btns-grupo" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-cancelar btn-prev">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar
+                    </button>
+                    <button type="submit" class="btn-botao-verde">Salvar</button>
+                </div>
+            </div>
+        </form>
     </body>
 </html>

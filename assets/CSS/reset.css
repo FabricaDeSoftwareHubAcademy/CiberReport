@@ -24,7 +24,6 @@ body {
     line-height: 1.5;
     min-height: 100vh;
     /*adicionei altura minima de 100vh para pegar o valor inteiro no eixo y*/
-    display: flex;
     /* 5. Improve text rendering */
     -webkit-font-smoothing: antialiased;
 }
