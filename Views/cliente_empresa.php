@@ -60,6 +60,8 @@ if(isset($_POST['nome_fantasia']))
 <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
 <link rel="stylesheet" href="../assets/CSS/Pages/clientes.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
+<link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
+<link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 
 <?php include 'menu.php'; ?>
 <main>
@@ -67,141 +69,183 @@ if(isset($_POST['nome_fantasia']))
     
     <section class="listar-clientes">
     
-        <input type="checkbox" id="abrir-modal" style="display: none"
-            <?php if(!empty($mensagem_erro)) echo 'checked'; ?> />
+
         <div class="button-cadastro">
-            <label for="abrir-modal" class="modal-clientes-btn-abrir-sistema"><i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span></label>
+            <button class="btn-novo-cadastro btn-modal-novo-cadastro" data-modal-target="modalClientes">
+                <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
+            </button>
         </div>
-        <div class="modal-clientes-modal">
-            <div class="modal-clientes-box">
-                <div class="modal-clientes-area-titulo">
-                    <div class="modal-clientes-titulo-flex">
-                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" class="modal-clientes-icone-topo" />
-                        <div class="modal-clientes-titulo-modal">
-                            <h2>Cadastro de Empresa</h2>
-                            <p>Informações da empresa contratante e do responsável técnico</p>
-                        </div>
+
+        <div class="modal-overlay" id="modalClientes"
+            <?php if(!empty($mensagem_erro)) echo 'style="visibility:visible;opacity:1;"'; ?>>
+            <div class="modal modal--xl">
+
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
                     </div>
-                    <label for="abrir-modal" class="modal-clientes-fechar"><i class="fa-solid fa-xmark"></i></label>
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Cadastro de Empresa</h2>
+                        <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
+                    </div>
+                    <button type="button" class="modal__fechar" data-modal-close="modalClientes">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
-    
-                <form action="" method="post" class="modal-clientes-div-form">
-                    <div class="modal-clientes-corpo-form">
-                        <div class="modal-clientes-secao-label">
-                            <i class="fa-solid fa-file-lines"></i>
-                            <h3>Dados da Empresa</h3>
-                        </div>
-    
-                        <div class="modal-clientes-form-row">
-                                <div class="modal-clientes-area-dados-cliente-empresa">
-                                    <label>Nome da Empresa</label>
-                                    <input type="text" name="nome_fantasia" placeholder="Digite o nome da Empresa" />
+
+                <form action="" method="post">
+                    <div class="modal__body">
+
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
+                                <h3>Dados da Empresa</h3>
+                            </div>
+
+                            <div class="modal-grade modal-grade--3">
+                                <div class="campo">
+                                    <label class="campo__label">Nome da Empresa</label>
+                                    <input type="text" name="nome_fantasia" class="campo__input" placeholder="Digite o nome da Empresa" />
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente-racao-empresa">
-                                    <label>Razão Social</label>
-                                    <input type="text" name="razao_social" placeholder="Digite a razão social" />
+                                <div class="campo">
+                                    <label class="campo__label">Razão Social</label>
+                                    <input type="text" name="razao_social" class="campo__input" placeholder="Digite a razão social" />
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente-tel">
-                                    <label>Telefone</label>
-                                    <div class="modal-clientes-campo-telefone">
-                                        <i class="fa fa-phone"></i>
-                                        <input type="text" name="telefone" placeholder="(11) 9999-9999" />
+                                <div class="campo">
+                                    <label class="campo__label">Telefone</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa fa-phone campo__input-icone"></i>
+                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" placeholder="(11) 9999-9999" />
                                     </div>
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente-email">
-                                    <label>E-mail</label>
-                                    <div class="modal-clientes-campo-email">
-                                        <i class="fa-solid fa-envelope"></i>
-                                        <input type="email" name="email_contato" placeholder="email@.com" />
+                                <div class="campo">
+                                    <label class="campo__label">E-mail</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                        <input type="email" name="email_contato" class="campo__input campo__input--com-icone-esq" placeholder="email@.com" />
                                     </div>
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>CNPJ</label>
-                                    <input type="text" name="cnpj" placeholder="23.456.789/0001-01" />
+                                <div class="campo">
+                                    <label class="campo__label">CNPJ</label>
+                                    <input type="text" name="cnpj" class="campo__input" placeholder="23.456.789/0001-01" />
                                 </div>
+                                <div class="campo">
+                                    <label class="campo__label">CEP</label>
+                                    <input type="text" name="cep" id="cep" class="campo__input" placeholder="12345-678" onblur="buscarCep()" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Endereço</label>
+                                    <input type="text" name="rua" id="endereco" class="campo__input" placeholder="Digite o endereço" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Número</label>
+                                    <input type="text" name="numero" class="campo__input" placeholder="0000" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Complemento</label>
+                                    <input type="text" name="complemento" class="campo__input" placeholder="Complemento" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Bairro</label>
+                                    <input type="text" name="bairro" id="bairro" class="campo__input" placeholder="Digite o bairro" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Cidade</label>
+                                    <input type="text" name="cidade" id="cidade" class="campo__input" placeholder="Selecione uma Cidade" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Estado</label>
+                                    <input type="text" name="estado" id="estado" class="campo__input" placeholder="Selecione um Estado" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">País</label>
+                                    <input type="text" name="pais" id="pais" class="campo__input" value="Brasil" required />
+                                </div>
+                            </div>
                         </div>
-    
-                        <div class="modal-clientes-form-row">
-                                <div class="modal-clientes-area-dados-cliente area-numero">
-                                    <label>CEP</label>
-                                    <input type="text" name="cep" id="cep" placeholder="12345-678" onblur="buscarCep()" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Endereço</label>
-                                    <input type="text" name="rua" id="endereco" placeholder="Digite o endereço" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente area-numero">
-                                    <label>Número</label>
-                                    <input type="text" name="numero" placeholder="0000" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Complemento</label>
-                                    <input type="text" name="complemento" placeholder="Complemento" />
-                                </div>
-                        </div>
-    
-                        <div class="modal-clientes-form-row">
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Bairro</label>
-                                    <input type="text" name="bairro" id="bairro" placeholder="Digite o bairro" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Cidade</label>
-                                    <input type="text" name="cidade" id="cidade" placeholder="Selecione uma Cidade" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Estado</label>
-                                    <input type="text" name="estado" id="estado" placeholder="Selecione um Estado" />
-                                </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>País</label>
-                                    <input type="text" name="pais" id="pais" value="Brasil" required/>
-                                </div>
-                        </div>
-    
-                        <div class="modal-clientes-secao-label">
-                                <i class="fa-solid fa-user"></i>
+                    
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-user modal-secao__titulo-icone"></i>
                                 <h3>Dados do Responsável</h3>
-                        </div>
-    
-                        <div class="modal-clientes-form-row">
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>Nome do Responsável</label>
-                                    <input type="text" name="responsavel" placeholder="Digite o nome" />
+                            </div>
+
+                            <div class="modal-grade modal-grade--3">
+                                <div class="campo">
+                                    <label class="campo__label">Nome do Responsável</label>
+                                    <input type="text" name="responsavel" class="campo__input" placeholder="Digite o nome" />
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente-tel">
-                                    <label>Telefone</label>
-                                    <div class="modal-clientes-campo-telefone">
-                                        <i class="fa fa-phone"></i>
-                                        <input type="text" name="telefone_responsavel" placeholder="(11)99999-9999" />
+                                <div class="campo">
+                                    <label class="campo__label">Telefone</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa fa-phone campo__input-icone"></i>
+                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="(11)99999-9999" />
                                     </div>
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente-email">
-                                    <label>E-mail</label>
-                                    <div class="modal-clientes-campo-email">
-                                        <i class="fa-solid fa-envelope"></i>
-                                        <input type="email" name="email_responsavel" placeholder="email@.com" />
+                                <div class="campo">
+                                    <label class="campo__label">E-mail</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                        <input type="email" name="email_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="email@.com" />
                                     </div>
                                 </div>
-                                <div class="modal-clientes-area-dados-cliente">
-                                    <label>CPF</label>
-                                    <input type="text" name="cpf" placeholder="000.000.000-00" />
+                                <div class="campo">
+                                    <label class="campo__label">CPF</label>
+                                    <input type="text" name="cpf" class="campo__input" placeholder="000.000.000-00" />
                                 </div>
+                            </div>
                         </div>
-                        <div class="modal-clientes-botoes-form">
-                                <?php if(!empty($mensagem_erro)): ?>
-                                    <p class="modal-clientes-msg-erro">
-                                        <i class="fa-solid fa-circle-exclamation"></i>
-                                        <?php echo $mensagem_erro; ?>
-                                    </p>
-                                <?php endif; ?>
-                                <label for="abrir-modal" class="modal-clientes-btn-cancelar">CANCELAR</label>
-                                <button type="submit" class="modal-clientes-btn-salvar">SALVAR</button>
-                        </div>
+               
+
                     </div>
+
+                    <div class="modal__footer">
+                        <?php if(!empty($mensagem_erro)): ?>
+                            <p class="campo__mensagem-erro" style="margin-right: auto;">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <?php echo $mensagem_erro; ?>
+                            </p>
+                        <?php endif; ?>
+                        <button type="button" class="btn-cancelar" data-modal-close="modalClientes">CANCELAR</button>
+                        <button type="submit" class="btn-botao-verde">SALVAR</button>
+                    </div>
+
                 </form>
+
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         <div class="tabela-wrapper">
             <table>
                 <thead>
@@ -279,6 +323,7 @@ if(isset($_POST['nome_fantasia']))
 </main>
     
     <script src="../Assets/JS/componentes/menu.js"></script> 
+    <script src="../assets/JS/componentes/modal.js"></script>
 </html>
 
 
