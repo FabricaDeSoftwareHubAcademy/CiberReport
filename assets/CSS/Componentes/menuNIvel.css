@@ -1,61 +1,106 @@
-@import url("../style.css");
+/* Progressbar */
+.containerProgress{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--cor-texto-secundario);
+}
 
-.form-stepper input{
+.progressbar{
+  position: relative;
   display: flex;
-  width: 10rem;
-  align-items: center;
+  justify-content: space-between;
+  counter-reset: step;
+  margin: 2rem 0 4rem;
+}
+
+.modal__stepper .progressbar {
+  isolation: isolate;
+}
+
+.progressbar::before, .progress{
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  background-color: #dcdcdd;
+  z-index: -1;
+}
+
+.progress{
+  background-color: var(--cor-azul-primaria);
+  width: 0%;
+  transition: 0.3s;
+}
+
+.progress-step {
+  width: 5rem;
+  height: 5rem;
+  background-color: var(--cor-cinza-terciario);
+  border: 2px solid var(--cor-borda-padrao);
+  border-radius: 50%;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--cor-texto-secundario);
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
 
-.container-stepper {
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-    height: 8rem;
-    flex-shrink: 0;
-    border: 1px solid gray;
+.progress-step::before {
+  counter-increment: step;
+  content: counter(step);
 }
-.stepper {
-    display: flex;
-    width: auto;
-    margin-top: 10px;
-    align-items: center;
-    gap: 8px;
+
+.progress-step::after {
+  content: attr(data-title);
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  font-size: 0.85rem;
+  color: var(--cor-texto-secundario);
 }
-.espaco-stepper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+
+
+.progress-step-active {
+  background-color: var(--cor-azul-primaria);
+  border-color: var(--cor-azul-primaria);
+  color: #fff;
 }
-.stepper-numero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--cor-texto-titulo);
-    padding: 1rem;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 100%;
+
+/* Concluído (há um próximo step também marcado como ativo) */
+.progress-step-active:has(~ .progress-step-active) {
+  background-color: var(--cor-verde);
+  border-color: var(--cor-verde);
+  color: #fff;
 }
-.stepper-separador {
-    border: 1px solid #000;
-    width: 120px;
-    margin-bottom: 20px;
+
+.progress-step-active:has(~ .progress-step-active)::before {
+  content: '\2713';
 }
-#btn-voltar{
+
+.form-step{
+  display: none;
+}
+
+.form-step-active{
   display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
 }
-#btn-avancar.active{
-  display: hidden;
+
+.input-grupo{
+  margin: 2rem 0;
 }
-.stepper-numero.active{
-  background-color: green;
+
+.btns-grupo{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.stepper-numero.estado{
-     border: 1px solid var(--cor-verde);
-}
-.stepper-separador.active{
-  border: 1px solid green;
+
+.next-btn{
+  display: flex;
+  justify-content: flex-end;
 }
