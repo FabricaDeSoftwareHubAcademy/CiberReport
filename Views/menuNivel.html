@@ -3,10 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/CSS/Componentes/menuNIvel.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
         <link rel="stylesheet" href="../assets/CSS/style.css" />
+        <link rel="stylesheet" href="../assets/CSS/Componentes/button.css" />
         <script src="../assets/JS/componentes/menuNIvel.js" defer></script>
-        <title>Document</title>
+        <title>Template — Stepper de Formulário</title>
     </head>
 
     <body>
@@ -14,87 +21,63 @@
             <!-- Barra de Progressão -->
             <div class="progressbar">
                 <div class="progress" id="progress"></div>
-                <div class="progress-step progress-step-active" data-title="exemplo"></div>
-                <div class="progress-step" data-title="exemplo"></div>
-                <div class="progress-step" data-title="exemplo"></div>
-                <div class="progress-step" data-title="exemplo"></div>
+                <div class="progress-step progress-step-active" data-title="Dados Pessoais"></div>
+                <div class="progress-step" data-title="Contato"></div>
+                <div class="progress-step" data-title="Segurança"></div>
             </div>
-            <!-- Steps -->
+
+            <!-- Step 1 -->
             <div class="form-step form-step-active">
-                <div class="input-group">
-                    <label for="username">username</label>
-                    <input type="text"
-                           id="username"
-                           placeholder="Digite seu nome"
-                           >
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="username">Nome</label>
+                    <input class="campo__input" type="text" id="username" placeholder="Digite seu nome" />
                 </div>
-                <div class="input-group">
-                    <label for="position">Position</label>
-                    <input type="text"
-                           id="position"
-                           placeholder="Digite sua posição"
-                           >
+                <div class="campo">
+                    <label class="campo__label" for="position">Cargo</label>
+                    <input class="campo__input" type="text" id="position" placeholder="Digite seu cargo" />
                 </div>
-                <div class="next-btn">
-                    <a href="#" class="btn btn-next">proximo</a>
+                <div class="next-btn" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-botao-verde btn-next">
+                        Próximo <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-            <div class="form-step ">
-                <div class="input-group">
-                    <label for="phone">Telefone</label>
-                    <input type="text"
-                           id="phone"
-                           placeholder="Digite seu nome"
-                           >
+
+            <!-- Step 2 -->
+            <div class="form-step">
+                <div class="campo">
+                    <label class="campo__label" for="phone">Telefone</label>
+                    <input class="campo__input" type="tel" id="phone" placeholder="(00) 00000-0000" />
                 </div>
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email"
-                           id="email"
-                           placeholdere="Digite sua posição"
-                           >
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="email">E-mail</label>
+                    <input class="campo__input" type="email" id="email" placeholder="seuemail@exemplo.com" />
                 </div>
-                <div class="btns-grupo">
-                    <a href="#" class="btn btn-prev">Voltar</a>
-                    <a href="#" class="btn btn-next">proximo</a>
-                </div>
-            </div>
-            <div class="form-step ">
-                <div class="input-group">
-                    <label for="date">Data de Nascimento</label>
-                    <input type="date"
-                           id="date"
-                           >
-                </div>
-                <div class="input-group">
-                    <label for="ID">ID</label>
-                    <input type="number"
-                           id="ID"
-                           placeholdere="Digite sua posição"
-                           >
-                </div>
-                <div class="btns-grupo">
-                    <a href="#" class="btn btn-prev">Voltar</a>
-                    <a href="#" class="btn btn-next">proximo</a>
+                <div class="btns-grupo" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-cancelar btn-prev">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar
+                    </button>
+                    <button type="button" class="btn-botao-verde btn-next">
+                        Próximo <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-            <div class="form-step ">
-                <div class="input-group">
-                    <label for="password">Senha</label>
-                    <input type="password"
-                           id="password"
-                           >
+
+            <!-- Step 3 (último) -->
+            <div class="form-step">
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="password">Senha</label>
+                    <input class="campo__input" type="password" id="password" placeholder="••••••••" />
                 </div>
-                <div class="input-group">
-                    <label for="confirmPassword">Confirmar Senha</label>
-                    <input type="password"
-                           id="confirmPassword"
-                           placeholdere="Confirme sua Senha"
-                           >
+                <div class="campo">
+                    <label class="campo__label campo__label--obrigatorio" for="confirmPassword">Confirmar Senha</label>
+                    <input class="campo__input" type="password" id="confirmPassword" placeholder="••••••••" />
                 </div>
-                <div class="btns-grupo">
-                    <a href="#" class="btn btn-prev">Voltar</a>
-                    <input type="submit" value="submit" class="btn">
+                <div class="btns-grupo" style="margin-top: 2.4rem">
+                    <button type="button" class="btn-cancelar btn-prev">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar
+                    </button>
+                    <button type="submit" class="btn-botao-verde">Salvar</button>
                 </div>
             </div>
         </form>

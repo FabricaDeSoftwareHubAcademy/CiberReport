@@ -1,43 +1,10 @@
-body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-label{
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input{
-  display: block;
-  justify-content: center;
-  width: 94%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.titulo{
-  text-align: center;
-}
-
-.width-50{
-  width: 50%;
-}
-
-.ml-auto{
-  margin-left: auto;
-}
-
 /* Progressbar */
 .containerProgress{
   width: 100%;
   padding: 10px;
   border: 1px solid var(--cor-texto-secundario);
 }
+
 .progressbar{
   position: relative;
   display: flex;
@@ -72,10 +39,10 @@ input{
   justify-content: center;
   align-items: center;
 }
+
 .progress-step::before{
   counter-increment: step;
   content: counter(step);
-  
 }
 
 .progress-step::after{
@@ -91,15 +58,7 @@ input{
   color: #f3f3f3;
 }
 
-/*form*/
-.form{
-  width: clamp(320px, 90%, 600px);
-  margin: 0 auto;
-  border: 1px solid #ccc;
-  border-radius: 0.35rem;
-  padding: 1.9rem;
-}
-
+/* Steps do formulário */
 .form-step{
   display: none;
 }
@@ -112,33 +71,13 @@ input{
   margin: 2rem 0;
 }
 
-/*btn grupo*/
-
 .btns-grupo{
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.btn{
-  padding: 0.75rem;
-  display: inline-block;
-  width: 100px;
-  border: none;
-  font-size: 1rem;
-  text-decoration: none;
-  background-color: rgba(0, 119, 255, 0.514);
-  color: #f3f3f3;
-  border-radius: 0.25rem;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
 .next-btn{
   display: flex;
   justify-content: flex-end;
-}
-.btn:hover{
-  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 119, 255, 0.514);
 }
