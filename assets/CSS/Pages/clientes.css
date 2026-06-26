@@ -3,18 +3,12 @@
 
 
 
-body {
-    display: flex;
-    min-height: 100vh;
-    background-color: var(--cor-fundo-pagina);
-}
 
 .main-content {
     flex: 1;
     width: 100%;
     overflow-x: hidden;
 }
-
 
 .button-cadastro {
     display: flex;
@@ -291,16 +285,24 @@ body {
     min-width: 1100px;
     border-collapse: collapse;
 }
-main{
+/* main{
     padding: var(--espaco-lg);
     display: flex;
     flex-direction: column;
     gap: var(--espaco-lg);
     height: 100%;
     
+} */
+
+.modal-clientes-msg-erro {
+    width: 100%;
+    color: #d32f2f;
+    font-size: var(--fonte-legenda);
+    margin-bottom: var(--espaco-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
 }
-
-
 
 
 

@@ -1,6 +1,3 @@
-<!-- Para usar o menu siga as etapas: -->
-<!-- 1º etapa: teu arquivo estar em .php -->
-<!-- 2º etapa: colar na primeira linha do seu arquivo <?php include_once 'menu.php' ?> -->
 <!doctype html>
 <html lang="pt-br">
     <head>
@@ -18,6 +15,7 @@
             referrerpolicy="no-referrer"
         />
         <link rel="stylesheet" href="../Assets/CSS/style.css" />
+        <link rel="stylesheet" href="../Assets/CSS/Pages/usuario.css" />
     </head>
 
     <body>
@@ -25,11 +23,11 @@
             <div class="sidebar_content">
                 <div class="logo">
                     <div class="logo-nome">
-                        <img src="../assets/img/logo-cyber-report.svg" alt="" />
-                        <img src="../assets/img/logo-baikal.svg" alt="" />
+                        <img src="../../../assets/img/logo-cyber-report.svg" alt="" />
+                        <img src="../../../assets/img/logo-baikal.svg" alt="" />
                     </div>
                     <div class="logo-imagem">
-                        <img src="../assets/img/logo-baikal-icone.svg" alt="" />
+                        <img src="../../../assets/img/logo-baikal-icone.svg" alt="" />
                     </div>
                 </div>
                 <ul id="side_itens">
@@ -48,7 +46,7 @@
                         <div class="tooltip-item"><span>Relatórios</span></div>
                     </li>
                     <li class="side_item">
-                        <a href="#" id="dropdown_item">
+                        <a href="#">
                             <i class="fa-solid fa-building-user"></i>
                             <span class="item_description">Gestão</span>
                             <i class="fa-solid fa-angle-down" id="dropdown"></i>
@@ -128,14 +126,13 @@
                 </button>
             </div>
         </nav>
-        <div class="menuOverlay"></div>
         <!-- <p></p> -->
         <div class="main-content">
             <header id="menu-superior">
                 <div class="logo-menuSuperior">
-                    <img src="../assets/img/logo-baikal-icone.svg" alt="" />
+                    <img src="../../../assets/img/logo-baikal-icone.svg" alt=""/>
                 </div>
-                <h1>Titulo da pagina</h1>
+                <h1>gerenciamento de usuários</h1>
                 <!-- barra de pesquisa para desktop -->
                 <div class="input-pesquisaSuperior">
                     <input type="text" placeholder="Buscar..." />
@@ -143,7 +140,7 @@
                         <i class="fa-brands fa-sistrix"></i>
                     </button>
                 </div>
-
+                
                 <!-- pesquisa para formato mobile -->
                 <div class="pesquisa-mobile">
                     <button>
@@ -159,20 +156,89 @@
                         </button>
                     </div>
                 </div>
-                <div class="perfis">
-                    <i class="fa-regular fa-bell notificacao"></i>
-                    <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
-                    <div class="description-user">
-                        <p>Marcos antonio</p>
-                        <p>Gerente</p>
+
+        <div class="perfis">
+            <i class="fa-regular fa-bell notificacao"></i>
+            <img class="imagem-usuario" src="../../../assets/img/foto-perfil.jpg" alt="" />
+            <div class="description-user">
+                <p>Marcos antonio</p>
+                <p>Gerente</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="corpo_card">
+            <div class="area-modal">
+                <div class="cabecalho">
+                    <img class="icone-cabecalho" src="../assets/img/usercab.svg" alt="" />
+                    <div class="texto-cabecalho">
+                        <div class="elemento-cabecalho">
+                            <div class="textos-caebecalho">
+                                <h2>Gerenciamento de Usuário</h2>
+                                <span>Informações da empresa contratante e do responsável técnico</span>
+                            </div>
+                        </div>
+                        <span class="fechar">X</span>
                     </div>
                 </div>
-            </header>
+                <h4 style="padding-left: 12px">dados do funcionario</h4>
+                <div class="itens_mid">
+                    <div class="container-foto">
+                        <div class="foto_do_user">
+                            <img id="icon_ft" src="../assets/img/usermid.svg" />
+                        </div>
+                        <h4>alterar foto do usuario</h4>
+                    </div>
+                </div>
 
-            <main>
-                <h2>Conteúdo Principal</h2>
-            </main>
+                <div class="campos">
+                    <div class="container-infoA">
+                        <label>Nome</label> <br />
+                        <input class="imputA" type="text" placeholder="digite seu nome" />
+                    </div>
+                    <div class="posicionamento">
+                        <div class="container-info">
+                            <label>Email</label> <br />
+                            <input class="imputB" type="tex" placeholder="empresa@gmail.com" />
+                        </div>
+                        <div class="container-info">
+                            <label class="imputC">Telefone</label> <br />
+                            <input class="imputC" type="tex" placeholder="(11)99999-9999" />
+                        </div>
+                    </div>
+                    <div class="posicionamento">
+                        <div class="container-info">
+                            <label>CPF</label> <br />
+                            <input class="imputD" type="text" placeholder="000.000.000-00" />
+                        </div>
+                        <div class="input-group">
+                            <label id="cargo">Cargo</label> <br />
+                            <select id="cargo">
+                                <option selected disabled>Selecione um cargo</option>
+                                <option>Analista</option>
+                                <option>administrador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-groupA">
+                        <label id="especialidade">Especialidades</label> <br />
+                        <select id="especialidade">
+                            <option selected disabled>Selecione uma especialidade</option>
+                            <option>Mobile</option>
+                            <option>Web</option>
+                            <option>front</option>
+                            <option>Back</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="botoes">
+                    <button id="botaoA">cancelar</button>
+                    <button id="botaoB">Salvar</button>
+                </div>
+            </div>
         </div>
-        <script src="src\components\menu\menu.js"></script>
-    </body>
+    
 </html>
+</div>
+<script src="src\components\menu\menu.js"></script>
