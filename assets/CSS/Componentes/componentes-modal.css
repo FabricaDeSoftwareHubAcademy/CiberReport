@@ -323,7 +323,6 @@
    <div class="modal-secao"> ...conteúdo... </div>
    ============================================================================= */
 .modal-secao {
-    background-color: var(--cor-branco-primario);
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-lg);
     padding: var(--espaco-lg);

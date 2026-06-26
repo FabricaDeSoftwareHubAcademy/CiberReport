@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 <li class="item-submenu">
-                    <a href="#">
+                    <a href="gerenciarClientes.php">
                         <i class="fa-solid fa-address-book"></i>
                         <span class="item_description">Clientes</span>
                     </a>
@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="item-submenu">
-                    <a href="#">
+                    <a href="gerenciarPentest.php">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
                     </a>

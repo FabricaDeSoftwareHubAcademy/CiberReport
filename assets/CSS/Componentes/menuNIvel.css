@@ -1,49 +1,20 @@
-body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-label{
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input{
-  display: block;
-  justify-content: center;
-  width: 94%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.titulo{
-  text-align: center;
-}
-
-.width-50{
-  width: 50%;
-}
-
-.ml-auto{
-  margin-left: auto;
-}
-
 /* Progressbar */
 .containerProgress{
   width: 100%;
   padding: 10px;
   border: 1px solid var(--cor-texto-secundario);
 }
+
 .progressbar{
   position: relative;
   display: flex;
   justify-content: space-between;
   counter-reset: step;
   margin: 2rem 0 4rem;
+}
+
+.modal__stepper .progressbar {
+  isolation: isolate;
 }
 
 .progressbar::before, .progress{
@@ -58,46 +29,55 @@ input{
 }
 
 .progress{
-  background-color: rgb(0, 119, 255);
+  background-color: var(--cor-azul-primaria);
   width: 0%;
   transition: 0.3s;
 }
 
-.progress-step{
+.progress-step {
   width: 5rem;
   height: 5rem;
-  background-color: #dcdcdd;
+  background-color: var(--cor-cinza-terciario);
+  border: 2px solid var(--cor-borda-padrao);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.progress-step::before{
-  counter-increment: step;
-  content: counter(step);
-  
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--cor-texto-secundario);
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
 
-.progress-step::after{
+.progress-step::before {
+  counter-increment: step;
+  content: counter(step);
+}
+
+.progress-step::after {
   content: attr(data-title);
   position: absolute;
   top: calc(100% + 0.5rem);
   font-size: 0.85rem;
-  color: #666;
+  color: var(--cor-texto-secundario);
 }
 
-.progress-step-active{
-  background-color: rgb(0, 119, 255);
-  color: #f3f3f3;
+
+.progress-step-active {
+  background-color: var(--cor-azul-primaria);
+  border-color: var(--cor-azul-primaria);
+  color: #fff;
 }
 
-/*form*/
-.form{
-  width: clamp(320px, 90%, 600px);
-  margin: 0 auto;
-  border: 1px solid #ccc;
-  border-radius: 0.35rem;
-  padding: 1.9rem;
+/* Concluído (há um próximo step também marcado como ativo) */
+.progress-step-active:has(~ .progress-step-active) {
+  background-color: var(--cor-verde);
+  border-color: var(--cor-verde);
+  color: #fff;
+}
+
+.progress-step-active:has(~ .progress-step-active)::before {
+  content: '\2713';
 }
 
 .form-step{
@@ -105,14 +85,14 @@ input{
 }
 
 .form-step-active{
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
 }
 
 .input-grupo{
   margin: 2rem 0;
 }
-
-/*btn grupo*/
 
 .btns-grupo{
   display: flex;
@@ -120,25 +100,7 @@ input{
   align-items: center;
 }
 
-.btn{
-  padding: 0.75rem;
-  display: inline-block;
-  width: 100px;
-  border: none;
-  font-size: 1rem;
-  text-decoration: none;
-  background-color: rgba(0, 119, 255, 0.514);
-  color: #f3f3f3;
-  border-radius: 0.25rem;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
 .next-btn{
   display: flex;
   justify-content: flex-end;
-}
-.btn:hover{
-  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 119, 255, 0.514);
 }
