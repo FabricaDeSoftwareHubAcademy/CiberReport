@@ -122,12 +122,11 @@ body {
     display: flex;
     min-height: 100vh;
 }
-main {
-    margin: var(--espaco-md);
-}
+
 
 .main-content {
     flex: 1;
+    padding: var(--espaco-xl);
     min-width: 0;
     display: flex;
     flex-direction: column;
