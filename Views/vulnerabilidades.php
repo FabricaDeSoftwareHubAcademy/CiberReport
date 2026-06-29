@@ -91,7 +91,7 @@
                         <td class="resumo-texto">O problema identificado na aplicação foi...</td>
                         <td><span class="badge badge-critica">Crítica</span></td>
                         <td><span class="badge badge-critica">Crítica</span></td>
-                        <td class="cvss">9.3</td>
+                        <td class="cvss">9.8</td>
                         <td>
                             <div class="acoes">
                                 <button title="Visualizar" aria-label="Visualizar">
@@ -165,7 +165,7 @@
                         <td class="resumo-texto">O problema identificado na aplicação foi...</td>
                         <td><span class="badge badge-media">Média</span></td>
                         <td><span class="badge badge-media">Médio</span></td>
-                        <td class="cvss">7.7</td>
+                        <td class="cvss">7.2</td>
                         <td>
                             <div class="acoes">
                                 <button title="Visualizar" aria-label="Visualizar">
