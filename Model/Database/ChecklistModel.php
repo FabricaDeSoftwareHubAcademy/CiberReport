@@ -1,0 +1,67 @@
+<?php
+class ChecklistModel
+{
+    private $pdo;
+    public $msgErro = "";
+
+    public function conectar($nome_banco, $host, $usuario, $senha)
+    {
+        global $pdo;
+        try {
+            $pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
+        } catch (PDOException $erro) {
+            $this->msgErro = $erro->getMessage();
+        }
+    }
+
+    public function listar()
+    {
+        global $pdo;
+        $sql = $pdo->prepare("SELECT * FROM pentest_tipos ORDER BY nome");
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscar($id)
+    {
+        global $pdo;
+        $sql = $pdo->prepare("SELECT * FROM pentest_tipos WHERE id = :id");
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function cadastrar($nome, $descricao_breve, $descricao_completa, $categoria, $modelo, $tecnica, $frameworks, $nivel_profundidade, $horas_execucao)
+    {
+        global $pdo;
+        $sql = $pdo->prepare("INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria, modelo, tecnica, frameworks, nivel_profundidade, horas_execucao, habilitado) VALUES (:nome, :descricao_breve, :descricao_completa, :categoria, :modelo, :tecnica, :frameworks, :checklist, :nivel_profundidade, :horas_execucao, 1)");
+        $sql->bindValue(":nome", $nome);
+        $sql->bindValue(":descricao_breve", $descricao_breve);
+        $sql->bindValue(":descricao_completa", $descricao_completa);
+        $sql->bindValue(":categoria", $categoria);
+        $sql->bindValue(":modelo", $modelo);
+        $sql->bindValue(":tecnica", $tecnica);
+        $sql->bindValue(":frameworks", $frameworks);
+        $sql->bindValue(":nivel_profundidade", $nivel_profundidade);
+        $sql->bindValue(":horas_execucao", $horas_execucao);
+        $sql->execute();
+        return $pdo->lastInsertId();
+    }
+
+    public function excluir($id)
+    {
+        global $pdo;
+        $sql = $pdo->prepare("DELETE FROM pentest_tipos WHERE id = :id");
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+    }
+
+    public function alterarStatus($id, $status)
+    {
+        global $pdo;
+        $sql = $pdo->prepare("UPDATE pentest_tipos SET habilitado = :habilitado WHERE id = :id");
+        $sql->bindValue(":habilitado", $status);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+    }
+}
