@@ -47,6 +47,7 @@
 .modal--md  { width: 680px; max-width: 95vw; }
 .modal--lg  { width: 820px; max-width: 95vw; }
 .modal--xl  { width: 1020px; max-width: 95vw; }
+.modal--xxl  { width: 1400px; max-width: 95vw; }
 
 .modal--com-stepper {
     min-height: 400px;
