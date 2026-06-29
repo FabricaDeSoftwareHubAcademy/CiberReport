@@ -28,14 +28,8 @@
 
 
 
-/* Tamanho extra para modais de clientes com muitos campos */
-.modal--2xl {
-    width: 1400px;
-    max-width: 96vw;
-}
 .modal-grade--4 > * {
-    flex: 1 1 calc(25% - 1.6rem);
-    min-width: 80px;
+    flex: 1 1 calc(25% - var(--espaco-md));
 }
 
 

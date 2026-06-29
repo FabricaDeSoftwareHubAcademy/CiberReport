@@ -1,16 +1,10 @@
 <?php
-require "../bootstrap.php";
-require_once "../Model/Database/Empresa.php";
 require_once "../Model/Database/Endereco.php";
 
-$empresa = new Empresa();
+
 $endereco = new Endereco();
 
-$empresa->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
-$endereco->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
-
-$dados = $empresa->ListarDados();
 $mensagem_erro = "";
 
 $dados_empresa_editar = [];
@@ -79,7 +73,7 @@ if (isset($_POST['nome_fantasia'])) {
 
         <div class="modal-overlay" id="modalClientes"
             <?php if (!empty($mensagem_erro)) echo 'style="visibility:visible;opacity:1;"'; ?>>
-            <div class="modal modal--xl">
+            <div class="modal modal--xxl">
 
                 <div class="modal__header">
                     <div class="modal__header-icone">
@@ -102,12 +96,15 @@ if (isset($_POST['nome_fantasia'])) {
                                 <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
                                 <h3>Dados da Empresa</h3>
                             </div>
+                            <div class="modal-grade modal-grade--4">
 
-                            <div class="modal-grade modal-grade--3"> <!-- Mudar aqui está errado para um modal-grade--4 -->
                                 <div class="campo">
                                     <label class="campo__label">Nome da Empresa</label>
                                     <input type="text" name="nome_fantasia" class="campo__input" placeholder="Digite o nome da Empresa" />
                                 </div>
+                            </div>
+
+                            <div class="modal-grade modal-grade--4"> <!-- Mudar aqui está errado para um modal-grade--4 -->
                                 <div class="campo">
                                     <label class="campo__label">Razão Social</label>
                                     <input type="text" name="razao_social" class="campo__input" placeholder="Digite a razão social" />
@@ -171,7 +168,7 @@ if (isset($_POST['nome_fantasia'])) {
                                 <h3>Dados do Responsável</h3>
                             </div>
 
-                            <div class="modal-grade modal-grade--3">
+                            <div class="modal-grade modal-grade--4">
                                 <div class="campo">
                                     <label class="campo__label">Nome do Responsável</label>
                                     <input type="text" name="responsavel" class="campo__input" placeholder="Digite o nome" />
@@ -244,7 +241,7 @@ if (isset($_POST['nome_fantasia'])) {
                                 <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
                                 <h3>Dados da Empresa</h3>
                             </div>
-                            <div class="modal-grade modal-grade--3">
+                            <div class="modal-grade modal-grade--4">
                                 <div class="campo">
                                     <label class="campo__label">Nome da Empresa</label>
                                     <input type="text" name="nome_fantasia" class="campo__input" value="<?php echo $dados_empresa_editar['nome_fantasia'] ?? ''; ?>" />
@@ -311,7 +308,7 @@ if (isset($_POST['nome_fantasia'])) {
                                 <i class="fa-solid fa-user modal-secao__titulo-icone"></i>
                                 <h3>Dados do Responsável</h3>
                             </div>
-                            <div class="modal-grade modal-grade--3">
+                            <div class="modal-grade modal-grade--4">
                                 <div class="campo">
                                     <label class="campo__label">Nome do Responsável</label>
                                     <input type="text" name="responsavel" class="campo__input" value="<?php echo $dados_empresa_editar['responsavel'] ?? ''; ?>" />
@@ -381,7 +378,7 @@ if (isset($_POST['nome_fantasia'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($dados as $empresa) { ?>
+                    <!-- <?php foreach ($dados as $empresa) { ?> -->
                         <tr>
                             <td>#<?php echo $empresa['id']; ?></td>
                             <td><?php echo $empresa['nome_fantasia']; ?></td>
