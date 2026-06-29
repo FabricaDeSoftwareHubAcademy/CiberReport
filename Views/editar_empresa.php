@@ -6,8 +6,8 @@ require "../Model/Database/Endereco.php";
 $empresa = new Empresa();
 $endereco = new Endereco();
 
-$empresa->conectar($banco, $host, $user, $pass);
-$endereco->conectar($banco, $host, $user, $pass);
+$empresa->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
+$endereco->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
 $dados_empresa = [];
 $dados_endereco = [];
@@ -40,7 +40,7 @@ if (isset($_POST['nome_fantasia'])) {
     $empresa->atualizarDadosEmpresa($id_empresa, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel);
     $endereco->atualizarDadosEndereco($id_endereco, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais);
 
-    header("location:clientes.php");
+    header("location:cliente_empresa.php");
     exit;
 }
 
@@ -91,7 +91,7 @@ $dados = $empresa->ListarDados();
                         </a>
                     </div>
 
-                    <form action="editar_empresa.php" method="post">
+                    <form action="editar_empresa.php?id_empresa=<?php echo $dados_empresa_editar['id'] ?? ''; ?>" method="post">
                         <input type="hidden" name="id_empresa" value="<?php echo $dados_empresa['id']; ?>" />
                         <input type="hidden" name="id_endereco" value="<?php echo $dados_empresa['endereco_id']; ?>" />
 
