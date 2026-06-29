@@ -67,7 +67,7 @@
                         </a>
                     </li>
                     <li class="item-submenu">
-                        <a href="gerenciamento-projeto.html">
+                        <a href="gerenciamento-projeto.php">
                             <i class="fa-solid fa-terminal"></i>
                             <span class="item_description">Projetos</span>
                         </a>

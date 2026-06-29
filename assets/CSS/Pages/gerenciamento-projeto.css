@@ -3,6 +3,9 @@
     gap: 25px;
     margin: 10px 0px 10px 1450px;
 }
+.main-gerenciamento-projeto{
+    display: flex;
+}
 .btn-projeto{
     width: 200px;
 }
