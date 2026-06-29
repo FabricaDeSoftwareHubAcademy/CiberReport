@@ -5,21 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vulnerabilidades</title>
-    <link rel="stylesheet" href="../assets/CSS/Pages/modalarissa.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="../assets/CSS/style.css">
+    <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
     <link rel="stylesheet" href="../assets/CSS/Pages/vulnerabilidades.css" />
-    <link rel="stylesheet" href="../assets/CSS/style.css" />
-    <script src="../assets/JS/componentes/menu.js"></script>
-    <script defer src="../assets/JS/componentes/tabela.js"></script>
 </head>
 
-<?php $tituloPagina = 'Vulnerabilidades';
-include_once 'menu.php'; ?>
-
 <body>
+    <?php $tituloPagina = 'Vulnerabilidades';
+    include_once 'menu.php'; ?>
     <main>
         <div class="barra-acoes">
-            <button class="btn-nova">
+            <button class="btn-nova" data-modal-target="modalVulnerabilidade">
                 <i class="fa-solid fa-square-plus"></i>
                 Nova Vulnerabilidade
             </button>
@@ -241,90 +237,82 @@ include_once 'menu.php'; ?>
             </table>
         </div>
 
-        <div class="modal">
-            <div class="box">
-                <a href="#" class="fechar" id="btnFechar">&#x2715;</a>
+        <div class="modal-overlay" id="modalVulnerabilidade">
+            <div class="modal modal--xl">
 
-                <div class="area-titulo">
-                    <div class="icone-titulo"></div>
-                    <div class="titulo-modal">
-                        <h2>Nova Vulnerabilidade</h2>
-                        <label>Informação da vulnerabilidade encontrada.</label>
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Nova Vulnerabilidade</h2>
+                        <p class="modal__subtitulo">Informação da vulnerabilidade encontrada.</p>
+                    </div>
+                    <button class="modal__fechar" data-modal-close>&#x2715;</button>
                 </div>
 
-                <div class="area-dados-vulnerabilidade">
-                    <a href="#" class="btn-voltar" id="btnVoltar">&#8592;</a>
-
-                    <div class="secao-titulo">
-                        <span class="secao-icone"> </span>
+                <div class="modal__body">
+                    <div class="modal-secao__titulo">
+                        <i class="modal-secao__titulo-icone fa-solid fa-circle-info"></i>
                         <strong>Dados da Vulnerabilidade</strong>
                     </div>
 
-                    <div class="row-3">
-                        <div class="input-dados">
-                            <label for="nomeVuln">Nome da Vulnerabilidade:</label>
-                            <input type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" />
+                    <div class="modal-grade modal-grade--3">
+                        <div class="campo">
+                            <label class="campo__label" for="nomeVuln">Nome da Vulnerabilidade:</label>
+                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" />
                         </div>
-                        <div class="input-dados">
-                            <label for="cvssScore">CVSS Score:</label>
-                            <input type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" />
+                        <div class="campo">
+                            <label class="campo__label" for="cvssScore">CVSS Score:</label>
+                            <input class="campo__input" type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" />
                         </div>
-                        <div class="input-dados">
-                            <label for="cve">CVE:</label>
-                            <input type="text" id="cve" name="cve" placeholder="0.0 - 10.0" />
-                        </div>
-                    </div>
-
-                    <div class="input-dados">
-                        <label for="descricao">Descrição:</label>
-                        <div class="input-icone-wrap">
-                            <input type="text" id="descricao" name="descricao"
-                                placeholder="Descreva a Vulnerabilidade" />
-                            <span class="icone-input"> </span>
+                        <div class="campo">
+                            <label class="campo__label" for="cve">CVE:</label>
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" />
                         </div>
                     </div>
 
-                    <div class="row-2">
-                        <div class="input-dados">
-                            <label for="descTecnica">Descrição Técnica:</label>
-                            <textarea id="descTecnica" name="descTecnica"
-                                placeholder="Descreva a vulnerabilidade em detalhes"></textarea>
+                    <div class="campo">
+                        <label class="campo__label" for="descricao">Descrição:</label>
+                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" />
+                    </div>
+
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label" for="descTecnica">Descrição Técnica:</label>
+                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes"></textarea>
                         </div>
-                        <div class="input-dados">
-                            <label for="impactos">Impactos:</label>
-                            <textarea id="impactos" name="impactos"
-                                placeholder="Descreva o impacto potencial"></textarea>
+                        <div class="campo">
+                            <label class="campo__label" for="impactos">Impactos:</label>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial"></textarea>
                         </div>
                     </div>
 
-                    <div class="row-2">
-                        <div class="input-dados">
-                            <label for="responsavel">Responsável:</label>
-                            <div class="input-icone-wrap">
-                                <input type="text" id="responsavel" name="responsavel"
-                                    placeholder="Nome do Responsável" />
-                                <span class="icone-input"> </span>
-                            </div>
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label" for="responsavel">Responsável:</label>
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" />
                         </div>
-                        <div class="input-dados">
-                            <label for="severidade">Severidade:</label>
-                            <div class="select-wrap">
-                                <select id="severidade" name="severidade">
+                        <div class="campo">
+                            <label class="campo__label" for="severidade">Severidade:</label>
+                            <div class="campo__select-wrapper">
+                                <select class="campo__select" id="severidade" name="severidade">
                                     <option value="" disabled selected>Selecione a severidade</option>
                                     <option value="critica">Crítica</option>
                                     <option value="alta">Alta</option>
                                     <option value="media">Média</option>
                                     <option value="baixa">Baixa</option>
                                 </select>
+                                <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
                         </div>
                     </div>
-                    <div class="row-2">
-                        <div class="input-dados">
-                            <label for="categoria">Categoria:</label>
-                            <div class="select-wrap">
-                                <select id="categoria" name="categoria">
+
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label" for="categoria">Categoria:</label>
+                            <div class="campo__select-wrapper">
+                                <select class="campo__select" id="categoria" name="categoria">
                                     <option value="" disabled selected>Selecione a categoria</option>
                                     <option value="web">Aplicação Web</option>
                                     <option value="rede">Rede</option>
@@ -332,32 +320,36 @@ include_once 'menu.php'; ?>
                                     <option value="mobile">Mobile</option>
                                     <option value="api">API</option>
                                 </select>
+                                <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
                         </div>
-                        <div class="input-dados">
-                            <label for="status">Status:</label>
-                            <div class="select-wrap">
-                                <select id="status" name="status">
-                                    <option value="" disabled selected>Selecione a status</option>
+                        <div class="campo">
+                            <label class="campo__label" for="status">Status:</label>
+                            <div class="campo__select-wrapper">
+                                <select class="campo__select" id="status" name="status">
+                                    <option value="" disabled selected>Selecione o status</option>
                                     <option value="aberta">Aberta</option>
                                     <option value="em-analise">Em Análise</option>
                                     <option value="corrigida">Corrigida</option>
                                     <option value="aceita">Aceita</option>
                                     <option value="falso-positivo">Falso Positivo</option>
                                 </select>
+                                <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="botoes-forms">
-                    <button class="btn-cancelar" id="btnCancelar">Cancelar</button>
-                    <button class="btn-salvar" id="btnSalvar">Salvar</button>
-                </div>
+
+                <footer class="modal__footer">
+                    <button class="btn-cancelar" data-modal-close>Cancelar</button>
+                    <button class="btn-botao-verde" id="btnSalvar">Salvar</button>
+                </footer>
+
             </div>
         </div>
     </main>
-</body>
-</div>
-</div>
 
+    <script src="../assets/JS/componentes/tabela.js"></script>
+    <script src="../assets/JS/componentes/modal.js"></script>
+</body>
 </html>
