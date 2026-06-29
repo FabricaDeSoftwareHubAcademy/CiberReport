@@ -1,7 +1,6 @@
 <?php
     Class Empresa
     {
-        private $pdo;
 
         public $msgErro = "";
 
@@ -59,7 +58,7 @@
         {
             global $pdo;
             $sql = $pdo->prepare("DELETE FROM empresa WHERE id = :id");
-            $sql->bindValue(":id",$id_empresa);
+            $sql->bindValue(":id",$id_empresa); 
             $sql->execute();
         }
 

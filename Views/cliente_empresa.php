@@ -347,8 +347,6 @@ if (isset($_POST['nome_fantasia'])) {
         
 
 
-
-
         <div class="tabela-wrapper">
             <table>
                 <thead>
@@ -357,71 +355,96 @@ if (isset($_POST['nome_fantasia'])) {
                             <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="1">
-                            <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Nome do Pentest <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="2">
-                            <span class="th-label">CNPJ <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Breve Descrição</span>
                         </th>
                         <th data-col="3">
-                            <span class="th-label">Responsável <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Categoria <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="4">
-                            <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Modelo <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="5">
-                            <span class="th-label">Telefone <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Técnica <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="6">
-                            <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Frameworks</span>
+                        </th>
+                        <th data-col="7">
+                            <span class="th-label">Checklist</span>
+                        </th>
+                        <th data-col="8">
+                            <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <?php foreach ($dados as $empresa) { ?> -->
+                    <?php foreach ($pentests as $pentest): ?>
+                        <?php
+                        $frameworks = array_filter(array_map('trim', explode(',', $pentest['frameworks'] ?? '')));
+                        $ativo = (bool) $pentest['habilitado'];
+                        ?>
                         <tr>
-                            <td>#<?php echo $empresa['id']; ?></td>
-                            <td><?php echo $empresa['nome_fantasia']; ?></td>
-                            <td><?php echo $empresa['cnpj']; ?></td>
-                            <td><?php echo $empresa['responsavel']; ?></td>
-                            <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
-                            <td><?php echo $empresa['telefone']; ?></td>
+                            <td><?= $pentest['id'] ?></td>
+                            <td><?= htmlspecialchars($pentest['nome']) ?></td>
+                            <td class="ger-pentest-col-descricao"><?= htmlspecialchars($pentest['descricao_breve']) ?></td>
                             <td>
-
-                                <span class="status status-concluido">Ativo</span>
+                                <span class="ger-pentest-cat-badge">
+                                    <?= htmlspecialchars($pentest['categoria']) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($pentest['modelo']) ?></td>
+                            <td><?= htmlspecialchars($pentest['tecnica']) ?></td>
+                            <td>
+                                <div class="ger-pentest-frameworks-list">
+                                    <?php foreach (array_slice($frameworks, 0, 2) as $fw): ?>
+                                        <span class="ger-pentest-framework-tag"><?= htmlspecialchars($fw) ?></span>
+                                    <?php endforeach; ?>
+                                    <?php if (count($frameworks) > 2): ?>
+                                        <span class="ger-pentest-framework-tag ger-pentest-tag-mais">+<?= count($frameworks) - 2 ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($pentest['checklist'] ?? '') ?></td>
+                            <td>
+                                <label class="ger-pentest-toggle-switch">
+                                    <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
+                                    <span class="ger-pentest-toggle-slider"></span>
+                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
+                                </label>
                             </td>
                             <td>
                                 <div class="acoes">
-
-                                    <a href="cliente_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
-                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </a>
-                                    <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <button><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn-editar" title="Editar" aria-label="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <a href="gerenciarPentest.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                    <?php } ?>
+                    <?php endforeach; ?>
+                    <?php if (empty($pentests)): ?>
+                        <tr>
+                            <td colspan="10" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="8" class="rodape-tabela">
-                            <div class="paginacao">
-                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
-                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
-                                <button class="pag-num" aria-label="Página 2">2</button>
-                                <button class="pag-num" aria-label="Página 3">3</button>
-                                <button class="pag-num" aria-label="Página 4">4</button>
-                                <button class="pag-num" aria-label="Página 5">5</button>
-                                <button class="pag-num" aria-label="Página 6">6</button>
-                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
-                            </div>
+                        <td colspan="10" class="rodape-tabela">
+                            <div class="paginacao"></div>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
+
+
     </section>
 </main>
 <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
