@@ -7,7 +7,12 @@
 @import url("Componentes/tabela.css");
 @import url("Componentes/modal.css");
 @import url(Componentes/componentes-modal.css);
+<<<<<<< Updated upstream
 @import url("Componentes/button.css");
+=======
+@import url('Pages/gerenciamento-projeto.css');
+
+>>>>>>> Stashed changes
 /* ⚠️ NUNCA use valores de cor, fonte ou espaçamento direto no CSS.
    Sempre use as variáveis definidas aqui. Caso queira/precise de algo AVISE!!! */
 
