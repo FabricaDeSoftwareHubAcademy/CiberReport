@@ -13,6 +13,15 @@ $endereco->conectar($_ENV['DB_NAME'], $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV[
 $dados = $empresa->ListarDados();
 $mensagem_erro = "";
 
+$dados_empresa_editar = [];
+$dados_endereco_editar = [];
+if (isset($_GET['id_empresa'])) {
+    $id_empresa_editar = addslashes($_GET['id_empresa']);
+    $dados_empresa_editar = $empresa->buscarDadosEmpresa($id_empresa_editar);
+    $dados_endereco_editar = $endereco->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
+}
+
+
 if (isset($_POST['nome_fantasia'])) {
     $nome_fantasia = addslashes($_POST['nome_fantasia']);
     $razao_social = addslashes($_POST['razao_social']);
@@ -206,8 +215,139 @@ if (isset($_POST['nome_fantasia'])) {
 
             </div>
         </div>
+        
+        <div class="modal-overlay" id="modalEditar"
+            <?php if (!empty($dados_empresa_editar)) echo 'style="visibility:visible;opacity:1;"'; ?>>
+            <div class="modal modal--xl">
 
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
+                    </div>
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Edição de Cadastro</h2>
+                        <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
+                    </div>
+                    <a href="cliente_empresa.php" class="modal__fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                </div>
 
+                <form action="editar_empresa.php?id_empresa=<?php echo $dados_empresa_editar['id'] ?? ''; ?>" method="post">
+                    <input type="hidden" name="id_empresa" value="<?php echo $dados_empresa_editar['id'] ?? ''; ?>" />
+                    <input type="hidden" name="id_endereco" value="<?php echo $dados_empresa_editar['endereco_id'] ?? ''; ?>" />
+
+                    <div class="modal__body">
+
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
+                                <h3>Dados da Empresa</h3>
+                            </div>
+                            <div class="modal-grade modal-grade--3">
+                                <div class="campo">
+                                    <label class="campo__label">Nome da Empresa</label>
+                                    <input type="text" name="nome_fantasia" class="campo__input" value="<?php echo $dados_empresa_editar['nome_fantasia'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Razão Social</label>
+                                    <input type="text" name="razao_social" class="campo__input" value="<?php echo $dados_empresa_editar['razao_social'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Telefone</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa fa-phone campo__input-icone"></i>
+                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['telefone'] ?? ''; ?>" />
+                                    </div>
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">E-mail</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                        <input type="email" name="email_contato" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['email_contato'] ?? ''; ?>" />
+                                    </div>
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">CNPJ</label>
+                                    <input type="text" name="cnpj" class="campo__input" value="<?php echo $dados_empresa_editar['cnpj'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">CEP</label>
+                                    <input type="text" name="cep" class="campo__input" value="<?php echo $dados_endereco_editar['cep'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Endereço</label>
+                                    <input type="text" name="rua" class="campo__input" value="<?php echo $dados_endereco_editar['rua'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Número</label>
+                                    <input type="text" name="numero" class="campo__input" value="<?php echo $dados_endereco_editar['numero'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Complemento</label>
+                                    <input type="text" name="complemento" class="campo__input" value="<?php echo $dados_endereco_editar['complemento'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Bairro</label>
+                                    <input type="text" name="bairro" class="campo__input" value="<?php echo $dados_endereco_editar['bairro'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Cidade</label>
+                                    <input type="text" name="cidade" class="campo__input" value="<?php echo $dados_endereco_editar['cidade'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Estado</label>
+                                    <input type="text" name="estado" class="campo__input" value="<?php echo $dados_endereco_editar['estado'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">País</label>
+                                    <input type="text" name="pais" class="campo__input" value="<?php echo $dados_endereco_editar['pais'] ?? ''; ?>" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-user modal-secao__titulo-icone"></i>
+                                <h3>Dados do Responsável</h3>
+                            </div>
+                            <div class="modal-grade modal-grade--3">
+                                <div class="campo">
+                                    <label class="campo__label">Nome do Responsável</label>
+                                    <input type="text" name="responsavel" class="campo__input" value="<?php echo $dados_empresa_editar['responsavel'] ?? ''; ?>" />
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">Telefone</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa fa-phone campo__input-icone"></i>
+                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="(11)99999-9999" />
+                                    </div>
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">E-mail</label>
+                                    <div class="campo__input-wrapper">
+                                        <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                        <input type="email" name="email_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="email@.com" />
+                                    </div>
+                                </div>
+                                <div class="campo">
+                                    <label class="campo__label">CPF</label>
+                                    <input type="text" name="cpf" class="campo__input" placeholder="000.000.000-00" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal__footer">
+                        <a href="cliente_empresa.php" class="btn-cancelar">CANCELAR</a>
+                        <button type="submit" class="btn-botao-verde">SALVAR</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        
 
 
 
@@ -256,7 +396,7 @@ if (isset($_POST['nome_fantasia'])) {
                             <td>
                                 <div class="acoes">
 
-                                    <a href="editar_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                    <a href="cliente_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
                                         <button><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
                                     <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
