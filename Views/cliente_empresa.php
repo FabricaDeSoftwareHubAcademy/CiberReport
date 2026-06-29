@@ -355,27 +355,21 @@ if (isset($_POST['nome_fantasia'])) {
                             <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="1">
-                            <span class="th-label">Nome do Pentest <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="2">
-                            <span class="th-label">Breve Descrição</span>
+                            <span class="th-label">CNPJ</span>
                         </th>
                         <th data-col="3">
-                            <span class="th-label">Categoria <i class="fa-solid fa-filter sort-icon"></i></span>
+                            <span class="th-label">Responsável <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="4">
-                            <span class="th-label">Modelo <i class="fa-solid fa-filter sort-icon"></i></span>
+                            <span class="th-label">Email <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="5">
-                            <span class="th-label">Técnica <i class="fa-solid fa-filter sort-icon"></i></span>
+                            <span class="th-label">Telefone <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="6">
-                            <span class="th-label">Frameworks</span>
-                        </th>
-                        <th data-col="7">
-                            <span class="th-label">Checklist</span>
-                        </th>
-                        <th data-col="8">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
