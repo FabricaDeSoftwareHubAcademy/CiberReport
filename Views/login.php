@@ -70,11 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
                 <form method="POST">
                     <label>E-mail</label>
-                    <input type="email" name="email" placeholder="email@gmail.com">
+                    <input type="email" name="email" placeholder="email@example.com">
                     <label>Senha</label>
                     <input type="password" name="senha" placeholder="senha">
                     <a href="">Esqueceu a senha?</a>
-                    <button type="submit">Entrar</button>
+                    <button type="submit" href="vulnerabilidade.html">Entrar</button>
                 </form>
             </div>
         </section>
