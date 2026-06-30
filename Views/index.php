@@ -1,312 +1,377 @@
+<?php
+require_once "../Controller/TipoPentestController.php";
+
+$controller = new TipoPentestController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
+    $controller->cadastrar();
+    header("Location: gerenciarPentest.php");
+    exit;
+}
+
+if (isset($_GET['excluir'])) {
+    $controller->excluir($_GET['excluir']);
+    header("Location: gerenciarPentest.php");
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'alterarHabilitado') {
+    $id        = (int) ($_POST['id'] ?? 0);
+    $habilitado = (int) ($_POST['habilitado'] ?? 0);
+    $controller->alterarStatus($id, $habilitado);
+    echo json_encode(['ok' => true]);
+    exit;
+}
+
+$pentests = $controller->listar();
+
+?>
 <!doctype html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>CYBER REPORT</title>
-        <link rel="stylesheet" href="../Assets/CSS/style.css"/>
-    </head>
 
-    <body>
-        <?php include 'menu-backup.php'; ?>
-        <div class="main-content">
-           
-            <main>
-                <div class="tabela-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-col="0">
-                                    <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th data-col="1">
-                                    <span class="th-label">Projeto <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th data-col="2">
-                                    <span class="th-label">Resp. Téc <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th data-col="3">
-                                    <span class="th-label"
-                                        >Tipo do teste <i class="fa-solid fa-sort sort-icon"></i
-                                    ></span>
-                                </th>
-                                <th data-col="4" data-tipo="data">
-                                    <span class="th-label">Data Inicio <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th data-col="5" data-tipo="data">
-                                    <span class="th-label">Data Fim <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th data-col="6">
-                                    <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
-                                </th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#PT - 2026-041</td>
-                                <td>Orbitails</td>
-                                <td>André</td>
-                                <td>Pentest Web (Black Box)</td>
-                                <td>12/04/2026 10:12</td>
-                                <td>20/04/2026 19:00</td>
-                                <td>
-                                    <span class="status status-atrasado">Atrasado</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 6075-013</td>
-                                <td>NeuroLinker</td>
-                                <td>Mariana</td>
-                                <td>Pentest API REST + Web</td>
-                                <td>09/04/2026 08:30</td>
-                                <td>13/04/2026 17:45</td>
-                                <td>
-                                    <span class="status status-concluido">Concluído</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 2026-043</td>
-                                <td>Nexus Global</td>
-                                <td>Rafael</td>
-                                <td>CSRF / Session Hijacking</td>
-                                <td>01/05/2026 14:20</td>
-                                <td>13/05/2026 18:10</td>
-                                <td>
-                                    <span class="status status-aguardando">Aguardando</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 2342-244</td>
-                                <td>Vanguard Systems</td>
-                                <td>Beatriz</td>
-                                <td>Full Stack (API, CSRF, Web)</td>
-                                <td>09/01/2026 09:00</td>
-                                <td>13/03/2026 16:30</td>
-                                <td>
-                                    <span class="status status-concluido">Concluido</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 1234-123</td>
-                                <td>Bio Core</td>
-                                <td>Lucas</td>
-                                <td>Análise Criptográfica</td>
-                                <td>22/02/2026 11:40</td>
-                                <td>05/04/2026 20:15</td>
-                                <td>
-                                    <span class="status status-atrasado">Atrasado</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 2313-214</td>
-                                <td>Protótipo X</td>
-                                <td>Camila</td>
-                                <td>XSS / DOM-based</td>
-                                <td>17/03/2026 13:25</td>
-                                <td>02/05/2026 19:00</td>
-                                <td>
-                                    <span class="status status-aguardando">Aguardando</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 1231-123</td>
-                                <td>Estelar AI</td>
-                                <td>Thiago</td>
-                                <td>SQL Injection</td>
-                                <td>05/02/2026 15:50</td>
-                                <td>28/02/2026 18:30</td>
-                                <td>
-                                    <span class="status status-concluido">Concluido</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 8888-812</td>
-                                <td>Fundação Atlas</td>
-                                <td>Júlia</td>
-                                <td>Pentest Web (Gray Box)</td>
-                                <td>14/12/2025 08:00</td>
-                                <td>30/01/2026 17:20</td>
-                                <td>
-                                    <span class="status status-concluido">Concluido</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 1335-5534</td>
-                                <td>ACME</td>
-                                <td>Felipe</td>
-                                <td>SQL Injection</td>
-                                <td>03/03/2026 10:45</td>
-                                <td>19/04/2026 16:00</td>
-                                <td>
-                                    <span class="status status-concluido">Concluido</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#PT - 2026-099</td>
-                                <td>Helix Labs</td>
-                                <td>Renata</td>
-                                <td>Pentest Mobile (Android)</td>
-                                <td>28/04/2026 09:15</td>
-                                <td>10/05/2026 18:40</td>
-                                <td>
-                                    <span class="status status-aguardando">Aguardando</span>
-                                </td>
-                                <td>
-                                    <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="8" class="rodape-tabela">
-                                    <div class="paginacao">
-                                        <button class="pag-btn" aria-label="Página anterior">Anterior</button>
-                                        <button class="pag-num ativo" aria-label="Página 1" aria-current="page">
-                                            1
-                                        </button>
-                                        <button class="pag-num" aria-label="Página 2">2</button>
-                                        <button class="pag-num" aria-label="Página 3">3</button>
-                                        <button class="pag-num" aria-label="Página 4">4</button>
-                                        <button class="pag-num" aria-label="Página 5">5</button>
-                                        <button class="pag-num" aria-label="Página 6">6</button>
-                                        <button class="pag-btn" aria-label="Próxima página">Próximo</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </main>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciar Tipos de Pentest</title>
+    <link rel="stylesheet" href="../assets/CSS/style.css">
+    <link rel="stylesheet" href="../assets/CSS/Pages/gerenciarPentest.css">
+</head>
+
+<body>
+
+    <?php $tituloPagina = 'Gerenciar Tipos de Pentest';
+    include_once 'Components/menu.php'; ?>
+
+    <main>
+        <div class="ger-pentest-topo">
+            <button class="btn-novo-cadastro" data-modal-target="modalNovoPentest">
+                <i class="fa-solid fa-plus"></i>Novo Pentest
+            </button>
         </div>
-    </body>
+        <div class="tabela-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-col="0">
+                            <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="1">
+                            <span class="th-label">Nome do Pentest <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="2">
+                            <span class="th-label">Breve Descrição</span>
+                        </th>
+                        <th data-col="3">
+                            <span class="th-label">Categoria <i class="fa-solid fa-filter sort-icon"></i></span>
+                        </th>
+                        <th data-col="4">
+                            <span class="th-label">Modelo <i class="fa-solid fa-filter sort-icon"></i></span>
+                        </th>
+                        <th data-col="5">
+                            <span class="th-label">Técnica <i class="fa-solid fa-filter sort-icon"></i></span>
+                        </th>
+                        <th data-col="6">
+                            <span class="th-label">Frameworks</span>
+                        </th>
+                        <th data-col="7">
+                            <span class="th-label">Checklist</span>
+                        </th>
+                        <th data-col="8">
+                            <span class="th-label">Status</span>
+                        </th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($pentests as $pentest): ?>
+                        <?php
+                        $frameworks = array_filter(array_map('trim', explode(',', $pentest['frameworks'] ?? '')));
+                        $ativo = (bool) $pentest['habilitado'];
+                        ?>
+                        <tr>
+                            <td><?= $pentest['id'] ?></td>
+                            <td><?= htmlspecialchars($pentest['nome']) ?></td>
+                            <td class="ger-pentest-col-descricao"><?= htmlspecialchars($pentest['descricao_breve']) ?></td>
+                            <td>
+                                <span class="ger-pentest-cat-badge">
+                                    <?= htmlspecialchars($pentest['categoria']) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($pentest['modelo']) ?></td>
+                            <td><?= htmlspecialchars($pentest['tecnica']) ?></td>
+                            <td>
+                                <div class="ger-pentest-frameworks-list">
+                                    <?php foreach (array_slice($frameworks, 0, 2) as $fw): ?>
+                                        <span class="ger-pentest-framework-tag"><?= htmlspecialchars($fw) ?></span>
+                                    <?php endforeach; ?>
+                                    <?php if (count($frameworks) > 2): ?>
+                                        <span class="ger-pentest-framework-tag ger-pentest-tag-mais">+<?= count($frameworks) - 2 ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($pentest['checklist'] ?? '') ?></td>
+                            <td>
+                                <div class="ger-pentest-status-cell">
+                                    <label class="switch">
+                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
+                                        <span class="switch-slider"></span>
+                                    </label>
+                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="acoes">
+                                    <button class="btn-editar" title="Editar" aria-label="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <a href="gerenciarPentest.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if (empty($pentests)): ?>
+                        <tr>
+                            <td colspan="10" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10" class="rodape-tabela">
+                            <div class="paginacao"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
+    <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
+         fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
+         o conteúdo quando o menu lateral abre/fecha. -->
+    </div>
+    </div>
+
+    <div class="modal-overlay" id="modalNovoPentest">
+        <div class="modal modal--lg modal--com-stepper">
+
+
+            <div class="modal__header">
+                <div class="modal__header-icone">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="modal__header-texto">
+                    <h2 class="modal__titulo">Criação de Pentest</h2>
+                    <p class="modal__subtitulo">Definição do modelo de pentest e suas características técnicas</p>
+                </div>
+                <button class="modal__fechar" data-modal-close>&times;</button>
+            </div>
+
+
+            <div class="modal__stepper">
+                <div class="progressbar">
+                    <div class="progress" id="progress"></div>
+                    <div class="progress-step progress-step-active" data-title="Cadastro"></div>
+                    <div class="progress-step" data-title="Operação e Governança"></div>
+                </div>
+            </div>
+
+            <div class="modal__body">
+
+                <!-- Step 1: Cadastro -->
+                <div class="form-step form-step-active">
+                    <h3 class="modal-secao__titulo">Cadastro</h3>
+
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label campo__label--obrigatorio">Nome do Pentest</label>
+                            <input type="text" class="campo__input" placeholder="Digite o nome do Pentest">
+                        </div>
+                        <div class="campo">
+                            <label class="campo__label">Técnicos utilizados</label>
+                            <div class="campo__multi-busca">
+                                <div class="campo__select-wrapper" style="flex: 1">
+                                    <select class="campo__select">
+                                        <option value="">Selecionar...</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                                </div>
+                                <button type="button" class="campo__botao-adicionar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label class="campo__label">Nível de automação</label>
+                        <div class="campo__select-wrapper">
+                            <select class="campo__select">
+                                <option value="">Selecionar...</option>
+                                <option value="manual">Manual</option>
+                                <option value="semi">Semi-automatizada</option>
+                                <option value="auto">Automatizada</option>
+                                <option value="hibrida">Híbrida</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label class="campo__label campo__label--obrigatorio">Breve descrição</label>
+                        <input type="text" class="campo__input" placeholder="Modelo de avaliação de segurança para aplicações web baseado em OWASP">
+                    </div>
+
+                    <div class="campo">
+                        <label class="campo__label campo__label--obrigatorio">Descrição</label>
+                        <textarea class="campo__textarea" rows="4" placeholder="Avaliação abrangente de segurança em aplicações web, incluindo identificação de vulnerabilidades do OWASP Top 10..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Operação e Governança -->
+                <div class="form-step">
+                    <h3 class="modal-secao__titulo">
+                        <i class="fa-solid fa-gears modal-secao__titulo-icone"></i>
+                        Configuração do Pentest
+                    </h3>
+
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label">Modelo de execução</label>
+                            <div class="campo__multi-busca">
+                                <input type="text" class="campo__input" style="flex: 1" placeholder="Defina o nível de acesso ao sistema alvo...">
+                                <button type="button" class="campo__botao-adicionar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="campo">
+                            <label class="campo__label">Categoria</label>
+                            <div class="campo__multi-busca">
+                                <input type="text" class="campo__input" style="flex: 1" placeholder="Digite aqui...">
+                                <button type="button" class="campo__botao-adicionar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label class="campo__label">Horas para execução do pentest</label>
+                        <input type="number" class="campo__input" placeholder="Digite quantas horas...">
+                    </div>
+
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label">Checklists</label>
+                            <div class="campo__multi">
+                                <div class="campo__multi-busca">
+                                    <div class="campo__select-wrapper" style="flex: 1">
+                                        <select class="campo__select">
+                                            <option value="">Defina o nível de acesso ao sistema alvo...</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                                    </div>
+                                    <button type="button" class="campo__botao-adicionar">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="campo__multi-chips">
+                                    <span class="chip">AM Review <button type="button" class="chip__remover"><i class="fa-solid fa-xmark"></i></button></span>
+                                    <span class="chip">Network Security <button type="button" class="chip__remover"><i class="fa-solid fa-xmark"></i></button></span>
+                                    <span class="chip">Data Encryption <button type="button" class="chip__remover"><i class="fa-solid fa-xmark"></i></button></span>
+                                    <span class="chip">Logging &amp; Monitoring <button type="button" class="chip__remover"><i class="fa-solid fa-xmark"></i></button></span>
+                                    <span class="chip">Backup Validation <button type="button" class="chip__remover"><i class="fa-solid fa-xmark"></i></button></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-secao">
+                            <span class="modal-secao__titulo">
+                                <i class="fa-solid fa-shield-halved modal-secao__titulo-icone"></i>
+                                Governança Técnica
+                            </span>
+                            <div class="campo">
+                                <label class="campo__label">Frameworks</label>
+                                <div class="campo__multi-busca">
+                                    <div class="campo__select-wrapper" style="flex: 1">
+                                        <select class="campo__select">
+                                            <option value="">Ex: OWASP</option>
+                                            <option value="owasp">OWASP</option>
+                                            <option value="ptes">PTES</option>
+                                            <option value="nist">NIST</option>
+                                            <option value="mitre">MITRE ATT&amp;CK</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                                    </div>
+                                    <button type="button" class="btn-adicionar-quadrado">
+                                        <span class="icone-azul"><i class="fa-solid fa-plus"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Nível de Profundidade do Teste</label>
+                                <span class="pentest-governanca__nivel-label">Níveis</span>
+                                <div class="campo__multi-busca">
+                                    <div class="campo__select-wrapper" style="flex: 1">
+                                        <select class="campo__select">
+                                            <option value="">Ex: Deep Security Assessment</option>
+                                            <option value="basic">Basic Security Assessment</option>
+                                            <option value="standard">Standard Security Assessment</option>
+                                            <option value="deep">Deep Security Assessment</option>
+                                            <option value="advanced">Advanced Red Team</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                                    </div>
+                                    <button type="button" class="btn-adicionar-quadrado">
+                                        <span class="icone-azul"><i class="fa-solid fa-plus"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <footer class="modal__footer">
+                <button type="button" class="btn-cancelar" data-modal-close data-botao-passo="cancelar">Cancelar</button>
+                <button type="button" class="btn-cancelar btn-prev" data-botao-passo="voltar">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar
+                </button>
+                <button type="button" class="btn-next btn-botao-verde" data-botao-passo="avancar">
+                    Avançar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button type="button" class="btn-botao-verde" data-botao-passo="salvar">Salvar</button>
+            </footer>
+
+        </div>
+    </div>
+
     <script src="../Assets/JS/componentes/tabela.js"></script>
-    <script src="../Assets/JS/componentes/menu.js"></script>
+    <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="../assets/JS/componentes/menuNIvel.js"></script>
+    <script>
+        function toggleHabilitado(checkbox) {
+            const label = checkbox.closest('.ger-pentest-status-cell').querySelector('.ger-pentest-toggle-label');
+            label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+
+            const body = new FormData();
+            body.append('action', 'alterarHabilitado');
+            body.append('id', checkbox.dataset.id);
+            body.append('habilitado', checkbox.checked ? '1' : '0');
+
+            fetch('gerenciarPentest.php', {
+                    method: 'POST',
+                    body
+                })
+                .catch(() => {
+                    checkbox.checked = !checkbox.checked;
+                    label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+                });
+        }
+    </script>
+</body>
+
 </html>
