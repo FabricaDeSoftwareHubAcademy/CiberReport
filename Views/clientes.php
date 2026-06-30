@@ -640,3 +640,94 @@ if (isset($_POST['nome_fantasia'])) {
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="tabela-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-col="0">
+                            <span class="th-label">ID <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="1">
+                            <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="2">
+                            <span class="th-label">CNPJ <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="3">
+                            <span class="th-label">Responsável <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="4">
+                            <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="5">
+                            <span class="th-label">Telefone <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th data-col="6">
+                            <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                        </th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <?php foreach ($dados as $empresa) { ?> -->
+                        <tr>
+                            <td>#<?php echo $empresa['id']; ?></td>
+                            <td><?php echo $empresa['nome_fantasia']; ?></td>
+                            <td><?php echo $empresa['cnpj']; ?></td>
+                            <td><?php echo $empresa['responsavel']; ?></td>
+                            <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
+                            <td><?php echo $empresa['telefone']; ?></td>
+                            <td>
+
+                                <span class="status status-concluido">Ativo</span>
+                            </td>
+                            <td>
+                                <div class="acoes">
+
+                                    <a href="cliente_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button><i class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8" class="rodape-tabela">
+                            <div class="paginacao">
+                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
+                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
+                                <button class="pag-num" aria-label="Página 2">2</button>
+                                <button class="pag-num" aria-label="Página 3">3</button>
+                                <button class="pag-num" aria-label="Página 4">4</button>
+                                <button class="pag-num" aria-label="Página 5">5</button>
+                                <button class="pag-num" aria-label="Página 6">6</button>
+                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
