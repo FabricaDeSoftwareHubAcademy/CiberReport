@@ -52,7 +52,7 @@ $pentests = $controller->listar();
 <body>
     <!-- chama o menu rafael -->
     <?php $tituloPagina = 'Checklist';
-    include 'menu.php'; ?>
+    include 'Components/menu.php'; ?>
 
     <main>
         <!-- chama novo botão de cadastro -->
@@ -170,7 +170,7 @@ $pentests = $controller->listar();
                                         <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
                                         <span class="switch-slider"></span>
                                     </label>
-                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
+                                    <span class="ger-pentest-toggle-label"></span>
                                 </div>
                             </td>
                             <td>
