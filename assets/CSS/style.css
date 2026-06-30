@@ -7,7 +7,7 @@
 @import url("Componentes/tabela.css");
 @import url("Componentes/modal.css");
 @import url(Componentes/componentes-modal.css);
-
+@import url("Componentes/button.css");
 /* ⚠️ NUNCA use valores de cor, fonte ou espaçamento direto no CSS.
    Sempre use as variáveis definidas aqui. Caso queira/precise de algo AVISE!!! */
 
@@ -121,6 +121,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 

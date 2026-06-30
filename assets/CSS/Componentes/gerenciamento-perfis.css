@@ -1,0 +1,87 @@
+
+.perfis-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 19px 20px 0px 20px;
+}
+
+.perfis-header {
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.perfis-corpo {
+    display: flex;
+    gap: 20px;
+}
+
+.perfis-lista-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 110px;
+}
+
+.perfis-permissoes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.perfis-grade {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.perfis-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.perfis-grupo-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.permissao-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--cor-branco-primario);
+    border: 1px solid #e2e8f0;
+    border-radius: var(--raio-md);
+    padding: 10px 14px;
+    gap: 12px;
+}
+
+.permissao-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.permissao-nome {
+    font-size: 13px;
+    font-weight: 600;
+    color: #101a40;
+}
+
+.permissao-descricao {
+    font-size: 11px;
+    color: #718096;
+}
+
+.perfis-rodape {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+}

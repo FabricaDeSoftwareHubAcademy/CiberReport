@@ -1,12 +1,9 @@
 <?php
-$host  = "localhost";
-$user  = "root";
-$pass  = "";
-$banco = "crud544";
+require_once __DIR__ . "/../bootstrap.php";
 
-$conexao = new mysqli($host, $user, $pass, $banco);
-
-if ($conexao->connect_error) {
-    die("Erro na conexão: " . $conexao->connect_error);
-}
-?>
+$conexao = new PDO(
+    "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8",
+    $_ENV['DB_USER'],
+    $_ENV['DB_PASS'],
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+);
