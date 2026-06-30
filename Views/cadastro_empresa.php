@@ -9,7 +9,7 @@
 </head>
 <body>
     <div>
-        <?php $tituloPagina = 'Nome da Página'; include_once 'menu.php'; ?>
+        <?php $tituloPagina = 'Nome da Página'; include_once 'Components/menu.php'; ?>
             <main>
                 <h2 class="titulo-pagina">CADASTRO DE EMPRESA</h2>
                 <form method="post">

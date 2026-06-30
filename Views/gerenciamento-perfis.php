@@ -23,7 +23,7 @@
     </head>
 
     <body>
-        <?php  $tituloPagina = 'Nome da Página'; include_once 'menu.php'; ?>
+        <?php  $tituloPagina = 'Nome da Página'; include_once 'Components/menu.php'; ?>
             <!-- <div class="main-content"> -->
                 <main>
                         <div class="perfis-container">
