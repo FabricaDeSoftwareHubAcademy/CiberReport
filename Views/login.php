@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label>Senha</label>
                     <input type="password" name="senha" placeholder="senha">
                     <a href="">Esqueceu a senha?</a>
-                    <button type="submit" href="vulnerabilidade.html">Entrar</button>
+                    <button type="submit">Entrar</button>
                 </form>
             </div>
         </section>
