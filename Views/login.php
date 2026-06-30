@@ -12,12 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = "Preencha todos os campos.";
     } else {
         $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        $stmt->execute([$email]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado->num_rows === 1) {
-            $usuario = $resultado->fetch_assoc();
+        if ($usuario) {
 
             if (password_verify($senha, $usuario['senha'])) {
                 $_SESSION['usuario_id']   = $usuario['id'];
