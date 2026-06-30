@@ -4,14 +4,19 @@ require_once "../Controller/ChecklistController.php";
 $controller = new ChecklistController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
-    $controller->cadastrar();
-    header("Location: gerenciarPentest.php");
+    if (!empty($_POST['id'])) {
+        $controller->atualizar();
+    } else {
+        $controller->cadastrar();
+    }
+
+    header("Location: checklist.php");
     exit;
 }
 
 if (isset($_GET['excluir'])) {
     $controller->excluir($_GET['excluir']);
-    header("Location: gerenciarPentest.php");
+    header("Location: checklist.php");
     exit;
 }
 
@@ -20,6 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $habilitado = (int) ($_POST['habilitado'] ?? 0);
     $controller->alterarStatus($id, $habilitado);
     echo json_encode(['ok' => true]);
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'buscarChecklist') {
+    $id = (int) ($_POST['id'] ?? 0);
+    $checklist = $controller->buscarComItens($id);
+
+    echo json_encode($checklist);
     exit;
 }
 
@@ -45,7 +57,7 @@ $pentests = $controller->listar();
     <main>
         <!-- chama novo botão de cadastro -->
         <div class="button-cadastro">
-            <button class="btn-novo-cadastro" data-modal-target="modalChecklist">
+            <button type="button" class="btn-novo-cadastro" data-modal-target="modalChecklist" onclick="limparFormularioChecklist()">
                 <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
             </button>
         </div>
@@ -67,6 +79,45 @@ $pentests = $controller->listar();
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
+                <form method="POST" action="checklist.php" class="form-checklist">
+                    <input type="hidden" name="id" id="checklist_id">
+
+                    <div class="form-grupo">
+                        <label>Nome do Checklist</label>
+                        <input type="text" name="nome" placeholder="Ex: Checklist Pentest Web" required>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" placeholder="Ex: Checklist básico para testes web">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Categoria</label>
+                        <input type="text" name="categoria" placeholder="Ex: Web, Rede, API" required>
+                    </div>
+
+                    <hr>
+
+                    <h3>Itens do Checklist</h3>
+
+                    <div id="lista-itens-checklist">
+                        <div class="item-checklist">
+                            <input type="text" name="itens[]" placeholder="Ex: Verificar SQL Injection" required>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="adicionarItemChecklist()">
+                        + Adicionar Item
+                    </button>
+
+                    <div class="modal__footer">
+                        <button type="submit" class="btn-salvar">
+                            Salvar Checklist
+                        </button>
+                    </div>
+
+                </form>
 
             </div>
         </div>
@@ -88,15 +139,6 @@ $pentests = $controller->listar();
                         <th data-col="3">
                             <span class="th-label">Categoria <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
-                        <th data-col="4">
-                            <span class="th-label">Modelo <i class="fa-solid fa-filter sort-icon"></i></span>
-                        </th>
-                        <th data-col="5">
-                            <span class="th-label">Técnica <i class="fa-solid fa-filter sort-icon"></i></span>
-                        </th>
-                        <th data-col="6">
-                            <span class="th-label">Frameworks</span>
-                        </th>
                         <th data-col="7">
                             <span class="th-label">Status</span>
                         </th>
@@ -108,29 +150,19 @@ $pentests = $controller->listar();
                     <!-- conectado ao banco de dados -->
                     <?php foreach ($pentests as $pentest): ?>
                         <?php
-                        $frameworks = array_filter(array_map('trim', explode(',', $pentest['frameworks'] ?? '')));
                         $ativo = (bool) $pentest['habilitado'];
                         ?>
                         <tr>
                             <td><?= $pentest['id'] ?></td>
                             <td><?= htmlspecialchars($pentest['nome']) ?></td>
-                            <td class="ger-pentest-col-descricao"><?= htmlspecialchars($pentest['descricao_breve']) ?></td>
+                            <td class="ger-pentest-col-descricao">
+                                <?= htmlspecialchars($pentest['descricao'] ?? '') ?>
+                            </td>
+
                             <td>
                                 <span class="ger-pentest-cat-badge">
-                                    <?= htmlspecialchars($pentest['categoria']) ?>
+                                    <?= htmlspecialchars($pentest['categoria'] ?? '') ?>
                                 </span>
-                            </td>
-                            <td><?= htmlspecialchars($pentest['modelo']) ?></td>
-                            <td><?= htmlspecialchars($pentest['tecnica']) ?></td>
-                            <td>
-                                <div class="ger-pentest-frameworks-list">
-                                    <?php foreach (array_slice($frameworks, 0, 2) as $fw): ?>
-                                        <span class="ger-pentest-framework-tag"><?= htmlspecialchars($fw) ?></span>
-                                    <?php endforeach; ?>
-                                    <?php if (count($frameworks) > 2): ?>
-                                        <span class="ger-pentest-framework-tag ger-pentest-tag-mais">+<?= count($frameworks) - 2 ?></span>
-                                    <?php endif; ?>
-                                </div>
                             </td>
                             <td>
                                 <div class="ger-pentest-status-cell">
@@ -143,10 +175,16 @@ $pentests = $controller->listar();
                             </td>
                             <td>
                                 <div class="acoes">
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <a href="gerenciarPentest.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
+<button 
+    type="button"
+    class="btn-editar" 
+    title="Editar" 
+    aria-label="Editar"
+    onclick="editarChecklist('<?= $pentest['id'] ?>')"
+>
+    <i class="fa-solid fa-pen-to-square"></i>
+</button>
+                                    <a href="checklist.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -156,13 +194,13 @@ $pentests = $controller->listar();
                     <?php if (empty($pentests)): ?>
 
                         <tr>
-                            <td colspan="10" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
+                            <td colspan="6" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="10" class="rodape-tabela">
+                        <td colspan="6" class="rodape-tabela">
                             <div class="paginacao"></div>
                         </td>
                     </tr>
@@ -177,5 +215,6 @@ $pentests = $controller->listar();
 
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/js/componentes/tabela.js"></script>
+<script src="../assets/JS/checklist.js"></script>
 
 </html>

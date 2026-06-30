@@ -24,27 +24,22 @@ class ChecklistController
 
     public function cadastrar()
     {
-        $nome              = addslashes($_POST['nome'] ?? '');
-        $descricao_breve   = addslashes($_POST['descricao_breve'] ?? '');
-        $descricao_completa = addslashes($_POST['descricao_completa'] ?? '');
-        $categoria         = addslashes($_POST['categoria'] ?? '');
-        $modelo            = addslashes($_POST['modelo'] ?? '');
-        $tecnica           = addslashes($_POST['tecnica'] ?? '');
-        $frameworks        = addslashes($_POST['frameworks'] ?? '');
-        $nivel_profundidade = addslashes($_POST['nivel_profundidade'] ?? '');
-        $horas_execucao    = (int) ($_POST['horas_execucao'] ?? 0);
+        $nome = trim($_POST['nome'] ?? '');
+        $descricao = trim($_POST['descricao'] ?? '');
+        $categoria = trim($_POST['categoria'] ?? '');
+        $itens = $_POST['itens'] ?? [];
 
-        if (empty($nome) || empty($descricao_breve) || empty($categoria) || empty($modelo) || empty($tecnica)) {
+        if (empty($nome) || empty($categoria) || empty($itens)) {
             return false;
         }
 
         return $this->ChecklistModel->cadastrar(
-            $nome, $descricao_breve, $descricao_completa,
-            $categoria, $modelo, $tecnica,
-            $frameworks,$nivel_profundidade, $horas_execucao
+            $nome,
+            $descricao,
+            $categoria,
+            $itens
         );
     }
-
     public function excluir($id)
     {
         $this->ChecklistModel->excluir((int) $id);
@@ -54,4 +49,31 @@ class ChecklistController
     {
         $this->ChecklistModel->alterarStatus((int) $id, (int) $status);
     }
+
+    public function atualizar()
+{
+    $id = (int) ($_POST['id'] ?? 0);
+    $nome = trim($_POST['nome'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+    $categoria = trim($_POST['categoria'] ?? '');
+    $itens = $_POST['itens'] ?? [];
+
+    if ($id <= 0 || empty($nome) || empty($categoria) || empty($itens)) {
+        return false;
+    }
+
+    return $this->ChecklistModel->atualizar(
+        $id,
+        $nome,
+        $descricao,
+        $categoria,
+        $itens
+    );
+}
+
+public function buscarComItens($id)
+{
+    return $this->ChecklistModel->buscarComItens((int) $id);
+}
+
 }
