@@ -58,7 +58,7 @@ if (isset($_POST['nome_fantasia'])) {
 <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 
-<?php $tituloPagina = 'Clientes'; include 'menu.php'; ?>
+<?php $tituloPagina = 'Clientes'; include 'Components/menu.php'; ?>
 <main>
 
 
