@@ -1,5 +1,4 @@
 <?php
-require "../Model/conexao.php";
 require "../Model/Database/Empresa.php";
 require "../Model/Database/Endereco.php";
 
