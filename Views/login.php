@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($senha)) {
         $erro = "Preencha todos os campos.";
     } else {
-        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
+        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuario WHERE email = ?");
         $stmt->execute([$email]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($senha, $usuario['senha'])) {
                 $_SESSION['usuario_id']   = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
-                header("Location: index.php");
+                header("Location: gerenciar_pentest.php");
                 exit;
             }
         }
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
                 <form method="POST">
                     <label>E-mail</label>
-                    <input type="email" name="email" placeholder="email@gmail.com">
+                    <input type="email" name="email" placeholder="email@example.com">
                     <label>Senha</label>
                     <input type="password" name="senha" placeholder="senha">
                     <a href="">Esqueceu a senha?</a>

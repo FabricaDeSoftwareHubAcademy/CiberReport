@@ -18,7 +18,6 @@
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
-    font-family: "Poppins", sans-serif;
 }
 
 .btn-nova:hover {
@@ -194,7 +193,6 @@
     border-radius: 6px;
     color: #666;
     transition: 0.3s;
-    font-family: "Poppins", sans-serif;
 }
 
 .acoes button:hover {
@@ -235,7 +233,6 @@
     padding: 5px 9px;
     border-radius: 6px;
     transition: 0.3s;
-    font-family: "Poppins", sans-serif;
     font-weight: 600;
 }
 
@@ -259,10 +256,6 @@
 }
 
 @media (max-width: 900px) {
-    body {
-        padding: 10px;
-    }
-
     .header {
         padding: 15px 20px;
     }
