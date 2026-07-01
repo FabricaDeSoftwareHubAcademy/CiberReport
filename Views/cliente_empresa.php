@@ -214,7 +214,8 @@ $dados = $controller->listar();
                         <h2 class="modal__titulo">Edição de Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <a href="cliente_empresa.php" class="modal__fechar">
+                    <!-- Resolver o problema do botão -->
+                    <a href="cliente_empresa.php" class="modal__fechar"> 
                         <i class="fa-solid fa-xmark"></i>
                     </a>
                 </div>
@@ -235,6 +236,8 @@ $dados = $controller->listar();
                                     <label class="campo__label">Nome da Empresa</label>
                                     <input type="text" name="nome_fantasia" class="campo__input" value="<?php echo $dados_empresa_editar['nome_fantasia'] ?? ''; ?>" />
                                 </div>
+                            </div>
+                            <div class="modal-grade modal-grade--4">
                                 <div class="campo">
                                     <label class="campo__label">Razão Social</label>
                                     <input type="text" name="razao_social" class="campo__input" value="<?php echo $dados_empresa_editar['razao_social'] ?? ''; ?>" />
@@ -388,7 +391,7 @@ $dados = $controller->listar();
                                     <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="excluir_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
+                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -418,7 +421,27 @@ $dados = $controller->listar();
 </div>
 </div>
 
-
+<script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
+<script>
+    function toggleHabilitado(checkbox) {
+        const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
+        label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+ 
+        const body = new FormData();
+        body.append('action', 'alterarHabilitado');
+        body.append('id', checkbox.dataset.id);
+        body.append('habilitado', checkbox.checked ? '1' : '0');
+ 
+        fetch('cliente_empresa.php', {
+                method: 'POST',
+                body
+            })
+            .catch(() => {
+                checkbox.checked = !checkbox.checked;
+                label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+            });
+    }
+</script>
 
 </html>
