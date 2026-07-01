@@ -1,5 +1,5 @@
 #sideBar {
-    position: fixed;
+    position: sticky;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -8,7 +8,7 @@
     padding: var(--espaco-sm);
     z-index: 100;
     top: 0;
-    left: 0;
+    align-self: flex-start;
     overflow: visible;
     width: max(var(--sidebar-fechado), 56px);
     flex-shrink: 0;
@@ -141,6 +141,9 @@
 
 #logout {
     padding: 12px;
+}
+#logout a{
+    text-decoration: none;
 }
 
 #logout_btn {
@@ -294,9 +297,5 @@
     }
     .menuOverlay.active{
         display: block;
-    }
-    .main-content,
-    .main-content.sidebar-open {
-        margin-left: 0;
     }
 }

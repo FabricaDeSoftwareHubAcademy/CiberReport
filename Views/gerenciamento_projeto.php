@@ -18,6 +18,7 @@
             <button class="btn-novo-cadastro btn-projeto">Alocar Analista</button>
             <button class="btn-novo-cadastro btn-projeto"><span>+</span>Novo Cadastro</button>
         </div>
+
         <div class="group-card-tabela">
             <div class="group-card-projeto">
                 <div class="container-card-projetos" id="projeto-ativo">
@@ -318,6 +319,8 @@
                 </table>
             </div>
         </div>
+
+        
     <main>
 </body>
 </html>

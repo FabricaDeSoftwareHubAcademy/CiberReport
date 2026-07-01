@@ -8,7 +8,6 @@
 @import url("Componentes/modal.css");
 @import url("Componentes/componentes-modal.css");
 @import url("Componentes/button.css");
-
 /* ⚠️ NUNCA use valores de cor, fonte ou espaçamento direto no CSS.
    Sempre use as variáveis definidas aqui. Caso queira/precise de algo AVISE!!! */
 
@@ -63,13 +62,6 @@ html {
     --cor-borda-foco: #006ab5;
     --cor-borda-erro: #ff3347;
     --cor-borda-sucesso: #43b75d;
-
-    /* --- Tipografia — pesos --- */
-    --peso-light: 300;
-    --peso-normal: 400;
-    --peso-medio: 500;
-    --peso-semibold: 600;
-    --peso-bold: 700;
 
     /* --- Tipografia — tamanhos --- */
     --fonte-titulo: 3.4rem;
@@ -128,28 +120,19 @@ body {
     color: var(--cor-texto-primario);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-}
-
-.menu {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 
 .main-content {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    margin-left: max(var(--sidebar-fechado), 56px);
-    transition: margin-left 0.5s;
 }
 
-.main-content.sidebar-open {
-    margin-left: max(var(--sidebar-aberto), 215px);
-}
-
-.main-content>main {
+.main-content > main {
     padding: var(--espaco-xl);
 }
