@@ -128,17 +128,26 @@ body {
     color: var(--cor-texto-primario);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+.menu {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
 
 .main-content {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
+    margin-left: max(var(--sidebar-fechado), 56px);
+    transition: margin-left 0.5s;
+}
+
+.main-content.sidebar-open {
+    margin-left: max(var(--sidebar-aberto), 215px);
 }
 
 .main-content>main {

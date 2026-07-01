@@ -1,17 +1,14 @@
-.menu{
-    display: flex;
-    align-items: flex-start;
-    min-height: 100vh;
-}
 #menu-superior {
     display: flex;
     position: sticky;
-    /* top: 0; */
+    top: 0;
     z-index: 98;
     justify-content: space-between;
     align-items: center;
     height: var(--altura-menu-superior);
     background-color: var(--cor-branco-primario);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-pesquisaSuperior {

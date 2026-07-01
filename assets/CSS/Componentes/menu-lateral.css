@@ -1,5 +1,5 @@
 #sideBar {
-    position: sticky;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -8,7 +8,7 @@
     padding: var(--espaco-sm);
     z-index: 100;
     top: 0;
-    align-self: flex-start;
+    left: 0;
     overflow: visible;
     width: max(var(--sidebar-fechado), 56px);
     flex-shrink: 0;
@@ -294,5 +294,9 @@
     }
     .menuOverlay.active{
         display: block;
+    }
+    .main-content,
+    .main-content.sidebar-open {
+        margin-left: 0;
     }
 }

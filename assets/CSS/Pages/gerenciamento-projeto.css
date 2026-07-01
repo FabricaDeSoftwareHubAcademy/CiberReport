@@ -1,23 +1,27 @@
 .group-btn-projeto{
     display: flex;
     gap: 25px;
-    margin: 10px 0px 10px 1450px;
-}
-.main-gerenciamento-projeto{
-    display: flex;
+    justify-content: end;
 }
 .btn-projeto{
     width: 200px;
 }
-.corpo-ger-projetos{
-    display: block;
-    overflow: hidden;
+.main-gerenciamento-projeto{
+    overflow-y: hidden;
+}
+.group-card-tabela{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    width: 100%;
 }
 .group-card-projeto{
     display: flex;
     gap: 20px;
     z-index: 3;
-    margin: 80px 0px 50px 200px;
+    margin: 0px 0px 50px 150px;
 }
 .container-card-projetos{
     background-color: var(--cor-fundo-branco);
@@ -38,6 +42,6 @@
     color: var(--cor-texto-secundario);
     font-size: var(--fonte-texto);
 }
-.tabela-projeto{
-    margin: 150px 0px 0px 250px;
+.tabela-gerenciamento-projeto{
+    display: flex;
 }
