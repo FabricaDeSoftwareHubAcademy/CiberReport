@@ -12,7 +12,7 @@
 
 <body>
     <?php $tituloPagina = 'Vulnerabilidades';
-    include_once 'menu.php'; ?>
+    include_once 'Components/menu.php'; ?>
     <main>
         <div class="barra-acoes">
             <button class="btn-nova" data-modal-target="modalVulnerabilidade">
