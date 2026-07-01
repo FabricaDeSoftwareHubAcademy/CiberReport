@@ -33,6 +33,15 @@
 }
 
 
+.clientes-status-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+} 
+
+.clientes-status-cell input:checked ~ .ger-pentest-toggle-label {
+    color: var(--cor-texto-primario);
+}
 
 
 

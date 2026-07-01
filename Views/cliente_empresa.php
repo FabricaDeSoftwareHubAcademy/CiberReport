@@ -5,6 +5,11 @@ $controller = new CadastroEmpresaController();
 
 
 $mensagem_erro = "";
+if (isset($_GET['excluir'])){
+    $controller->excluir($_GET['excluir']);
+    header("Location: cliente_empresa.php");
+    exit;
+}
 
 $dados_empresa_editar = [];
 $dados_endereco_editar = [];
@@ -35,7 +40,7 @@ $dados = $controller->listar();
 
 ?>
 
-
+<link rel="stylesheet" href="../assets/CSS/style.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
 <link rel="stylesheet" href="../assets/CSS/Pages/clientes.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
@@ -88,7 +93,7 @@ $dados = $controller->listar();
                                 </div>
                             </div>
 
-                            <div class="modal-grade modal-grade--4"> <!-- Mudar aqui está errado para um modal-grade--4 -->
+                            <div class="modal-grade modal-grade--4">
                                 <div class="campo">
                                     <label class="campo__label">Razão Social</label>
                                     <input type="text" name="razao_social" class="campo__input" placeholder="Digite a razão social" />
@@ -370,9 +375,13 @@ $dados = $controller->listar();
                             <td><?= htmlspecialchars($empresa['email_contato'] ?? '---') ?></td>
                             <td><?= htmlspecialchars($empresa['telefone']) ?></td>
                             <td>
-                                <span class="status status-concluido">
-                                    <?= $empresa['habilitado'] ? 'Ativo' : 'Inativo' ?>
-                                </span>
+                                <div class="clientes-status-cell">
+                                    <label class="switch">
+                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $empresa['id'] ?>" onchange="toggleHabilitado(this)">
+                                        <span class="switch-slider"></span>
+                                    </label>
+                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
+                                </div>
                             </td>
                             <td>
                                 <div class="acoes">
