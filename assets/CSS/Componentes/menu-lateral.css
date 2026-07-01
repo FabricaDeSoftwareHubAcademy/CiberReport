@@ -142,6 +142,9 @@
 #logout {
     padding: 12px;
 }
+#logout a{
+    text-decoration: none;
+}
 
 #logout_btn {
     border: none;

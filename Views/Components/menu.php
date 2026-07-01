@@ -32,7 +32,7 @@
             </div>
             <ul id="side_itens">
                 <li class="side_item">
-                    <a href="index.php">
+                    <a href="#">
                         <i class="fa-solid fa-chart-column"></i>
                         <span class="item_description">Dashboard</span>
                     </a>
@@ -67,27 +67,27 @@
                         </a>
                     </li>
                     <li class="item-submenu">
-                        <a href="gerenciamento-projeto.html">
+                        <a href="gerenciamento_projeto.php">
                             <i class="fa-solid fa-terminal"></i>
                             <span class="item_description">Projetos</span>
                         </a>
                     </li>
                     <li class="item-submenu">
-                        <a href="gerenciarPentest.php">
+                        <a href="gerenciar_pentest.php">
                             <i class="fa-solid fa-user-secret"></i>
                             <span class="item_description">Pentest</span>
                         </a>
                     </li>
                 </ul>
                 <li class="side_item">
-                    <a href="#">
+                    <a href="checklist.php">
                         <i class="fa-solid fa-list-check"></i>
                         <span class="item_description">Checklist</span>
                     </a>
                     <div class="tooltip-item"><span>Checklist</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="vulnerabilidades.html">
+                    <a href="vulnerabilidades.php">
                         <i class="fa-solid fa-bug"></i>
                         <span class="item_description">Vulnerabilidades</span>
                     </a>
@@ -108,7 +108,7 @@
                     <div class="tooltip-item"><span>Logs</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="#">
+                    <a href="gerenciamento_perfis">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
@@ -120,10 +120,12 @@
             </button>
         </div>
         <div id="logout">
-            <button id="logout_btn">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span class="item_description"> Logout </span>
-            </button>
+            <a href="login.php">
+                <button id="logout_btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span class="item_description"> Logout </span>
+                </button>
+            </a>
         </div>
     </nav>
     <div class="menuOverlay"></div>
