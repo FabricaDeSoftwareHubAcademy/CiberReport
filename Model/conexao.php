@@ -1,13 +1,9 @@
 <?php
 require_once __DIR__ . "/../bootstrap.php";
 
-$conexao = new mysqli(
-    $_ENV['DB_HOST'],
+$conexao = new PDO(
+    "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8",
     $_ENV['DB_USER'],
     $_ENV['DB_PASS'],
-    $_ENV['DB_NAME']
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
-
-if ($conexao->connect_error) {
-    die("Erro na conexão: " . $conexao->connect_error);
-}

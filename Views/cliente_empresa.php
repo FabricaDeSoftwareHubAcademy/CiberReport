@@ -1,8 +1,7 @@
 <?php
-require_once "../Model/Database/Endereco.php";
+require_once __DIR__ . "/../Controller/CadastroEmpresaController.php";
 
-
-$endereco = new Endereco();
+$controller = new CadastroEmpresaController();
 
 
 $mensagem_erro = "";
@@ -11,43 +10,28 @@ $dados_empresa_editar = [];
 $dados_endereco_editar = [];
 if (isset($_GET['id_empresa'])) {
     $id_empresa_editar = addslashes($_GET['id_empresa']);
-    $dados_empresa_editar = $empresa->buscarDadosEmpresa($id_empresa_editar);
-    $dados_endereco_editar = $endereco->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
+    $dados_empresa_editar = $controller->buscarDadosEmpresa($id_empresa_editar);
+    $dados_endereco_editar = $controller->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
+    $controller->editar();
+    header("Location: cliente_empresa.php");
+    exit;
+}
 
-if (isset($_POST['nome_fantasia'])) {
-    $nome_fantasia = addslashes($_POST['nome_fantasia']);
-    $razao_social = addslashes($_POST['razao_social']);
-    $telefone = addslashes($_POST['telefone']);
-    $email_contato = addslashes($_POST['email_contato']);
-    $cnpj = addslashes($_POST['cnpj']);
-    $responsavel = addslashes($_POST['responsavel']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
+    $resultado = $controller->cadastrar();
 
-    $cep = addslashes($_POST['cep']);
-    $rua = addslashes($_POST['rua']);
-    $numero = addslashes($_POST['numero']);
-    $complemento = addslashes($_POST['complemento']);
-    $bairro = addslashes($_POST['bairro']);
-    $cidade = addslashes($_POST['cidade']);
-    $estado = addslashes($_POST['estado']);
-    $pais = addslashes($_POST['pais']);
-
-    if (!empty($nome_fantasia) && !empty($razao_social) && !empty($telefone) && !empty($email_contato) && !empty($cnpj) && !empty($responsavel) && !empty($cep) && !empty($rua) && !empty($numero) && !empty($bairro) && !empty($cidade) && !empty($estado)) {
-        $id_endereco_novo = $endereco->cadastrarEndereco($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais);
-
-        if ($empresa->cadastrarEmpresa($id_endereco_novo, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)) {
-            header("location:clientes.php");
-            exit;
-        } else {
-            $mensagem_erro = "Empresa já cadastrada!";
-        }
-    } else {
-        $mensagem_erro = "Preencha todos os campos!";
+    if ($resultado === true){
+        header("Location: cliente_empresa.php");
+        exit;
+    }else{
+        $mensagem_erro = $resultado;
     }
 }
 
-
+$dados = $controller->listar();
 
 ?>
 
@@ -58,7 +42,7 @@ if (isset($_POST['nome_fantasia'])) {
 <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 
-<?php $tituloPagina = 'Clientes'; include 'menu.php'; ?>
+<?php $tituloPagina = 'Clientes'; include 'Components/menu.php'; ?>
 <main>
 
 
@@ -230,7 +214,7 @@ if (isset($_POST['nome_fantasia'])) {
                     </a>
                 </div>
 
-                <form action="editar_empresa.php?id_empresa=<?php echo $dados_empresa_editar['id'] ?? ''; ?>" method="post">
+                <form action="cliente_empresa.php" method="post">
                     <input type="hidden" name="id_empresa" value="<?php echo $dados_empresa_editar['id'] ?? ''; ?>" />
                     <input type="hidden" name="id_endereco" value="<?php echo $dados_empresa_editar['endereco_id'] ?? ''; ?>" />
 
@@ -348,8 +332,7 @@ if (isset($_POST['nome_fantasia'])) {
 
 
 
-
-        <div class="tabela-wrapper">
+       <div class="tabela-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -360,63 +343,59 @@ if (isset($_POST['nome_fantasia'])) {
                             <span class="th-label">Nome da Empresa <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="2">
-                            <span class="th-label">CNPJ <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">CNPJ</span>
                         </th>
                         <th data-col="3">
-                            <span class="th-label">Responsável <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Responsável <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="4">
-                            <span class="th-label">Email <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Email <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="5">
-                            <span class="th-label">Telefone <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Telefone <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
                         <th data-col="6">
-                            <span class="th-label">Status <i class="fa-solid fa-sort sort-icon"></i></span>
+                            <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <?php foreach ($dados as $empresa) { ?> -->
+                    <?php foreach ($dados as $empresa): ?>
                         <tr>
-                            <td>#<?php echo $empresa['id']; ?></td>
-                            <td><?php echo $empresa['nome_fantasia']; ?></td>
-                            <td><?php echo $empresa['cnpj']; ?></td>
-                            <td><?php echo $empresa['responsavel']; ?></td>
-                            <td><?php echo isset($empresa['email_contato']) ? $empresa['email_contato'] : '---'; ?></td>
-                            <td><?php echo $empresa['telefone']; ?></td>
+                            <td>#<?= $empresa['id'] ?></td>
+                            <td><?= htmlspecialchars($empresa['nome_fantasia']) ?></td>
+                            <td><?= htmlspecialchars($empresa['cnpj']) ?></td>
+                            <td><?= htmlspecialchars($empresa['responsavel']) ?></td>
+                            <td><?= htmlspecialchars($empresa['email_contato'] ?? '---') ?></td>
+                            <td><?= htmlspecialchars($empresa['telefone']) ?></td>
                             <td>
-
-                                <span class="status status-concluido">Ativo</span>
+                                <span class="status status-concluido">
+                                    <?= $empresa['habilitado'] ? 'Ativo' : 'Inativo' ?>
+                                </span>
                             </td>
                             <td>
                                 <div class="acoes">
-
-                                    <a href="cliente_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-editar" title="Editar" aria-label="Editar">
-                                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-editar" title="Editar" aria-label="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="excluir_empresa.php?id_empresa=<?php echo $empresa['id']; ?>" class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <button><i class="fa-solid fa-trash"></i></button>
+                                    <a href="excluir_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                    <?php } ?>
+                    <?php endforeach; ?>
+                    <?php if (empty($dados)): ?>
+                        <tr>
+                            <td colspan="8" style="text-align:center">Nenhuma empresa cadastrada.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="8" class="rodape-tabela">
-                            <div class="paginacao">
-                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
-                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
-                                <button class="pag-num" aria-label="Página 2">2</button>
-                                <button class="pag-num" aria-label="Página 3">3</button>
-                                <button class="pag-num" aria-label="Página 4">4</button>
-                                <button class="pag-num" aria-label="Página 5">5</button>
-                                <button class="pag-num" aria-label="Página 6">6</button>
-                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
-                            </div>
+                            <div class="paginacao"></div>
                         </td>
                     </tr>
                 </tfoot>

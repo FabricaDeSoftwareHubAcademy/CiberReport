@@ -6,13 +6,9 @@
 @import url("Componentes/menu-superior.css");
 @import url("Componentes/tabela.css");
 @import url("Componentes/modal.css");
-@import url(Componentes/componentes-modal.css);
-<<<<<<< Updated upstream
+@import url("Componentes/componentes-modal.css");
 @import url("Componentes/button.css");
-=======
-@import url('Pages/gerenciamento-projeto.css');
 
->>>>>>> Stashed changes
 /* ⚠️ NUNCA use valores de cor, fonte ou espaçamento direto no CSS.
    Sempre use as variáveis definidas aqui. Caso queira/precise de algo AVISE!!! */
 
@@ -67,6 +63,13 @@ html {
     --cor-borda-foco: #006ab5;
     --cor-borda-erro: #ff3347;
     --cor-borda-sucesso: #43b75d;
+
+    /* --- Tipografia — pesos --- */
+    --peso-light: 300;
+    --peso-normal: 400;
+    --peso-medio: 500;
+    --peso-semibold: 600;
+    --peso-bold: 700;
 
     /* --- Tipografia — tamanhos --- */
     --fonte-titulo: 3.4rem;
@@ -138,6 +141,6 @@ body {
     flex-direction: column;
 }
 
-.main-content > main {
+.main-content>main {
     padding: var(--espaco-xl);
 }

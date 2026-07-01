@@ -3,7 +3,7 @@
     ========================
 
     PASSO 1 — inclua o menu no topo do <body> com o título da página:
-        $tituloPagina = 'Nome da Página'; include_once 'menu.php'; Envolva essa linha com a tag do php
+        $tituloPagina = 'Nome da Página'; include_once 'Components/menu.php'; Envolva essa linha com a tag do php
 
     PASSO 2 — adicione o conteúdo dentro de uma tag <main>:
         <main>
