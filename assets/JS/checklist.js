@@ -2,14 +2,11 @@ function adicionarItemChecklist() {
     const lista = document.getElementById('lista-itens-checklist');
 
     const div = document.createElement('div');
-    div.classList.add('campo');
+    div.classList.add('item-checklist');
 
     div.innerHTML = `
-        <label class="campo__label campo__label--obrigatorio">Item</label>
-        <div class="campo__multi-busca">
-            <input type="text" name="itens[]" class="campo__input" placeholder="Novo item do checklist" required>
-            <button type="button" class="btn-cancelar" onclick="this.closest('.campo').remove()">Remover</button>
-        </div>
+        <input type="text" name="itens[]" placeholder="Novo item do checklist" required>
+        <button type="button" onclick="this.parentElement.remove()">Remover</button>
     `;
 
     lista.appendChild(div);
@@ -68,23 +65,19 @@ function editarChecklist(id) {
         if (checklist.itens && checklist.itens.length > 0) {
             checklist.itens.forEach(item => {
                 const div = document.createElement('div');
-                div.classList.add('campo');
+                div.classList.add('item-checklist');
 
                 div.innerHTML = `
-                    <label class="campo__label campo__label--obrigatorio">Item</label>
-                    <div class="campo__multi-busca">
-                        <input type="text" name="itens[]" class="campo__input" value="${item.titulo}" required>
-                        <button type="button" class="btn-cancelar" onclick="this.closest('.campo').remove()">Remover</button>
-                    </div>
+                    <input type="text" name="itens[]" value="${item.titulo}" required>
+                    <button type="button" onclick="this.parentElement.remove()">Remover</button>
                 `;
 
                 lista.appendChild(div);
             });
         } else {
             lista.innerHTML = `
-                <div class="campo">
-                    <label class="campo__label campo__label--obrigatorio">Item</label>
-                    <input type="text" name="itens[]" class="campo__input" placeholder="Ex: Verificar SQL Injection" required>
+                <div class="item-checklist">
+                    <input type="text" name="itens[]" placeholder="Novo item do checklist" required>
                 </div>
             `;
         }
@@ -109,9 +102,8 @@ function limparFormularioChecklist() {
     const lista = document.getElementById('lista-itens-checklist');
 
     lista.innerHTML = `
-        <div class="campo">
-            <label class="campo__label campo__label--obrigatorio">Item</label>
-            <input type="text" name="itens[]" class="campo__input" placeholder="Ex: Verificar SQL Injection" required>
+        <div class="item-checklist">
+            <input type="text" name="itens[]" placeholder="Ex: Verificar SQL Injection" required>
         </div>
     `;
 }
