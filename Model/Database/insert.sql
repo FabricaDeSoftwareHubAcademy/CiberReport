@@ -68,9 +68,9 @@ INSERT INTO empresa (endereco_id, responsavel_id, nome_fantasia, razao_social, c
 -- ---------------------------------------------------------
 -- checklist
 -- ---------------------------------------------------------
-INSERT INTO checklist (nome, habilitado) VALUES
-('OWASP Top 10 - Aplicação Web', 1),
-('Checklist de Rede Interna', 1);
+INSERT INTO checklist (nome, descricao, categoria, habilitado) VALUES
+('OWASP Top 10 - Aplicação Web', 'Checklist baseado no OWASP Top 10 para avaliação de segurança em aplicações web.', 'Web Application', 1),
+('Checklist de Rede Interna', 'Checklist para avaliação de segurança em infraestrutura de rede corporativa interna.', 'Rede Interna', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
