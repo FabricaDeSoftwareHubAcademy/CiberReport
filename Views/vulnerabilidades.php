@@ -12,7 +12,7 @@
 
 <body>
     <?php $tituloPagina = 'Vulnerabilidades';
-    include_once 'menu.php'; ?>
+    include_once 'Components/menu.php'; ?>
     <main>
         <div class="barra-acoes">
             <button class="btn-nova" data-modal-target="modalVulnerabilidade">
@@ -352,4 +352,5 @@
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
+
 </html>

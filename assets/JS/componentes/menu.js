@@ -20,6 +20,7 @@ document.getElementById('open_btn').addEventListener('click', function () {
     } else {
         sideBar.classList.add('open-sidebar');
     }
+    // suBmenus.classList.add('fechado');
 });
 
 // Dropdown de Gestão
