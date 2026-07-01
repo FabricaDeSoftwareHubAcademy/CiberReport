@@ -10,26 +10,26 @@ class Empresa
         $this->pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
     }
 
+    public function buscarPorCnpj($cnpj)
+    {
+        $sql = $this->pdo->prepare("SELECT id FROM empresa WHERE cnpj = :cnpj");
+        $sql->bindValue(":cnpj", $cnpj);
+        $sql->execute();
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function cadastrarEmpresa($endereco_id, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)
     {
-        $empresa = $this->pdo->prepare("SELECT id FROM empresa WHERE cnpj = :c");
-        $empresa->bindValue(":c", $cnpj);
-        $empresa->execute();
-
-        if ($empresa->rowCount() > 0) {
-            return false;
-        } else {
-            $empresa = $this->pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contato,telefone,responsavel,status) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
-            $empresa->bindValue(":endereco_id", $endereco_id);
-            $empresa->bindValue(":nome_fantasia", $nome_fantasia);
-            $empresa->bindValue(":razao_social", $razao_social);
-            $empresa->bindValue(":cnpj", $cnpj);
-            $empresa->bindValue(":email_contato", $email_contato);
-            $empresa->bindValue(":telefone", $telefone);
-            $empresa->bindValue(":responsavel", $responsavel);
-            $empresa->execute();
-            return true;
-        }
+        $sql = $this->pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contato,telefone,responsavel,habilitado) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
+        $sql->bindValue(":endereco_id", $endereco_id);
+        $sql->bindValue(":nome_fantasia", $nome_fantasia);
+        $sql->bindValue(":razao_social", $razao_social);
+        $sql->bindValue(":cnpj", $cnpj);
+        $sql->bindValue(":email_contato", $email_contato);
+        $sql->bindValue(":telefone", $telefone);
+        $sql->bindValue(":responsavel", $responsavel);
+        $sql->execute();
+        return $this->pdo->lastInsertId();
     }
 
     public function ListarDados()
@@ -67,10 +67,10 @@ class Empresa
         $sql->execute();
     }
 
-    public function alterarStatus($id_empresa, $status)
+    public function alterarStatus($id_empresa, $habilitado)
     {
-        $sql = $this->pdo->prepare("UPDATE empresa SET status = :status WHERE id = :id");
-        $sql->bindValue(":status", $status);
+        $sql = $this->pdo->prepare("UPDATE empresa SET habilitado = :habilitado WHERE id = :id");
+        $sql->bindValue(":habilitado", $habilitado);
         $sql->bindValue(":id", $id_empresa);
         $sql->execute();
     }

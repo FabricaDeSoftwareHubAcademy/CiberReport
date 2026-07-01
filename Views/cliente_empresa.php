@@ -1,8 +1,7 @@
 <?php
-require_once "../Model/Database/Endereco.php";
+require_once __DIR__ . "/../Controller/CadastroEmpresaController.php";
 
-
-$endereco = new Endereco();
+$controller = new CadastroEmpresaController();
 
 
 $mensagem_erro = "";
@@ -11,43 +10,28 @@ $dados_empresa_editar = [];
 $dados_endereco_editar = [];
 if (isset($_GET['id_empresa'])) {
     $id_empresa_editar = addslashes($_GET['id_empresa']);
-    $dados_empresa_editar = $empresa->buscarDadosEmpresa($id_empresa_editar);
-    $dados_endereco_editar = $endereco->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
+    $dados_empresa_editar = $controller->buscarDadosEmpresa($id_empresa_editar);
+    $dados_endereco_editar = $controller->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
+    $controller->editar();
+    header("Location: cliente_empresa.php");
+    exit;
+}
 
-if (isset($_POST['nome_fantasia'])) {
-    $nome_fantasia = addslashes($_POST['nome_fantasia']);
-    $razao_social = addslashes($_POST['razao_social']);
-    $telefone = addslashes($_POST['telefone']);
-    $email_contato = addslashes($_POST['email_contato']);
-    $cnpj = addslashes($_POST['cnpj']);
-    $responsavel = addslashes($_POST['responsavel']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
+    $resultado = $controller->cadastrar();
 
-    $cep = addslashes($_POST['cep']);
-    $rua = addslashes($_POST['rua']);
-    $numero = addslashes($_POST['numero']);
-    $complemento = addslashes($_POST['complemento']);
-    $bairro = addslashes($_POST['bairro']);
-    $cidade = addslashes($_POST['cidade']);
-    $estado = addslashes($_POST['estado']);
-    $pais = addslashes($_POST['pais']);
-
-    if (!empty($nome_fantasia) && !empty($razao_social) && !empty($telefone) && !empty($email_contato) && !empty($cnpj) && !empty($responsavel) && !empty($cep) && !empty($rua) && !empty($numero) && !empty($bairro) && !empty($cidade) && !empty($estado)) {
-        $id_endereco_novo = $endereco->cadastrarEndereco($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais);
-
-        if ($empresa->cadastrarEmpresa($id_endereco_novo, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)) {
-            header("location:clientes.php");
-            exit;
-        } else {
-            $mensagem_erro = "Empresa já cadastrada!";
-        }
-    } else {
-        $mensagem_erro = "Preencha todos os campos!";
+    if ($resultado === true){
+        header("Location: cliente_empresa.php");
+        exit;
+    }else{
+        $mensagem_erro = $resultado;
     }
 }
 
-
+$dados = $controller->listar();
 
 ?>
 
@@ -58,7 +42,7 @@ if (isset($_POST['nome_fantasia'])) {
 <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
 
-<?php $tituloPagina = 'Clientes'; include 'menu.php'; ?>
+<?php $tituloPagina = 'Clientes'; include 'Components/menu.php'; ?>
 <main>
 
 
@@ -230,7 +214,7 @@ if (isset($_POST['nome_fantasia'])) {
                     </a>
                 </div>
 
-                <form action="editar_empresa.php?id_empresa=<?php echo $dados_empresa_editar['id'] ?? ''; ?>" method="post">
+                <form action="cliente_empresa.php" method="post">
                     <input type="hidden" name="id_empresa" value="<?php echo $dados_empresa_editar['id'] ?? ''; ?>" />
                     <input type="hidden" name="id_endereco" value="<?php echo $dados_empresa_editar['endereco_id'] ?? ''; ?>" />
 
@@ -347,7 +331,8 @@ if (isset($_POST['nome_fantasia'])) {
         
 
 
-        <div class="tabela-wrapper">
+
+       <div class="tabela-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -376,69 +361,46 @@ if (isset($_POST['nome_fantasia'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pentests as $pentest): ?>
-                        <?php
-                        $frameworks = array_filter(array_map('trim', explode(',', $pentest['frameworks'] ?? '')));
-                        $ativo = (bool) $pentest['habilitado'];
-                        ?>
+                    <?php foreach ($dados as $empresa): ?>
                         <tr>
-                            <td><?= $pentest['id'] ?></td>
-                            <td><?= htmlspecialchars($pentest['nome']) ?></td>
-                            <td class="ger-pentest-col-descricao"><?= htmlspecialchars($pentest['descricao_breve']) ?></td>
+                            <td>#<?= $empresa['id'] ?></td>
+                            <td><?= htmlspecialchars($empresa['nome_fantasia']) ?></td>
+                            <td><?= htmlspecialchars($empresa['cnpj']) ?></td>
+                            <td><?= htmlspecialchars($empresa['responsavel']) ?></td>
+                            <td><?= htmlspecialchars($empresa['email_contato'] ?? '---') ?></td>
+                            <td><?= htmlspecialchars($empresa['telefone']) ?></td>
                             <td>
-                                <span class="ger-pentest-cat-badge">
-                                    <?= htmlspecialchars($pentest['categoria']) ?>
+                                <span class="status status-concluido">
+                                    <?= $empresa['habilitado'] ? 'Ativo' : 'Inativo' ?>
                                 </span>
-                            </td>
-                            <td><?= htmlspecialchars($pentest['modelo']) ?></td>
-                            <td><?= htmlspecialchars($pentest['tecnica']) ?></td>
-                            <td>
-                                <div class="ger-pentest-frameworks-list">
-                                    <?php foreach (array_slice($frameworks, 0, 2) as $fw): ?>
-                                        <span class="ger-pentest-framework-tag"><?= htmlspecialchars($fw) ?></span>
-                                    <?php endforeach; ?>
-                                    <?php if (count($frameworks) > 2): ?>
-                                        <span class="ger-pentest-framework-tag ger-pentest-tag-mais">+<?= count($frameworks) - 2 ?></span>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                            <td><?= htmlspecialchars($pentest['checklist'] ?? '') ?></td>
-                            <td>
-                                <label class="ger-pentest-toggle-switch">
-                                    <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
-                                    <span class="ger-pentest-toggle-slider"></span>
-                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
-                                </label>
                             </td>
                             <td>
                                 <div class="acoes">
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
+                                    <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <a href="gerenciarPentest.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
+                                    </a>
+                                    <a href="excluir_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <?php if (empty($pentests)): ?>
+                    <?php if (empty($dados)): ?>
                         <tr>
-                            <td colspan="10" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
+                            <td colspan="8" style="text-align:center">Nenhuma empresa cadastrada.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="10" class="rodape-tabela">
+                        <td colspan="8" class="rodape-tabela">
                             <div class="paginacao"></div>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-
-
     </section>
 </main>
 <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
