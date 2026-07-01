@@ -33,8 +33,21 @@
 }
 
 
+.clientes-status-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+} 
 
+.clientes-status-cell input:checked ~ .clientes-toggle-label {
+    color: var(--cor-texto-primario);
+}
 
+.clientes-toggle-label {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+    min-width: 42px;
+}
 
 
 

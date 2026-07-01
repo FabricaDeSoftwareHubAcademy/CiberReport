@@ -352,4 +352,5 @@
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
+
 </html>
