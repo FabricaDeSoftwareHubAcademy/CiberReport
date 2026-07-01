@@ -83,40 +83,57 @@ $checklists = $controller->listar();
                 <form method="POST" action="checklist.php" class="form-checklist">
                     <input type="hidden" name="id" id="checklist_id">
 
-                    <div class="form-grupo">
-                        <label>Nome do Checklist</label>
-                        <input type="text" name="nome" placeholder="Ex: Checklist" required>
-                    </div>
+                    <div class="modal__body">
 
-                    <div class="form-grupo">
-                        <label>Descrição</label>
-                        <input type="text" name="descricao" placeholder="Ex: Checklist básico para testes web">
-                    </div>
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-clipboard-check modal-secao__titulo-icone"></i>
+                                <h3>Dados do Checklist</h3>
+                            </div>
 
-                    <div class="form-grupo">
-                        <label>Categoria</label>
-                        <input type="text" name="categoria" placeholder="Ex: Web, Rede, API" required>
-                    </div>
+                            <div class="modal-grade modal-grade--4">
+                                <div class="campo">
+                                    <label class="campo__label campo__label--obrigatorio">Nome do Checklist</label>
+                                    <input type="text" name="nome" class="campo__input" placeholder="Ex: Checklist Web" required>
+                                </div>
 
-                    <hr>
+                                <div class="campo">
+                                    <label class="campo__label campo__label--obrigatorio">Categoria</label>
+                                    <input type="text" name="categoria" class="campo__input" placeholder="Ex: Web, Rede, API" required>
+                                </div>
 
-                    <h3>Itens do Checklist</h3>
-
-                    <div id="lista-itens-checklist">
-                        <div class="item-checklist">
-                            <input type="text" name="itens[]" placeholder="Ex: Verificar SQL Injection" required>
+                                <div class="campo">
+                                    <label class="campo__label">Descrição</label>
+                                    <input type="text" name="descricao" class="campo__input" placeholder="Ex: Checklist básico para testes web">
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <button type="button" onclick="adicionarItemChecklist()">
-                        + Adicionar Item
-                    </button>
+                        <div class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-list-check modal-secao__titulo-icone"></i>
+                                <h3>Itens do Checklist</h3>
+                            </div>
+
+                            <div id="lista-itens-checklist" class="modal-grade modal-grade--4">
+                                <div class="campo">
+                                    <label class="campo__label campo__label--obrigatorio">Item</label>
+                                    <input type="text" name="itens[]" class="campo__input" placeholder="Ex: Verificar SQL Injection" required>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-botao-verde" onclick="adicionarItemChecklist()">
+                                <i class="fa-solid fa-plus"></i>
+                                Adicionar Item
+                            </button>
+                        </div>
+
+                    </div>
 
                     <div class="modal__footer">
                         <button type="button" class="btn-cancelar" data-modal-close="modalChecklist">CANCELAR</button>
                         <button type="submit" class="btn-botao-verde">SALVAR</button>
                     </div>
-
                 </form>
 
             </div>
