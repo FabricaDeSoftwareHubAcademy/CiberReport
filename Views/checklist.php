@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
-$checklists = $controller->listar();
+$pentests = $controller->listar();
 
 ?>
 
@@ -57,7 +57,7 @@ $checklists = $controller->listar();
 
     <main>
         <!-- chama novo botão de cadastro -->
-        <div class="button-cadastro-checklist">
+        <div class="button-cadastro">
             <button type="button" class="btn-novo-cadastro" data-modal-target="modalChecklist" onclick="limparFormularioChecklist()">
                 <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
             </button>
@@ -83,57 +83,41 @@ $checklists = $controller->listar();
                 <form method="POST" action="checklist.php" class="form-checklist">
                     <input type="hidden" name="id" id="checklist_id">
 
-                    <div class="modal__body">
-
-                        <div class="modal-secao">
-                            <div class="modal-secao__titulo">
-                                <i class="fa-solid fa-clipboard-check modal-secao__titulo-icone"></i>
-                                <h3>Dados do Checklist</h3>
-                            </div>
-
-                            <div class="modal-grade modal-grade--4">
-                                <div class="campo">
-                                    <label class="campo__label campo__label--obrigatorio">Nome do Checklist</label>
-                                    <input type="text" name="nome" class="campo__input" placeholder="Ex: Checklist Web" required>
-                                </div>
-
-                                <div class="campo">
-                                    <label class="campo__label campo__label--obrigatorio">Categoria</label>
-                                    <input type="text" name="categoria" class="campo__input" placeholder="Ex: Web, Rede, API" required>
-                                </div>
-
-                                <div class="campo">
-                                    <label class="campo__label">Descrição</label>
-                                    <input type="text" name="descricao" class="campo__input" placeholder="Ex: Checklist básico para testes web">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-secao">
-                            <div class="modal-secao__titulo">
-                                <i class="fa-solid fa-list-check modal-secao__titulo-icone"></i>
-                                <h3>Itens do Checklist</h3>
-                            </div>
-
-                            <div id="lista-itens-checklist" class="modal-grade modal-grade--4">
-                                <div class="campo">
-                                    <label class="campo__label campo__label--obrigatorio">Item</label>
-                                    <input type="text" name="itens[]" class="campo__input" placeholder="Ex: Verificar SQL Injection" required>
-                                </div>
-                            </div>
-
-                            <button type="button" class="btn-botao-verde" onclick="adicionarItemChecklist()">
-                                <i class="fa-solid fa-plus"></i>
-                                Adicionar Item
-                            </button>
-                        </div>
-
+                    <div class="form-grupo">
+                        <label>Nome do Checklist</label>
+                        <input type="text" name="nome" placeholder="Ex: Checklist Pentest Web" required>
                     </div>
+
+                    <div class="form-grupo">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" placeholder="Ex: Checklist básico para testes web">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Categoria</label>
+                        <input type="text" name="categoria" placeholder="Ex: Web, Rede, API" required>
+                    </div>
+
+                    <hr>
+
+                    <h3>Itens do Checklist</h3>
+
+                    <div id="lista-itens-checklist">
+                        <div class="item-checklist">
+                            <input type="text" name="itens[]" placeholder="Ex: Verificar SQL Injection" required>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="adicionarItemChecklist()">
+                        + Adicionar Item
+                    </button>
 
                     <div class="modal__footer">
-                        <button type="button" class="btn-cancelar" data-modal-close="modalChecklist">CANCELAR</button>
-                        <button type="submit" class="btn-botao-verde">SALVAR</button>
+                        <button type="submit" class="btn-salvar">
+                            Salvar Checklist
+                        </button>
                     </div>
+
                 </form>
 
             </div>
@@ -165,28 +149,29 @@ $checklists = $controller->listar();
 
                 <tbody>
                     <!-- conectado ao banco de dados -->
-                    <?php foreach ($checklists as $checklist): ?>
+                    <?php foreach ($pentests as $pentest): ?>
                         <?php
-                        $ativo = (bool) $checklist['habilitado'];
+                        $ativo = (bool) $pentest['habilitado'];
                         ?>
                         <tr>
-                            <td><?= $checklist['id'] ?></td>
-                            <td><?= htmlspecialchars($checklist['nome']) ?></td>
-                            <td class="checklist-desc">
-                                <?= htmlspecialchars($checklist['descricao'] ?? '') ?>
+                            <td><?= $pentest['id'] ?></td>
+                            <td><?= htmlspecialchars($pentest['nome']) ?></td>
+                            <td class="ger-pentest-col-descricao">
+                                <?= htmlspecialchars($pentest['descricao'] ?? '') ?>
                             </td>
 
                             <td>
-                                <span class="checklist-cat">
-                                    <?= htmlspecialchars($checklist['categoria'] ?? '') ?>
+                                <span class="ger-pentest-cat-badge">
+                                    <?= htmlspecialchars($pentest['categoria'] ?? '') ?>
                                 </span>
                             </td>
                             <td>
-                                <div class=".checklist-ativo">
+                                <div class="ger-pentest-status-cell">
                                     <label class="switch">
-                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $checklist['id'] ?>" onchange="toggleHabilitado(this)">
+                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
                                         <span class="switch-slider"></span>
                                     </label>
+                                    <span class="ger-pentest-toggle-label"></span>
                                 </div>
                             </td>
                             <td>
@@ -196,20 +181,20 @@ $checklists = $controller->listar();
                                         class="btn-editar"
                                         title="Editar"
                                         aria-label="Editar"
-                                        onclick="editarChecklist('<?= $checklist['id'] ?>')">
+                                        onclick="editarChecklist('<?= $pentest['id'] ?>')">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <a href="checklist.php?excluir=<?= $checklist['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta Check Lista?')">
+                                    <a href="checklist.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <?php if (empty($checklists)): ?>
+                    <?php if (empty($pentests)): ?>
 
                         <tr>
-                            <td colspan="6" style="text-align:center">Nenhum tipo de checklist cadastrado.</td>
+                            <td colspan="6" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

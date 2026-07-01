@@ -55,13 +55,13 @@
                 </li>
                 <ul id="submenu">
                     <li class="item-submenu">
-                        <a href="usuario.html" class="margin-lef">
+                        <a href="usuario.html">
                             <i class="fa-solid fa-users"></i>
                             <span class="item_description">Usuários</span>
                         </a>
                     </li>
                     <li class="item-submenu">
-                        <a href="cliente_empresa.php" class="margin-lef">
+                        <a href="cliente_empresa.php">
                             <i class="fa-solid fa-address-book"></i>
                             <span class="item_description">Clientes</span>
                         </a>
@@ -108,7 +108,7 @@
                     <div class="tooltip-item"><span>Logs</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="gerenciamento_perfis.php">
+                    <a href="gerenciamento_perfis">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
