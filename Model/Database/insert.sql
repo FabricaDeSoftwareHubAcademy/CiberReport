@@ -41,7 +41,7 @@ INSERT INTO perfil_permissao (perfil_id, permissao_id) VALUES
 -- usuario
 -- ---------------------------------------------------------
 INSERT INTO usuario (perfil_id, nome, cpf, email, senha, telefone, cargo, especialidade, habilitado, ultimo_login) VALUES
-(1, 'Fábio Rocha', '00011122233', 'fabio.rocha@cyberreport.com.br', '$2y$10$N9qo8uLOickgx2ZMRZoMye', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
+(1, 'Admin', '00011122233', 'admin@senac.com.br', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
 (2, 'Mariana Souza', '11122233344', 'mariana.souza@cyberreport.com.br', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
 (2, 'Rafael Lima', '22233344455', 'rafael.lima@cyberreport.com.br', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
 (2, 'Bianca Carvalho', '33344455566', 'bianca.carvalho@cyberreport.com.br', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
@@ -68,9 +68,9 @@ INSERT INTO empresa (endereco_id, responsavel_id, nome_fantasia, razao_social, c
 -- ---------------------------------------------------------
 -- checklist
 -- ---------------------------------------------------------
-INSERT INTO checklist (nome, habilitado) VALUES
-('OWASP Top 10 - Aplicação Web', 1),
-('Checklist de Rede Interna', 1);
+INSERT INTO checklist (nome, descricao, categoria, habilitado) VALUES
+('OWASP Top 10 - Aplicação Web', 'Checklist baseado no OWASP Top 10 para avaliação de segurança em aplicações web.', 'Web Application', 1),
+('Checklist de Rede Interna', 'Checklist para avaliação de segurança em infraestrutura de rede corporativa interna.', 'Rede Interna', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
