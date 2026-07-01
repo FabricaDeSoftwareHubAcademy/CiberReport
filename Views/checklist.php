@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
-$pentests = $controller->listar();
+$checklists = $controller->listar();
 
 ?>
 
@@ -57,7 +57,7 @@ $pentests = $controller->listar();
 
     <main>
         <!-- chama novo botão de cadastro -->
-        <div class="button-cadastro">
+        <div class="button-cadastro-checklist">
             <button type="button" class="btn-novo-cadastro" data-modal-target="modalChecklist" onclick="limparFormularioChecklist()">
                 <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
             </button>
@@ -85,7 +85,7 @@ $pentests = $controller->listar();
 
                     <div class="form-grupo">
                         <label>Nome do Checklist</label>
-                        <input type="text" name="nome" placeholder="Ex: Checklist Pentest Web" required>
+                        <input type="text" name="nome" placeholder="Ex: Checklist" required>
                     </div>
 
                     <div class="form-grupo">
@@ -113,9 +113,8 @@ $pentests = $controller->listar();
                     </button>
 
                     <div class="modal__footer">
-                        <button type="submit" class="btn-salvar">
-                            Salvar Checklist
-                        </button>
+                        <button type="button" class="btn-cancelar" data-modal-close="modalChecklist">CANCELAR</button>
+                        <button type="submit" class="btn-botao-verde">SALVAR</button>
                     </div>
 
                 </form>
@@ -149,29 +148,28 @@ $pentests = $controller->listar();
 
                 <tbody>
                     <!-- conectado ao banco de dados -->
-                    <?php foreach ($pentests as $pentest): ?>
+                    <?php foreach ($checklists as $checklist): ?>
                         <?php
-                        $ativo = (bool) $pentest['habilitado'];
+                        $ativo = (bool) $checklist['habilitado'];
                         ?>
                         <tr>
-                            <td><?= $pentest['id'] ?></td>
-                            <td><?= htmlspecialchars($pentest['nome']) ?></td>
-                            <td class="ger-pentest-col-descricao">
-                                <?= htmlspecialchars($pentest['descricao'] ?? '') ?>
+                            <td><?= $checklist['id'] ?></td>
+                            <td><?= htmlspecialchars($checklist['nome']) ?></td>
+                            <td class="checklist-desc">
+                                <?= htmlspecialchars($checklist['descricao'] ?? '') ?>
                             </td>
 
                             <td>
-                                <span class="ger-pentest-cat-badge">
-                                    <?= htmlspecialchars($pentest['categoria'] ?? '') ?>
+                                <span class="checklist-cat">
+                                    <?= htmlspecialchars($checklist['categoria'] ?? '') ?>
                                 </span>
                             </td>
                             <td>
-                                <div class="ger-pentest-status-cell">
+                                <div class=".checklist-ativo">
                                     <label class="switch">
-                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $pentest['id'] ?>" onchange="toggleHabilitado(this)">
+                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $checklist['id'] ?>" onchange="toggleHabilitado(this)">
                                         <span class="switch-slider"></span>
                                     </label>
-                                    <span class="ger-pentest-toggle-label"></span>
                                 </div>
                             </td>
                             <td>
@@ -181,20 +179,20 @@ $pentests = $controller->listar();
                                         class="btn-editar"
                                         title="Editar"
                                         aria-label="Editar"
-                                        onclick="editarChecklist('<?= $pentest['id'] ?>')">
+                                        onclick="editarChecklist('<?= $checklist['id'] ?>')">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <a href="checklist.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
+                                    <a href="checklist.php?excluir=<?= $checklist['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta Check Lista?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <?php if (empty($pentests)): ?>
+                    <?php if (empty($checklists)): ?>
 
                         <tr>
-                            <td colspan="6" style="text-align:center">Nenhum tipo de pentest cadastrado.</td>
+                            <td colspan="6" style="text-align:center">Nenhum tipo de checklist cadastrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
