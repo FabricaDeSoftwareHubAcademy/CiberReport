@@ -46,6 +46,7 @@ $pentests = $controller->listar();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/CSS/style.css" />
+    <link rel="stylesheet" href="../assets/CSS/Pages/checklist.css">
     <title>CADASTRO DE CHECKLIST</title>
 </head>
 
@@ -175,15 +176,14 @@ $pentests = $controller->listar();
                             </td>
                             <td>
                                 <div class="acoes">
-<button 
-    type="button"
-    class="btn-editar" 
-    title="Editar" 
-    aria-label="Editar"
-    onclick="editarChecklist('<?= $pentest['id'] ?>')"
->
-    <i class="fa-solid fa-pen-to-square"></i>
-</button>
+                                    <button
+                                        type="button"
+                                        class="btn-editar"
+                                        title="Editar"
+                                        aria-label="Editar"
+                                        onclick="editarChecklist('<?= $pentest['id'] ?>')">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
                                     <a href="checklist.php?excluir=<?= $pentest['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este pentest?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>

@@ -5,20 +5,26 @@ class ChecklistModel
     public $msgErro = "";
 
     public function conectar($nome_banco, $host, $usuario, $senha)
-    {
-        global $pdo;
-        try {
-            $pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
-        } catch (PDOException $erro) {
-            $this->msgErro = $erro->getMessage();
-        }
+{
+    try {
+        $this->pdo = new PDO(
+            "mysql:host=" . $host . ";dbname=" . $nome_banco,
+            $usuario,
+            $senha
+        );
+
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    } catch (PDOException $erro) {
+        $this->msgErro = $erro->getMessage();
     }
+}
 
     public function listar()
     {
-        global $pdo;
+        
 
-        $sql = $pdo->prepare("
+        $sql = $this->pdo->prepare("
         SELECT * FROM checklist 
         ORDER BY nome
     ");
@@ -30,8 +36,8 @@ class ChecklistModel
 
     public function buscar($id)
     {
-        global $pdo;
-        $sql = $pdo->prepare("SELECT * FROM checklist WHERE id = :id");
+        
+        $sql = $this->pdo->prepare("SELECT * FROM checklist WHERE id = :id");
         $sql->bindValue(":id", $id);
         $sql->execute();
         return $sql->fetch(PDO::FETCH_ASSOC);
@@ -39,9 +45,9 @@ class ChecklistModel
 
     public function cadastrar($nome, $descricao, $categoria, $itens)
     {
-        global $pdo;
+        
 
-        $sql = $pdo->prepare("
+        $sql = $this->pdo->prepare("
         INSERT INTO checklist 
         (nome, descricao, categoria, habilitado)
         VALUES 
@@ -53,7 +59,7 @@ class ChecklistModel
         $sql->bindValue(":categoria", $categoria);
         $sql->execute();
 
-        $checklist_id = $pdo->lastInsertId();
+        $checklist_id = $this->pdo->lastInsertId();
 
         foreach ($itens as $item) {
             $titulo = trim($item);
@@ -62,7 +68,7 @@ class ChecklistModel
                 continue;
             }
 
-            $sqlItem = $pdo->prepare("
+            $sqlItem = $this->pdo->prepare("
             INSERT INTO checklist_item
             (checklist_id, titulo, obrigatorio, habilitado)
             VALUES
@@ -79,22 +85,21 @@ class ChecklistModel
 
     public function excluir($id)
     {
-        global $pdo;
 
-        $sqlItens = $pdo->prepare("DELETE FROM checklist_item WHERE checklist_id = :id");
+        $sqlItens = $this->pdo->prepare("DELETE FROM checklist_item WHERE checklist_id = :id");
         $sqlItens->bindValue(":id", $id);
         $sqlItens->execute();
 
-        $sql = $pdo->prepare("DELETE FROM checklist WHERE id = :id");
+        $sql = $this->pdo->prepare("DELETE FROM checklist WHERE id = :id");
         $sql->bindValue(":id", $id);
         $sql->execute();
     }
 
     public function alterarStatus($id, $status)
     {
-        global $pdo;
+        
 
-        $sql = $pdo->prepare("UPDATE checklist SET habilitado = :habilitado WHERE id = :id");
+        $sql = $this->pdo->prepare("UPDATE checklist SET habilitado = :habilitado WHERE id = :id");
         $sql->bindValue(":habilitado", $status);
         $sql->bindValue(":id", $id);
         $sql->execute();
@@ -102,9 +107,9 @@ class ChecklistModel
 
     public function atualizar($id, $nome, $descricao, $categoria, $itens)
     {
-        global $pdo;
+        
 
-        $sql = $pdo->prepare("
+        $sql = $this->pdo->prepare("
         UPDATE checklist 
         SET nome = :nome, descricao = :descricao, categoria = :categoria
         WHERE id = :id
@@ -116,7 +121,7 @@ class ChecklistModel
         $sql->bindValue(":id", $id);
         $sql->execute();
 
-        $sqlDelete = $pdo->prepare("DELETE FROM checklist_item WHERE checklist_id = :id");
+        $sqlDelete = $this->pdo->prepare("DELETE FROM checklist_item WHERE checklist_id = :id");
         $sqlDelete->bindValue(":id", $id);
         $sqlDelete->execute();
 
@@ -127,7 +132,7 @@ class ChecklistModel
                 continue;
             }
 
-            $sqlItem = $pdo->prepare("
+            $sqlItem = $this->pdo->prepare("
             INSERT INTO checklist_item
             (checklist_id, titulo, obrigatorio, habilitado)
             VALUES
@@ -144,9 +149,9 @@ class ChecklistModel
 
     public function buscarComItens($id)
 {
-    global $pdo;
+    
 
-    $sql = $pdo->prepare("SELECT * FROM checklist WHERE id = :id");
+    $sql = $this->pdo->prepare("SELECT * FROM checklist WHERE id = :id");
     $sql->bindValue(":id", $id);
     $sql->execute();
 
@@ -156,7 +161,7 @@ class ChecklistModel
         return false;
     }
 
-    $sqlItens = $pdo->prepare("
+    $sqlItens = $this->pdo->prepare("
         SELECT * FROM checklist_item 
         WHERE checklist_id = :id 
         ORDER BY id

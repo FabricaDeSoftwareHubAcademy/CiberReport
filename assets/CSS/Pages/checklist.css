@@ -1,0 +1,5 @@
+.button-cadastro-checklist {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--espaco-md);
+}
