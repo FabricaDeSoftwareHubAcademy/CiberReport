@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($senha)) {
         $erro = "Preencha todos os campos.";
     } else {
-        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
+        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuario WHERE email = ?");
         $stmt->execute([$email]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
