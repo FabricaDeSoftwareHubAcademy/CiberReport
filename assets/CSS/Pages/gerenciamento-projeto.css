@@ -10,18 +10,15 @@
     overflow-y: hidden;
 }
 .group-card-tabela{
+    padding: 10px;
+    width: 100%;
+    gap: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 50px;
-    width: 100%;
 }
 .group-card-projeto{
     display: flex;
     gap: 20px;
-    z-index: 3;
-    margin: 0px 0px 50px 150px;
 }
 .container-card-projetos{
     background-color: var(--cor-fundo-branco);
@@ -44,4 +41,5 @@
 }
 .tabela-gerenciamento-projeto{
     display: flex;
+    justify-content: center;
 }
