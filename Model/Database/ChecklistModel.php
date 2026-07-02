@@ -173,4 +173,20 @@ class ChecklistModel
 
     return $checklist;
 }
+
+public function listarCategorias()
+{
+    $sql = $this->pdo->prepare("
+        SELECT DISTINCT categoria
+        FROM checklist
+        WHERE categoria IS NOT NULL
+          AND categoria <> ''
+        ORDER BY categoria
+    ");
+
+    $sql->execute();
+
+    return $sql->fetchAll(PDO::FETCH_COLUMN);
+}
+
 }

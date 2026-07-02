@@ -202,3 +202,6 @@ CREATE TABLE pentest_tipos (
     horas_execucao    INT,
     habilitado        TINYINT NOT NULL DEFAULT 1
 );
+
+ALTER TABLE checklist
+MODIFY COLUMN descricao VARCHAR(1000) DEFAULT NULL;
