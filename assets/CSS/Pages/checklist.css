@@ -3,7 +3,7 @@
     justify-content: flex-end;
     padding: var(--espaco-md);
 }
-.checklist-desc{    
+.checklist-desc{
     max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
