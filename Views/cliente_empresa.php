@@ -3,6 +3,12 @@ require_once __DIR__ . "/../Controller/CadastroEmpresaController.php";
 
 $controller = new CadastroEmpresaController();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'alterarHabilitado') {
+    $id = addslashes($_POST['id'] ?? '');
+    $habilitado = addslashes($_POST['habilitado'] ?? '');
+    $controller->alterarStatus($id, $habilitado);
+    exit;
+}
 
 $mensagem_erro = "";
 if (isset($_GET['excluir'])){
@@ -202,9 +208,9 @@ $dados = $controller->listar();
             </div>
         </div>
         
-        <div class="modal-overlay" id="modalEditar"
-            <?php if (!empty($dados_empresa_editar)) echo 'style="visibility:visible;opacity:1;"'; ?>>
-            <div class="modal modal--xl">
+    
+        <div class="modal-overlay<?= !empty($dados_empresa_editar) ? ' active' : '' ?>" id="modalEditar">
+            <div class="modal modal--xxl">
 
                 <div class="modal__header">
                     <div class="modal__header-icone">
@@ -214,10 +220,9 @@ $dados = $controller->listar();
                         <h2 class="modal__titulo">Edição de Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <!-- Resolver o problema do botão -->
-                    <a href="cliente_empresa.php" class="modal__fechar"> 
+                    <button type="button" class="modal__fechar" data-modal-close="modalEditar">
                         <i class="fa-solid fa-xmark"></i>
-                    </a>
+                    </button>
                 </div>
 
                 <form action="cliente_empresa.php" method="post">
@@ -329,7 +334,7 @@ $dados = $controller->listar();
                     </div>
 
                     <div class="modal__footer">
-                        <a href="cliente_empresa.php" class="btn-cancelar">CANCELAR</a>
+                        <button type="button" class="btn-cancelar" data-modal-close="modalEditar">CANCELAR</button>
                         <button type="submit" class="btn-botao-verde">SALVAR</button>
                     </div>
 
@@ -380,10 +385,10 @@ $dados = $controller->listar();
                             <td>
                                 <div class="clientes-status-cell">
                                     <label class="switch">
-                                        <input type="checkbox" <?= $ativo ? 'checked' : '' ?> data-id="<?= $empresa['id'] ?>" onchange="toggleHabilitado(this)">
+                                        <input type="checkbox" <?= $empresa['habilitado'] ? 'checked' : '' ?> data-id="<?= $empresa['id'] ?>" onchange="toggleHabilitado(this)">
                                         <span class="switch-slider"></span>
                                     </label>
-                                    <span class="ger-pentest-toggle-label"><?= $ativo ? 'Ativo' : 'Inativo' ?></span>
+                                    <span class="clientes-toggle-label"><?= $empresa['habilitado'] ? 'Ativo' : 'Inativo' ?></span>
                                 </div>
                             </td>
                             <td>
@@ -423,6 +428,7 @@ $dados = $controller->listar();
 
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
+<script src="../assets/JS/Buscarcep.js"></script>
 <script>
     function toggleHabilitado(checkbox) {
         const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
