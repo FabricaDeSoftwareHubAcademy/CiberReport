@@ -82,7 +82,7 @@ $dados = $controller->listar();
                                 <td><?= htmlspecialchars($projeto['habilitado']) ?></td>
                                 <td><?= htmlspecialchars($projeto['data_inicio']) ?></td>
                                 <td><?= htmlspecialchars($projeto['data_fim_prevista']) ?></td>
-                                <td><?= htmlspecialchars($projeto['data_fim_previsttradutora']) ?></td>
+                                <td><?= htmlspecialchars($projeto['data_fim_prevista']) ?></td>
                                 <td>
                                     <div class="acoes">
                                         <button title="Visualizar" aria-label="Visualizar">
@@ -99,7 +99,10 @@ $dados = $controller->listar();
                             </tr>
                         <?php endforeach; ?>
                         <?php if (empty($dados)): ?>
-                            <tr><td></td></tr>
+                            <tr>
+                                <td colspan="8" style="text-align:center"> Não há nenhum registro.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                     <tfoot>
                         <tr>
