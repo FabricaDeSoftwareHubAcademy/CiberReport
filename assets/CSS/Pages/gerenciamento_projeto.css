@@ -39,7 +39,3 @@
     color: var(--cor-texto-secundario);
     font-size: var(--fonte-texto);
 }
-.tabela-gerenciamento-projeto{
-    display: flex;
-    justify-content: center;
-}
