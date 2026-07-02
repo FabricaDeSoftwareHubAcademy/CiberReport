@@ -26,7 +26,7 @@
                     <span class="subtitle-card-projeto">12</span>
                 </div>
                 <div class="container-card-projetos" id="projeto-ativo">
-                    <h2 class="title-card-projeto">Aguradando    Início</h2>
+                    <h2 class="title-card-projeto">Aguardando Início</h2>
                     <span class="subtitle-card-projeto">04</span>
                 </div>
                 <div class="container-card-projetos" id="projeto-ativo">
