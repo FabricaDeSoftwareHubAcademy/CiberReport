@@ -16,9 +16,9 @@ class CadastroEmpresaController
         $this->endereco = new Endereco($conexao);
     }
 
-    public function listar()
+    public function listarEmpresa()
     {
-        return $this->empresa->ListarDados();
+        return $this->empresa->ListarDadosEmpresa();
     }
 
     public function buscarDadosEmpresa($id_empresa)
@@ -26,12 +26,12 @@ class CadastroEmpresaController
         return $this->empresa->buscarDadosEmpresa($id_empresa);
     }
 
-    public function buscarDadosEndereco($id_endereco)
+    public function buscarDadosEnderecoEmpresa($id_endereco)
     {
-        return $this->endereco->buscarDadosEndereco($id_endereco);
+        return $this->endereco->buscarDadosEnderecoEmpresa($id_endereco);
     }
 
-    public function cadastrar()
+    public function cadastrarEmpresa()
     {
         $nome_fantasia = addslashes($_POST['nome_fantasia'] ?? '');
         $razao_social = addslashes($_POST['razao_social'] ?? '');
@@ -62,7 +62,7 @@ class CadastroEmpresaController
             return "Empresa já cadastrada!";
         }
 
-        $id_endereco_novo = $this->endereco->cadastrarEndereco(
+        $id_endereco_novo = $this->endereco->cadastrarEnderecoEmpresa(
             $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais
         );
 
@@ -74,7 +74,7 @@ class CadastroEmpresaController
         return true;
     }
 
-    public function editar()
+    public function editarEmpresa()
     {
         $id_empresa = addslashes($_POST['id_empresa'] ?? '');
         $id_endereco = addslashes($_POST['id_endereco'] ?? '');
@@ -100,7 +100,7 @@ class CadastroEmpresaController
             $email_contato, $telefone, $responsavel
         );
 
-        $this->endereco->atualizarDadosEndereco(
+        $this->endereco->atualizarDadosEnderecoEmpresa(
             $id_endereco, $cep, $rua, $numero, $complemento,
             $bairro, $cidade, $estado, $pais
         );
@@ -108,17 +108,17 @@ class CadastroEmpresaController
         return true;
     }
 
-    public function excluir($id_empresa)
+    public function excluirClientes($id_empresa)
     {
         $dados_empresa = $this->empresa->buscarDadosEmpresa($id_empresa);
         $id_endereco = $dados_empresa['endereco_id'];
 
         $this->empresa->excluirEmpresa($id_empresa);
-        $this->endereco->excluirEndereco($id_endereco);
+        $this->endereco->excluirEnderecoEmpresa($id_endereco);
     }
 
-    public function alterarStatus($id_empresa, $status)
+    public function alterarStatusClientes($id_empresa, $status)
     {
-        $this->empresa->alterarStatus($id_empresa, $status);
+        $this->empresa->alterarStatusEmpresa($id_empresa, $status);
     }
 }

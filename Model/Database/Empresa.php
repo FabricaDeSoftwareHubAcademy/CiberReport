@@ -31,7 +31,7 @@ class Empresa
         return $this->pdo->lastInsertId();
     }
 
-    public function ListarDados()
+    public function ListarDadosEmpresa()
     {
         $sql = $this->pdo->prepare("SELECT empresa.*, endereco.cidade, endereco.estado FROM empresa INNER JOIN endereco ON empresa.endereco_id = endereco.id ORDER BY empresa.nome_fantasia");
         $sql->execute();
@@ -66,7 +66,7 @@ class Empresa
         $sql->execute();
     }
 
-    public function alterarStatus($id_empresa, $habilitado)
+    public function alterarStatusEmpresa($id_empresa, $habilitado)
     {
         $sql = $this->pdo->prepare("UPDATE empresa SET habilitado = :habilitado WHERE id = :id");
         $sql->bindValue(":habilitado", $habilitado);

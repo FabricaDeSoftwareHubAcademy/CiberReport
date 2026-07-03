@@ -6,13 +6,13 @@ $controller = new CadastroEmpresaController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'alterarHabilitado') {
     $id = addslashes($_POST['id'] ?? '');
     $habilitado = addslashes($_POST['habilitado'] ?? '');
-    $controller->alterarStatus($id, $habilitado);
+    $controller->alterarStatusClientes($id, $habilitado);
     exit;
 }
 
 $mensagem_erro = "";
 if (isset($_GET['excluir'])){
-    $controller->excluir($_GET['excluir']);
+    $controller->excluirClientes($_GET['excluir']);
     header("Location: cliente_empresa.php");
     exit;
 }
@@ -22,17 +22,17 @@ $dados_endereco_editar = [];
 if (isset($_GET['id_empresa'])) {
     $id_empresa_editar = addslashes($_GET['id_empresa']);
     $dados_empresa_editar = $controller->buscarDadosEmpresa($id_empresa_editar);
-    $dados_endereco_editar = $controller->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
+    $dados_endereco_editar = $controller->buscarDadosEnderecoEmpresa($dados_empresa_editar['endereco_id']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
-    $controller->editar();
+    $controller->editarEmpresa();
     header("Location: cliente_empresa.php");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
-    $resultado = $controller->cadastrar();
+    $resultado = $controller->cadastrarEmpresa();
 
     if ($resultado === true){
         header("Location: cliente_empresa.php");
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
     }
 }
 
-$dados = $controller->listar();
+$dados = $controller->listarEmpresa();
 
 ?>
 

@@ -10,7 +10,7 @@ class Endereco
         $this->pdo = $pdo;
     }
 
-    public function cadastrarEndereco($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais)
+    public function cadastrarEnderecoEmpresa($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais)
     {
         $sql = $this->pdo->prepare("INSERT INTO endereco (cep,rua,numero,complemento,bairro,cidade,estado,pais) VALUES (:cep,:rua,:numero,:complemento,:bairro,:cidade,:estado,:pais)");
         $sql->bindValue(":cep", $cep);
@@ -26,7 +26,7 @@ class Endereco
         return $this->pdo->lastInsertId();
     }
 
-    public function buscarDadosEndereco($id_endereco)
+    public function buscarDadosEnderecoEmpresa($id_endereco)
     {
         $sql = $this->pdo->prepare("SELECT * FROM endereco WHERE id = :id");
         $sql->bindValue(":id", $id_endereco);
@@ -34,7 +34,7 @@ class Endereco
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function atualizarDadosEndereco($id_endereco, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais)
+    public function atualizarDadosEnderecoEmpresa($id_endereco, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais)
     {
         $sql = $this->pdo->prepare("UPDATE endereco SET cep = :cep, rua = :rua, numero = :numero, complemento = :complemento, bairro = :bairro, cidade = :cidade, estado = :estado, pais = :pais WHERE id = :id");
         $sql->bindValue(":cep", $cep);
@@ -51,7 +51,7 @@ class Endereco
 
 
 
-    public function excluirEndereco($id_endereco)
+    public function excluirEnderecoEmpresa($id_endereco)
     {
         $sql = $this->pdo->prepare("DELETE FROM endereco WHERE id = :id");
         $sql->bindValue(":id", $id_endereco);
