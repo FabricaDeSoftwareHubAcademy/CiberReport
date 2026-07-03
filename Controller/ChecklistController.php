@@ -1,15 +1,17 @@
 <?php
-require_once __DIR__ . "/../bootstrap.php";
-require_once __DIR__ . "/../Model/Database/ChecklistModel.php";
+
+require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
 class ChecklistController
 {
-    private $ChecklistModel;
+    private ChecklistModel $model;
 
     public function __construct()
     {
-        $this->ChecklistModel = new ChecklistModel();
-        $this->ChecklistModel->conectar(
+        $this->model = new ChecklistModel();
+
+        $this->model->conectar(
             $_ENV['DB_NAME'],
             $_ENV['DB_HOST'],
             $_ENV['DB_USER'],
@@ -17,68 +19,179 @@ class ChecklistController
         );
     }
 
-    public function listar()
+    public function listar(): array
     {
-        return $this->ChecklistModel->listar();
+        return $this->model->listar();
     }
 
-    public function cadastrar()
+    public function cadastrar(): int|false
+    {
+        $dados = $this->obterDadosChecklist();
+
+        if (!$dados) {
+            return false;
+        }
+
+        return $this->model->cadastrar(
+            $dados['nome'],
+            $dados['descricao'],
+            $dados['categoria'],
+            $dados['itens_ids']
+        );
+    }
+
+    public function atualizar(): bool
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $dados = $this->obterDadosChecklist();
+
+        if ($id <= 0 || !$dados) {
+            return false;
+        }
+
+        return $this->model->atualizar(
+            $id,
+            $dados['nome'],
+            $dados['descricao'],
+            $dados['categoria'],
+            $dados['itens_ids']
+        );
+    }
+
+    private function obterDadosChecklist(): array|false
     {
         $nome = trim($_POST['nome'] ?? '');
         $descricao = trim($_POST['descricao'] ?? '');
         $categoria = trim($_POST['categoria'] ?? '');
-        $itens = $_POST['itens'] ?? [];
+        $itensIds = $this->normalizarIds($_POST['itens_ids'] ?? []);
 
-        if (empty($nome) || empty($categoria) || empty($itens)) {
+        if ($nome === '' || $categoria === '' || empty($itensIds)) {
             return false;
         }
 
-        return $this->ChecklistModel->cadastrar(
-            $nome,
-            $descricao,
-            $categoria,
-            $itens
+        return [
+            'nome' => $nome,
+            'descricao' => $descricao,
+            'categoria' => $categoria,
+            'itens_ids' => $itensIds
+        ];
+    }
+
+    private function normalizarIds(mixed $ids): array
+    {
+        if (!is_array($ids)) {
+            return [];
+        }
+
+        $ids = array_map('intval', $ids);
+        $ids = array_filter($ids, fn (int $id) => $id > 0);
+
+        return array_values(array_unique($ids));
+    }
+
+    public function excluir(int $id): bool
+    {
+        return $id > 0 && $this->model->excluir($id);
+    }
+
+    public function alterarStatus(int $id, int $status): bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $status = $status === 1 ? 1 : 0;
+
+        return $this->model->alterarStatus($id, $status);
+    }
+
+    public function buscarComItens(int $id): array|false
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        return $this->model->buscarComItens($id);
+    }
+
+    public function listarCategorias(): array
+    {
+        return $this->model->listarCategorias();
+    }
+
+    public function listarItensCatalogo(): array
+    {
+        return $this->model->listarItensCatalogo();
+    }
+
+    public function buscarItemCatalogo(): array|false
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+
+        if ($id <= 0) {
+            return false;
+        }
+
+        return $this->model->buscarItemCatalogo($id);
+    }
+
+    public function cadastrarItemCatalogo(): array|false
+    {
+        $dados = $this->obterDadosItemCatalogo();
+
+        if (!$dados) {
+            return false;
+        }
+
+        return $this->model->cadastrarItemCatalogo(
+            $dados['titulo'],
+            $dados['referencia'],
+            $dados['obrigatorio']
         );
     }
-    public function excluir($id)
+
+    public function atualizarItemCatalogo(): array|false
     {
-        $this->ChecklistModel->excluir((int) $id);
+        $id = (int) ($_POST['id'] ?? 0);
+        $dados = $this->obterDadosItemCatalogo();
+
+        if ($id <= 0 || !$dados) {
+            return false;
+        }
+
+        return $this->model->atualizarItemCatalogo(
+            $id,
+            $dados['titulo'],
+            $dados['referencia'],
+            $dados['obrigatorio']
+        );
     }
 
-    public function alterarStatus($id, $status)
+    private function obterDadosItemCatalogo(): array|false
     {
-        $this->ChecklistModel->alterarStatus((int) $id, (int) $status);
+        $titulo = trim($_POST['titulo'] ?? '');
+        $referencia = trim($_POST['referencia'] ?? '');
+        $obrigatorio = (int) ($_POST['obrigatorio'] ?? 1);
+
+        if ($titulo === '') {
+            return false;
+        }
+
+        return [
+            'titulo' => $titulo,
+            'referencia' => $referencia,
+            'obrigatorio' => $obrigatorio === 1 ? 1 : 0
+        ];
     }
 
-    public function atualizar()
-{
-    $id = (int) ($_POST['id'] ?? 0);
-    $nome = trim($_POST['nome'] ?? '');
-    $descricao = trim($_POST['descricao'] ?? '');
-    $categoria = trim($_POST['categoria'] ?? '');
-    $itens = $_POST['itens'] ?? [];
+    public function removerItemCatalogo(): array|false
+    {
+        $id = (int) ($_POST['id'] ?? 0);
 
-    if ($id <= 0 || empty($nome) || empty($categoria) || empty($itens)) {
-        return false;
+        if ($id <= 0) {
+            return false;
+        }
+
+        return $this->model->removerItemCatalogo($id);
     }
-
-    return $this->ChecklistModel->atualizar(
-        $id,
-        $nome,
-        $descricao,
-        $categoria,
-        $itens
-    );
-}
-
-public function buscarComItens($id)
-{
-    return $this->ChecklistModel->buscarComItens((int) $id);
-}
-
-public function listarCategorias()
-{
-    return $this->ChecklistModel->listarCategorias();
-}
-
 }
