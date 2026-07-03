@@ -1,5 +1,4 @@
 const sideBar = document.getElementById('sideBar');
-const suBmenus = document.getElementById('submenu');
 const dropdown = document.getElementById('dropdown');
 const pesquisaMobileBtn = document.querySelector('.pesquisa-mobile button');
 const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
@@ -11,8 +10,6 @@ document.getElementById('open_btn').addEventListener('click', function () {
     const isOpen = sideBar.classList.contains('open-sidebar');
 
     if (isOpen) {
-        suBmenus.classList.remove('open_submenu');
-        dropdown.classList.remove('open_dropdown');
         menuOverlay.classList.remove('active');
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
@@ -21,12 +18,6 @@ document.getElementById('open_btn').addEventListener('click', function () {
         sideBar.classList.add('open-sidebar');
     }
     // suBmenus.classList.add('fechado');
-});
-
-// Dropdown de Gestão
-document.getElementById('dropdown_item').addEventListener('click', function () {
-    suBmenus.classList.toggle('open_submenu');
-    dropdown.classList.toggle('open_dropdown');
 });
 
 // Logo do menu superior abre sidebar (mobile)
@@ -39,7 +30,6 @@ logoMenuSuperior.addEventListener('click', () => {
 menuOverlay.addEventListener('click', () => {
     sideBar.classList.remove('open-sidebar');
     menuOverlay.classList.remove('active');
-    suBmenus.classList.remove('open_submenu');
     dropdown.classList.remove('open_dropdown');
 });
 
