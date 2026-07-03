@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . "/../Model/conexao.php";
 require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
 class ChecklistController
@@ -83,12 +82,12 @@ class ChecklistController
         return array_values(array_unique($ids));
     }
 
-    public function excluir(int $id): bool
+    public function excluirChecklist(int $id): bool
     {
-        return $id > 0 && $this->checklistModel->excluir($id);
+        return $id > 0 && $this->checklistModel->excluirChecklist($id);
     }
 
-    public function alterarStatus(int $id, int $status): bool
+    public function alterarStatusChecklist(int $id, int $status): bool
     {
         if ($id <= 0) {
             return false;
@@ -96,26 +95,26 @@ class ChecklistController
 
         $status = $status === 1 ? 1 : 0;
 
-        return $this->checklistModel->alterarStatus($id, $status);
+        return $this->checklistModel->alterarStatusChecklist($id, $status);
     }
 
-    public function buscarComItens(int $id): array|false
+    public function buscarComItensChecklist(int $id): array|false
     {
         if ($id <= 0) {
             return false;
         }
 
-        return $this->checklistModel->buscarComItens($id);
+        return $this->checklistModel->buscarComItensChecklist($id);
     }
 
-    public function listarCategorias(): array
+    public function listarCategoriasChecklist(): array
     {
-        return $this->checklistModel->listarCategorias();
+        return $this->checklistModel->listarCategoriasChecklist();
     }
 
-    public function listarItensCatalogo(): array
+    public function listarItensCatalogoChecklist(): array
     {
-        return $this->checklistModel->listarItensCatalogo();
+        return $this->checklistModel->listarItensCatalogoChecklist();
     }
 
     public function buscarItemCatalogo(): array|false
@@ -129,7 +128,7 @@ class ChecklistController
         return $this->checklistModel->buscarItemCatalogo($id);
     }
 
-    public function cadastrarItemCatalogo(): array|false
+    public function cadastrarItemCatalogoChecklist(): array|false
     {
         $dados = $this->obterDadosItemCatalogo();
 
@@ -137,14 +136,14 @@ class ChecklistController
             return false;
         }
 
-        return $this->checklistModel->cadastrarItemCatalogo(
+        return $this->checklistModel->cadastrarItemCatalogoChecklist(
             $dados['titulo'],
             $dados['referencia'],
             $dados['obrigatorio']
         );
     }
 
-    public function atualizarItemCatalogo(): array|false
+    public function atualizarItemCatalogoChecklist(): array|false
     {
         $id = (int) ($_POST['id'] ?? 0);
         $dados = $this->obterDadosItemCatalogo();
@@ -153,7 +152,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->checklistModel->atualizarItemCatalogo(
+        return $this->checklistModel->atualizarItemCatalogoCheckList(
             $id,
             $dados['titulo'],
             $dados['referencia'],
@@ -178,7 +177,7 @@ class ChecklistController
         ];
     }
 
-    public function removerItemCatalogo(): array|false
+    public function removerItemCatalogoChecklist(): array|false
     {
         $id = (int) ($_POST['id'] ?? 0);
 
@@ -186,6 +185,6 @@ class ChecklistController
             return false;
         }
 
-        return $this->checklistModel->removerItemCatalogo($id);
+        return $this->checklistModel->removerItemCatalogoChecklist($id);
     }
 }

@@ -1,8 +1,8 @@
 <?php
-
 class ChecklistModel
 {
     private PDO $pdo;
+    public $msgErro = "";
 
 public function __construct($pdo)
     {
@@ -172,7 +172,7 @@ public function __construct($pdo)
         $sql->execute(['checklist_id' => $checklistId]);
     }
 
-    public function excluir(int $id): bool
+    public function excluirChecklist(int $id): bool
     {
         try {
             $this->pdo->beginTransaction();
@@ -195,7 +195,7 @@ public function __construct($pdo)
         }
     }
 
-    public function alterarStatus(int $id, int $status): bool
+    public function alterarStatusChecklist(int $id, int $status): bool
     {
         $sql = $this->pdo->prepare("
             UPDATE checklist
@@ -211,7 +211,7 @@ public function __construct($pdo)
         return $sql->rowCount() > 0;
     }
 
-    public function buscarComItens(int $id): array|false
+    public function buscarComItensChecklist(int $id): array|false
     {
         $checklist = $this->buscar($id);
 
@@ -240,7 +240,7 @@ public function __construct($pdo)
         return $checklist;
     }
 
-    public function listarCategorias(): array
+    public function listarCategoriasChecklist(): array
     {
         $sql = $this->pdo->query("
             SELECT DISTINCT categoria
@@ -253,7 +253,7 @@ public function __construct($pdo)
         return $sql->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function listarItensCatalogo(): array
+    public function listarItensCatalogoChecklist(): array
     {
         $sql = $this->pdo->query("
             SELECT
@@ -288,7 +288,7 @@ public function __construct($pdo)
         return $sql->fetch();
     }
 
-    public function cadastrarItemCatalogo(
+    public function cadastrarItemCatalogoChecklist(
         string $titulo,
         string $referencia,
         int $obrigatorio
@@ -372,7 +372,7 @@ public function __construct($pdo)
         $sql->execute(['id' => $id]);
     }
 
-    public function atualizarItemCatalogo(
+    public function atualizarItemCatalogoCheckList(
         int $id,
         string $titulo,
         string $referencia,
@@ -417,7 +417,7 @@ public function __construct($pdo)
         return (int) $sql->fetchColumn();
     }
 
-    public function removerItemCatalogo(int $id): array|false
+    public function removerItemCatalogoChecklist(int $id): array|false
     {
         $item = $this->buscarItemCatalogo($id);
 

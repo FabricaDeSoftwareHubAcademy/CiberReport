@@ -15,8 +15,8 @@ function responderJson(array $dados): void
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
-    if ($action === 'cadastrarItemCatalogo') {
-        $item = $controller->cadastrarItemCatalogo();
+    if ($action === 'cadastrarItemCatalogoChecklist') {
+        $item = $controller->cadastrarItemCatalogoChecklist();
 
         responderJson([
             'ok' => (bool) $item,
@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 
-    if ($action === 'atualizarItemCatalogo') {
-        $item = $controller->atualizarItemCatalogo();
+    if ($action === 'atualizarItemCatalogoChecklist') {
+        $item = $controller->atualizarItemCatalogoChecklist();
 
         responderJson([
             'ok' => (bool) $item,
@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 
-    if ($action === 'removerItemCatalogo') {
-        $resultado = $controller->removerItemCatalogo();
+    if ($action === 'removerItemCatalogoChecklist') {
+        $resultado = $controller->removerItemCatalogoChecklist();
 
         responderJson([
             'ok' => (bool) $resultado,
@@ -67,13 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $habilitado = (int) ($_POST['habilitado'] ?? 0);
 
         responderJson([
-            'ok' => $controller->alterarStatus($id, $habilitado)
+            'ok' => $controller->alterarStatusChecklist($id, $habilitado)
         ]);
     }
 
     if ($action === 'buscarChecklist') {
         $id = (int) ($_POST['id'] ?? 0);
-        $checklist = $controller->buscarComItens($id);
+        $checklist = $controller->buscarComItensChecklist($id);
 
         responderJson([
             'ok' => (bool) $checklist,
@@ -96,15 +96,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if (isset($_GET['excluir'])) {
-    $controller->excluir((int) $_GET['excluir']);
+    $controller->excluirChecklist((int) $_GET['excluir']);
 
     header('Location: checklist.php');
     exit;
 }
 
 $checklists = $controller->listarChecklist();
-$categorias = $controller->listarCategorias();
-$itensCatalogo = $controller->listarItensCatalogo();
+$categorias = $controller->listarCategoriasChecklist();
+$itensCatalogo = $controller->listarItensCatalogoChecklist();
 
 $jsonSeguro = JSON_UNESCAPED_UNICODE
     | JSON_HEX_TAG
@@ -127,12 +127,14 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 </head>
 
 <body>
+
     <?php
     $tituloPagina = 'Checklist';
     include 'Components/menu.php';
     ?>
 
     <main>
+        <!-- botao cadastrar checklist -->
         <div class="button-cadastro-checklist">
             <button
                 type="button"
@@ -143,6 +145,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                 <span class="texto">Novo Checklist</span>
             </button>
         </div>
+        <!-- Final botao cadastrar checklist -->
 
         <div class="modal-overlay" id="modalChecklist">
             <div class="modal modal--xxl">
