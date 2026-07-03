@@ -39,7 +39,7 @@
     const btnAnterior = document.createElement('button');
     btnAnterior.className = 'pag-btn';
     btnAnterior.setAttribute('aria-label', 'Página anterior');
-    btnAnterior.textContent = 'Anterior';
+    btnAnterior.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
     btnAnterior.disabled = paginaAtual === 1;
     btnAnterior.addEventListener('click', () => exibirPagina(paginaAtual - 1));
     containerPaginacao.appendChild(btnAnterior);
@@ -57,7 +57,7 @@
     const btnProximo = document.createElement('button');
     btnProximo.className = 'pag-btn';
     btnProximo.setAttribute('aria-label', 'Próxima página');
-    btnProximo.textContent = 'Próximo';
+    btnProximo.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
     btnProximo.disabled = paginaAtual === total;
     btnProximo.addEventListener('click', () => exibirPagina(paginaAtual + 1));
     containerPaginacao.appendChild(btnProximo);
