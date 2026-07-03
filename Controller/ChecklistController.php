@@ -84,7 +84,7 @@ class ChecklistController
         }
 
         $ids = array_map('intval', $ids);
-        $ids = array_filter($ids, fn (int $id) => $id > 0);
+        $ids = array_filter($ids, fn(int $id) => $id > 0);
 
         return array_values(array_unique($ids));
     }

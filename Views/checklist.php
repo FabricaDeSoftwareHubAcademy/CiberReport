@@ -138,8 +138,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                 type="button"
                 class="btn-novo-cadastro"
                 data-modal-target="modalChecklist"
-                onclick="limparFormularioChecklist()"
-            >
+                onclick="limparFormularioChecklist()">
                 <i class="fa-solid fa-plus"></i>
                 <span class="texto">Novo Checklist</span>
             </button>
@@ -151,15 +150,13 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                     <div class="modal__header-icone">
                         <img
                             src="../assets/img/Icon_Checklist.png"
-                            alt="Cadastro de Checklist"
-                        >
+                            alt="Cadastro de Checklist">
                     </div>
 
                     <div class="modal__header-texto">
                         <h2
                             class="modal__titulo"
-                            id="tituloModalChecklist"
-                        >
+                            id="tituloModalChecklist">
                             Cadastro de Checklist
                         </h2>
 
@@ -172,8 +169,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         type="button"
                         class="modal__fechar"
                         data-modal-close
-                        aria-label="Fechar"
-                    >
+                        aria-label="Fechar">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -182,8 +178,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                     method="POST"
                     action="checklist.php"
                     class="form-checklist"
-                    id="formChecklist"
-                >
+                    id="formChecklist">
                     <input type="hidden" name="id" id="checklist_id">
 
                     <div class="modal__body">
@@ -197,8 +192,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                 <div class="campo">
                                     <label
                                         for="checklist_nome"
-                                        class="campo__label campo__label--obrigatorio"
-                                    >
+                                        class="campo__label campo__label--obrigatorio">
                                         Nome do Checklist
                                     </label>
 
@@ -209,16 +203,14 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                         class="campo__input"
                                         placeholder="Ex: Checklist Web"
                                         maxlength="80"
-                                        required
-                                    >
+                                        required>
                                 </div>
 
                                 <div class="campo">
                                     <div class="categoria-label-linha">
                                         <label
                                             for="categoria_input"
-                                            class="campo__label campo__label--obrigatorio"
-                                        >
+                                            class="campo__label campo__label--obrigatorio">
                                             Categoria
                                         </label>
 
@@ -239,24 +231,21 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                             required
                                             aria-autocomplete="list"
                                             aria-controls="lista_categorias"
-                                            aria-expanded="false"
-                                        >
+                                            aria-expanded="false">
 
                                         <button
                                             type="button"
                                             id="btn_abrir_categorias"
                                             class="categoria-seta"
                                             title="Mostrar categorias"
-                                            aria-label="Mostrar categorias cadastradas"
-                                        >
+                                            aria-label="Mostrar categorias cadastradas">
                                             <i class="fa-solid fa-chevron-down"></i>
                                         </button>
 
                                         <div
                                             id="lista_categorias"
                                             class="categoria-dropdown"
-                                            hidden
-                                        ></div>
+                                            hidden></div>
                                     </div>
                                 </div>
                             </div>
@@ -264,8 +253,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                             <div class="campo checklist-descricao">
                                 <label
                                     for="descricao_checklist"
-                                    class="campo__label"
-                                >
+                                    class="campo__label">
                                     Descrição
                                 </label>
 
@@ -275,8 +263,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                     class="campo__textarea"
                                     maxlength="1000"
                                     placeholder="Descreva o objetivo e a finalidade deste checklist..."
-                                    oninput="contarDescricaoChecklist()"
-                                ></textarea>
+                                    oninput="contarDescricaoChecklist()"></textarea>
 
                                 <div class="checklist-contador">
                                     <span>Máximo de 1000 caracteres</span>
@@ -295,8 +282,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                 <button
                                     type="button"
                                     class="btn-botao-verde checklist-btn-gerenciar"
-                                    onclick="abrirModalGerenciarItens()"
-                                >
+                                    onclick="abrirModalGerenciarItens()">
                                     <i class="fa-solid fa-list-check"></i>
                                     Gerenciar itens
                                 </button>
@@ -304,8 +290,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                             <div
                                 id="lista-itens-checklist"
-                                class="lista-itens-selecionados"
-                            ></div>
+                                class="lista-itens-selecionados"></div>
                         </section>
                     </div>
 
@@ -313,8 +298,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         <button
                             type="button"
                             class="btn-cancelar"
-                            data-modal-close
-                        >
+                            data-modal-close>
                             CANCELAR
                         </button>
 
@@ -327,104 +311,98 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
         </div>
 
         <div class="modal-overlay" id="modalVisualizarChecklist">
-    <div class="modal modal--lg">
-        <div class="modal__header">
-            <div class="modal__header-icone">
-                <i class="fa-solid fa-eye"></i>
+            <div class="modal modal--lg">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Visualizar Checklist</h2>
+                        <p class="modal__subtitulo">Informações e itens vinculados</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        onclick="fecharVisualizacaoChecklist()"
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body visualizar-checklist-body">
+                    <input type="hidden" id="visualizar_checklist_id">
+
+                    <section class="visualizacao-secao">
+                        <div class="visualizacao-secao-titulo">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <h3>Dados do Checklist</h3>
+                        </div>
+
+                        <div class="visualizacao-checklist-dados">
+                            <div class="visualizacao-campo">
+                                <span class="visualizacao-campo-label">Nome</span>
+                                <strong id="visualizar_checklist_nome"></strong>
+                            </div>
+
+                            <div class="visualizacao-campo">
+                                <span class="visualizacao-campo-label">Categoria</span>
+                                <strong id="visualizar_checklist_categoria"></strong>
+                            </div>
+
+                            <div class="visualizacao-campo visualizacao-campo--completo">
+                                <span class="visualizacao-campo-label">Descrição</span>
+                                <p id="visualizar_checklist_descricao"></p>
+                            </div>
+
+                            <div class="visualizacao-campo">
+                                <span class="visualizacao-campo-label">Status</span>
+                                <span
+                                    id="visualizar_checklist_status"
+                                    class="visualizacao-status"></span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="visualizacao-secao">
+                        <div class="visualizacao-secao-cabecalho">
+                            <div class="visualizacao-secao-titulo">
+                                <i class="fa-solid fa-list-check"></i>
+                                <h3>Itens do Checklist</h3>
+                            </div>
+
+                            <span
+                                id="visualizar_total_itens"
+                                class="visualizacao-total-itens">
+                                0 itens
+                            </span>
+                        </div>
+
+                        <div
+                            id="visualizar_checklist_itens"
+                            class="visualizacao-lista-itens"></div>
+                    </section>
+                </div>
+
+                <div class="modal__footer">
+                    <button
+                        type="button"
+                        class="btn-cancelar"
+                        onclick="fecharVisualizacaoChecklist()">
+                        FECHAR
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-botao-verde"
+                        onclick="editarChecklistDaVisualizacao()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        EDITAR CHECKLIST
+                    </button>
+                </div>
             </div>
-
-            <div class="modal__header-texto">
-                <h2 class="modal__titulo">Visualizar Checklist</h2>
-                <p class="modal__subtitulo">Informações e itens vinculados</p>
-            </div>
-
-            <button
-                type="button"
-                class="modal__fechar"
-                onclick="fecharVisualizacaoChecklist()"
-                aria-label="Fechar"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
         </div>
-
-        <div class="modal__body visualizar-checklist-body">
-            <input type="hidden" id="visualizar_checklist_id">
-
-            <section class="visualizacao-secao">
-                <div class="visualizacao-secao-titulo">
-                    <i class="fa-solid fa-clipboard-check"></i>
-                    <h3>Dados do Checklist</h3>
-                </div>
-
-                <div class="visualizacao-checklist-dados">
-                    <div class="visualizacao-campo">
-                        <span class="visualizacao-campo-label">Nome</span>
-                        <strong id="visualizar_checklist_nome"></strong>
-                    </div>
-
-                    <div class="visualizacao-campo">
-                        <span class="visualizacao-campo-label">Categoria</span>
-                        <strong id="visualizar_checklist_categoria"></strong>
-                    </div>
-
-                    <div class="visualizacao-campo visualizacao-campo--completo">
-                        <span class="visualizacao-campo-label">Descrição</span>
-                        <p id="visualizar_checklist_descricao"></p>
-                    </div>
-
-                    <div class="visualizacao-campo">
-                        <span class="visualizacao-campo-label">Status</span>
-                        <span
-                            id="visualizar_checklist_status"
-                            class="visualizacao-status"
-                        ></span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="visualizacao-secao">
-                <div class="visualizacao-secao-cabecalho">
-                    <div class="visualizacao-secao-titulo">
-                        <i class="fa-solid fa-list-check"></i>
-                        <h3>Itens do Checklist</h3>
-                    </div>
-
-                    <span
-                        id="visualizar_total_itens"
-                        class="visualizacao-total-itens"
-                    >
-                        0 itens
-                    </span>
-                </div>
-
-                <div
-                    id="visualizar_checklist_itens"
-                    class="visualizacao-lista-itens"
-                ></div>
-            </section>
-        </div>
-
-        <div class="modal__footer">
-            <button
-                type="button"
-                class="btn-cancelar"
-                onclick="fecharVisualizacaoChecklist()"
-            >
-                FECHAR
-            </button>
-
-            <button
-                type="button"
-                class="btn-botao-verde"
-                onclick="editarChecklistDaVisualizacao()"
-            >
-                <i class="fa-solid fa-pen-to-square"></i>
-                EDITAR CHECKLIST
-            </button>
-        </div>
-    </div>
-</div>
 
         <div class="modal-overlay" id="modalGerenciarItens">
             <div class="modal modal--lg">
@@ -445,8 +423,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         type="button"
                         class="modal__fechar"
                         onclick="fecharModalGerenciarItens()"
-                        aria-label="Fechar"
-                    >
+                        aria-label="Fechar">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -456,8 +433,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         <div class="campo gerenciar-itens-pesquisa">
                             <label
                                 for="pesquisa_itens_catalogo"
-                                class="campo__label"
-                            >
+                                class="campo__label">
                                 Pesquisar itens
                             </label>
 
@@ -469,16 +445,14 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                     id="pesquisa_itens_catalogo"
                                     class="campo__input"
                                     placeholder="Pesquise pelo título ou referência"
-                                    autocomplete="off"
-                                >
+                                    autocomplete="off">
                             </div>
                         </div>
 
                         <button
                             type="button"
                             class="btn-botao-verde gerenciar-itens-novo"
-                            onclick="abrirModalNovoItem()"
-                        >
+                            onclick="abrirModalNovoItem()">
                             <i class="fa-solid fa-plus"></i>
                             Cadastrar novo item
                         </button>
@@ -494,24 +468,21 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                     <div
                         id="lista_itens_gerenciamento"
-                        class="gerenciar-itens-lista"
-                    ></div>
+                        class="gerenciar-itens-lista"></div>
                 </div>
 
                 <div class="modal__footer">
                     <button
                         type="button"
                         class="btn-cancelar"
-                        onclick="fecharModalGerenciarItens()"
-                    >
+                        onclick="fecharModalGerenciarItens()">
                         CANCELAR
                     </button>
 
                     <button
                         type="button"
                         class="btn-botao-verde"
-                        onclick="aplicarItensGerenciados()"
-                    >
+                        onclick="aplicarItensGerenciados()">
                         APLICAR ITENS
                     </button>
                 </div>
@@ -528,15 +499,13 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                     <div class="modal__header-texto">
                         <h2
                             class="modal__titulo"
-                            id="tituloModalItem"
-                        >
+                            id="tituloModalItem">
                             Cadastro de Item
                         </h2>
 
                         <p
                             class="modal__subtitulo"
-                            id="subtituloModalItem"
-                        >
+                            id="subtituloModalItem">
                             Cadastre um novo item reutilizável
                         </p>
                     </div>
@@ -545,8 +514,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         type="button"
                         class="modal__fechar"
                         onclick="fecharModalNovoItem()"
-                        aria-label="Fechar"
-                    >
+                        aria-label="Fechar">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -557,8 +525,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                     <div class="campo">
                         <label
                             for="novo_item_titulo"
-                            class="campo__label campo__label--obrigatorio"
-                        >
+                            class="campo__label campo__label--obrigatorio">
                             Título
                         </label>
 
@@ -567,15 +534,13 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                             id="novo_item_titulo"
                             class="campo__input"
                             placeholder="Ex: Verificar SQL Injection"
-                            maxlength="150"
-                        >
+                            maxlength="150">
                     </div>
 
                     <div class="campo">
                         <label
                             for="novo_item_referencia"
-                            class="campo__label"
-                        >
+                            class="campo__label">
                             Referência
                         </label>
 
@@ -584,22 +549,19 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                             id="novo_item_referencia"
                             class="campo__input"
                             placeholder="Ex: OWASP A03:2021"
-                            maxlength="255"
-                        >
+                            maxlength="255">
                     </div>
 
                     <div class="campo">
                         <label
                             for="novo_item_obrigatorio"
-                            class="campo__label"
-                        >
+                            class="campo__label">
                             Obrigatório
                         </label>
 
                         <select
                             id="novo_item_obrigatorio"
-                            class="campo__select"
-                        >
+                            class="campo__select">
                             <option value="1">Sim</option>
                             <option value="0">Não</option>
                         </select>
@@ -610,8 +572,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                     <button
                         type="button"
                         class="btn-cancelar"
-                        onclick="fecharModalNovoItem()"
-                    >
+                        onclick="fecharModalNovoItem()">
                         CANCELAR
                     </button>
 
@@ -619,8 +580,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                         type="button"
                         class="btn-botao-verde"
                         id="btnSalvarItemCatalogo"
-                        onclick="salvarItemCatalogo()"
-                    >
+                        onclick="salvarItemCatalogo()">
                         SALVAR
                     </button>
                 </div>
@@ -706,8 +666,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                             type="checkbox"
                                             <?= $ativo ? 'checked' : '' ?>
                                             data-id="<?= (int) $checklist['id'] ?>"
-                                            onchange="toggleHabilitado(this)"
-                                        >
+                                            onchange="toggleHabilitado(this)">
 
                                         <span class="switch-slider"></span>
                                     </label>
@@ -721,8 +680,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                         class="btn-visualizar"
                                         title="Visualizar"
                                         aria-label="Visualizar checklist"
-                                        onclick="visualizarChecklist(<?= (int) $checklist['id'] ?>)"
-                                    >
+                                        onclick="visualizarChecklist(<?= (int) $checklist['id'] ?>)">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
 
@@ -731,8 +689,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                         class="tabela-btn-editar"
                                         title="Editar"
                                         aria-label="Editar checklist"
-                                        onclick="editarChecklist(<?= (int) $checklist['id'] ?>)"
-                                    >
+                                        onclick="editarChecklist(<?= (int) $checklist['id'] ?>)">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
@@ -741,8 +698,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                         class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir checklist"
-                                        onclick="return confirm('Excluir este checklist?')"
-                                    >
+                                        onclick="return confirm('Excluir este checklist?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>

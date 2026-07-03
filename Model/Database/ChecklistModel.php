@@ -21,7 +21,6 @@ class ChecklistModel
             ]
         );
     }
-
     public function listar(): array
     {
         $sql = $this->pdo->query("
@@ -156,7 +155,7 @@ class ChecklistModel
     private function filtrarItensExistentes(array $itensIds): array
     {
         $itensIds = array_map('intval', $itensIds);
-        $itensIds = array_filter($itensIds, fn (int $id) => $id > 0);
+        $itensIds = array_filter($itensIds, fn(int $id) => $id > 0);
         $itensIds = array_values(array_unique($itensIds));
 
         if (empty($itensIds)) {

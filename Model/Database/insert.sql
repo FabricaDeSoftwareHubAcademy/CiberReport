@@ -239,6 +239,7 @@ INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria,
     'WEB', 'Gray Box', 'Manual', 'OWASP,PTES', 'OWASP', 'Deep Security Assessment', 44, 1
 );
 
+-- insert 03/07/2026
 
 INSERT INTO checklist_item_catalogo (
   id,
