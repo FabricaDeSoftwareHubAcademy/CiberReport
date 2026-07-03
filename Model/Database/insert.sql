@@ -238,3 +238,29 @@ INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria,
     'Avaliação de segurança em aplicações desktop cobrindo análise de tráfego entre cliente e servidor, armazenamento inseguro de dados locais, bypass de controles client-side e engenharia reversa de binários.',
     'WEB', 'Gray Box', 'Manual', 'OWASP,PTES', 'OWASP', 'Deep Security Assessment', 44, 1
 );
+
+-- insert 03/07/2026
+
+INSERT INTO checklist_item_catalogo (
+  id,
+  titulo,
+  referencia,
+  obrigatorio,
+  habilitado
+)
+SELECT
+  id,
+  titulo,
+  referencia,
+  obrigatorio,
+  habilitado
+FROM checklist_item;
+
+INSERT INTO checklist_item_vinculo (
+  checklist_id,
+  item_id
+)
+SELECT
+  checklist_id,
+  id
+FROM checklist_item;
