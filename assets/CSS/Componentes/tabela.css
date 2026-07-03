@@ -1,12 +1,13 @@
 .tabela-wrapper {
     overflow-x: auto;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .tabela-wrapper table {
     width: 100%;
     min-width: 900px;
-    max-width: 1200px;
     border-collapse: separate;
     border-spacing: 0;
     background-color: var(--cor-fundo-branco);
