@@ -163,15 +163,16 @@
     color: var(--cor-texto-primario);
     border: none;
     border-radius: var(--raio-full);
-    padding: var(--espaco-xs) var(--espaco-md);
     font-size: var(--fonte-apoio);
     font-family: inherit;
     cursor: pointer;
     transition: var(--transicao-rapida);
 }
 
+.tabela-wrapper .pag-btn,
 .tabela-wrapper .pag-num {
     min-width: 3.2rem;
+    min-height: 3.2rem;
     padding: var(--espaco-xs);
     display: inline-flex;
     align-items: center;
