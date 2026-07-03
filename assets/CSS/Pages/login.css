@@ -3,6 +3,11 @@ main{
     margin: 0;
 }
 
+.erro-login{
+    color: #ff3347;
+    margin: 4px 0 0 0;
+}
+
 .cyber-report img{
     width: 60%;
     height: 40%;
