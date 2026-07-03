@@ -5,11 +5,10 @@ class Empresa
 
     public $msgErro = "";
 
-    public function conectar($nome_banco, $host, $usuario, $senha)
+    public function __construct($pdo)
     {
-        $this->pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
+        $this->pdo = $pdo;
     }
-
     public function buscarPorCnpj($cnpj)
     {
         $sql = $this->pdo->prepare("SELECT id FROM empresa WHERE cnpj = :cnpj");

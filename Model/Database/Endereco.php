@@ -5,9 +5,9 @@ class Endereco
 
     public $msgErro = "";
 
-    public function conectar($nome_banco, $host, $usuario, $senha)
+    public function __construct($pdo)
     {
-        $this->pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
+        $this->pdo = $pdo;
     }
 
     public function cadastrarEndereco($cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $pais)
@@ -50,7 +50,7 @@ class Endereco
     }
 
 
-    //tirar o excluir endereco 
+
     public function excluirEndereco($id_endereco)
     {
         $sql = $this->pdo->prepare("DELETE FROM endereco WHERE id = :id");
