@@ -292,7 +292,7 @@ $categorias = $controller->listarCategorias();
                                 <div class="acoes">
                                     <button
                                         type="button"
-                                        class="btn-editar"
+                                        class="tabela-btn-editar"
                                         title="Editar"
                                         aria-label="Editar"
                                         onclick="editarChecklist('<?= (int) $checklist['id'] ?>')">
@@ -301,7 +301,7 @@ $categorias = $controller->listarCategorias();
 
                                     <a
                                         href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
-                                        class="btn-excluir"
+                                        class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir"
                                         onclick="return confirm('Excluir este checklist?')">
