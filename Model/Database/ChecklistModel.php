@@ -4,24 +4,11 @@ class ChecklistModel
 {
     private PDO $pdo;
 
-    public function conectar(
-        string $nomeBanco,
-        string $host,
-        string $usuario,
-        string $senha
-    ): void {
-        $this->pdo = new PDO(
-            "mysql:host={$host};dbname={$nomeBanco};charset=utf8mb4",
-            $usuario,
-            $senha,
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false
-            ]
-        );
+public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
     }
-    public function listar(): array
+    public function listarChecklist(): array
     {
         $sql = $this->pdo->query("
             SELECT id, nome, descricao, categoria, habilitado
@@ -45,7 +32,7 @@ class ChecklistModel
         return $sql->fetch();
     }
 
-    public function cadastrar(
+    public function cadastrarChecklist(
         string $nome,
         string $descricao,
         string $categoria,
@@ -88,7 +75,7 @@ class ChecklistModel
         }
     }
 
-    public function atualizar(
+    public function atualizarChecklist(
         int $id,
         string $nome,
         string $descricao,

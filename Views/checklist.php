@@ -83,8 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['nome'])) {
         $resultado = !empty($_POST['id'])
-            ? $controller->atualizar()
-            : $controller->cadastrar();
+            ? $controller->atualizarChecklist()
+            : $controller->cadastrarChecklist();
 
         if ($resultado) {
             header('Location: checklist.php');
@@ -102,7 +102,7 @@ if (isset($_GET['excluir'])) {
     exit;
 }
 
-$checklists = $controller->listar();
+$checklists = $controller->listarChecklist();
 $categorias = $controller->listarCategorias();
 $itensCatalogo = $controller->listarItensCatalogo();
 

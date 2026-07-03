@@ -5,26 +5,20 @@ require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
 class ChecklistController
 {
-    private ChecklistModel $model;
+    private $checklistModel;
 
     public function __construct()
     {
-        $this->model = new ChecklistModel();
-
-        $this->model->conectar(
-            $_ENV['DB_NAME'],
-            $_ENV['DB_HOST'],
-            $_ENV['DB_USER'],
-            $_ENV['DB_PASS']
-        );
+        global $conexao;
+        $this->checklistModel= new ChecklistModel($conexao);
     }
 
-    public function listar(): array
+    public function listarChecklist(): array
     {
-        return $this->model->listar();
+        return $this->checklistModel->listarChecklist();
     }
 
-    public function cadastrar(): int|false
+    public function cadastrarChecklist(): int|false
     {
         $dados = $this->obterDadosChecklist();
 
@@ -32,7 +26,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->cadastrar(
+        return $this->checklistModel->cadastrarChecklist(
             $dados['nome'],
             $dados['descricao'],
             $dados['categoria'],
@@ -40,7 +34,7 @@ class ChecklistController
         );
     }
 
-    public function atualizar(): bool
+    public function atualizarChecklist(): bool
     {
         $id = (int) ($_POST['id'] ?? 0);
         $dados = $this->obterDadosChecklist();
@@ -49,7 +43,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->atualizar(
+        return $this->checklistModel->atualizarChecklist(
             $id,
             $dados['nome'],
             $dados['descricao'],
@@ -91,7 +85,7 @@ class ChecklistController
 
     public function excluir(int $id): bool
     {
-        return $id > 0 && $this->model->excluir($id);
+        return $id > 0 && $this->checklistModel->excluir($id);
     }
 
     public function alterarStatus(int $id, int $status): bool
@@ -102,7 +96,7 @@ class ChecklistController
 
         $status = $status === 1 ? 1 : 0;
 
-        return $this->model->alterarStatus($id, $status);
+        return $this->checklistModel->alterarStatus($id, $status);
     }
 
     public function buscarComItens(int $id): array|false
@@ -111,17 +105,17 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->buscarComItens($id);
+        return $this->checklistModel->buscarComItens($id);
     }
 
     public function listarCategorias(): array
     {
-        return $this->model->listarCategorias();
+        return $this->checklistModel->listarCategorias();
     }
 
     public function listarItensCatalogo(): array
     {
-        return $this->model->listarItensCatalogo();
+        return $this->checklistModel->listarItensCatalogo();
     }
 
     public function buscarItemCatalogo(): array|false
@@ -132,7 +126,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->buscarItemCatalogo($id);
+        return $this->checklistModel->buscarItemCatalogo($id);
     }
 
     public function cadastrarItemCatalogo(): array|false
@@ -143,7 +137,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->cadastrarItemCatalogo(
+        return $this->checklistModel->cadastrarItemCatalogo(
             $dados['titulo'],
             $dados['referencia'],
             $dados['obrigatorio']
@@ -159,7 +153,7 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->atualizarItemCatalogo(
+        return $this->checklistModel->atualizarItemCatalogo(
             $id,
             $dados['titulo'],
             $dados['referencia'],
@@ -192,6 +186,6 @@ class ChecklistController
             return false;
         }
 
-        return $this->model->removerItemCatalogo($id);
+        return $this->checklistModel->removerItemCatalogo($id);
     }
 }
