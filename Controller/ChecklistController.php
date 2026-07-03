@@ -76,4 +76,9 @@ public function buscarComItens($id)
     return $this->ChecklistModel->buscarComItens((int) $id);
 }
 
+public function listarCategorias()
+{
+    return $this->ChecklistModel->listarCategorias();
+}
+
 }

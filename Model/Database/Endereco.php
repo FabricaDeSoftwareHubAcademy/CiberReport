@@ -49,6 +49,8 @@ class Endereco
         $sql->execute();
     }
 
+
+    //tirar o excluir endereco 
     public function excluirEndereco($id_endereco)
     {
         $sql = $this->pdo->prepare("DELETE FROM endereco WHERE id = :id");

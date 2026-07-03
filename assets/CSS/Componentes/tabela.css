@@ -1,12 +1,13 @@
 .tabela-wrapper {
     overflow-x: auto;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .tabela-wrapper table {
     width: 100%;
     min-width: 900px;
-    max-width: 1200px;
     border-collapse: separate;
     border-spacing: 0;
     background-color: var(--cor-fundo-branco);
@@ -105,12 +106,14 @@
     align-items: center;
 }
 
-.tabela-wrapper .acoes button {
+.tabela-wrapper .acoes button,
+.tabela-wrapper .acoes a {
     background: none;
     border: none;
     cursor: pointer;
     padding: var(--espaco-xs);
     color: var(--cor-texto-secundario);
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -118,17 +121,18 @@
     transition: background-color var(--transicao-rapida), border-radius var(--transicao-rapida);
 }
 
-.tabela-wrapper .acoes button:hover {
+.tabela-wrapper .acoes button:hover,
+.tabela-wrapper .acoes a:hover {
     color: var(--cor-azul-destaques);
     background-color: var(--cor-cinza-terciario);
     border-radius: 100%;
 }
 
-.tabela-wrapper .acoes .btn-excluir:hover {
+.tabela-wrapper .acoes .tabela-btn-excluir:hover {
     color: var(--cor-vermelho-destaque);
 }
 
-.tabela-wrapper .acoes .btn-editar:hover {
+.tabela-wrapper .acoes .tabela-btn-editar:hover {
     color: var(--cor-amarelo);
 }
 

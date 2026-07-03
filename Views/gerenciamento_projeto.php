@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . "/../Controller/ProjetoController.php";
+$controller = new ProjetoController();
+$dados = $controller->listar();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,7 +22,7 @@
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
             <button class="btn-novo-cadastro btn-projeto">Alocar Analista</button>
-            <button class="btn-novo-cadastro btn-projeto"><span>+</span>Novo Cadastro</button>
+            <button class="btn-novo-cadastro btn-projeto"><span>+</span>Novo Projeto</button>
         </div>
 
         <div class="group-card-tabela">
@@ -26,7 +32,7 @@
                     <span class="subtitle-card-projeto">12</span>
                 </div>
                 <div class="container-card-projetos" id="projeto-ativo">
-                    <h2 class="title-card-projeto">Aguradando    Início</h2>
+                    <h2 class="title-card-projeto">Aguardando Início</h2>
                     <span class="subtitle-card-projeto">04</span>
                 </div>
                 <div class="container-card-projetos" id="projeto-ativo">
@@ -68,246 +74,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#PT - 2026-041</td>
-                            <td>Orbitails</td>
-                            <td>André</td>
-                            <td>Pentest Web (Black Box)</td>
-                            <td>12/04/2026 10:12</td>
-                            <td>20/04/2026 19:00</td>
-                            <td>
-                                <span class="status status-atrasado">Atrasado</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 6075-013</td>
-                            <td>NeuroLinker</td>
-                            <td>Mariana</td>
-                            <td>Pentest API REST + Web</td>
-                            <td>09/04/2026 08:30</td>
-                            <td>13/04/2026 17:45</td>
-                            <td>
-                                <span class="status status-concluido">Concluído</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 2026-043</td>
-                            <td>Nexus Global</td>
-                            <td>Rafael</td>
-                            <td>CSRF / Session Hijacking</td>
-                            <td>01/05/2026 14:20</td>
-                            <td>13/05/2026 18:10</td>
-                            <td>
-                                <span class="status status-aguardando">Aguardando</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 2342-244</td>
-                            <td>Vanguard Systems</td>
-                            <td>Beatriz</td>
-                            <td>Full Stack (API, CSRF, Web)</td>
-                            <td>09/01/2026 09:00</td>
-                            <td>13/03/2026 16:30</td>
-                            <td>
-                                <span class="status status-concluido">Concluido</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 1234-123</td>
-                            <td>Bio Core</td>
-                            <td>Lucas</td>
-                            <td>Análise Criptográfica</td>
-                            <td>22/02/2026 11:40</td>
-                            <td>05/04/2026 20:15</td>
-                            <td>
-                                <span class="status status-atrasado">Atrasado</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 2313-214</td>
-                            <td>Protótipo X</td>
-                            <td>Camila</td>
-                            <td>XSS / DOM-based</td>
-                            <td>17/03/2026 13:25</td>
-                            <td>02/05/2026 19:00</td>
-                            <td>
-                                <span class="status status-aguardando">Aguardando</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 1231-123</td>
-                            <td>Estelar AI</td>
-                            <td>Thiago</td>
-                            <td>SQL Injection</td>
-                            <td>05/02/2026 15:50</td>
-                            <td>28/02/2026 18:30</td>
-                            <td>
-                                <span class="status status-concluido">Concluido</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 8888-812</td>
-                            <td>Fundação Atlas</td>
-                            <td>Júlia</td>
-                            <td>Pentest Web (Gray Box)</td>
-                            <td>14/12/2025 08:00</td>
-                            <td>30/01/2026 17:20</td>
-                            <td>
-                                <span class="status status-concluido">Concluido</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 1335-5534</td>
-                            <td>ACME</td>
-                            <td>Felipe</td>
-                            <td>SQL Injection</td>
-                            <td>03/03/2026 10:45</td>
-                            <td>19/04/2026 16:00</td>
-                            <td>
-                                <span class="status status-concluido">Concluido</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#PT - 2026-099</td>
-                            <td>Helix Labs</td>
-                            <td>Renata</td>
-                            <td>Pentest Mobile (Android)</td>
-                            <td>28/04/2026 09:15</td>
-                            <td>10/05/2026 18:40</td>
-                            <td>
-                                <span class="status status-aguardando">Aguardando</span>
-                            </td>
-                            <td>
-                                <div class="acoes">
-                                    <button title="Visualizar" aria-label="Visualizar">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button class="btn-editar" title="Editar" aria-label="Editar">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-excluir" title="Excluir" aria-label="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php foreach ($dados as $projeto): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($projeto['nome_fantasia']) ?></td>
+                                <td><?= htmlspecialchars($projeto['nome']) ?></td>
+                                <td><?= '-' ?></td>
+                                <td><?= htmlspecialchars($projeto['habilitado']) ?></td>
+                                <td><?= htmlspecialchars($projeto['data_inicio']) ?></td>
+                                <td><?= htmlspecialchars($projeto['data_fim_prevista']) ?></td>
+                                <td><?= htmlspecialchars($projeto['data_fim_prevista']) ?></td>
+                                <td>
+                                    <div class="acoes">
+                                        <button title="Visualizar" aria-label="Visualizar">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($dados)): ?>
+                            <tr>
+                                <td colspan="8" style="text-align:center"> Não há nenhum registro.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                     <tfoot>
                         <tr>
@@ -319,8 +114,7 @@
                 </table>
             </div>
         </div>
-
         
-    <main>
+    </main>
 </body>
 </html>
