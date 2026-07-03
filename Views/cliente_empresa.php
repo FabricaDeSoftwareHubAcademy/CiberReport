@@ -6,13 +6,13 @@ $controller = new CadastroEmpresaController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'alterarHabilitado') {
     $id = addslashes($_POST['id'] ?? '');
     $habilitado = addslashes($_POST['habilitado'] ?? '');
-    $controller->alterarStatus($id, $habilitado);
+    $controller->alterarStatusClientes($id, $habilitado);
     exit;
 }
 
 $mensagem_erro = "";
 if (isset($_GET['excluir'])){
-    $controller->excluir($_GET['excluir']);
+    $controller->excluirClientes($_GET['excluir']);
     header("Location: cliente_empresa.php");
     exit;
 }
@@ -22,17 +22,17 @@ $dados_endereco_editar = [];
 if (isset($_GET['id_empresa'])) {
     $id_empresa_editar = addslashes($_GET['id_empresa']);
     $dados_empresa_editar = $controller->buscarDadosEmpresa($id_empresa_editar);
-    $dados_endereco_editar = $controller->buscarDadosEndereco($dados_empresa_editar['endereco_id']);
+    $dados_endereco_editar = $controller->buscarDadosEnderecoEmpresa($dados_empresa_editar['endereco_id']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
-    $controller->editar();
+    $controller->editarEmpresa();
     header("Location: cliente_empresa.php");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
-    $resultado = $controller->cadastrar();
+    $resultado = $controller->cadastrarEmpresa();
 
     if ($resultado === true){
         header("Location: cliente_empresa.php");
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
     }
 }
 
-$dados = $controller->listar();
+$dados = $controller->listarEmpresa();
 
 ?>
 
@@ -66,8 +66,7 @@ $dados = $controller->listar();
             </button>
         </div>
 
-        <div class="modal-overlay" id="modalClientes"
-            <?php if (!empty($mensagem_erro)) echo 'style="visibility:visible;opacity:1;"'; ?>>
+        <div class="modal-overlay<?= !empty($mensagem_erro) ? ' active' : '' ?>" id="modalClientes">
             <div class="modal modal--xxl">
 
                 <div class="modal__header">
@@ -191,8 +190,8 @@ $dados = $controller->listar();
 
 
                     </div>
-
-                    <div class="modal__footer">
+<!-- ERRO NESSA LINHA, alterar o campo de obrigatoriedade -->
+                    <div class="modal__footer"> 
                         <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -334,6 +333,12 @@ $dados = $controller->listar();
                     </div>
 
                     <div class="modal__footer">
+                        <?php if (!empty($mensagem_erro)): ?>
+                            <p class="campo__mensagem-erro" style="margin-right: auto;">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <?php echo $mensagem_erro; ?>
+                            </p>
+                        <?php endif; ?>
                         <button type="button" class="btn-cancelar" data-modal-close="modalEditar">CANCELAR</button>
                         <button type="submit" class="btn-botao-verde">SALVAR</button>
                     </div>
@@ -448,6 +453,27 @@ $dados = $controller->listar();
                 label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
             });
     }
-</script>
+    
+    function limparIdEmpresaDaUrl() {
+        if (window.location.search.includes('id_empresa')) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('id_empresa');
+            window.history.replaceState({}, '', url);
+        }
+    }
 
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalEditar = document.getElementById('modalEditar');
+        if (!modalEditar) return;
+
+        modalEditar.querySelectorAll('[data-modal-close]').forEach(botao => {
+            botao.addEventListener('click', limparIdEmpresaDaUrl);
+        });
+        modalEditar.addEventListener('click', (e) => {
+            if (e.target === modalEditar) {
+                limparIdEmpresaDaUrl();
+            }
+        });
+    });
+</script>
 </html>
