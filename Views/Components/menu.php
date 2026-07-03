@@ -158,7 +158,7 @@
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
                 <div class="description-user">
-                    <p>Marcos antonio</p>
+                    <p>Bruno Alvares</p>
                     <p>Gerente</p>
                 </div>
             </div>
