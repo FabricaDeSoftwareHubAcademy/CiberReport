@@ -200,12 +200,12 @@
     color: #1d1d1d;
 }
 
-.acoes .btn-excluir:hover {
+.acoes .tabela-btn-excluir:hover {
     color: #e74c3c;
     background: #fdecea;
 }
 
-.acoes .btn-editar:hover {
+.acoes .tabela-btn-editar:hover {
     color: #008cff;
     background: #e8f4ff;
 }
