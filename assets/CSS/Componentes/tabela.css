@@ -106,6 +106,12 @@
     white-space: nowrap;
 }
 
+.tabela-wrapper .col-status {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
 .tabela-wrapper .acoes {
     display: flex;
     gap: var(--espaco-sm);
