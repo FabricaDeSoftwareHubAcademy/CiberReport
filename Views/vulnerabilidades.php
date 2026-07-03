@@ -97,10 +97,10 @@
                                 <button title="Visualizar" aria-label="Visualizar">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
-                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
@@ -134,10 +134,10 @@
                                 <button title="Visualizar" aria-label="Visualizar">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
-                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
@@ -171,10 +171,10 @@
                                 <button title="Visualizar" aria-label="Visualizar">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
-                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
@@ -208,10 +208,10 @@
                                 <button title="Visualizar" aria-label="Visualizar">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
-                                <button class="btn-editar" title="Editar" aria-label="Editar">
+                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>

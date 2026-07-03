@@ -728,7 +728,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                                     <button
                                         type="button"
-                                        class="btn-editar"
+                                        class="tabela-btn-editar"
                                         title="Editar"
                                         aria-label="Editar checklist"
                                         onclick="editarChecklist(<?= (int) $checklist['id'] ?>)"
@@ -738,7 +738,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                                     <a
                                         href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
-                                        class="btn-excluir"
+                                        class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir checklist"
                                         onclick="return confirm('Excluir este checklist?')"
