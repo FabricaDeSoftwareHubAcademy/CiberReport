@@ -848,8 +848,8 @@ async function salvarItemCatalogo() {
     dados.append(
         'action',
         id > 0
-            ? 'atualizarItemCatalogo'
-            : 'cadastrarItemCatalogo'
+            ? 'atualizarItemCatalogoChecklist'
+            : 'cadastrarItemCatalogoChecklist'
     );
 
     if (id > 0) {
@@ -922,7 +922,7 @@ async function removerItemCatalogo(id) {
 
     const dados = new FormData();
 
-    dados.append('action', 'removerItemCatalogo');
+    dados.append('action', 'removerItemCatalogoChecklist');
     dados.append('id', id);
 
     try {
