@@ -15,7 +15,7 @@
     include_once 'Components/menu.php'; ?>
     <main>
         <div class="barra-acoes">
-            <button class="btn-nova" data-modal-target="modalVulnerabilidade">
+            <button class="btn-novo-cadastro" data-modal-target="modalVulnerabilidade">
                 <i class="fa-solid fa-square-plus"></i>
                 Nova Vulnerabilidade
             </button>
