@@ -14,8 +14,9 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../Assets/CSS/style.css" />
-    <link rel="stylesheet" href="../Assets/CSS/Pages/usuario.css" />
+    <link rel="stylesheet" href="../assets/CSS/style.css" />
+    <link rel="stylesheet" href="../assets/CSS/Pages/usuario.css" />
+    
 </head>
 
 <body>

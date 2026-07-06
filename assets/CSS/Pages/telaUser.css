@@ -1,5 +1,7 @@
-.btn-novo-cadastro.btn-cadastro-usuario {
-margin-left: 1400px;
+.btn-position {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--espaco-md);
 }
 .table-wrapper {
     overflow-x: auto;

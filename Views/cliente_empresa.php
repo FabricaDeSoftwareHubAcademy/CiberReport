@@ -396,7 +396,7 @@ $dados = $controller->listar();
                                     <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="tabela-btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
+                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
