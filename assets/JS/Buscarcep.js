@@ -1,77 +1,40 @@
-
-
 function buscarCep() {
-    const inputCep = document.getElementById('cep');
-    const inputEndereco = document.getElementById('endereco');
-    const inputBairro = document.getElementById('bairro');
-    const inputCidade = document.getElementById('cidade');
-    const inputEstado = document.getElementById('estado');
-    const inputPais = document.getElementById('pais');
 
-    if (!inputCep) return;
+    var campoCep = document.getElementById("cep");
+    var cepDigitado = campoCep.value;
 
-    const cep = inputCep.value.replace(/\D/g, '');
+    cepDigitado = cepDigitado.replace(/\D/g, "");
 
-    if (cep.length !== 8) {
+    if (cepDigitado.length != 8) {
         return;
     }
 
-    limparMensagemErroCep();
-    inputCep.classList.add('campo__input--carregando');
+    var url = "https://viacep.com.br/ws/" + cepDigitado + "/json/";
 
-    fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then(resposta => {
-            if (!resposta.ok) {
-                throw new Error('Falha na comunicação com o serviço de CEP.');
-            }
+    fetch(url)
+        .then(function (resposta) {
             return resposta.json();
         })
-        .then(dados => {
+        .then(function (dados) {
+
             if (dados.erro) {
-                mostrarMensagemErroCep('CEP não encontrado.');
-                limparCamposEndereco();
+                alert("CEP não encontrado!");
                 return;
             }
 
-            if (inputEndereco) inputEndereco.value = dados.logradouro || '';
-            if (inputBairro) inputBairro.value = dados.bairro || '';
-            if (inputCidade) inputCidade.value = dados.localidade || '';
-            if (inputEstado) inputEstado.value = dados.uf || '';
-            if (inputPais && !inputPais.value) inputPais.value = 'Brasil';
+            document.getElementById("endereco").value = dados.logradouro;
+            document.getElementById("bairro").value = dados.bairro;
+            document.getElementById("cidade").value = dados.localidade;
+            document.getElementById("estado").value = dados.uf;
 
-            const inputNumero = document.getElementsByName('numero')[0];
-            if (inputNumero) inputNumero.focus();
+            var campoPais = document.getElementById("pais");
+            if (campoPais.value == "") {
+                campoPais.value = "Brasil";
+            }
+
         })
-        .catch(() => {
-            mostrarMensagemErroCep('Não foi possível buscar o CEP. Tente novamente.');
-        })
-        .finally(() => {
-            inputCep.classList.remove('campo__input--carregando');
+        .catch(function (erro) {
+            alert("Erro ao buscar o CEP. Tente novamente.");
+            console.log(erro);
         });
-}
-
-function limparCamposEndereco() {
-    const ids = ['endereco', 'bairro', 'cidade', 'estado'];
-    ids.forEach(id => {
-        const campo = document.getElementById(id);
-        if (campo) campo.value = '';
-    });
-}
-
-function mostrarMensagemErroCep(mensagem) {
-    const inputCep = document.getElementById('cep');
-    if (!inputCep) return;
-
-    limparMensagemErroCep();
-
-    const erro = document.createElement('span');
-    erro.className = 'campo__mensagem-erro campo__mensagem-erro--cep';
-    erro.textContent = mensagem;
-
-    inputCep.insertAdjacentElement('afterend', erro);
-}
-
-function limparMensagemErroCep() {
-    const erroExistente = document.querySelector('.campo__mensagem-erro--cep');
-    if (erroExistente) erroExistente.remove();
 }

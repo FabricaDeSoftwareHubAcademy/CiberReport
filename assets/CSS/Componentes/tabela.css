@@ -100,10 +100,23 @@
     color: var(--cor-texto-primario);
 }
 
+.tabela-wrapper th:last-child,
+.tabela-wrapper td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.tabela-wrapper .col-status {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
 .tabela-wrapper .acoes {
     display: flex;
     gap: var(--espaco-sm);
     align-items: center;
+    justify-content: flex-end;
 }
 
 .tabela-wrapper .acoes button,
@@ -156,15 +169,16 @@
     color: var(--cor-texto-primario);
     border: none;
     border-radius: var(--raio-full);
-    padding: var(--espaco-xs) var(--espaco-md);
     font-size: var(--fonte-apoio);
     font-family: inherit;
     cursor: pointer;
     transition: var(--transicao-rapida);
 }
 
+.tabela-wrapper .pag-btn,
 .tabela-wrapper .pag-num {
     min-width: 3.2rem;
+    min-height: 3.2rem;
     padding: var(--espaco-xs);
     display: inline-flex;
     align-items: center;

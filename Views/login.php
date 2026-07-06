@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>    
             <div class="login-box">
                 <h2>LOGIN</h2>
-                <?php if ($erro): ?>
-                    <p class="erro"><?= htmlspecialchars ($erro) ?></p>
-                <?php endif; ?>
                 <form method="POST">
                     <label>E-mail</label>
                     <input type="email" name="email" placeholder="email@example.com">
                     <label>Senha</label>
                     <input type="password" name="senha" placeholder="senha">
+                    <?php if ($erro): ?>
+                        <p class="erro-login"><?= htmlspecialchars ($erro) ?></p>
+                    <?php endif; ?>
                     <a href="">Esqueceu a senha?</a>
                     <button type="submit">Entrar</button>
                 </form>

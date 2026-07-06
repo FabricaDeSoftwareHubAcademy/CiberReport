@@ -205,3 +205,19 @@ CREATE TABLE pentest_tipos (
 
 ALTER TABLE checklist
 MODIFY COLUMN descricao VARCHAR(1000) DEFAULT NULL;
+
+CREATE TABLE IF NOT EXISTS checklist_item_catalogo (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(150) NOT NULL,
+  referencia VARCHAR(255) DEFAULT NULL,
+  obrigatorio TINYINT NOT NULL DEFAULT 1,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
+  id INT NOT NULL AUTO_INCREMENT,
+  checklist_id INT NOT NULL,
+  item_id INT NOT NULL,
+  PRIMARY KEY (id)
+);

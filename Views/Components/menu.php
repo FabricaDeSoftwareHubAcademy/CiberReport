@@ -23,8 +23,8 @@
         <div class="sidebar_content">
             <div class="logo">
                 <div class="logo-nome">
-                    <img src="../assets/img/logo-cyber-report.svg" alt="" />
-                    <img src="../assets/img/logo-baikal.svg" alt="" />
+                    <img src="../assets/img/logo-cyber-report.svg" alt="" class="logo-cyber" />
+                    <img src="../assets/img/logo-baikal.svg" alt="" class="logo-baikal" />
                 </div>
                 <div class="logo-imagem">
                     <img src="../assets/img/logo-baikal-icone.svg" alt="" />
@@ -46,39 +46,34 @@
                     <div class="tooltip-item"><span>Relatórios</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="#" id="dropdown_item">
-                        <i class="fa-solid fa-building-user"></i>
-                        <span class="item_description">Gestão</span>
-                        <i class="fa-solid fa-angle-down" id="dropdown"></i>
+                    <a href="usuario.html" class="margin-lef">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="item_description">Usuários</span>
                     </a>
-                    <div class="tooltip-item"><span>Gestão</span></div>
+                    <div class="tooltip-item"><span>Usuários</span></div>
                 </li>
-                <ul id="submenu">
-                    <li class="item-submenu">
-                        <a href="usuario.html" class="margin-lef">
-                            <i class="fa-solid fa-users"></i>
-                            <span class="item_description">Usuários</span>
-                        </a>
-                    </li>
-                    <li class="item-submenu">
-                        <a href="cliente_empresa.php" class="margin-lef">
-                            <i class="fa-solid fa-address-book"></i>
-                            <span class="item_description">Clientes</span>
-                        </a>
-                    </li>
-                    <li class="item-submenu">
-                        <a href="gerenciamento_projeto.php">
-                            <i class="fa-solid fa-terminal"></i>
-                            <span class="item_description">Projetos</span>
-                        </a>
-                    </li>
-                    <li class="item-submenu">
-                        <a href="gerenciar_pentest.php">
-                            <i class="fa-solid fa-user-secret"></i>
-                            <span class="item_description">Pentest</span>
-                        </a>
-                    </li>
-                </ul>
+                <li class="side_item">
+                    <a href="cliente_empresa.php" class="margin-lef">
+                        <i class="fa-solid fa-address-book"></i>
+                        <span class="item_description">Clientes</span>
+                    </a>
+                    <div class="tooltip-item"><span>Clientes</span></div>
+                </li>
+                <li class="side_item">
+                    <a href="gerenciamento_projeto.php">
+                        <i class="fa-solid fa-terminal"></i>
+                        <span class="item_description">Projetos</span>
+                    </a>
+                    <div class="tooltip-item"><span>Vulnerabilidades</span></div>
+
+                </li>
+                <li class="side_item">
+                    <a href="gerenciar_pentest.php">
+                        <i class="fa-solid fa-user-secret"></i>
+                        <span class="item_description">Pentest</span>
+                    </a>
+                    <div class="tooltip-item"><span>Pentest</span></div>
+                </li>
                 <li class="side_item">
                     <a href="checklist.php">
                         <i class="fa-solid fa-list-check"></i>
@@ -147,7 +142,7 @@
             <!-- pesquisa para formato mobile -->
             <div class="pesquisa-mobile">
                 <button>
-                    <i class="fa-brands fa-sistrix"></i>
+                    <i class="fa-brands fa-sistrix" class='color: #9ca3af;'></i>
                 </button>
             </div>
             <!-- overlay-pesquisa -->
@@ -163,7 +158,7 @@
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
                 <div class="description-user">
-                    <p>Marcos antonio</p>
+                    <p>Bruno Alvares</p>
                     <p>Gerente</p>
                 </div>
             </div>

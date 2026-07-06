@@ -13,6 +13,7 @@ $dados = $controller->listar();
     <link rel="stylesheet" href="../assets/CSS/style.css">
     <link rel="stylesheet" href="../assets/CSS/Pages/gerenciamento-projeto.css">
     <script src="../assets/JS/componentes/tabela.js" defer></script>
+    <script src="../assets/JS/componentes/modal.js" defer></script>
 </head>
 <body class="corpo-ger-projetos">
     <?php
@@ -22,7 +23,7 @@ $dados = $controller->listar();
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
             <button class="btn-novo-cadastro btn-projeto">Alocar Analista</button>
-            <button class="btn-novo-cadastro btn-projeto"><span>+</span>Novo Projeto</button>
+            <button class="btn-novo-cadastro btn-projeto" data-modal-target="modal-cadastro-projeto"><span>+</span>Novo Projeto</button>
         </div>
 
         <div class="group-card-tabela">
@@ -116,5 +117,32 @@ $dados = $controller->listar();
         </div>
         
     </main>
+
+    <div class="modal-overlay" id="modal-cadastro-projeto">
+        <div class="modal modal--md">
+            <div class="modal__header">
+                <div class="modal__header-icone"><i class="fa-solid fa-shield"></i></div>
+                <div class="modal__header-texto">
+                    <h2 class="modal__titulo">Cadastro de Projeto</h2>
+                    <p class="modal__subtitulo">Informações da empresa contratante e do projeto</p>
+                </div>
+                <button class="modal__fechar" data-modal-close="modal-cadastro-projeto">X</button>
+            </div>
+            <form class="modal__body">
+                <div class="form-step">
+                    <div class="modal-grade">
+                        <div class="campo">
+                            <label class="campo__label" for="nome-cleinte">cliente</label>
+                            <select name="cliente" id="cliente" aria-placeholder="Selecione um cliente" class="campo__select">
+    
+                            </select>
+                            <button class="btn-novo-cadastro">+</button>
+                        </div>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
