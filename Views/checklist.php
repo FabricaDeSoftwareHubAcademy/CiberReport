@@ -673,6 +673,9 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                                         <span class="switch-slider"></span>
                                     </label>
+                                    <span class="checklist-toggle-label">
+                                        <?= $ativo ? 'Ativo' : 'Inativo' ?>
+                                    </span>
                                 </div>
                             </td>
 
