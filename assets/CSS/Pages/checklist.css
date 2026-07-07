@@ -27,6 +27,7 @@
 .checklist-ativo {
     display: inline-flex;
     align-items: center;
+    gap: var(--espaco-sm);
 }
 
 #modalChecklist .modal {
@@ -176,6 +177,7 @@
     width: auto;
     flex-shrink: 0;
     padding: var(--espaco-sm) var(--espaco-md);
+    gap: 10px;
 }
 
 .lista-itens-selecionados {
@@ -288,13 +290,14 @@
 
 .gerenciar-itens-campo-pesquisa .campo__input {
     width: 100%;
-    padding-left: 2.7rem;
+    padding-left: 5rem;
 }
 
 .gerenciar-itens-novo {
     width: auto;
     flex-shrink: 0;
     white-space: nowrap;
+    gap: 5px;
 }
 
 .gerenciar-itens-resumo {

@@ -44,11 +44,14 @@ async function buscarChecklist(id) {
 }
 
 async function toggleHabilitado(elemento) {
+    const linhaStatus = elemento.closest('.checklist-ativo');
+    const textoStatus = linhaStatus?.querySelector('.checklist-toggle-label');
+    const habilitado = elemento.checked ? 1 : 0;
     const dados = new FormData();
 
     dados.append('action', 'alterarHabilitado');
     dados.append('id', elemento.dataset.id);
-    dados.append('habilitado', elemento.checked ? 1 : 0);
+    dados.append('habilitado', habilitado);
 
     try {
         const resultado = await enviarFormularioAjax(dados);
@@ -56,10 +59,20 @@ async function toggleHabilitado(elemento) {
         if (!resultado.ok) {
             throw new Error('Status não alterado.');
         }
+
+        if (textoStatus) {
+            textoStatus.textContent = habilitado ? 'Ativo' : 'Inativo';
+        }
     } catch (erro) {
         console.error(erro);
 
         elemento.checked = !elemento.checked;
+
+        if (textoStatus) {
+            textoStatus.textContent = elemento.checked
+                ? 'Ativo'
+                : 'Inativo';
+        }
 
         alert('Não foi possível alterar o status.');
     }
