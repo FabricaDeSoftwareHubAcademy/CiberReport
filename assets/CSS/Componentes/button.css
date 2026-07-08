@@ -13,6 +13,7 @@
     background-color: var(--cor-verde);   
     color: var(--cor-branco-primario);
     height: 40px;
+    gap: 15px;
 }
 .btn-botao-verde:hover{
     background-color: rgb(39, 146, 55);
@@ -30,6 +31,7 @@
     background-color: var(--cor-branco-primario);   
     color: #101a40;
     height: 40px;
+    gap: 15px;
 }
 .btn-cancelar:hover {
     background-color: #b6cedd; 
