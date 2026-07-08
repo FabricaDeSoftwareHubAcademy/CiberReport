@@ -1,112 +1,115 @@
 <?php
 
-require_once "../Controller/ChecklistController.php";
+require_once '../Controller/ChecklistController.php';
 
-$controller = new ChecklistController();
-$erroFormulario = '';
+$controllerChecklist = new ChecklistController();
+$erroFormularioChecklist = '';
 
-function responderJson(array $dados): void
+function responderJsonChecklist(array $dadosChecklist): void
 {
     header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($dados, JSON_UNESCAPED_UNICODE);
+    echo json_encode($dadosChecklist, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
+function escaparHtmlChecklist(mixed $valorChecklist): string
+{
+    return htmlspecialchars((string) $valorChecklist, ENT_QUOTES, 'UTF-8');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $acaoChecklist = $_POST['action'] ?? '';
 
-    if ($action === 'cadastrarItemCatalogoChecklist') {
-        $item = $controller->cadastrarItemCatalogoChecklist();
+    switch ($acaoChecklist) {
+        case 'cadastrarItemCatalogoChecklist':
+            $itemChecklist = $controllerChecklist->cadastrarItemCatalogoChecklist();
 
-        responderJson([
-            'ok' => (bool) $item,
-            'item' => $item,
-            'mensagem' => $item
-                ? 'Item cadastrado com sucesso.'
-                : 'Informe um título válido para o item.'
-        ]);
-    }
+            responderJsonChecklist([
+                'ok' => (bool) $itemChecklist,
+                'item' => $itemChecklist,
+                'mensagem' => $itemChecklist
+                    ? 'Item cadastrado com sucesso.'
+                    : 'Informe um título válido para o item.'
+            ]);
 
-    if ($action === 'buscarItemCatalogo') {
-        $item = $controller->buscarItemCatalogo();
+        case 'buscarItemCatalogoChecklist':
+            $itemChecklist = $controllerChecklist->buscarItemCatalogoChecklist();
 
-        responderJson([
-            'ok' => (bool) $item,
-            'item' => $item,
-            'mensagem' => $item
-                ? ''
-                : 'Item não encontrado.'
-        ]);
-    }
+            responderJsonChecklist([
+                'ok' => (bool) $itemChecklist,
+                'item' => $itemChecklist,
+                'mensagem' => $itemChecklist ? '' : 'Item não encontrado.'
+            ]);
 
-    if ($action === 'atualizarItemCatalogoChecklist') {
-        $item = $controller->atualizarItemCatalogoChecklist();
+        case 'atualizarItemCatalogoChecklist':
+            $itemChecklist = $controllerChecklist->atualizarItemCatalogoChecklist();
 
-        responderJson([
-            'ok' => (bool) $item,
-            'item' => $item,
-            'mensagem' => $item
-                ? 'Item atualizado com sucesso.'
-                : 'Não foi possível atualizar. Verifique se o título já existe.'
-        ]);
-    }
+            responderJsonChecklist([
+                'ok' => (bool) $itemChecklist,
+                'item' => $itemChecklist,
+                'mensagem' => $itemChecklist
+                    ? 'Item atualizado com sucesso.'
+                    : 'Não foi possível atualizar. Verifique se o título já existe.'
+            ]);
 
-    if ($action === 'removerItemCatalogoChecklist') {
-        $resultado = $controller->removerItemCatalogoChecklist();
+        case 'removerItemCatalogoChecklist':
+            $resultadoChecklist = $controllerChecklist->removerItemCatalogoChecklist();
 
-        responderJson([
-            'ok' => (bool) $resultado,
-            'resultado' => $resultado,
-            'mensagem' => $resultado['mensagem']
-                ?? 'Não foi possível remover o item.'
-        ]);
-    }
+            responderJsonChecklist([
+                'ok' => (bool) $resultadoChecklist,
+                'resultado' => $resultadoChecklist,
+                'mensagem' => is_array($resultadoChecklist)
+                    ? ($resultadoChecklist['mensagem'] ?? 'Não foi possível remover o item.')
+                    : 'Não foi possível remover o item.'
+            ]);
 
-    if ($action === 'alterarHabilitado') {
-        $id = (int) ($_POST['id'] ?? 0);
-        $habilitado = (int) ($_POST['habilitado'] ?? 0);
+        case 'alterarStatusChecklist':
+            $idChecklist = (int) ($_POST['id'] ?? 0);
+            $habilitadoChecklist = (int) ($_POST['habilitado'] ?? 0);
 
-        responderJson([
-            'ok' => $controller->alterarStatusChecklist($id, $habilitado)
-        ]);
-    }
+            responderJsonChecklist([
+                'ok' => $controllerChecklist->alterarStatusChecklist(
+                    $idChecklist,
+                    $habilitadoChecklist
+                )
+            ]);
 
-    if ($action === 'buscarChecklist') {
-        $id = (int) ($_POST['id'] ?? 0);
-        $checklist = $controller->buscarComItensChecklist($id);
+        case 'buscarChecklist':
+            $idChecklist = (int) ($_POST['id'] ?? 0);
+            $registroChecklist = $controllerChecklist->buscarComItensChecklist($idChecklist);
 
-        responderJson([
-            'ok' => (bool) $checklist,
-            'checklist' => $checklist
-        ]);
+            responderJsonChecklist([
+                'ok' => (bool) $registroChecklist,
+                'checklist' => $registroChecklist
+            ]);
     }
 
     if (isset($_POST['nome'])) {
-        $resultado = !empty($_POST['id'])
-            ? $controller->atualizarChecklist()
-            : $controller->cadastrarChecklist();
+        $resultadoChecklist = !empty($_POST['id'])
+            ? $controllerChecklist->atualizarChecklist()
+            : $controllerChecklist->cadastrarChecklist();
 
-        if ($resultado) {
+        if ($resultadoChecklist) {
             header('Location: checklist.php');
             exit;
         }
 
-        $erroFormulario = 'Preencha os campos obrigatórios e selecione pelo menos um item.';
+        $erroFormularioChecklist =
+            'Preencha os campos obrigatórios e selecione pelo menos um item.';
     }
 }
 
 if (isset($_GET['excluir'])) {
-    $controller->excluirChecklist((int) $_GET['excluir']);
-
+    $controllerChecklist->excluirChecklist((int) $_GET['excluir']);
     header('Location: checklist.php');
     exit;
 }
 
-$checklists = $controller->listarChecklist();
-$categorias = $controller->listarCategoriasChecklist();
-$itensCatalogo = $controller->listarItensCatalogoChecklist();
+$checklists = $controllerChecklist->listarChecklist();
+$categoriasChecklist = $controllerChecklist->listarCategoriasChecklist();
+$itensCatalogoChecklist = $controllerChecklist->listarItensCatalogoChecklist();
 
-$jsonSeguro = JSON_UNESCAPED_UNICODE
+$jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     | JSON_HEX_TAG
     | JSON_HEX_AMP
     | JSON_HEX_APOS
@@ -127,467 +130,22 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 </head>
 
 <body>
-
     <?php
     $tituloPagina = 'Checklist';
     include 'Components/menu.php';
     ?>
 
-    <main>
-        <!-- botao cadastrar checklist -->
-        <div class="button-cadastro-checklist">
+    <main class="checklist-pagina">
+
+        <div class="checklist-cadastro-acoes">
             <button
                 type="button"
                 class="btn-novo-cadastro"
-                data-modal-target="modalChecklist"
+                data-modal-target="checklist-modal-formulario"
                 onclick="limparFormularioChecklist()">
                 <i class="fa-solid fa-plus"></i>
                 <span class="texto">Novo Checklist</span>
             </button>
-        </div>
-        <!-- Final botao cadastrar checklist -->
-
-        <div class="modal-overlay" id="modalChecklist">
-            <div class="modal modal--xxl">
-                <div class="modal__header">
-                    <div class="modal__header-icone">
-                        <img
-                            src="../assets/img/Icon_Checklist.png"
-                            alt="Cadastro de Checklist">
-                    </div>
-
-                    <div class="modal__header-texto">
-                        <h2
-                            class="modal__titulo"
-                            id="tituloModalChecklist">
-                            Cadastro de Checklist
-                        </h2>
-
-                        <p class="modal__subtitulo">
-                            Crie e organize listas padrões de verificação
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <form
-                    method="POST"
-                    action="checklist.php"
-                    class="form-checklist"
-                    id="formChecklist">
-                    <input type="hidden" name="id" id="checklist_id">
-
-                    <div class="modal__body">
-                        <section class="modal-secao">
-                            <div class="modal-secao__titulo">
-                                <i class="fa-solid fa-clipboard-check modal-secao__titulo-icone"></i>
-                                <h3>Dados do Checklist</h3>
-                            </div>
-
-                            <div class="checklist-dados-linha">
-                                <div class="campo">
-                                    <label
-                                        for="checklist_nome"
-                                        class="campo__label campo__label--obrigatorio">
-                                        Nome do Checklist
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        name="nome"
-                                        id="checklist_nome"
-                                        class="campo__input"
-                                        placeholder="Ex: Checklist Web"
-                                        maxlength="80"
-                                        required>
-                                </div>
-
-                                <div class="campo">
-                                    <div class="categoria-label-linha">
-                                        <label
-                                            for="categoria_input"
-                                            class="campo__label campo__label--obrigatorio">
-                                            Categoria
-                                        </label>
-
-                                        <small class="campo__ajuda">
-                                            Digite uma categoria nova ou selecione uma existente.
-                                        </small>
-                                    </div>
-
-                                    <div class="categoria-combobox">
-                                        <input
-                                            type="text"
-                                            name="categoria"
-                                            id="categoria_input"
-                                            class="campo__input categoria-input"
-                                            placeholder="Digite ou selecione uma categoria"
-                                            autocomplete="off"
-                                            maxlength="150"
-                                            required
-                                            aria-autocomplete="list"
-                                            aria-controls="lista_categorias"
-                                            aria-expanded="false">
-
-                                        <button
-                                            type="button"
-                                            id="btn_abrir_categorias"
-                                            class="categoria-seta"
-                                            title="Mostrar categorias"
-                                            aria-label="Mostrar categorias cadastradas">
-                                            <i class="fa-solid fa-chevron-down"></i>
-                                        </button>
-
-                                        <div
-                                            id="lista_categorias"
-                                            class="categoria-dropdown"
-                                            hidden></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="campo checklist-descricao">
-                                <label
-                                    for="descricao_checklist"
-                                    class="campo__label">
-                                    Descrição
-                                </label>
-
-                                <textarea
-                                    name="descricao"
-                                    id="descricao_checklist"
-                                    class="campo__textarea"
-                                    maxlength="1000"
-                                    placeholder="Descreva o objetivo e a finalidade deste checklist..."
-                                    oninput="contarDescricaoChecklist()"></textarea>
-
-                                <div class="checklist-contador">
-                                    <span>Máximo de 1000 caracteres</span>
-                                    <span id="contador_descricao">0 / 1000</span>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="modal-secao">
-                            <div class="checklist-itens-cabecalho">
-                                <div class="modal-secao__titulo">
-                                    <i class="fa-solid fa-list-check modal-secao__titulo-icone"></i>
-                                    <h3>Itens do Checklist</h3>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="btn-botao-verde checklist-btn-gerenciar"
-                                    onclick="abrirModalGerenciarItens()">
-                                    <i class="fa-solid fa-list-check"></i>
-                                    Gerenciar itens
-                                </button>
-                            </div>
-
-                            <div
-                                id="lista-itens-checklist"
-                                class="lista-itens-selecionados"></div>
-                        </section>
-                    </div>
-
-                    <div class="modal__footer">
-                        <button
-                            type="button"
-                            class="btn-cancelar"
-                            data-modal-close>
-                            CANCELAR
-                        </button>
-
-                        <button type="submit" class="btn-botao-verde">
-                            SALVAR
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="modalVisualizarChecklist">
-            <div class="modal modal--lg">
-                <div class="modal__header">
-                    <div class="modal__header-icone">
-                        <i class="fa-solid fa-eye"></i>
-                    </div>
-
-                    <div class="modal__header-texto">
-                        <h2 class="modal__titulo">Visualizar Checklist</h2>
-                        <p class="modal__subtitulo">Informações e itens vinculados</p>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        onclick="fecharVisualizacaoChecklist()"
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="modal__body visualizar-checklist-body">
-                    <input type="hidden" id="visualizar_checklist_id">
-
-                    <section class="visualizacao-secao">
-                        <div class="visualizacao-secao-titulo">
-                            <i class="fa-solid fa-clipboard-check"></i>
-                            <h3>Dados do Checklist</h3>
-                        </div>
-
-                        <div class="visualizacao-checklist-dados">
-                            <div class="visualizacao-campo">
-                                <span class="visualizacao-campo-label">Nome</span>
-                                <strong id="visualizar_checklist_nome"></strong>
-                            </div>
-
-                            <div class="visualizacao-campo">
-                                <span class="visualizacao-campo-label">Categoria</span>
-                                <strong id="visualizar_checklist_categoria"></strong>
-                            </div>
-
-                            <div class="visualizacao-campo visualizacao-campo--completo">
-                                <span class="visualizacao-campo-label">Descrição</span>
-                                <p id="visualizar_checklist_descricao"></p>
-                            </div>
-
-                            <div class="visualizacao-campo">
-                                <span class="visualizacao-campo-label">Status</span>
-                                <span
-                                    id="visualizar_checklist_status"
-                                    class="visualizacao-status"></span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="visualizacao-secao">
-                        <div class="visualizacao-secao-cabecalho">
-                            <div class="visualizacao-secao-titulo">
-                                <i class="fa-solid fa-list-check"></i>
-                                <h3>Itens do Checklist</h3>
-                            </div>
-
-                            <span
-                                id="visualizar_total_itens"
-                                class="visualizacao-total-itens">
-                                0 itens
-                            </span>
-                        </div>
-
-                        <div
-                            id="visualizar_checklist_itens"
-                            class="visualizacao-lista-itens"></div>
-                    </section>
-                </div>
-
-                <div class="modal__footer">
-                    <button
-                        type="button"
-                        class="btn-cancelar"
-                        onclick="fecharVisualizacaoChecklist()">
-                        FECHAR
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn-botao-verde"
-                        onclick="editarChecklistDaVisualizacao()">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                        EDITAR CHECKLIST
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="modalGerenciarItens">
-            <div class="modal modal--lg">
-                <div class="modal__header">
-                    <div class="modal__header-icone">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-
-                    <div class="modal__header-texto">
-                        <h2 class="modal__titulo">Gerenciar Itens</h2>
-
-                        <p class="modal__subtitulo">
-                            Selecione os itens que farão parte deste checklist
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        onclick="fecharModalGerenciarItens()"
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="modal__body">
-                    <div class="gerenciar-itens-topo">
-                        <div class="campo gerenciar-itens-pesquisa">
-                            <label
-                                for="pesquisa_itens_catalogo"
-                                class="campo__label">
-                                Pesquisar itens
-                            </label>
-
-                            <div class="gerenciar-itens-campo-pesquisa">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-
-                                <input
-                                    type="text"
-                                    id="pesquisa_itens_catalogo"
-                                    class="campo__input"
-                                    placeholder="Pesquise pelo título ou referência"
-                                    autocomplete="off">
-                            </div>
-                        </div>
-
-                        <button
-                            type="button"
-                            class="btn-botao-verde gerenciar-itens-novo"
-                            onclick="abrirModalNovoItem()">
-                            <i class="fa-solid fa-plus"></i>
-                            Cadastrar novo item
-                        </button>
-                    </div>
-
-                    <div class="gerenciar-itens-resumo">
-                        <span>Itens disponíveis</span>
-
-                        <strong id="contador_itens_selecionados">
-                            0 selecionados
-                        </strong>
-                    </div>
-
-                    <div
-                        id="lista_itens_gerenciamento"
-                        class="gerenciar-itens-lista"></div>
-                </div>
-
-                <div class="modal__footer">
-                    <button
-                        type="button"
-                        class="btn-cancelar"
-                        onclick="fecharModalGerenciarItens()">
-                        CANCELAR
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn-botao-verde"
-                        onclick="aplicarItensGerenciados()">
-                        APLICAR ITENS
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="modalNovoItem">
-            <div class="modal modal--lg">
-                <div class="modal__header">
-                    <div class="modal__header-icone">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-
-                    <div class="modal__header-texto">
-                        <h2
-                            class="modal__titulo"
-                            id="tituloModalItem">
-                            Cadastro de Item
-                        </h2>
-
-                        <p
-                            class="modal__subtitulo"
-                            id="subtituloModalItem">
-                            Cadastre um novo item reutilizável
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        onclick="fecharModalNovoItem()"
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="modal__body">
-                    <input type="hidden" id="item_catalogo_id">
-
-                    <div class="campo">
-                        <label
-                            for="novo_item_titulo"
-                            class="campo__label campo__label--obrigatorio">
-                            Título
-                        </label>
-
-                        <input
-                            type="text"
-                            id="novo_item_titulo"
-                            class="campo__input"
-                            placeholder="Ex: Verificar SQL Injection"
-                            maxlength="150">
-                    </div>
-
-                    <div class="campo">
-                        <label
-                            for="novo_item_referencia"
-                            class="campo__label">
-                            Referência
-                        </label>
-
-                        <input
-                            type="text"
-                            id="novo_item_referencia"
-                            class="campo__input"
-                            placeholder="Ex: OWASP A03:2021"
-                            maxlength="255">
-                    </div>
-
-                    <div class="campo">
-                        <label
-                            for="novo_item_obrigatorio"
-                            class="campo__label">
-                            Obrigatório
-                        </label>
-
-                        <select
-                            id="novo_item_obrigatorio"
-                            class="campo__select">
-                            <option value="1">Sim</option>
-                            <option value="0">Não</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal__footer">
-                    <button
-                        type="button"
-                        class="btn-cancelar"
-                        onclick="fecharModalNovoItem()">
-                        CANCELAR
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn-botao-verde"
-                        id="btnSalvarItemCatalogo"
-                        onclick="salvarItemCatalogo()">
-                        SALVAR
-                    </button>
-                </div>
-            </div>
         </div>
 
         <div class="tabela-wrapper">
@@ -600,90 +158,64 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                                 <i class="fa-solid fa-sort sort-icon"></i>
                             </span>
                         </th>
-
                         <th data-col="1">
                             <span class="th-label">
                                 Nome do Checklist
                                 <i class="fa-solid fa-sort sort-icon"></i>
                             </span>
                         </th>
-
                         <th data-col="2">
-                            <span class="th-label">
-                                Breve Descrição
-                            </span>
+                            <span class="th-label">Breve Descrição</span>
                         </th>
-
                         <th data-col="3">
                             <span class="th-label">
                                 Categoria
                                 <i class="fa-solid fa-filter sort-icon"></i>
                             </span>
                         </th>
-
                         <th data-col="4">
                             <span class="th-label">Status</span>
                         </th>
-
                         <th>Ações</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php foreach ($checklists as $checklist): ?>
-                        <?php $ativo = (bool) $checklist['habilitado']; ?>
+                        <?php $ativoChecklist = (bool) $checklist['habilitado']; ?>
 
                         <tr>
                             <td><?= (int) $checklist['id'] ?></td>
-
-                            <td>
-                                <?= htmlspecialchars(
-                                    $checklist['nome'],
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>
+                            <td><?= escaparHtmlChecklist($checklist['nome']) ?></td>
+                            <td class="checklist-tabela-descricao">
+                                <?= escaparHtmlChecklist($checklist['descricao'] ?? '') ?>
                             </td>
-
-                            <td class="checklist-desc">
-                                <?= htmlspecialchars(
-                                    $checklist['descricao'] ?? '',
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>
-                            </td>
-
                             <td>
-                                <span class="checklist-cat">
-                                    <?= htmlspecialchars(
-                                        $checklist['categoria'] ?? '',
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ) ?>
+                                <span class="checklist-categoria-badge">
+                                    <?= escaparHtmlChecklist($checklist['categoria'] ?? '') ?>
                                 </span>
                             </td>
-
                             <td>
-                                <div class="checklist-ativo">
+                                <div class="checklist-status">
                                     <label class="switch">
                                         <input
                                             type="checkbox"
-                                            <?= $ativo ? 'checked' : '' ?>
+                                            <?= $ativoChecklist ? 'checked' : '' ?>
                                             data-id="<?= (int) $checklist['id'] ?>"
-                                            onchange="toggleHabilitado(this)">
-
+                                            onchange="alternarStatusChecklist(this)">
                                         <span class="switch-slider"></span>
                                     </label>
-                                    <span class="checklist-toggle-label">
-                                        <?= $ativo ? 'Ativo' : 'Inativo' ?>
+
+                                    <span class="checklist-status-texto">
+                                        <?= $ativoChecklist ? 'Ativo' : 'Inativo' ?>
                                     </span>
                                 </div>
                             </td>
-
                             <td>
                                 <div class="acoes">
                                     <button
                                         type="button"
-                                        class="btn-visualizar"
+                                        class="checklist-btn-visualizar"
                                         title="Visualizar"
                                         aria-label="Visualizar checklist"
                                         onclick="visualizarChecklist(<?= (int) $checklist['id'] ?>)">
@@ -714,7 +246,7 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
 
                     <?php if (empty($checklists)): ?>
                         <tr>
-                            <td colspan="6" class="tabela-vazia">
+                            <td colspan="6" class="checklist-tabela-vazia">
                                 Nenhum checklist cadastrado.
                             </td>
                         </tr>
@@ -730,29 +262,436 @@ $jsonSeguro = JSON_UNESCAPED_UNICODE
                 </tfoot>
             </table>
         </div>
+
+        <div class="modal-overlay" id="checklist-modal-formulario">
+            <div class="modal modal--xxl">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <img src="../assets/img/Icon_Checklist.png" alt="Cadastro de Checklist">
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo" id="checklist-titulo-modal">
+                            Cadastro de Checklist
+                        </h2>
+                        <p class="modal__subtitulo">
+                            Crie e organize listas padrões de verificação
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        data-modal-close
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form
+                    method="POST"
+                    action="checklist.php"
+                    class="checklist-formulario"
+                    id="checklist-formulario">
+                    <input type="hidden" name="id" id="checklist-id">
+
+                    <div class="modal__body">
+                        <section class="modal-secao">
+                            <div class="modal-secao__titulo">
+                                <i class="fa-solid fa-clipboard-check modal-secao__titulo-icone"></i>
+                                <h3>Dados do Checklist</h3>
+                            </div>
+
+                            <div class="checklist-dados-grid">
+                                <div class="campo">
+                                    <label
+                                        for="checklist-nome"
+                                        class="campo__label campo__label--obrigatorio">
+                                        Nome do Checklist
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="nome"
+                                        id="checklist-nome"
+                                        class="campo__input"
+                                        placeholder="Ex: Checklist Web"
+                                        maxlength="80"
+                                        required>
+                                </div>
+
+                                <div class="campo">
+                                    <div class="checklist-categoria-cabecalho">
+                                        <label
+                                            for="checklist-categoria"
+                                            class="campo__label campo__label--obrigatorio">
+                                            Categoria
+                                        </label>
+                                        <small class="campo__ajuda">
+                                            Digite uma categoria nova ou selecione uma existente.
+                                        </small>
+                                    </div>
+
+                                    <div class="checklist-categoria-combobox">
+                                        <input
+                                            type="text"
+                                            name="categoria"
+                                            id="checklist-categoria"
+                                            class="campo__input checklist-categoria-input"
+                                            placeholder="Digite ou selecione uma categoria"
+                                            autocomplete="off"
+                                            maxlength="150"
+                                            required
+                                            aria-autocomplete="list"
+                                            aria-controls="checklist-lista-categorias"
+                                            aria-expanded="false">
+
+                                        <button
+                                            type="button"
+                                            id="checklist-btn-categorias"
+                                            class="checklist-categoria-botao"
+                                            title="Mostrar categorias"
+                                            aria-label="Mostrar categorias cadastradas">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </button>
+
+                                        <div
+                                            id="checklist-lista-categorias"
+                                            class="checklist-categoria-lista"
+                                            hidden></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="campo checklist-descricao-campo">
+                                <label for="checklist-descricao" class="campo__label">
+                                    Descrição
+                                </label>
+                                <textarea
+                                    name="descricao"
+                                    id="checklist-descricao"
+                                    class="campo__textarea"
+                                    maxlength="1000"
+                                    placeholder="Descreva o objetivo e a finalidade deste checklist..."
+                                    oninput="contarDescricaoChecklist()"></textarea>
+
+                                <div class="checklist-contador">
+                                    <span>Máximo de 1000 caracteres</span>
+                                    <span id="checklist-contador-descricao">0 / 1000</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="modal-secao">
+                            <div class="checklist-itens-cabecalho">
+                                <div class="modal-secao__titulo">
+                                    <i class="fa-solid fa-list-check modal-secao__titulo-icone"></i>
+                                    <h3>Itens do Checklist</h3>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn-botao-verde checklist-btn-gerenciar"
+                                    onclick="abrirGerenciamentoItensChecklist()">
+                                    <i class="fa-solid fa-list-check"></i>
+                                    Gerenciar itens
+                                </button>
+                            </div>
+
+                            <div
+                                id="checklist-lista-selecionados"
+                                class="checklist-lista-selecionados"></div>
+                        </section>
+                    </div>
+
+                    <div class="modal__footer">
+                        <button type="button" class="btn-cancelar" data-modal-close>
+                            CANCELAR
+                        </button>
+                        <button type="submit" class="btn-botao-verde">
+                            SALVAR
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="checklist-modal-visualizar">
+            <div class="modal modal--xxl">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Visualizar Checklist</h2>
+                        <p class="modal__subtitulo">Informações e itens vinculados</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        data-modal-close
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body checklist-visualizacao">
+                    <input type="hidden" id="checklist-visualizar-id">
+
+                    <section class="checklist-visualizacao-secao">
+                        <div class="checklist-visualizacao-titulo">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <h3>Dados do Checklist</h3>
+                        </div>
+
+                        <div class="checklist-visualizacao-dados">
+                            <div class="checklist-visualizacao-campo">
+                                <span class="checklist-visualizacao-label">Nome</span>
+                                <strong id="checklist-visualizar-nome"></strong>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo">
+                                <span class="checklist-visualizacao-label">Categoria</span>
+                                <strong id="checklist-visualizar-categoria"></strong>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo checklist-visualizacao-campo--largo">
+                                <span class="checklist-visualizacao-label">Descrição</span>
+                                <p id="checklist-visualizar-descricao"></p>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo">
+                                <span class="checklist-visualizacao-label">Status</span>
+                                <span
+                                    id="checklist-visualizar-status"
+                                    class="checklist-visualizacao-status"></span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="checklist-visualizacao-secao">
+                        <div class="checklist-visualizacao-cabecalho">
+                            <div class="checklist-visualizacao-titulo">
+                                <i class="fa-solid fa-list-check"></i>
+                                <h3>Itens do Checklist</h3>
+                            </div>
+                            <span
+                                id="checklist-visualizar-total"
+                                class="checklist-visualizacao-total">
+                                0 itens
+                            </span>
+                        </div>
+
+                        <div
+                            id="checklist-visualizar-itens"
+                            class="checklist-visualizacao-lista"></div>
+                    </section>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn-cancelar" data-modal-close>
+                        FECHAR
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-botao-verde"
+                        onclick="editarDaVisualizacaoChecklist()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        EDITAR CHECKLIST
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="checklist-modal-gerenciar-itens">
+            <div class="modal modal--xxl">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Gerenciar Itens</h2>
+                        <p class="modal__subtitulo">
+                            Selecione os itens que farão parte deste checklist
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        data-modal-close
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body">
+                    <div class="checklist-gerenciar-topo">
+                        <div class="campo checklist-gerenciar-pesquisa">
+                            <label for="checklist-pesquisa-itens" class="campo__label">
+                                Pesquisar itens
+                            </label>
+
+                            <div class="checklist-gerenciar-campo-pesquisa">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input
+                                    type="text"
+                                    id="checklist-pesquisa-itens"
+                                    class="campo__input"
+                                    placeholder="Pesquise pelo título ou referência"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn-botao-verde checklist-gerenciar-novo"
+                            onclick="abrirNovoItemChecklist()">
+                            <i class="fa-solid fa-plus"></i>
+                            Cadastrar novo item
+                        </button>
+                    </div>
+
+                    <div class="checklist-gerenciar-resumo">
+                        <span>Itens disponíveis</span>
+                        <strong id="checklist-contador-selecionados">0 selecionados</strong>
+                    </div>
+
+                    <div
+                        id="checklist-lista-gerenciamento"
+                        class="checklist-gerenciar-lista"></div>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn-cancelar" data-modal-close>
+                        CANCELAR
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-botao-verde"
+                        onclick="aplicarItensGerenciadosChecklist()">
+                        APLICAR ITENS
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="checklist-modal-item">
+            <div class="modal modal--xxl">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo" id="checklist-titulo-modal-item">
+                            Cadastro de Item
+                        </h2>
+                        <p class="modal__subtitulo" id="checklist-subtitulo-modal-item">
+                            Cadastre um novo item reutilizável
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        data-modal-close
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body">
+                    <input type="hidden" id="checklist-item-id">
+
+                    <div class="campo">
+                        <label
+                            for="checklist-item-titulo"
+                            class="campo__label campo__label--obrigatorio">
+                            Título
+                        </label>
+                        <input
+                            type="text"
+                            id="checklist-item-titulo"
+                            class="campo__input"
+                            placeholder="Ex: Verificar SQL Injection"
+                            maxlength="150">
+                    </div>
+
+                    <div class="campo">
+                        <label for="checklist-item-referencia" class="campo__label">
+                            Referência
+                        </label>
+                        <input
+                            type="text"
+                            id="checklist-item-referencia"
+                            class="campo__input"
+                            placeholder="Ex: OWASP A03:2021"
+                            maxlength="255">
+                    </div>
+
+                    <div class="campo">
+                        <label for="checklist-item-obrigatorio" class="campo__label">
+                            Obrigatório
+                        </label>
+                        <select id="checklist-item-obrigatorio" class="campo__select">
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn-cancelar" data-modal-close>
+                        CANCELAR
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-botao-verde"
+                        id="checklist-btn-salvar-item"
+                        onclick="salvarItemCatalogoChecklist()">
+                        SALVAR
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script>
-        window.categoriasChecklist = <?= json_encode($categorias, $jsonSeguro) ?>;
-        window.itensCatalogo = <?= json_encode($itensCatalogo, $jsonSeguro) ?>;
-        window.erroChecklist = <?= json_encode($erroFormulario, $jsonSeguro) ?>;
+        window.categoriasChecklist = <?= json_encode(
+                                            $categoriasChecklist,
+                                            $jsonSeguroChecklist
+                                        ) ?>;
+
+        window.itensCatalogoChecklist = <?= json_encode(
+                                            $itensCatalogoChecklist,
+                                            $jsonSeguroChecklist
+                                        ) ?>;
+
+        window.erroFormularioChecklist = <?= json_encode(
+                                                $erroFormularioChecklist,
+                                                $jsonSeguroChecklist
+                                            ) ?>;
     </script>
 
     <script src="../assets/JS/componentes/modal.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/checklist.js"></script>
 
-    <?php if ($erroFormulario !== ''): ?>
+    <?php if ($erroFormularioChecklist !== ''): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                alert(window.erroChecklist);
-
+                alert(window.erroFormularioChecklist);
                 document
-                    .getElementById('modalChecklist')
+                    .getElementById('checklist-modal-formulario')
                     ?.classList.add('active');
             });
         </script>
     <?php endif; ?>
+    
 </body>
 
 </html>
