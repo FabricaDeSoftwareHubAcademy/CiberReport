@@ -76,8 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
         </section>
+        <canvas id="wave-divider"></canvas>
         </div>
     </main>
+
+    <script src="../assets/JS/onda_login.js"></script>
 </body>
 
 </html>
