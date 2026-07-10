@@ -132,12 +132,16 @@
             </div>
             <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             <!-- barra de pesquisa para desktop -->
-            <div class="input-pesquisaSuperior">
-                <input type="text" placeholder="Buscar..." />
-                <button>
+            <form method="POST" class="input-pesquisaSuperior">
+                <input type="text"
+                    name="busca"
+                    placeholder="Digite os termos de Busca..."
+                    value="<?php echo htmlspecialchars($_POST['busca'] ?? ''); ?>" />
+
+                <button type="submit">
                     <i class="fa-brands fa-sistrix"></i>
                 </button>
-            </div>
+            </form>
 
             <!-- pesquisa para formato mobile -->
             <div class="pesquisa-mobile">
@@ -147,12 +151,12 @@
             </div>
             <!-- overlay-pesquisa -->
             <div class="overlay-pesquisaMobile">
-                <div class="barra-pesquisa">
-                    <input type="text" placeholder="Buscar..." />
-                    <button>
+                <form class="barra-pesquisa">
+                    <input type="text" placeholder="Digite os termos de Busca..." <?php if (htmlspecialchars($_POST['busca'])) echo htmlspecialchars($_POST['busca']); ?> />
+                    <button type="submit">
                         <i class="fa-brands fa-sistrix"></i>
                     </button>
-                </div>
+                </form>
             </div>
             <div class="perfis">
                 <i class="fa-regular fa-bell notificacao"></i>
