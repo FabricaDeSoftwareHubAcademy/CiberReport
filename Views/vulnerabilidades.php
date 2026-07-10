@@ -298,10 +298,10 @@
                             <div class="campo__select-wrapper">
                                 <select class="campo__select" id="severidade" name="severidade">
                                     <option value="" disabled selected>Selecione a severidade</option>
-                                    <option value="critica">Crítica</option>
                                     <option value="alta">Alta</option>
-                                    <option value="media">Média</option>
                                     <option value="baixa">Baixa</option>
+                                    <option value="critica">Crítica</option>
+                                    <option value="media">Média</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -314,11 +314,11 @@
                             <div class="campo__select-wrapper">
                                 <select class="campo__select" id="categoria" name="categoria">
                                     <option value="" disabled selected>Selecione a categoria</option>
+                                    <option value="api">API</option>
                                     <option value="web">Aplicação Web</option>
-                                    <option value="rede">Rede</option>
                                     <option value="infra">Infraestrutura</option>
                                     <option value="mobile">Mobile</option>
-                                    <option value="api">API</option>
+                                    <option value="rede">Rede</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -329,9 +329,9 @@
                                 <select class="campo__select" id="status" name="status">
                                     <option value="" disabled selected>Selecione o status</option>
                                     <option value="aberta">Aberta</option>
-                                    <option value="em-analise">Em Análise</option>
-                                    <option value="corrigida">Corrigida</option>
                                     <option value="aceita">Aceita</option>
+                                    <option value="corrigida">Corrigida</option>
+                                    <option value="em-analise">Em Análise</option>
                                     <option value="falso-positivo">Falso Positivo</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>

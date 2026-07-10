@@ -16,32 +16,36 @@
             }
         }
 
-        public function Vulnerabilidades($endereco_id,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel)
+        public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
         {
             global $pdo;
 
-            $empresa = $pdo->prepare("SELECT id FROM vulnerabilidade WHERE cnpj = :c");
-            $empresa->bindValue(":c", $cnpj);
-            $empresa->execute();
+            $Vulnerabilidades = $pdo->prepare("SELECT id FROM Vulnerabilidade WHERE  = :c");
+            $Vulnerabilidades->bindValue(":c",);
+            $Vulnerabilidades->execute();
 
-            if($empresa->rowCount() > 0){
+            if($id->rowCount() > 0){
                 return false;
             }
             else{
-                $vulnerabilidades = $pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contato,telefone,responsavel,status) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
-                $empresa->bindValue(":endereco_id",$endereco_id);
-                $empresa->bindValue(":nome_fantasia",$nome_fantasia);
-                $empresa->bindValue(":razao_social",$razao_social);
-                $empresa->bindValue(":cnpj",$cnpj);
-                $empresa->bindValue(":email_contato",$email_contato);
-                $empresa->bindValue(":telefone",$telefone);
-                $empresa->bindValue(":responsavel",$responsavel);
-                $empresa->execute();
+                $Vulnerabilidades = $pdo->prepare("INSERT INTO Vulnerabilidade (id,projeto_id,nome,cvss,cve,descricao,descricao_tecnica, categoria,severidade_vulnerabilidade,habilidade,status) VALUES (:id,:nome,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
+                $Vulnerabilidades->bindValue(":id",$id);
+                $Vulnerabilidades->bindValue(":projeto_id",$projeto_id);
+                $Vulnerabilidades->bindValue(":nome",$nome);
+                $Vulnerabilidades->bindValue(":cvss",$cvss);
+                $Vulnerabilidades->bindValue(":cve",$cve);
+                $Vulnerabilidades->bindValue(":descricao",$descricao);
+                $Vulnerabilidades->bindValue(":descricao_tecnica",$descricao_tecnica);
+                $Vulnerabilidades->bindValue(":categoria",$categoria);
+                $Vulnerabilidades->bindValue(":severidade_vulnerabilidade",$severidade_vulnerabilidade);
+                $Vulnerabilidades->bindValue(":habilidade",$habilitado);
+                $Vulnerabilidades->bindValue(":impacto_negocio",$impacto_negocio);
+                $Vulnerabilidades->execute();
                 return true;
             }
         }
 
-        public function ListarDados()
+        public function ListarVulnerabilidade()
         {
             $dados_vulnerabilidades = array();
             global $pdo;
@@ -50,53 +54,56 @@
             $sql = $pdo->prepare("SELECT vulnerabilidade.*, endereco.cidade, endereco.estado FROM empresa INNER JOIN endereco ON empresa.endereco_id = endereco.id ORDER BY empresa.nome_fantasia");
             $sql->execute();
 
-            $dados_empresa = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $dados_vulnerabilidades = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-            return $dados_empresa;
+            return $dados_vulnerabilidades;
         }
 
-        public function excluirVulnerabilidades($id_vulnerabilidades)
+        public function excluirVulnerabilidades($id)
         {
             global $pdo;
             $sql = $pdo->prepare("DELETE FROM vulnerabilidades WHERE id = :id");
-            $sql->bindValue(":id",$id_vulnerabilidades);
+            $sql->bindValue(":id",$id);
             $sql->execute();
         }
 
-        public function buscarDadosVulnerabilidade($id_vulnerabilidade)
+        public function buscarDadosVulnerabilidades($id)
         {
-            $dados_vulnerabilidade = array();
+            $dados_vulnerabilidades = array();
             global $pdo;
 
-            $sql = $pdo->prepare("SELECT * FROM empresa WHERE id = :id");
-            $sql->bindValue(":id", $id_vulnerabilidade);
+            $sql = $pdo->prepare("SELECT * FROM vulnerabidade WHERE id = :id");
+            $sql->bindValue(":id", $id);
             $sql->execute();
 
-            $dados_vulnerabilidade = $sql->fetch(PDO::FETCH_ASSOC);
+            $dados_vulnerabilidades = $sql->fetch(PDO::FETCH_ASSOC);
 
-            return $dados_vulnerabilidade;
+            return $dados_vulnerabilidades;
         }
 
-        public function atualizarDadosVulnerabilidade($id_vulnerabilidade,$nome_fantasia,$razao_social,$cnpj,$email_contato,$telefone,$responsavel)
+        public function atualizarDadosVulnerabilidades($id,$nome,$cvss,$cve,$descricao,$descricao_tecnica,$categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
         {
             global $pdo;
-            $sql = $pdo->prepare("UPDATE vulnerabilidade SET nome_fantasia = :nome_fantasia, razao_social = :razao_social, cnpj = :cnpj, email_contato = :email_contato, telefone = :telefone, responsavel = :responsavel WHERE id = :id");
-            $sql->bindValue(":nome_fantasia",$nome_fantasia);
-            $sql->bindValue(":razao_social",$razao_social);
-            $sql->bindValue(":cnpj",$cnpj);
-            $sql->bindValue(":email_contato",$email_contato);
-            $sql->bindValue(":telefone",$telefone);
-            $sql->bindValue(":responsavel",$responsavel);
-            $sql->bindValue(":id",$id_vulnerabilidade);
+            $sql = $pdo->prepare("UPDATE vulnerabilidade SET nome = :cvss, cve = :descricao, descricao_tecnica, categoria = severidade_vulnerabilidade, habilitado , impacto_negocio , WHERE id = :id");
+            $sql->bindValue(":nome",$nome);
+            $sql->bindValue(":cvss",$cvss);
+            $sql->bindValue(":cve",$cve);
+            $sql->bindValue(":descricao",$descricao);
+            $sql->bindValue(":descricao_tecnica",$descricao_tecnica);
+            $sql->bindValue(":categoria",$categoria);
+            $sql->bindValue(":severidade_vulnerabilidade",$severidade_vulnerabilidade);
+            $sql->bindValue(":habilitado",$habilitado);
+            $sql->bindValue(":impacto_negocio",$impacto_negocio);
+            $sql->bindValue(":id",$id);
             $sql->execute();
         }
 
-        public function alterarStatus($id_vulnerabilidades, $status)
+        public function alterarStatus($id, $habilitado)
         {
             global $pdo;
             $sql = $pdo->prepare("UPDATE vulnerabilidade SET status = :status WHERE id = :id");
-            $sql->bindValue(":status",$status);
-            $sql->bindValue(":id",$id_vulnerabilidades);
+            $sql->bindValue(":status",$habilitado);
+            $sql->bindValue(":id",$id);
             $sql->execute();
         }
     }
