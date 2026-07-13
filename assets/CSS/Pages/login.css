@@ -156,17 +156,6 @@ main{
     background: #1d3870;
 }
 
-/* Onda decorativa entre lado-esq e lado-dir */
-#wave-divider{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
-}
-
 @media (max-width: 1024px) {
     .lado-esq {
         width: 55%;
@@ -217,7 +206,4 @@ main{
         font-size: clamp(13px, 3.5vw, 15px);
     }
 
-    #wave-divider{
-        display: none; /* lado-esq some no mobile, então a onda não faz sentido */
-    }
 }
