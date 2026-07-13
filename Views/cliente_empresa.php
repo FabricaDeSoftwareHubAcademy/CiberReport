@@ -57,7 +57,7 @@ $dados = $controller->listarEmpresa();
 <main>
 
 
-    <section class="listar-clientes">
+    <section class="listar-clientes" id="tabela">
 
 
         <div class="button-cadastro">
@@ -430,7 +430,7 @@ $dados = $controller->listarEmpresa();
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
-
+<script src="../assets/JS/BarraDePesquisa.js"></script>
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>

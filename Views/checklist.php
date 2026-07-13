@@ -149,7 +149,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
         </div>
 
         <div class="tabela-wrapper">
-            <table>
+            <table id="tabela">
                 <thead>
                     <tr>
                         <th data-col="0">

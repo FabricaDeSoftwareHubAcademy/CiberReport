@@ -41,7 +41,7 @@
         </div>
 
         <div class="tabela-wrapper">
-            <table class="tabela">
+            <table class="tabela" id="tabela">
                 <thead>
                     <tr>
                         <th data-col="0">
@@ -348,7 +348,8 @@
             </div>
         </div>
     </main>
-
+    
+    <script src="../assets/JS/BarraDePesquisa.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>

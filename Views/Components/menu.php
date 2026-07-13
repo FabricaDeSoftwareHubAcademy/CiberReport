@@ -135,8 +135,7 @@
             <form method="POST" class="input-pesquisaSuperior">
                 <input type="text"
                     name="busca"
-                    placeholder="Digite os termos de Busca..."
-                    value="<?php echo htmlspecialchars($_POST['busca'] ?? ''); ?>" />
+                    placeholder="Digite os termos de Busca..." id="busca" />
 
                 <button type="submit">
                     <i class="fa-brands fa-sistrix"></i>
@@ -150,14 +149,14 @@
                 </button>
             </div>
             <!-- overlay-pesquisa -->
-            <div class="overlay-pesquisaMobile">
-                <form class="barra-pesquisa">
-                    <input type="text" placeholder="Digite os termos de Busca..." <?php if (htmlspecialchars($_POST['busca'])) echo htmlspecialchars($_POST['busca']); ?> />
-                    <button type="submit">
-                        <i class="fa-brands fa-sistrix"></i>
-                    </button>
-                </form>
-            </div>
+         
+            <form class="barra-pesquisa">
+                <input type="text" placeholder="Digite os termos de Busca..."  id="Barra-pesquisa" id="busca"/>
+                <button type="submit">
+                    <i class="fa-brands fa-sistrix"></i>
+                </button>
+            </form>
+            
             <div class="perfis">
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />

@@ -47,7 +47,7 @@ $dados = $controller->listar();
             </div>
     
             <div class="tabela-wrapper tabela-gerenciamento-projeto">
-                <table>
+                <table id="tabela">
                     <thead>
                         <tr>
                             <th data-col="0">
@@ -143,6 +143,6 @@ $dados = $controller->listar();
             </form>
         </div>
     </div>
-
+    <script src="../assets/JS/BarraDePesquisa.js"></script>
 </body>
 </html>
