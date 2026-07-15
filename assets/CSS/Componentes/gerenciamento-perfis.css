@@ -11,10 +11,7 @@
     justify-content: flex-end;
 }
 
-.perfis-corpo {
-    display: flex;
-    gap: 20px;
-}
+
 
 .perfis-lista-tabs {
     display: flex;
