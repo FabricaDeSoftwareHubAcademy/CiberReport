@@ -19,7 +19,7 @@
 -->
 
 <div class="menu">
-    <nav id="sideBar">
+    <nav id="sideBar" class="open-sidebar">
         <div class="sidebar_content">
             <div class="logo">
                 <div class="logo-nome">
