@@ -1,7 +1,7 @@
 <?php 
 
 require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Database/gerenc_perfil.php";
+require_once __DIR__ . "/../Model/Database/GerenciarPerfil.php";
 
 class gerenciarPerfilController
 {

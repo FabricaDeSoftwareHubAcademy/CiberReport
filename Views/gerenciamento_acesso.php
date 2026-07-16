@@ -1,5 +1,5 @@
 <?php
-require_once "../Controller/gerenciarPerfilController.php";
+require_once "../Controller/GerenciarPerfilController.php";
 
 $controller = new GerenciarPerfilController();
 
@@ -42,7 +42,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
         referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../assets/CSS/style.css">
     <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
-    <link rel="stylesheet" href="../assets/CSS/Componentes/gerenciamento-perfis.css">
+    <link rel="stylesheet" href="../assets/CSS/Componentes/gerenciamento-acesso.css">
 </head>
 
 <body>
@@ -52,7 +52,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
     ?>
 
     <main>
-        <div class="ger-pentest-topo">
+        <div class="ger-acesso-topo">
             <button class="btn-novo-cadastro" data-modal-target="modalNovoPerfil">
                 <i class="fa-solid fa-plus"></i>Novo perfil
             </button>

@@ -1,4 +1,8 @@
-
+.ger-acesso-topo{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--espaco-md);
+}
 .perfis-container {
     display: flex;
     flex-direction: column;
