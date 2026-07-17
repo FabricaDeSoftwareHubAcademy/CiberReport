@@ -2,13 +2,6 @@
 
 Um sistema web para geração/registro de relatórios relacionados a cibersegurança. Fornece formulários e visualizações para criar, consultar e gerir incidentes, avaliações e evidências relacionadas à segurança.
 
-## Sumário
-- [Sobre](#sobre)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias](#tecnologias)
-- [Requisitos](#requisitos)
-- [Instalação](#instalação)
-
 ## Sobre
 CiberReport é um projeto voltado a facilitar a criação e o gerenciamento de relatórios de segurança (incidentes, auditorias, checklists). O foco é em simplicidade de uso, armazenamento organizado das evidências e exportação de relatórios para análises posteriores.
 
