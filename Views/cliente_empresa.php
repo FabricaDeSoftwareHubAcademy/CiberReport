@@ -191,7 +191,7 @@ $dados = $controller->listarEmpresa();
 
                     </div>
 <!-- ERRO NESSA LINHA, alterar o campo de obrigatoriedade -->
-                    <div class="modal__footer"> 
+                    <div class="modal__footer modal__footer-cliente"> 
                         <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -332,7 +332,7 @@ $dados = $controller->listarEmpresa();
 
                     </div>
 
-                    <div class="modal__footer">
+                    <div class="modal__footer modal__footer-cliente-edicao">
                         <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
