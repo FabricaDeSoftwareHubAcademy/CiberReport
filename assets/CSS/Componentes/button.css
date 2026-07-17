@@ -1,4 +1,4 @@
-
+@import url("../style.css");
 
 .btn-botao-verde{
     display: flex;
@@ -13,16 +13,17 @@
     background-color: var(--cor-verde);   
     color: var(--cor-branco-primario);
     height: 40px;
+    gap: 15px;
 }
 .btn-botao-verde:hover{
-    background-color: rgb(97, 223, 97);
+    background-color: rgb(39, 146, 55);
 }
 .btn-cancelar{
     display: flex;       
     align-items: center;        
     justify-content: center;   
     padding: 10px 20px;            
-    font-size: 13px;           
+    font-size: 13px;
     font-weight: 600;           
     border: 1px solid #101a40;
     border-radius: var(--raio-md);         
@@ -30,6 +31,7 @@
     background-color: var(--cor-branco-primario);   
     color: #101a40;
     height: 40px;
+    gap: 15px;
 }
 .btn-cancelar:hover {
     background-color: #b6cedd; 
@@ -44,13 +46,13 @@
     border: none;
     border-radius: var(--raio-md);
     cursor: pointer;
-    background-color: #081650;
+    background-color: var(--cor-azul-primaria);
     color: var(--cor-branco-primario);
     gap: 15px;
     height: 40px;
 }
 .btn-novo-cadastro:hover{
-    background-color:#072188;
+    background-color: var(--cor-azul-destaques);
 }
 .btn-fechar-modal{
     display: flex;
@@ -836,7 +838,13 @@
 
 
 .switch:hover input:checked + .switch-slider {
-  filter: brightness(1.2); 
+  filter: brightness(1.2);
+}
+
+.switch ~ [class$="-toggle-label"] {
+  display: inline-block;
+  width: 46px;
+  text-align: left;
 }
 
 
