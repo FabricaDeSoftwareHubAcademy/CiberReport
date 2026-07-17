@@ -581,4 +581,35 @@
     .checklist-visualizacao-campo--largo {
         grid-column: auto;
     }
+
+
+    .tabela-wrapper table {
+    min-width: 1100px;
+    table-layout: fixed;
+}
+
+.tabela-wrapper th:nth-child(1),
+.tabela-wrapper td:nth-child(1) {
+    width: 40px;
+}
+
+.tabela-wrapper th:nth-child(2),
+.tabela-wrapper td:nth-child(2) {
+    width: 240px;
+}
+
+.tabela-wrapper th:nth-child(3),
+.tabela-wrapper td:nth-child(3) {
+    width: 240px;
+}
+
+.tabela-wrapper th:nth-child(4),
+.tabela-wrapper td:nth-child(4) {
+    width: 120px;
+}
+
+
+
+
+
 }

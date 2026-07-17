@@ -173,7 +173,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <i class="fa-solid fa-filter sort-icon"></i>
                             </span>
                         </th>
-                        <th data-col="4">
+                        <th data-col="4" class="col-status">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
