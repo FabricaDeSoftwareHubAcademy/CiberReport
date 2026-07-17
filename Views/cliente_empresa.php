@@ -372,7 +372,7 @@ $dados = $controller->listarEmpresa();
                         <th data-col="5">
                             <span class="th-label">Telefone <i class="fa-solid fa-filter sort-icon"></i></span>
                         </th>
-                        <th data-col="6">
+                        <th data-col="6" class="col-status">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
@@ -387,7 +387,7 @@ $dados = $controller->listarEmpresa();
                             <td><?= htmlspecialchars($empresa['responsavel']) ?></td>
                             <td><?= htmlspecialchars($empresa['email_contato'] ?? '---') ?></td>
                             <td><?= htmlspecialchars($empresa['telefone']) ?></td>
-                            <td>
+                            <td class="col-status">
                                 <div class="clientes-status-cell">
                                     <label class="switch">
                                         <input type="checkbox" <?= $empresa['habilitado'] ? 'checked' : '' ?> data-id="<?= $empresa['id'] ?>" onchange="toggleHabilitado(this)">

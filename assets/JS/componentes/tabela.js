@@ -29,6 +29,24 @@
     });
     paginaAtual = pagina;
     renderizarBotoes();
+    aplicarTooltipsOverflow();
+  }
+
+  // --- tooltip para conteúdo truncado ---
+  function aplicarTooltipsOverflow() {
+    const celulas = [
+      ...cabecalhos,
+      ...todasLinhas()
+        .filter((linha) => linha.style.display !== 'none')
+        .flatMap((linha) => Array.from(linha.cells)),
+    ];
+    celulas.forEach((celula) => {
+      if (celula.scrollWidth > celula.clientWidth) {
+        celula.title = celula.textContent.trim();
+      } else {
+        celula.removeAttribute('title');
+      }
+    });
   }
 
   function renderizarBotoes() {
@@ -114,7 +132,7 @@
           ? 'fa-solid fa-sort-up sort-icon'
           : 'fa-solid fa-sort-down sort-icon';
       } else {
-        icone.className = 'fa-solid fa-sort sort-icon';
+        icone.className = 'sort-icon';
       }
     });
   }
@@ -128,5 +146,6 @@
   });
 
   // inicializa na página 1
+  atualizarIcones();
   exibirPagina(1);
 })();
