@@ -46,7 +46,7 @@
                     <div class="tooltip-item"><span>Relatórios</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="usuario.html" class="margin-lef">
+                    <a href="usuario.php" class="margin-lef">
                         <i class="fa-solid fa-users"></i>
                         <span class="item_description">Usuários</span>
                     </a>
