@@ -41,7 +41,7 @@ class VulnerabilidadesController
         }
 
         return $this->Vulnerabilidades->cadastrarVulnerabilidade(
-            $id,$nome, $projeto_id, $nome,
+            $id,$nome, $projeto_id,
             $cvss, $cve, $descricao,
             $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio
         );
