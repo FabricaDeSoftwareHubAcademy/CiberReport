@@ -39,6 +39,9 @@ class CadastroEmpresaController
         $email_contato = addslashes($_POST['email_contato'] ?? '');
         $cnpj = addslashes($_POST['cnpj'] ?? '');
         $responsavel = addslashes($_POST['responsavel'] ?? '');
+        $telefone_responsavel = addcslashes($_POST['telefone_responsavel']);
+        $email_responsavel = addcslashes($_POST['email_responsavel']);
+        $cpf_responsavel = addcslashes($_POST['cpf_responsavel']);
 
         $cep = addslashes($_POST['cep'] ?? '');
         $rua = addslashes($_POST['rua'] ?? '');
@@ -68,7 +71,7 @@ class CadastroEmpresaController
 
         $this->empresa->cadastrarEmpresa(
             $id_endereco_novo, $nome_fantasia, $razao_social, $cnpj,
-            $email_contato, $telefone, $responsavel
+            $email_contato, $telefone, $responsavel, $telefone_responsavel, $email_responsavel, $cpf_responsavel
         );
 
         return true;
@@ -85,6 +88,9 @@ class CadastroEmpresaController
         $email_contato = addslashes($_POST['email_contato'] ?? '');
         $cnpj = addslashes($_POST['cnpj'] ?? '');
         $responsavel = addslashes($_POST['responsavel'] ?? '');
+        $telefone_responsavel = addcslashes($_POST['telefone_responsavel'] ?? '');
+        $email_responsavel = addcslashes($_POST['email_responsavel'] ?? '');
+        $cpf_responsavel = addcslashes($_POST['cpf_responsavel'] ?? '');
 
         $cep = addslashes($_POST['cep'] ?? '');
         $rua = addslashes($_POST['rua'] ?? '');
@@ -97,7 +103,7 @@ class CadastroEmpresaController
 
         $this->empresa->atualizarDadosEmpresa(
             $id_empresa, $nome_fantasia, $razao_social, $cnpj,
-            $email_contato, $telefone, $responsavel
+            $email_contato, $telefone, $responsavel,  $telefone_responsavel, $email_responsavel, $cpf_responsavel
         );
 
         $this->endereco->atualizarDadosEnderecoEmpresa(

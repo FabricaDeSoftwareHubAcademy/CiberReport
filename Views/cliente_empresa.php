@@ -325,7 +325,7 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CPF</label>
-                                    <input type="text" name="cpf" class="campo__input" placeholder="000.000.000-00" />
+                                    <input type="text" name="cpf_responsavel" class="campo__input" placeholder="000.000.000-00" />
                                 </div>
                             </div>
                         </div>

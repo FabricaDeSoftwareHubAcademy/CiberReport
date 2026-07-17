@@ -17,7 +17,7 @@ class Empresa
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function cadastrarEmpresa($endereco_id, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)
+    public function cadastrarEmpresa($endereco_id, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel, $telefone_responsavel, $cpf_responsavel, $email_responsavel)
     {
         $sql = $this->pdo->prepare("INSERT INTO empresa (endereco_id,nome_fantasia,razao_social,cnpj,email_contato,telefone,responsavel,habilitado) VALUES (:endereco_id,:nome_fantasia,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
         $sql->bindValue(":endereco_id", $endereco_id);
@@ -27,6 +27,9 @@ class Empresa
         $sql->bindValue(":email_contato", $email_contato);
         $sql->bindValue(":telefone", $telefone);
         $sql->bindValue(":responsavel", $responsavel);
+        $sql->bindValue(":telefone_responsavel", $telefone_responsavel);
+        $sql->bindValue(":email_responsavel", $email_responsavel);
+        $sql->bindValue(":cpf_responsavel", $cpf_responsavel);
         $sql->execute();
         return $this->pdo->lastInsertId();
     }
@@ -53,7 +56,7 @@ class Empresa
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function atualizarDadosEmpresa($id_empresa, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel)
+    public function atualizarDadosEmpresa($id_empresa, $nome_fantasia, $razao_social, $cnpj, $email_contato, $telefone, $responsavel, $telefone_responsavel, $cpf_responsavel, $email_responsavel)
     {
         $sql = $this->pdo->prepare("UPDATE empresa SET nome_fantasia = :nome_fantasia, razao_social = :razao_social, cnpj = :cnpj, email_contato = :email_contato, telefone = :telefone, responsavel = :responsavel WHERE id = :id");
         $sql->bindValue(":nome_fantasia", $nome_fantasia);
@@ -63,6 +66,9 @@ class Empresa
         $sql->bindValue(":telefone", $telefone);
         $sql->bindValue(":responsavel", $responsavel);
         $sql->bindValue(":id", $id_empresa);
+        $sql->bindValue(":telefone_responsavel", $telefone_responsavel);
+        $sql->bindValue(":email_responsavel", $email_responsavel);
+        $sql->bindValue(":cpf_responsavel", $cpf_responsavel);
         $sql->execute();
     }
 
