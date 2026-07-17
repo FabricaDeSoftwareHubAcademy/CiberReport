@@ -16,95 +16,183 @@
             }
         }
 
-        public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
+      class Vulnerabilidades
+    {
+        private $pdo;
+ 
+        public $msgErro = "";
+ 
+        public function conectar($nome_banco, $host, $usuario, $senha)
         {
-            global $pdo;
-
-            $Vulnerabilidades = $pdo->prepare("SELECT id FROM Vulnerabilidade WHERE  = :c");
-            $Vulnerabilidades->bindValue(":c",);
-            $Vulnerabilidades->execute();
-
-            if($id->rowCount() > 0){
+            try {
+                $this->pdo = new PDO("mysql:host=" . $host . ";dbname=" . $nome_banco, $usuario, $senha);
+                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                return true;
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                $this->pdo = null;
                 return false;
             }
-            else{
-                $Vulnerabilidades = $pdo->prepare("INSERT INTO Vulnerabilidade (id,projeto_id,nome,cvss,cve,descricao,descricao_tecnica, categoria,severidade_vulnerabilidade,habilidade,status) VALUES (:id,:nome,:razao_social,:cnpj,:email_contato,:telefone,:responsavel,1)");
-                $Vulnerabilidades->bindValue(":id",$id);
-                $Vulnerabilidades->bindValue(":projeto_id",$projeto_id);
-                $Vulnerabilidades->bindValue(":nome",$nome);
-                $Vulnerabilidades->bindValue(":cvss",$cvss);
-                $Vulnerabilidades->bindValue(":cve",$cve);
-                $Vulnerabilidades->bindValue(":descricao",$descricao);
-                $Vulnerabilidades->bindValue(":descricao_tecnica",$descricao_tecnica);
-                $Vulnerabilidades->bindValue(":categoria",$categoria);
-                $Vulnerabilidades->bindValue(":severidade_vulnerabilidade",$severidade_vulnerabilidade);
-                $Vulnerabilidades->bindValue(":habilidade",$habilitado);
-                $Vulnerabilidades->bindValue(":impacto_negocio",$impacto_negocio);
-                $Vulnerabilidades->execute();
+        }
+ 
+        private function conexaoOk()
+        {
+            if ($this->pdo === null) {
+                $this->msgErro = "Sem conexão ativa com o banco de dados. Chame conectar() antes.";
+                return false;
+            }
+            return true;
+        }
+ 
+        public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
+        {
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $verifica = $this->pdo->prepare("SELECT id FROM Vulnerabilidade WHERE nome = :nome AND projeto_id = :projeto_id");
+                $verifica->bindValue(":nome", $nome);
+                $verifica->bindValue(":projeto_id", $projeto_id);
+                $verifica->execute();
+ 
+                if ($verifica->rowCount() > 0) {
+                    return false;
+                }
+ 
+                $sql = $this->pdo->prepare("INSERT INTO Vulnerabilidade
+                    (id, projeto_id, nome, cvss, cve, descricao, descricao_tecnica, categoria, severidade_vulnerabilidade, habilitado, impacto_negocio, status)
+                    VALUES
+                    (:id, :projeto_id, :nome, :cvss, :cve, :descricao, :descricao_tecnica, :categoria, :severidade_vulnerabilidade, :habilitado, :impacto_negocio, 1)");
+ 
+                $sql->bindValue(":id", $id);
+                $sql->bindValue(":projeto_id", $projeto_id);
+                $sql->bindValue(":nome", $nome);
+                $sql->bindValue(":cvss", $cvss);
+                $sql->bindValue(":cve", $cve);
+                $sql->bindValue(":descricao", $descricao);
+                $sql->bindValue(":descricao_tecnica", $descricao_tecnica);
+                $sql->bindValue(":categoria", $categoria);
+                $sql->bindValue(":severidade_vulnerabilidade", $severidade_vulnerabilidade);
+                $sql->bindValue(":habilitado", $habilitado);
+                $sql->bindValue(":impacto_negocio", $impacto_negocio);
+                $sql->execute();
+ 
                 return true;
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
             }
         }
-
-        public function ListarVulnerabilidade()
+ 
+        public function listarVulnerabilidade()
         {
-            $dados_vulnerabilidades = array();
-            global $pdo;
-
-            
-            $sql = $pdo->prepare("SELECT vulnerabilidade.*, endereco.cidade, endereco.estado FROM empresa INNER JOIN endereco ON empresa.endereco_id = endereco.id ORDER BY empresa.nome_fantasia");
-            $sql->execute();
-
-            $dados_vulnerabilidades = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-            return $dados_vulnerabilidades;
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $sql = $this->pdo->prepare("SELECT * FROM Vulnerabilidade ORDER BY nome");
+                $sql->execute();
+ 
+                return $sql->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
+            }
         }
-
+ 
         public function excluirVulnerabilidades($id)
         {
-            global $pdo;
-            $sql = $pdo->prepare("DELETE FROM vulnerabilidades WHERE id = :id");
-            $sql->bindValue(":id",$id);
-            $sql->execute();
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $sql = $this->pdo->prepare("DELETE FROM Vulnerabilidade WHERE id = :id");
+                $sql->bindValue(":id", $id);
+                $sql->execute();
+ 
+                return $sql->rowCount() > 0;
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
+            }
         }
-
+ 
         public function buscarDadosVulnerabilidades($id)
         {
-            $dados_vulnerabilidades = array();
-            global $pdo;
-
-            $sql = $pdo->prepare("SELECT * FROM vulnerabidade WHERE id = :id");
-            $sql->bindValue(":id", $id);
-            $sql->execute();
-
-            $dados_vulnerabilidades = $sql->fetch(PDO::FETCH_ASSOC);
-
-            return $dados_vulnerabilidades;
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $sql = $this->pdo->prepare("SELECT * FROM Vulnerabilidade WHERE id = :id");
+                $sql->bindValue(":id", $id);
+                $sql->execute();
+ 
+                return $sql->fetch(PDO::FETCH_ASSOC);
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
+            }
         }
-
-        public function atualizarDadosVulnerabilidades($id,$nome,$cvss,$cve,$descricao,$descricao_tecnica,$categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
+ 
+        public function atualizarDadosVulnerabilidades($id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
         {
-            global $pdo;
-            $sql = $pdo->prepare("UPDATE vulnerabilidade SET nome = :cvss, cve = :descricao, descricao_tecnica, categoria = severidade_vulnerabilidade, habilitado , impacto_negocio , WHERE id = :id");
-            $sql->bindValue(":nome",$nome);
-            $sql->bindValue(":cvss",$cvss);
-            $sql->bindValue(":cve",$cve);
-            $sql->bindValue(":descricao",$descricao);
-            $sql->bindValue(":descricao_tecnica",$descricao_tecnica);
-            $sql->bindValue(":categoria",$categoria);
-            $sql->bindValue(":severidade_vulnerabilidade",$severidade_vulnerabilidade);
-            $sql->bindValue(":habilitado",$habilitado);
-            $sql->bindValue(":impacto_negocio",$impacto_negocio);
-            $sql->bindValue(":id",$id);
-            $sql->execute();
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $sql = $this->pdo->prepare("UPDATE Vulnerabilidade SET
+                    nome = :nome,
+                    cvss = :cvss,
+                    cve = :cve,
+                    descricao = :descricao,
+                    descricao_tecnica = :descricao_tecnica,
+                    categoria = :categoria,
+                    severidade_vulnerabilidade = :severidade_vulnerabilidade,
+                    habilitado = :habilitado,
+                    impacto_negocio = :impacto_negocio
+                    WHERE id = :id");
+ 
+                $sql->bindValue(":nome", $nome);
+                $sql->bindValue(":cvss", $cvss);
+                $sql->bindValue(":cve", $cve);
+                $sql->bindValue(":descricao", $descricao);
+                $sql->bindValue(":descricao_tecnica", $descricao_tecnica);
+                $sql->bindValue(":categoria", $categoria);
+                $sql->bindValue(":severidade_vulnerabilidade", $severidade_vulnerabilidade);
+                $sql->bindValue(":habilitado", $habilitado);
+                $sql->bindValue(":impacto_negocio", $impacto_negocio);
+                $sql->bindValue(":id", $id);
+                $sql->execute();
+ 
+                return $sql->rowCount() > 0;
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
+            }
         }
-
+ 
         public function alterarStatus($id, $habilitado)
         {
-            global $pdo;
-            $sql = $pdo->prepare("UPDATE vulnerabilidade SET status = :status WHERE id = :id");
-            $sql->bindValue(":status",$habilitado);
-            $sql->bindValue(":id",$id);
-            $sql->execute();
+            if (!$this->conexaoOk()) {
+                return false;
+            }
+ 
+            try {
+                $sql = $this->pdo->prepare("UPDATE Vulnerabilidade SET status = :status WHERE id = :id");
+                $sql->bindValue(":status", $habilitado);
+                $sql->bindValue(":id", $id);
+                $sql->execute();
+ 
+                return $sql->rowCount() > 0;
+            } catch (PDOException $erro) {
+                $this->msgErro = $erro->getMessage();
+                return false;
+            }
         }
     }
-?>
+}
