@@ -195,7 +195,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                     <?= escaparHtmlChecklist($checklist['categoria'] ?? '') ?>
                                 </span>
                             </td>
-                            <td>
+                            <td class="col-status">
                                 <div class="checklist-status">
                                     <label class="switch">
                                         <input
