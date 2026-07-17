@@ -838,7 +838,13 @@
 
 
 .switch:hover input:checked + .switch-slider {
-  filter: brightness(1.2); 
+  filter: brightness(1.2);
+}
+
+.switch ~ [class$="-toggle-label"] {
+  display: inline-block;
+  width: 46px;
+  text-align: left;
 }
 
 
