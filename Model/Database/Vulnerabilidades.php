@@ -51,7 +51,7 @@
             global $pdo;
 
             
-            $sql = $pdo->prepare("SELECT vulnerabilidade.*, endereco.cidade, endereco.estado FROM empresa INNER JOIN endereco ON empresa.endereco_id = endereco.id ORDER BY empresa.nome_fantasia");
+            $sql = $pdo->prepare("SELECT vulnerabilidade.*, id, projeto_id FROM vulnerabilidade INNER JOIN endereco ON empresa.endereco_id = endereco.id ORDER BY vulnerabilidade");
             $sql->execute();
 
             $dados_vulnerabilidades = $sql->fetchAll(PDO::FETCH_ASSOC);
