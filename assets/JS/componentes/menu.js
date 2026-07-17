@@ -14,8 +14,10 @@ document.getElementById('open_btn').addEventListener('click', function () {
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
         }, 100);
+        document.cookie = "sidebar_aberta=false; path=/; SameSite=Lax";
     } else {
         sideBar.classList.add('open-sidebar');
+        document.cookie = "sidebar_aberta=true; path=/; SameSite=Lax";
     }
     // suBmenus.classList.add('fechado');
 });

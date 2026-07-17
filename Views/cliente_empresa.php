@@ -351,7 +351,7 @@ $dados = $controller->listarEmpresa();
 
 
        <div class="tabela-wrapper">
-            <table>
+            <table id="tabela">
                 <thead>
                     <tr>
                         <th data-col="0">
@@ -430,7 +430,7 @@ $dados = $controller->listarEmpresa();
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
-
+<script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>
