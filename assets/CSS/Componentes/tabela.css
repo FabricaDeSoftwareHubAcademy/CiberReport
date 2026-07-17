@@ -1,10 +1,10 @@
 .tabela-wrapper {
     overflow-x: auto;
     width: 100%;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+    max-width: 100%;
+    box-sizing: border-box;
 }
+
 .tabela-wrapper table {
     width: 100%;
     min-width: 900px;
