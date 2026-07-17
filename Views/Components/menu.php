@@ -103,7 +103,7 @@
                     <div class="tooltip-item"><span>Logs</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="gerenciamento_perfis.php">
+                    <a href="gerenciamento_acesso.php">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
