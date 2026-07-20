@@ -9,11 +9,12 @@
   // --- paginação ---
   const LINHAS_POR_PAGINA = 10;
   let paginaAtual = 1;
+  let linhasFiltro = null;
   const tabela = corpo.closest('table');
   const containerPaginacao = tabela ? tabela.querySelector('tfoot .paginacao') : null;
 
   function todasLinhas() {
-    return Array.from(corpo.querySelectorAll('tr'));
+    return linhasFiltro || Array.from(corpo.querySelectorAll('tr'));
   }
 
   function totalPaginas() {
@@ -144,6 +145,19 @@
       rotulo.addEventListener('click', () => ordenarLinhas(coluna));
     }
   });
+
+  // --- filtro externo (barra de pesquisa) ---
+  window.tabelaPaginacao = {
+    filtrar(linhas) {
+      Array.from(corpo.querySelectorAll('tr')).forEach((linha) => (linha.style.display = 'none'));
+      linhasFiltro = linhas;
+      exibirPagina(1);
+    },
+    limparFiltro() {
+      linhasFiltro = null;
+      exibirPagina(1);
+    },
+  };
 
   // inicializa na página 1
   atualizarIcones();
