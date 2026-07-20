@@ -51,7 +51,7 @@ $estadoMenu = (isset($_COOKIE['sidebar_aberta']) && $_COOKIE['sidebar_aberta'] =
                     <div class="tooltip-item"><span>Relatórios</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="usuario.html" class="margin-lef">
+                    <a href="usuario.php" class="margin-lef">
                         <i class="fa-solid fa-users"></i>
                         <span class="item_description">Usuários</span>
                     </a>
@@ -108,7 +108,7 @@ $estadoMenu = (isset($_COOKIE['sidebar_aberta']) && $_COOKIE['sidebar_aberta'] =
                     <div class="tooltip-item"><span>Logs</span></div>
                 </li>
                 <li class="side_item">
-                    <a href="gerenciamento_perfis.php">
+                    <a href="gerenciamento_acesso.php">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
@@ -168,3 +168,5 @@ $estadoMenu = (isset($_COOKIE['sidebar_aberta']) && $_COOKIE['sidebar_aberta'] =
                 </div>
             </div>
         </header>
+
+        <script src="../assets/JS/componentes/menu.js"></script>

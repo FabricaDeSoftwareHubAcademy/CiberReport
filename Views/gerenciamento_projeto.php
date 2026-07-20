@@ -89,10 +89,10 @@ $dados = $controller->listar();
                                         <button title="Visualizar" aria-label="Visualizar">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
-                                        <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
+                                        <button class="btn-editar" title="Editar" aria-label="Editar">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
-                                        <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
