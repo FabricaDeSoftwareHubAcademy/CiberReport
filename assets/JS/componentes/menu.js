@@ -5,34 +5,37 @@ const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
 const logoMenuSuperior = document.querySelector('.logo-menuSuperior');
 const menuOverlay = document.querySelector('.menuOverlay');
 
-// Botão de abrir/fechar sidebar (desktop)
+function persistenciaMenu(valor){
+    document.cookie = `sidebarOpen=${valor}; path=/; max-age=900000`
+}
+
 document.getElementById('open_btn').addEventListener('click', function () {
     const isOpen = sideBar.classList.contains('open-sidebar');
 
     if (isOpen) {
         menuOverlay.classList.remove('active');
+        persistenciaMenu(false);
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
         }, 100);
-        document.cookie = "sidebar_aberta=false; path=/; SameSite=Lax";
     } else {
         sideBar.classList.add('open-sidebar');
-        document.cookie = "sidebar_aberta=true; path=/; SameSite=Lax";
+        persistenciaMenu(true);        
     }
-    // suBmenus.classList.add('fechado');
 });
 
 // Logo do menu superior abre sidebar (mobile)
 logoMenuSuperior.addEventListener('click', () => {
-    sideBar.classList.toggle('open-sidebar');
-    menuOverlay.classList.toggle('active');
+    const menuAberto = sideBar.classList.toggle('open-sidebar');
+    menuOverlay.classList.toggle('active', menuAberto);
+    persistenciaMenu(menuAberto);
 });
 
 // Overlay do menu mobile fecha o sidebar
 menuOverlay.addEventListener('click', () => {
     sideBar.classList.remove('open-sidebar');
     menuOverlay.classList.remove('active');
-    dropdown.classList.remove('open_dropdown');
+    persistenciaMenu(false);
 });
 
 // Botão de pesquisa mobile abre overlay de busca

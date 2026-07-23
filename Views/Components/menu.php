@@ -1,3 +1,8 @@
+<?php
+session_start();
+$nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
+?>
+
 <!--
     COMO USAR O MENU LATERAL
     ========================
@@ -17,14 +22,12 @@
     Sem esse fechamento o <main> fica fora do flex row da sidebar
     e o efeito de "empurrar" o conteúdo não funciona.
 -->
-
-
 <div class="menu">
-    <?php
-// Define a classe inicial baseada no cookie
-$estadoMenu = (isset($_COOKIE['sidebar_aberta']) && $_COOKIE['sidebar_aberta'] === 'true') ? 'open-sidebar' : '';
+<?php 
+$sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
+$classeMenu = $sidebarAberto ? 'open-sidebar' : '';
 ?>
-    <nav id="sideBar" class="<?php echo $estadoMenu; ?>">
+    <nav id="sideBar" class="<?= $classeMenu ?>">
         <div class="sidebar_content">
             <div class="logo">
                 <div class="logo-nome">
@@ -163,7 +166,7 @@ $estadoMenu = (isset($_COOKIE['sidebar_aberta']) && $_COOKIE['sidebar_aberta'] =
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
                 <div class="description-user">
-                    <p>Bruno Alvares</p>
+                    <p><?= $nomeUsuario?></p>
                     <p>Gerente</p>
                 </div>
             </div>
