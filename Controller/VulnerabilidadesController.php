@@ -52,8 +52,8 @@ class VulnerabilidadesController
         $this->Vulnerabilidades->excluirVulnerabilidades((int) $id);
     }
 
-    public function alterarStatus($id, $habilitado)
+    public function alterarStatus($id, $status)
     {
-        $this->Vulnerabilidades->alterarStatus((int) $id, (int) $habilitado);
+        $this->Vulnerabilidades->alterarStatus((int) $id, (int) $status);
     }
 }
