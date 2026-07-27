@@ -246,3 +246,10 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   item_id INT NOT NULL,
   PRIMARY KEY (id)
 );
+
+ALTER TABLE empresa
+ADD(
+  email_responsavel VARCHAR(255) NOT NULL,
+  cpf_responsavel CHAR(11) NOT NULL,
+  telefone_responsavel VARCHAR(20) NOT NULL
+);
