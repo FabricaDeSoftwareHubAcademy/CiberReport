@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS cronometro_log (
   PRIMARY KEY (id)
   -- FOREIGN KEY (cronometro_id) REFERENCES cronometro_registro(id),
   -- FOREIGN KEY (ip_analista) REFERENCES cronometro_registro(ip_analista),
-  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo), 
+  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo),
   -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS banco_conhecimento (
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
 );
 
-CREATE TABLEIF IF NOT EXISTS pentest_tipos (
+CREATE TABLE IF NOT EXISTS pentest_tipos (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     nome              VARCHAR(255) NOT NULL,
     descricao_breve   VARCHAR(500),
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
 );
 
 ALTER TABLE empresa
-ADD( 
+ADD(
   email_responsavel VARCHAR(255) NOT NULL,
   cpf_responsavel CHAR(11) NOT NULL,
   telefone_responsavel VARCHAR(20) NOT NULL
