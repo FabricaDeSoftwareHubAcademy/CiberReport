@@ -49,6 +49,11 @@
 }
 
 
-
+.modal__footer-cliente{
+    border-top: none !important;
+}
+.modal__footer-cliente-edicao{
+    border-top: none !important;
+}
 
 
