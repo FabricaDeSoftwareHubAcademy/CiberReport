@@ -61,10 +61,10 @@ $dados = $controller->listar();
                             <th data-col="3">
                                 <span class="th-label">Tipo do teste <i class="fa-solid fa-sort sort-icon"></i></span>
                             </th>
-                            <th data-col="4" data-tipo="data">
+                            <th data-col="4" data-filtro="data">
                                 <span class="th-label">Data Inicio <i class="fa-solid fa-sort sort-icon"></i></span>
                             </th>
-                            <th data-col="5" data-tipo="data">
+                            <th data-col="5" data-filtro="data">
                                 <span class="th-label">Data Fim <i class="fa-solid fa-sort sort-icon"></i></span>
                             </th>
                             <th data-col="6">
