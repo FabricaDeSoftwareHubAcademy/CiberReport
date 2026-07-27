@@ -1,5 +1,9 @@
 /* ===== Componente de Foto do Usuário ===== */
-
+.ger-usuario{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--espaco-md);
+}
 .foto-usuario-wrapper {
     display: flex;
     flex-direction: column;

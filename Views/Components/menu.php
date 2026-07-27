@@ -26,6 +26,10 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
 <?php 
 $sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
 $classeMenu = $sidebarAberto ? 'open-sidebar' : '';
+$paginaAtual = basename($_SERVER['PHP_SELF'] ?? '');
+$itemMenuAtivo = static function (string ...$paginas) use ($paginaAtual): string {
+    return in_array($paginaAtual, $paginas, true) ? ' active' : '';
+};
 ?>
     <nav id="sideBar" class="<?= $classeMenu ?>">
         <div class="sidebar_content">
@@ -39,35 +43,21 @@ $classeMenu = $sidebarAberto ? 'open-sidebar' : '';
                 </div>
             </div>
             <ul id="side_itens">
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('dashboard.php') ?>">
                     <a href="#">
                         <i class="fa-solid fa-chart-column"></i>
                         <span class="item_description">Dashboard</span>
                     </a>
                     <div class="tooltip-item"><span>Dashboard</span></div>
                 </li>
-                <li class="side_item">
-                    <a href="#">
-                        <i class="fa-solid fa-file-lines"></i>
-                        <span class="item_description">Relatórios</span>
-                    </a>
-                    <div class="tooltip-item"><span>Relatórios</span></div>
-                </li>
-                <li class="side_item">
-                    <a href="usuario.php" class="margin-lef">
-                        <i class="fa-solid fa-users"></i>
-                        <span class="item_description">Usuários</span>
-                    </a>
-                    <div class="tooltip-item"><span>Usuários</span></div>
-                </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('cliente_empresa.php') ?>">
                     <a href="cliente_empresa.php" class="margin-lef">
                         <i class="fa-solid fa-address-book"></i>
                         <span class="item_description">Clientes</span>
                     </a>
                     <div class="tooltip-item"><span>Clientes</span></div>
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('gerenciamento_projeto.php') ?>">
                     <a href="gerenciamento_projeto.php">
                         <i class="fa-solid fa-terminal"></i>
                         <span class="item_description">Projetos</span>
@@ -82,40 +72,54 @@ $classeMenu = $sidebarAberto ? 'open-sidebar' : '';
                     </a>
                     <div class="tooltip-item"><span>Pentest</span></div>
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('checklist.php') ?>">
                     <a href="checklist.php">
                         <i class="fa-solid fa-list-check"></i>
                         <span class="item_description">Checklist</span>
                     </a>
                     <div class="tooltip-item"><span>Checklist</span></div>
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('vulnerabilidades.php') ?>">
                     <a href="vulnerabilidades.php">
                         <i class="fa-solid fa-bug"></i>
                         <span class="item_description">Vulnerabilidades</span>
                     </a>
                     <div class="tooltip-item"><span>Vulnerabilidades</span></div>
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('conhecimento.php') ?>">
                     <a href="#">
                         <i class="fa-solid fa-book-open"></i>
                         <span class="item_description">Conhecimento</span>
                     </a>
                     <div class="tooltip-item"><span>Conhecimento</span></div>
                 </li>
-                <li class="side_item">
-                    <a href="#">
-                        <i class="fa-solid fa-clipboard"></i>
-                        <span class="item_description">Logs</span>
+                <li class="side_item<?= $itemMenuAtivo('usuario.php') ?>">
+                    <a href="usuario.php" class="margin-lef">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="item_description">Usuários</span>
                     </a>
-                    <div class="tooltip-item"><span>Logs</span></div>
+                    <div class="tooltip-item"><span>Usuários</span></div>
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('gerenciamento_acesso.php') ?>">
                     <a href="gerenciamento_acesso.php">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
                     <div class="tooltip-item"><span>Perfis de Acesso</span></div>
+                </li>
+                <li class="side_item<?= $itemMenuAtivo('relatorios.php') ?>">
+                    <a href="#">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <span class="item_description">Relatórios</span>
+                    </a>
+                    <div class="tooltip-item"><span>Relatórios</span></div>
+                </li>
+                <li class="side_item<?= $itemMenuAtivo('logs.php') ?>">
+                    <a href="#">
+                        <i class="fa-solid fa-clipboard"></i>
+                        <span class="item_description">Logs</span>
+                    </a>
+                    <div class="tooltip-item"><span>Logs</span></div>
                 </li>
             </ul>
             <button id="open_btn">
