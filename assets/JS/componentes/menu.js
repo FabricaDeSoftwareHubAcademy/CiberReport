@@ -9,33 +9,27 @@ function persistenciaMenu(valor){
     document.cookie = `sidebarOpen=${valor}; path=/; max-age=900000`
 }
 
-document.getElementById('open_btn').addEventListener('click', function () {
-    const isOpen = sideBar.classList.contains('open-sidebar');
+const botaoMenu = document.getElementById('open_btn');
 
-    if (isOpen) {
-        menuOverlay.classList.remove('active');
-        persistenciaMenu(false);
-        setTimeout(() => {
-            sideBar.classList.remove('open-sidebar');
-        }, 100);
-    } else {
-        sideBar.classList.add('open-sidebar');
-        persistenciaMenu(true);        
-    }
+function atualizarEstadoMenu(aberto) {
+    sideBar.classList.toggle('open-sidebar', aberto);
+    menuOverlay.classList.toggle('active', aberto && window.innerWidth <= 931);
+    botaoMenu.setAttribute('aria-expanded', String(aberto));
+    persistenciaMenu(aberto);
+}
+
+botaoMenu.addEventListener('click', function () {
+    atualizarEstadoMenu(!sideBar.classList.contains('open-sidebar'));
 });
 
 // Logo do menu superior abre sidebar (mobile)
 logoMenuSuperior.addEventListener('click', () => {
-    const menuAberto = sideBar.classList.toggle('open-sidebar');
-    menuOverlay.classList.toggle('active', menuAberto);
-    persistenciaMenu(menuAberto);
+    atualizarEstadoMenu(!sideBar.classList.contains('open-sidebar'));
 });
 
 // Overlay do menu mobile fecha o sidebar
 menuOverlay.addEventListener('click', () => {
-    sideBar.classList.remove('open-sidebar');
-    menuOverlay.classList.remove('active');
-    persistenciaMenu(false);
+    atualizarEstadoMenu(false);
 });
 
 // Botão de pesquisa mobile abre overlay de busca

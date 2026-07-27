@@ -5,6 +5,7 @@
   const cabecalhos = document.querySelectorAll('table thead th[data-col]');
   let colunaOrdenada = null;
   let ordemAscendente = true;
+  let termoBuscaGlobal = '';
 
   // --- paginação ---
   const COOKIE_LINHAS_POR_PAGINA = 'linhasPorPagina';
@@ -541,6 +542,10 @@
   }
 
   function linhaPassaFiltros(linha) {
+    if (termoBuscaGlobal && !normalizarTextoBusca(linha.textContent).includes(termoBuscaGlobal)) {
+      return false;
+    }
+
     for (const [coluna, filtro] of filtrosAtivos) {
       if (colunasFiltroData.has(coluna)) {
         if (!linhaPassaFiltroData(linha, coluna, filtro)) return false;
@@ -551,6 +556,41 @@
       if (!valoresLinha.some((valor) => filtro.has(valor))) return false;
     }
     return true;
+  }
+
+  function normalizarTextoBusca(texto) {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  function inicializarBuscaGlobal() {
+    const formularios = Array.from(document.querySelectorAll(
+      '.input-pesquisaSuperior, .overlay-pesquisaMobile'
+    ));
+    const campos = formularios
+      .map((formulario) => formulario.querySelector('input[type="text"]'))
+      .filter(Boolean);
+
+    if (!campos.length) return;
+
+    formularios.forEach((formulario) => {
+      formulario.addEventListener('submit', (evento) => evento.preventDefault());
+    });
+
+    campos.forEach((campo) => {
+      campo.addEventListener('input', () => {
+        termoBuscaGlobal = normalizarTextoBusca(campo.value);
+
+        campos.forEach((outroCampo) => {
+          if (outroCampo !== campo) outroCampo.value = campo.value;
+        });
+
+        exibirPagina(1);
+      });
+    });
   }
 
   function aoClicarForaDoPainel(evento) {
@@ -777,6 +817,7 @@
 
   // inicializa na página 1
   renderizarSeletorItensPorPagina();
+  inicializarBuscaGlobal();
   atualizarIcones();
   exibirPagina(1);
 })();
