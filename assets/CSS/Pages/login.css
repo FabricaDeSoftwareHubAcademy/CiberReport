@@ -142,7 +142,7 @@ main{
     margin-bottom: 20px;
 }
 
-.login-box button{
+.btn-entrar-login{
     padding: 12px;
     border: none;
     border-radius: 8px;
@@ -152,8 +152,52 @@ main{
     transition: 0.3s;
 }
 
-.login-box button:hover{
+.btn-entrar-login:hover{
     background: #1d3870;
+}
+
+.btn-enviar-link-login{
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #13264f;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-enviar-link-login:hover{
+    background: #1d3870;
+}
+
+.btn-voltar-login{
+    background: none;
+    border: none;
+    color: #13264f;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: left;
+    padding: 0;
+}
+
+.btn-voltar-login:hover{
+    text-decoration: underline;
+}
+
+.esqueceu-senha-login{
+    background: none;
+    border: none;
+    color: #13264f;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: right;
+    padding: 0;
+}
+
+.esqueceu-senha-login:hover{
+    text-decoration: underline;
 }
 
 @media (max-width: 1024px) {
