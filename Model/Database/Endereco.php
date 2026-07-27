@@ -50,11 +50,4 @@ class Endereco
     }
 
 
-
-    public function excluirEnderecoEmpresa($id_endereco)
-    {
-        $sql = $this->pdo->prepare("DELETE FROM endereco WHERE id = :id");
-        $sql->bindValue(":id", $id_endereco);
-        $sql->execute();
-    }
 }

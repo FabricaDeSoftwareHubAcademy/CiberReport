@@ -39,9 +39,9 @@ class CadastroEmpresaController
         $email_contato = addslashes($_POST['email_contato'] ?? '');
         $cnpj = addslashes($_POST['cnpj'] ?? '');
         $responsavel = addslashes($_POST['responsavel'] ?? '');
-        $telefone_responsavel = addcslashes($_POST['telefone_responsavel']);
-        $email_responsavel = addcslashes($_POST['email_responsavel']);
-        $cpf_responsavel = addcslashes($_POST['cpf_responsavel']);
+        $telefone_responsavel = addslashes($_POST['telefone_responsavel'] ?? '');
+        $email_responsavel = addslashes($_POST['email_responsavel'] ?? '');
+        $cpf_responsavel = addslashes($_POST['cpf_responsavel'] ?? '');
 
         $cep = addslashes($_POST['cep'] ?? '');
         $rua = addslashes($_POST['rua'] ?? '');
@@ -88,9 +88,9 @@ class CadastroEmpresaController
         $email_contato = addslashes($_POST['email_contato'] ?? '');
         $cnpj = addslashes($_POST['cnpj'] ?? '');
         $responsavel = addslashes($_POST['responsavel'] ?? '');
-        $telefone_responsavel = addcslashes($_POST['telefone_responsavel'] ?? '');
-        $email_responsavel = addcslashes($_POST['email_responsavel'] ?? '');
-        $cpf_responsavel = addcslashes($_POST['cpf_responsavel'] ?? '');
+        $telefone_responsavel = addslashes($_POST['telefone_responsavel'] ?? '');
+        $email_responsavel = addslashes($_POST['email_responsavel'] ?? '');
+        $cpf_responsavel = addslashes($_POST['cpf_responsavel'] ?? '');
 
         $cep = addslashes($_POST['cep'] ?? '');
         $rua = addslashes($_POST['rua'] ?? '');
@@ -114,14 +114,6 @@ class CadastroEmpresaController
         return true;
     }
 
-    public function excluirClientes($id_empresa)
-    {
-        $dados_empresa = $this->empresa->buscarDadosEmpresa($id_empresa);
-        $id_endereco = $dados_empresa['endereco_id'];
-
-        $this->empresa->excluirEmpresa($id_empresa);
-        $this->endereco->excluirEnderecoEmpresa($id_endereco);
-    }
 
     public function alterarStatusClientes($id_empresa, $status)
     {
