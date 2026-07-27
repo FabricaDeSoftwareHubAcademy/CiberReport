@@ -62,7 +62,7 @@ $usuarios = $controller->listar();
     <?php $tituloPagina = 'Gerenciamento de Usuário';
     include_once 'Components/menu.php'; ?>
     <main>
-        <div class="ger-pentest-topo">
+        <div class="ger-usuario">
             <button class="btn-novo-cadastro" data-modal-target="modalNovoUsuario">
                 <i class="fa-solid fa-plus"></i>Novo Usuario
             </button>
