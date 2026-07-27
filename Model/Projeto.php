@@ -48,4 +48,43 @@ class Projeto
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function editarProjeto(array $dados)
+    {
+        try {
+            $sql = $this->pdo->prepare("UPDATE projeto SET empresa_id = :empresa_id, nome = :nome, data_inicio = :data_inicio, data_fim_prevista = :data_fim_prevista, data_fim_real = :data_fim_real, horas_contratadas = :horas_contratadas, horas_executadas = :horas_executadas, tipo = :tipo, nivel_sigilo = :nivel_sigilo, escopo = :escopo, alvo = :alvo, contrato = :contrato, restricao = :restricao, habilitado = :habilitado WHERE id = :id");
+            $sql->bindValue(":id", $dados['id']);
+            $sql->bindValue(":empresa_id", $dados['empresa_id']);
+            $sql->bindValue(":nome", $dados['nome']);
+            $sql->bindValue(":data_inicio", $dados['data_inicio']);
+            $sql->bindValue(":data_fim_prevista", $dados['data_fim_prevista']);
+            $sql->bindValue(":data_fim_real", $dados['data_fim_real']);
+            $sql->bindValue(":horas_contratadas", $dados['horas_contratadas']);
+            $sql->bindValue(":horas_executadas", $dados['horas_executadas']);
+            $sql->bindValue(":tipo", $dados['tipo']);
+            $sql->bindValue(":nivel_sigilo", $dados['nivel_sigilo']);
+            $sql->bindValue(":escopo", $dados['escopo']);
+            $sql->bindValue(":alvo", $dados['alvo']);
+            $sql->bindValue(":contrato", $dados['contrato']);
+            $sql->bindValue(":restricao", $dados['restricao']);
+            $sql->bindValue(":habilitado", $dados['habilitado']);
+            $sql->execute();
+            return true;
+        } catch (PDOException $e) {
+            $this->msgErro = $e->getMessage();
+            return false;
+        }
+    }
+    public function excluirProjeto($id)
+    {
+        try {
+            $sql = $this->pdo->prepare("DELETE FROM projeto WHERE id = :id");
+            $sql->bindValue(":id", $id);
+            $sql->execute();
+            return true;
+        } catch (PDOException $e) {
+            $this->msgErro = $e->getMessage();
+            return false;
+        }
+    }
+    
 }
