@@ -14,6 +14,7 @@ $dados = $controller->listar();
     <link rel="stylesheet" href="../assets/CSS/Pages/gerenciamento-projeto.css">
     <script src="../assets/JS/componentes/tabela.js" defer></script>
     <script src="../assets/JS/componentes/modal.js" defer></script>
+    <script src="../assets/JS/barraDePesquisa.js" defer></script>
 </head>
 <body class="corpo-ger-projetos">
     <?php

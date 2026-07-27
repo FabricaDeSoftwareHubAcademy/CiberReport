@@ -422,6 +422,7 @@ $dados = $controller->listarEmpresa();
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
+<script src="../assets/JS/barraDePesquisa.js"></script>
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>
