@@ -98,8 +98,9 @@ CREATE TABLE IF NOT EXISTS projeto (
   PRIMARY KEY (id)
   -- FOREIGN KEY (empresa_id) REFERENCES empresa(id)
 );
+
 -- Liga um projeto a um ou mais tipos de pentest (N:N).
--- Dev de Projetos: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
+-- Matheus Kill: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
 CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
   projeto_id INT NOT NULL,
   tipo_pentest_id INT NOT NULL,
@@ -141,7 +142,7 @@ CREATE TABLE IF NOT EXISTS cronometro_log (
   PRIMARY KEY (id)
   -- FOREIGN KEY (cronometro_id) REFERENCES cronometro_registro(id),
   -- FOREIGN KEY (ip_analista) REFERENCES cronometro_registro(ip_analista),
-  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo), 
+  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo),
   -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
@@ -183,9 +184,7 @@ CREATE TABLE IF NOT EXISTS banco_conhecimento (
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
 );
 
--- Substitui as antigas modelo_pentest e pentest_tipos, que duplicavam o mesmo
--- conceito com campos diferentes (uma delas ainda guardava box-model, que agora
--- é exclusivo de projeto.tipo). Esta é a única tabela de Tipo de Pentest.
+
 CREATE TABLE IF NOT EXISTS categoria_pentest (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(80) NOT NULL UNIQUE,
