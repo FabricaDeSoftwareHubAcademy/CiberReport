@@ -41,7 +41,7 @@
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-md);
     background-color: var(--cor-fundo-branco);
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
     transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
@@ -84,7 +84,7 @@
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-md);
     background-color: var(--cor-fundo-branco);
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
     resize: vertical;
@@ -104,7 +104,7 @@
     border: 1px solid var(--cor-borda-padrao);
     border-radius: var(--raio-md);
     background-color: var(--cor-fundo-branco);
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
     appearance: none;
@@ -140,7 +140,7 @@
 .campo__multi-busca { display: flex; align-items: center; gap: var(--espaco-sm); }
 .campo__multi-input {
     flex: 1; height: 44px; padding: 0 var(--espaco-md); border: 1px solid var(--cor-borda-padrao);
-    border-radius: var(--raio-md); font-family: "Poppins", sans-serif; font-size: var(--fonte-apoio);
+    border-radius: var(--raio-md); font-family: var(--fonte-familia-corpo); font-size: var(--fonte-apoio);
     outline: none; box-sizing: border-box; background-color: var(--cor-fundo-branco);
 }
 .campo__multi-chips {
@@ -304,7 +304,9 @@
 
 /* Estados */
 .campo__input:focus, .campo__textarea:focus, .campo__select:focus { border-color: var(--cor-borda-foco); box-shadow: 0 0 0 3px rgba(0, 106, 181, 0.12); }
-.campo--erro .campo__input { border-color: var(--cor-borda-erro); }
+.campo--erro .campo__input,
+.campo--erro .campo__select,
+.campo--erro .campo__textarea { border-color: var(--cor-borda-erro); }
 .campo__mensagem-erro { display: none; font-size: var(--fonte-legenda); color: var(--cor-vermelho-destaque); margin-top: var(--espaco-xs); }
 .campo--erro .campo__mensagem-erro { display: block; }
 

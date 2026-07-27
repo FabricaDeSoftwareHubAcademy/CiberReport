@@ -212,7 +212,7 @@
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     font-weight: 500;
     color: var(--cor-texto-secundario);

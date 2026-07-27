@@ -63,6 +63,10 @@ html {
     --cor-borda-erro: #ff3347;
     --cor-borda-sucesso: #43b75d;
 
+    /* --- Tipografia — famílias --- */
+    --fonte-familia-titulo: "Poppins", sans-serif;
+    --fonte-familia-corpo: "Poppins", sans-serif;
+
     /* --- Tipografia — tamanhos --- */
     --fonte-titulo: 3.4rem;
     --fonte-subtitulo: 2.8rem;
@@ -112,7 +116,7 @@ html {
 
 /* --- GLOBAL --- */
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-texto);
     font-weight: var(--peso-normal);
     line-height: 1.5;
@@ -123,6 +127,15 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--fonte-familia-titulo);
 }
 
 
