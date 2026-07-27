@@ -7,6 +7,10 @@
         ? window.itensCatalogoChecklist
         : [];
 
+    const checklistsExistentesChecklist = Array.isArray(window.checklistsExistentesChecklist)
+        ? window.checklistsExistentesChecklist
+        : [];
+
     const selecionadosChecklist = new Map();
     const gerenciadosChecklist = new Map();
 
@@ -198,6 +202,8 @@
             }
 
             fecharCategoriasChecklist();
+            fecharNomesChecklist();
+            atualizarValidacaoNomeChecklist();
             contarDescricaoChecklist();
             renderizarSelecionadosChecklist();
             abrirModalChecklist('checklist-modal-formulario');
@@ -216,6 +222,8 @@
         gerenciadosChecklist.clear();
 
         fecharCategoriasChecklist();
+        fecharNomesChecklist();
+        atualizarValidacaoNomeChecklist();
         contarDescricaoChecklist();
         renderizarSelecionadosChecklist();
     }
@@ -278,6 +286,78 @@
     function fecharCategoriasChecklist() {
         const listaChecklist = elementoChecklist('checklist-lista-categorias');
         const campoChecklist = elementoChecklist('checklist-categoria');
+
+        if (listaChecklist) {
+            listaChecklist.hidden = true;
+        }
+
+        if (campoChecklist) {
+            campoChecklist.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    function idAtualChecklist() {
+        return Number(elementoChecklist('checklist-id').value) || 0;
+    }
+
+    function checklistPorNomeChecklist(nomeChecklist) {
+        const termoChecklist = normalizarChecklist(nomeChecklist);
+        const idChecklist = idAtualChecklist();
+
+        return checklistsExistentesChecklist.find(itemChecklist =>
+            Number(itemChecklist.id) !== idChecklist
+            && normalizarChecklist(itemChecklist.nome) === termoChecklist
+        );
+    }
+
+    function nomeDuplicadoChecklist(nomeChecklist) {
+        return normalizarChecklist(nomeChecklist) !== '' && Boolean(checklistPorNomeChecklist(nomeChecklist));
+    }
+
+    function atualizarValidacaoNomeChecklist() {
+        const campoChecklist = elementoChecklist('checklist-nome');
+        const duplicadoChecklist = nomeDuplicadoChecklist(campoChecklist.value);
+
+        campoChecklist.closest('.campo')?.classList.toggle('campo--erro', duplicadoChecklist);
+    }
+
+    function renderizarNomesChecklist(filtroChecklist = '') {
+        const listaChecklist = elementoChecklist('checklist-lista-nomes');
+        const termoChecklist = normalizarChecklist(filtroChecklist);
+        const idChecklist = idAtualChecklist();
+
+        if (termoChecklist === '') {
+            listaChecklist.hidden = true;
+            return;
+        }
+
+        const encontradosChecklist = checklistsExistentesChecklist.filter(itemChecklist =>
+            Number(itemChecklist.id) !== idChecklist
+            && normalizarChecklist(itemChecklist.nome).includes(termoChecklist)
+        );
+
+        if (encontradosChecklist.length === 0) {
+            listaChecklist.hidden = true;
+            return;
+        }
+
+        listaChecklist.innerHTML = encontradosChecklist.map(itemChecklist => `
+            <button
+                type="button"
+                class="checklist-categoria-opcao"
+                data-checklist-nome-id="${Number(itemChecklist.id)}"
+            >
+                ${escaparHtmlChecklist(itemChecklist.nome)}
+            </button>
+        `).join('');
+
+        listaChecklist.hidden = false;
+        elementoChecklist('checklist-nome').setAttribute('aria-expanded', 'true');
+    }
+
+    function fecharNomesChecklist() {
+        const listaChecklist = elementoChecklist('checklist-lista-nomes');
+        const campoChecklist = elementoChecklist('checklist-nome');
 
         if (listaChecklist) {
             listaChecklist.hidden = true;
@@ -376,7 +456,7 @@
                 >
                     <input
                         type="checkbox"
-                        class="checklist-gerenciar-checkbox"
+                        class="meu-checkbox"
                         data-checklist-item-checkbox="${idChecklist}"
                         ${selecionadoChecklist ? 'checked' : ''}
                         aria-label="Selecionar ${escaparHtmlChecklist(itemChecklist.titulo)}"
@@ -673,6 +753,32 @@
             fecharCategoriasChecklist();
         });
 
+        elementoChecklist('checklist-nome')?.addEventListener('input', eventoChecklist => {
+            renderizarNomesChecklist(eventoChecklist.target.value);
+            atualizarValidacaoNomeChecklist();
+        });
+
+        elementoChecklist('checklist-nome')?.addEventListener('focus', eventoChecklist => {
+            renderizarNomesChecklist(eventoChecklist.target.value);
+        });
+
+        elementoChecklist('checklist-nome')?.addEventListener('keydown', eventoChecklist => {
+            if (eventoChecklist.key === 'Escape') {
+                fecharNomesChecklist();
+            }
+        });
+
+        elementoChecklist('checklist-lista-nomes')?.addEventListener('click', eventoChecklist => {
+            const opcaoChecklist = eventoChecklist.target.closest('[data-checklist-nome-id]');
+
+            if (!opcaoChecklist) {
+                return;
+            }
+
+            fecharNomesChecklist();
+            editarChecklist(Number(opcaoChecklist.dataset.checklistNomeId));
+        });
+
         elementoChecklist('checklist-pesquisa-itens')?.addEventListener('input', eventoChecklist => {
             renderizarGerenciamentoChecklist(eventoChecklist.target.value);
         });
@@ -723,12 +829,23 @@
             if (selecionadosChecklist.size === 0) {
                 eventoChecklist.preventDefault();
                 alert('Selecione pelo menos um item para o checklist.');
+                return;
+            }
+
+            if (nomeDuplicadoChecklist(elementoChecklist('checklist-nome').value)) {
+                eventoChecklist.preventDefault();
+                atualizarValidacaoNomeChecklist();
+                alert('Já existe um checklist com esse nome. Escolha outro nome ou edite o checklist existente.');
             }
         });
 
         document.addEventListener('click', eventoChecklist => {
             if (!eventoChecklist.target.closest('.checklist-categoria-combobox')) {
                 fecharCategoriasChecklist();
+            }
+
+            if (!eventoChecklist.target.closest('.checklist-nome-combobox')) {
+                fecharNomesChecklist();
             }
         });
     }

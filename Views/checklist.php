@@ -95,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $erroFormularioChecklist =
-            'Preencha os campos obrigatórios e selecione pelo menos um item.';
+            'Preencha os campos obrigatórios, selecione pelo menos um item e verifique '
+            . 'se já não existe um checklist com esse nome.';
     }
 }
 
@@ -108,6 +109,14 @@ if (isset($_GET['excluir'])) {
 $checklists = $controllerChecklist->listarChecklist();
 $categoriasChecklist = $controllerChecklist->listarCategoriasChecklist();
 $itensCatalogoChecklist = $controllerChecklist->listarItensCatalogoChecklist();
+
+$nomesChecklist = array_map(
+    static fn(array $checklist): array => [
+        'id' => (int) $checklist['id'],
+        'nome' => $checklist['nome']
+    ],
+    $checklists
+);
 
 $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     | JSON_HEX_TAG
@@ -309,14 +318,30 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                         class="campo__label campo__label--obrigatorio">
                                         Nome do Checklist
                                     </label>
-                                    <input
-                                        type="text"
-                                        name="nome"
-                                        id="checklist-nome"
-                                        class="campo__input"
-                                        placeholder="Ex: Checklist Web"
-                                        maxlength="80"
-                                        required>
+
+                                    <div class="checklist-nome-combobox">
+                                        <input
+                                            type="text"
+                                            name="nome"
+                                            id="checklist-nome"
+                                            class="campo__input"
+                                            placeholder="Ex: Checklist Web"
+                                            autocomplete="off"
+                                            maxlength="80"
+                                            required
+                                            aria-autocomplete="list"
+                                            aria-controls="checklist-lista-nomes"
+                                            aria-expanded="false">
+
+                                        <div
+                                            id="checklist-lista-nomes"
+                                            class="checklist-categoria-lista"
+                                            hidden></div>
+                                    </div>
+
+                                    <small class="campo__mensagem-erro" id="checklist-erro-nome">
+                                        Já existe um checklist com esse nome. Clique nele na lista para editar.
+                                    </small>
                                 </div>
 
                                 <div class="campo">
@@ -636,10 +661,13 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         <label for="checklist-item-obrigatorio" class="campo__label">
                             Obrigatório
                         </label>
-                        <select id="checklist-item-obrigatorio" class="campo__select">
-                            <option value="1">Sim</option>
-                            <option value="0">Não</option>
-                        </select>
+                        <div class="campo__select-wrapper">
+                            <select id="checklist-item-obrigatorio" class="campo__select">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -668,6 +696,11 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
         window.itensCatalogoChecklist = <?= json_encode(
                                             $itensCatalogoChecklist,
+                                            $jsonSeguroChecklist
+                                        ) ?>;
+
+        window.checklistsExistentesChecklist = <?= json_encode(
+                                            $nomesChecklist,
                                             $jsonSeguroChecklist
                                         ) ?>;
 
