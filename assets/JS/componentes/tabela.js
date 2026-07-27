@@ -189,19 +189,17 @@
     return Array.from(celula.querySelectorAll('*')).find(elementoTransbordou) || null;
   }
 
-  // Posiciona perto do cursor (não do centro da célula) para tooltips de
-  // células largas ficarem coladas em onde o mouse realmente está.
+  // Posiciona no canto inferior direito do cursor (não centralizado nem acima
+  // dele), para tooltips de células largas ficarem coladas em onde o mouse
+  // realmente está.
   const DESLOCAMENTO_CURSOR = 14;
 
   function posicionarTooltipCelula(x, y, tooltip) {
     const largura = tooltip.offsetWidth;
     const altura = tooltip.offsetHeight;
 
-    let esquerda = x - largura / 2;
-    esquerda = Math.max(8, Math.min(esquerda, window.innerWidth - largura - 8));
-
-    let topo = y - altura - DESLOCAMENTO_CURSOR;
-    if (topo < 8) topo = y + DESLOCAMENTO_CURSOR;
+    const esquerda = Math.min(x + DESLOCAMENTO_CURSOR, window.innerWidth - largura - 8);
+    const topo = Math.min(y + DESLOCAMENTO_CURSOR, window.innerHeight - altura - 8);
 
     tooltip.style.left = `${esquerda}px`;
     tooltip.style.top = `${topo}px`;

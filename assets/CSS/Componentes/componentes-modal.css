@@ -1,4 +1,35 @@
 /* =============================================================================
+   00. TOOLTIP RÁPIDO (assets/JS/componentes/tooltip.js)
+   Mesmo visual/comportamento do balão usado em tabelas (tabela.css), para
+   elementos com data-tooltip="texto" fora de <table> — ex.: campos e chips
+   dentro de modais.
+   ============================================================================= */
+.tooltip-flutuante {
+    position: fixed;
+    display: block;
+    width: max-content;
+    max-width: 280px;
+    padding: var(--espaco-xs) var(--espaco-sm);
+    background-color: var(--cor-texto-primario);
+    color: #fff;
+    border-radius: var(--raio-sm);
+    font-size: var(--fonte-legenda);
+    font-weight: 500;
+    white-space: normal;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 2000;
+}
+
+.tooltip-flutuante--visivel {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =============================================================================
    01. SISTEMA DE GRIDS FLEXÍVEIS (Alinhadores de colunas)
    HTML esperado:
    <div class="modal-grade"> <div class="campo">...</div> </div>
