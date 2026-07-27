@@ -62,7 +62,7 @@ $usuarios = $controller->listar();
     <?php $tituloPagina = 'Gerenciamento de Usuário';
     include_once 'Components/menu.php'; ?>
     <main>
-        <div class="ger-usuario">
+        <div class="ger-usuario-top">
             <button class="btn-novo-cadastro" data-modal-target="modalNovoUsuario">
                 <i class="fa-solid fa-plus"></i>Novo Usuario
             </button>
@@ -93,7 +93,7 @@ $usuarios = $controller->listar();
                 <tbody>
                     <?php foreach ($usuarios as $usuario): ?>
                         <?php $ativo = (bool) $usuario['habilitado']; ?>
-                        <tr class="<?= $ativo ? '' : 'linha-inativa' ?>">
+                        <tr>
                             <td><?= htmlspecialchars($usuario['nome']) ?></td>
                             <td>
                                 <span class="ger-pentest-cat-badge">
@@ -170,14 +170,15 @@ $usuarios = $controller->listar();
                 <div class="foto-usuario-wrapper">
                     <label class="foto-usuario-label" for="fotoCadastro">
                         <div class="foto-usuario-preview" id="previewFotoCadastro">
+                            <img class="foto-usuario-imagem" alt="Pré-visualização da foto do usuário" hidden>
                             <i class="fa-solid fa-user foto-usuario-icone-padrao"></i>
                             <div class="foto-usuario-overlay">
                                 <i class="fa-solid fa-camera"></i>
                             </div>
                         </div>
                     </label>
-                    <input type="file" name="foto" id="fotoCadastro" class="foto-usuario-input" accept="image/*">
-                    <span class="foto-usuario-alterar">Alterar foto</span>
+                    <input type="file" name="foto" id="fotoCadastro" class="foto-usuario-input" accept="image/jpeg,image/png,image/webp">
+                    <button type="button" class="foto-usuario-alterar button-usuario-reset" data-selecionar-foto="fotoCadastro">Alterar foto</button>
                 </div>
                 <div class="modal__body">
                     <div class="modal-grade__col-full">
@@ -340,8 +341,8 @@ $usuarios = $controller->listar();
                             </div>
                         </div>
                     </label>
-                    <input type="file" name="foto" id="fotoEdicao" class="foto-usuario-input" accept="image/*">
-                    <span class="foto-usuario-alterar">Alterar foto</span>
+                    <input type="file" name="foto" id="fotoEdicao" class="foto-usuario-input" accept="image/jpeg,image/png,image/webp">
+                    <button type="button" class="foto-usuario-alterar button-usuario-reset" data-selecionar-foto="fotoEdicao">Alterar foto</button>
                 </div>
                 <div class="modal__body">
                     <div class="modal-grade__col-full">
@@ -402,6 +403,7 @@ $usuarios = $controller->listar();
         </div>
     </div>
 
+    <script src="../assets/JS/gerenciarUsuario.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
