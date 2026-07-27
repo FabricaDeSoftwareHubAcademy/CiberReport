@@ -43,10 +43,10 @@ class ProjetoValidator
     {
         $erros = [];
 
-        if (empty($nome)) {
+        if (empty($dados_limpo['nome'])) {
             $erros[] = 'O nome do projeto é obrigatório.';
         }
-        if (empty($empresa_id)) {
+        if (empty($dados_limpo['empresa_id'])) {
             $erros[] = 'A empresa é obrigatória.';
         }
         if (empty($horas_contratadas)) {
@@ -68,5 +68,19 @@ class ProjetoValidator
         if (count($erros) > 0) {
             throw new Exception(implode("<br>", $erros));
         }
+    }
+
+    public static function processarEdicao(array $dados)
+    {
+        $dadosLimpos = self::sanitizar($dados);
+        self::validarRegras($dadosLimpos);
+        $id = filter_var($dados['id'] ?? NULL, FILTER_VALIDATE_INT);
+
+        if (!$id){
+            throw new Exception('O ID do projeto é obrigatório para edição');
+        }
+        $dadosLimpos['id'] = $id;
+
+        return $dadosLimpos;
     }
 }
