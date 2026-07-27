@@ -11,11 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'alter
 }
 
 $mensagem_erro = "";
-if (isset($_GET['excluir'])){
-    $controller->excluirClientes($_GET['excluir']);
-    header("Location: cliente_empresa.php");
-    exit;
-}
 
 $dados_empresa_editar = [];
 $dados_endereco_editar = [];
@@ -52,6 +47,7 @@ $dados = $controller->listarEmpresa();
 <link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
 <link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
+
 
 <?php $tituloPagina = 'Clientes'; include 'Components/menu.php'; ?>
 <main>
@@ -107,7 +103,7 @@ $dados = $controller->listarEmpresa();
                                     <label class="campo__label">Telefone</label>
                                     <div class="campo__input-wrapper">
                                         <i class="fa fa-phone campo__input-icone"></i>
-                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" placeholder="(11) 9999-9999" />
+                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" placeholder="(11) 9999-9999" oninput="mascararTelefone(this)" />
                                     </div>
                                 </div>
                                 <div class="campo">
@@ -119,11 +115,11 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CNPJ</label>
-                                    <input type="text" name="cnpj" class="campo__input" placeholder="23.456.789/0001-01" />
+                                    <input type="text" name="cnpj" class="campo__input" placeholder="23.456.789/0001-01" oninput="mascararCNPJ(this)" />
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CEP</label>
-                                    <input type="text" name="cep" id="cep" class="campo__input" placeholder="12345-678" onblur="buscarCep()" />
+                                    <input type="text" name="cep" id="cep" class="campo__input" placeholder="12345-678" onblur="buscarCep()" oninput="mascararCEP(this)"  />
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Endereço</label>
@@ -131,7 +127,7 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Número</label>
-                                    <input type="text" name="numero" class="campo__input" placeholder="0000" />
+                                    <input type="text" name="numero" class="campo__input" placeholder="0000" oninput="apenasNumeros(this)" />
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Complemento</label>
@@ -171,7 +167,7 @@ $dados = $controller->listarEmpresa();
                                     <label class="campo__label">Telefone</label>
                                     <div class="campo__input-wrapper">
                                         <i class="fa fa-phone campo__input-icone"></i>
-                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="(11)99999-9999" />
+                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="(11)99999-9999" oninput="mascararTelefone(this)" />
                                     </div>
                                 </div>
                                 <div class="campo">
@@ -183,15 +179,14 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CPF</label>
-                                    <input type="text" name="cpf" class="campo__input" placeholder="000.000.000-00" />
+                                    <input type="text" name="cpf_responsavel" class="campo__input" placeholder="000.000.000-00" oninput="mascararCPF(this)" />
                                 </div>
                             </div>
                         </div>
 
 
                     </div>
-<!-- ERRO NESSA LINHA, alterar o campo de obrigatoriedade -->
-                    <div class="modal__footer"> 
+                    <div class="modal__footer modal__footer-cliente"> 
                         <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -250,7 +245,7 @@ $dados = $controller->listarEmpresa();
                                     <label class="campo__label">Telefone</label>
                                     <div class="campo__input-wrapper">
                                         <i class="fa fa-phone campo__input-icone"></i>
-                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['telefone'] ?? ''; ?>" />
+                                        <input type="text" name="telefone" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['telefone'] ?? ''; ?>" oninput="mascararTelefone(this)" />
                                     </div>
                                 </div>
                                 <div class="campo">
@@ -262,11 +257,11 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CNPJ</label>
-                                    <input type="text" name="cnpj" class="campo__input" value="<?php echo $dados_empresa_editar['cnpj'] ?? ''; ?>" />
+                                    <input type="text" name="cnpj" class="campo__input" value="<?php echo $dados_empresa_editar['cnpj'] ?? ''; ?>" oninput="mascararCNPJ(this)"/>
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CEP</label>
-                                    <input type="text" name="cep" class="campo__input" value="<?php echo $dados_endereco_editar['cep'] ?? ''; ?>" />
+                                    <input type="text" name="cep" class="campo__input" value="<?php echo $dados_endereco_editar['cep'] ?? ''; ?>" oninput="mascararCEP(this)" />
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Endereço</label>
@@ -274,7 +269,7 @@ $dados = $controller->listarEmpresa();
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Número</label>
-                                    <input type="text" name="numero" class="campo__input" value="<?php echo $dados_endereco_editar['numero'] ?? ''; ?>" />
+                                    <input type="text" name="numero" class="campo__input" value="<?php echo $dados_endereco_editar['numero'] ?? ''; ?>" oninput="apenasNumeros(this)" />
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">Complemento</label>
@@ -313,26 +308,26 @@ $dados = $controller->listarEmpresa();
                                     <label class="campo__label">Telefone</label>
                                     <div class="campo__input-wrapper">
                                         <i class="fa fa-phone campo__input-icone"></i>
-                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="(11)99999-9999" />
+                                        <input type="text" name="telefone_responsavel" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['telefone_responsavel'] ?? ''; ?>"  oninput="mascararTelefone(this)" />
                                     </div>
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">E-mail</label>
                                     <div class="campo__input-wrapper">
                                         <i class="fa-solid fa-envelope campo__input-icone"></i>
-                                        <input type="email" name="email_responsavel" class="campo__input campo__input--com-icone-esq" placeholder="email@.com" />
+                                        <input type="email" name="email_responsavel" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_editar['email_responsavel'] ?? ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="campo">
                                     <label class="campo__label">CPF</label>
-                                    <input type="text" name="cpf" class="campo__input" placeholder="000.000.000-00" />
+                                    <input type="text" name="cpf_responsavel" class="campo__input" value="<?php echo $dados_empresa_editar['cpf_responsavel'] ?? ''; ?>" oninput="mascararCPF(this)" />
                                 </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <div class="modal__footer">
+                    <div class="modal__footer modal__footer-cliente-edicao">
                         <?php if (!empty($mensagem_erro)): ?>
                             <p class="campo__mensagem-erro" style="margin-right: auto;">
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -380,7 +375,7 @@ $dados = $controller->listarEmpresa();
                 </thead>
                 <tbody>
                     <?php foreach ($dados as $empresa): ?>
-                        <tr>
+                        <tr class="<?= $empresa['habilitado'] ? '' : 'linha-inativa' ?>">
                             <td>#<?= $empresa['id'] ?></td>
                             <td><?= htmlspecialchars($empresa['nome_fantasia']) ?></td>
                             <td><?= htmlspecialchars($empresa['cnpj']) ?></td>
@@ -400,9 +395,6 @@ $dados = $controller->listarEmpresa();
                                 <div class="acoes">
                                     <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
-                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
@@ -434,16 +426,19 @@ $dados = $controller->listarEmpresa();
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>
+<script src="../assets/JS/mascaras.js"></script>
 <script>
     function toggleHabilitado(checkbox) {
         const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
+        const linha = checkbox.closest('tr');
         label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
- 
+        linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
         const body = new FormData();
         body.append('action', 'alterarHabilitado');
         body.append('id', checkbox.dataset.id);
         body.append('habilitado', checkbox.checked ? '1' : '0');
- 
+
         fetch('cliente_empresa.php', {
                 method: 'POST',
                 body
@@ -451,6 +446,7 @@ $dados = $controller->listarEmpresa();
             .catch(() => {
                 checkbox.checked = !checkbox.checked;
                 label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+                linha?.classList.toggle('linha-inativa', !checkbox.checked);
             });
     }
     
@@ -465,6 +461,20 @@ $dados = $controller->listarEmpresa();
     document.addEventListener('DOMContentLoaded', () => {
         const modalEditar = document.getElementById('modalEditar');
         if (!modalEditar) return;
+
+        const campoCnpj = modalEditar.querySelector('input[name="cnpj"]');
+        const campoCep = modalEditar.querySelector('input[name="cep"]');
+        const campoNumero = modalEditar.querySelector('input[name="numero"]');
+        const campoTelefone = modalEditar.querySelector('input[name="telefone"]');
+        const campoTelefoneResponsavel = modalEditar.querySelector('input[name="telefone_responsavel"]');
+        const campoCpfResponsavel = modalEditar.querySelector('input[name="cpf_responsavel"]');
+
+        if (campoCnpj) mascararCNPJ(campoCnpj);
+        if (campoCep) mascararCEP(campoCep);
+        if (campoNumero) apenasNumeros(campoNumero);
+        if (campoTelefone) mascararTelefone(campoTelefone);
+        if (campoTelefoneResponsavel) mascararTelefone(campoTelefoneResponsavel);
+        if (campoCpfResponsavel) mascararCPF(campoCpfResponsavel);
 
         modalEditar.querySelectorAll('[data-modal-close]').forEach(botao => {
             botao.addEventListener('click', limparIdEmpresaDaUrl);
