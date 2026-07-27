@@ -41,7 +41,7 @@
         </div>
 
         <div class="tabela-wrapper">
-            <table class="tabela">
+            <table class="tabela" id="tabela">
                 <thead>
                     <tr>
                         <th data-col="0">

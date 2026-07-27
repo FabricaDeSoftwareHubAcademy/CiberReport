@@ -1,3 +1,8 @@
+<?php
+session_start();
+$nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
+?>
+
 <!--
     COMO USAR O MENU LATERAL
     ========================
@@ -17,9 +22,12 @@
     Sem esse fechamento o <main> fica fora do flex row da sidebar
     e o efeito de "empurrar" o conteúdo não funciona.
 -->
-
 <div class="menu">
-    <nav id="sideBar">
+<?php 
+$sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
+$classeMenu = $sidebarAberto ? 'open-sidebar' : '';
+?>
+    <nav id="sideBar" class="<?= $classeMenu ?>">
         <div class="sidebar_content">
             <div class="logo">
                 <div class="logo-nome">
@@ -132,12 +140,12 @@
             </div>
             <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             <!-- barra de pesquisa para desktop -->
-            <div class="input-pesquisaSuperior">
-                <input type="text" placeholder="Buscar..." />
+            <form class="input-pesquisaSuperior">
+                <input type="text" placeholder="Buscar..." id="busca" />
                 <button>
                     <i class="fa-brands fa-sistrix"></i>
                 </button>
-            </div>
+            </form>
 
             <!-- pesquisa para formato mobile -->
             <div class="pesquisa-mobile">
@@ -146,19 +154,19 @@
                 </button>
             </div>
             <!-- overlay-pesquisa -->
-            <div class="overlay-pesquisaMobile">
-                <div class="barra-pesquisa">
+            <form class="overlay-pesquisaMobile">
+                <div class="barra-pesquisa" id="busca-mobile">
                     <input type="text" placeholder="Buscar..." />
                     <button>
                         <i class="fa-brands fa-sistrix"></i>
                     </button>
                 </div>
-            </div>
+            </form>
             <div class="perfis">
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="../assets/img/foto-perfil.jpg" alt="" />
                 <div class="description-user">
-                    <p>Bruno Alvares</p>
+                    <p><?= $nomeUsuario?></p>
                     <p>Gerente</p>
                 </div>
             </div>
