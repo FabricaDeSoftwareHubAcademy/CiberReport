@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/../bootstrap.php";
-require_once __DIR__ . "/../Model/Database/Projeto.php";
+require_once __DIR__ . "/../Model/Projeto.php";
 
 
 class ProjetoController
