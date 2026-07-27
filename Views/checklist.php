@@ -184,7 +184,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                     <?php foreach ($checklists as $checklist): ?>
                         <?php $ativoChecklist = (bool) $checklist['habilitado']; ?>
 
-                        <tr>
+                        <tr class="<?= $ativoChecklist ? '' : 'linha-inativa' ?>">
                             <td><?= (int) $checklist['id'] ?></td>
                             <td><?= escaparHtmlChecklist($checklist['nome']) ?></td>
                             <td class="checklist-tabela-descricao">

@@ -68,6 +68,7 @@
     async function alternarStatusChecklist(campoChecklist) {
         const grupoChecklist = campoChecklist.closest('.checklist-status');
         const textoChecklist = grupoChecklist?.querySelector('.checklist-status-texto');
+        const linhaChecklist = campoChecklist.closest('tr');
         const habilitadoChecklist = campoChecklist.checked ? 1 : 0;
 
         try {
@@ -83,6 +84,8 @@
             if (textoChecklist) {
                 textoChecklist.textContent = habilitadoChecklist ? 'Ativo' : 'Inativo';
             }
+
+            linhaChecklist?.classList.toggle('linha-inativa', !campoChecklist.checked);
         } catch (erroChecklist) {
             console.error(erroChecklist);
             campoChecklist.checked = !campoChecklist.checked;
@@ -90,6 +93,8 @@
             if (textoChecklist) {
                 textoChecklist.textContent = campoChecklist.checked ? 'Ativo' : 'Inativo';
             }
+
+            linhaChecklist?.classList.toggle('linha-inativa', !campoChecklist.checked);
 
             alert('Não foi possível alterar o status.');
         }
