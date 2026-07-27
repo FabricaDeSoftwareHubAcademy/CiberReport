@@ -93,7 +93,7 @@ $usuarios = $controller->listar();
                 <tbody>
                     <?php foreach ($usuarios as $usuario): ?>
                         <?php $ativo = (bool) $usuario['habilitado']; ?>
-                        <tr>
+                        <tr class="<?= $ativo ? '' : 'linha-inativa' ?>">
                             <td><?= htmlspecialchars($usuario['nome']) ?></td>
                             <td>
                                 <span class="ger-pentest-cat-badge">
