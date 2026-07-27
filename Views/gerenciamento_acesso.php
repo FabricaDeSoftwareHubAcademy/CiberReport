@@ -131,7 +131,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                 <form class="modal__body" method="post" action="gerenciamento_perfis.php" id="formPerfil">
                     <input type="hidden" name="id" id="perfil-id" value="">
 
-                    <div class="form-step">
+                    <div class="form-step form-step-active">
                         <div class="modal-grade">
                             <div class="campo">
                                 <label class="campo__label" for="nome">Nome do perfil</label>
