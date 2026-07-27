@@ -149,7 +149,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
         </div>
 
         <div class="tabela-wrapper">
-            <table>
+            <table id="table">
                 <thead>
                     <tr>
                         <th data-col="0">
@@ -173,7 +173,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <i class="fa-solid fa-filter sort-icon"></i>
                             </span>
                         </th>
-                        <th data-col="4">
+                        <th data-col="4" class="col-status">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
@@ -195,7 +195,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                     <?= escaparHtmlChecklist($checklist['categoria'] ?? '') ?>
                                 </span>
                             </td>
-                            <td>
+                            <td class="col-status">
                                 <div class="checklist-status">
                                     <label class="switch">
                                         <input
@@ -676,7 +676,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                                 $jsonSeguroChecklist
                                             ) ?>;
     </script>
-
+    <script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/checklist.js"></script>

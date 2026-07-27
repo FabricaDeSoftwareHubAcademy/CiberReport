@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS banco_conhecimento (
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
 );
 
-CREATE TABLE pentest_tipos (
+CREATE TABLEIF IF NOT EXISTS pentest_tipos (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     nome              VARCHAR(255) NOT NULL,
     descricao_breve   VARCHAR(500),
@@ -203,7 +203,7 @@ CREATE TABLE pentest_tipos (
     habilitado        TINYINT NOT NULL DEFAULT 1
 );
 
-ALTER TABLE checklist
+ALTER TABLE  checklist
 MODIFY COLUMN descricao VARCHAR(1000) DEFAULT NULL;
 
 CREATE TABLE IF NOT EXISTS checklist_item_catalogo (

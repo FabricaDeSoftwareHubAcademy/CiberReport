@@ -351,7 +351,7 @@ $dados = $controller->listarEmpresa();
 
 
        <div class="tabela-wrapper">
-            <table>
+            <table id="tabela">
                 <thead>
                     <tr>
                         <th data-col="0">
@@ -401,7 +401,7 @@ $dados = $controller->listarEmpresa();
                                     <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="tabela-btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
+                                    <a href="cliente_empresa.php?excluir=<?= $empresa['id'] ?>" class="btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir esta empresa?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -430,7 +430,7 @@ $dados = $controller->listarEmpresa();
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
-
+<script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>

@@ -5,32 +5,37 @@ const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
 const logoMenuSuperior = document.querySelector('.logo-menuSuperior');
 const menuOverlay = document.querySelector('.menuOverlay');
 
-// Botão de abrir/fechar sidebar (desktop)
+function persistenciaMenu(valor){
+    document.cookie = `sidebarOpen=${valor}; path=/; max-age=900000`
+}
+
 document.getElementById('open_btn').addEventListener('click', function () {
     const isOpen = sideBar.classList.contains('open-sidebar');
 
     if (isOpen) {
         menuOverlay.classList.remove('active');
+        persistenciaMenu(false);
         setTimeout(() => {
             sideBar.classList.remove('open-sidebar');
         }, 100);
     } else {
         sideBar.classList.add('open-sidebar');
+        persistenciaMenu(true);        
     }
-    // suBmenus.classList.add('fechado');
 });
 
 // Logo do menu superior abre sidebar (mobile)
 logoMenuSuperior.addEventListener('click', () => {
-    sideBar.classList.toggle('open-sidebar');
-    menuOverlay.classList.toggle('active');
+    const menuAberto = sideBar.classList.toggle('open-sidebar');
+    menuOverlay.classList.toggle('active', menuAberto);
+    persistenciaMenu(menuAberto);
 });
 
 // Overlay do menu mobile fecha o sidebar
 menuOverlay.addEventListener('click', () => {
     sideBar.classList.remove('open-sidebar');
     menuOverlay.classList.remove('active');
-    dropdown.classList.remove('open_dropdown');
+    persistenciaMenu(false);
 });
 
 // Botão de pesquisa mobile abre overlay de busca
@@ -41,6 +46,13 @@ pesquisaMobileBtn.addEventListener('click', () => {
 // Clicar fora da barra fecha o overlay de busca
 overlayPesquisa.addEventListener('click', (e) => {
     if (!e.target.closest('.barra-pesquisa')) {
+        overlayPesquisa.classList.remove('active');
+    }
+});
+
+// Fecha a pesquisa ao sair da largura mobile
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 700) {
         overlayPesquisa.classList.remove('active');
     }
 });
