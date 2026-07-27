@@ -1,7 +1,7 @@
 <?php
-require_once "../Controller/GerenciarPerfilController.php";
+require_once "../Controller/GerenciarAcessoController.php";
 
-$controller = new GerenciarPerfilController();
+$controller = new GerenciarAcessoController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
     $controller->cadastrar();
@@ -12,14 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
 if (isset($_GET['excluir'])) {
     $controller->excluir($_GET['excluir']);
     header("Location: gerenciamento_perfis.php");
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'alterarHabilitado') {
-    $id         = (int) ($_POST['id'] ?? 0);
-    $habilitado = (int) ($_POST['habilitado'] ?? 0);
-    $controller->alterarStatus($id, $habilitado);
-    echo json_encode(['ok' => true]);
     exit;
 }
 
