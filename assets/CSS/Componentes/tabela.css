@@ -67,6 +67,31 @@
     color: var(--cor-amarelo);
 }
 
+.tabela-tooltip {
+    position: fixed;
+    display: block;
+    width: max-content;
+    max-width: 280px;
+    padding: var(--espaco-xs) var(--espaco-sm);
+    background-color: var(--cor-texto-primario);
+    color: #fff;
+    border-radius: var(--raio-sm);
+    font-size: var(--fonte-legenda);
+    font-weight: 500;
+    white-space: normal;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 1000;
+}
+
+.tabela-tooltip--visivel {
+    opacity: 1;
+    visibility: visible;
+}
+
 .tabela-filtro-painel {
     position: fixed;
     z-index: 1000;

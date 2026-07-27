@@ -75,7 +75,6 @@
     });
     paginaAtual = Math.min(pagina, totalPaginas());
     renderizarBotoes();
-    aplicarTooltipsOverflow();
   }
 
   function renderizarSeletorItensPorPagina() {
@@ -156,23 +155,106 @@
     containerItensPorPagina.appendChild(inputCustom);
   }
 
-  // --- tooltip para conteúdo truncado ---
-  function aplicarTooltipsOverflow() {
-    const celulas = [
-      ...cabecalhos,
-      ...todasLinhas()
-        .filter((linha) => linha.style.display !== 'none')
-        .flatMap((linha) => Array.from(linha.cells)),
-    ];
-    celulas.forEach((celula) => {
-      const alvo = celula.querySelector('.ger-pentest-descricao-texto') || celula;
-      const transbordou = alvo.scrollWidth > alvo.clientWidth || alvo.scrollHeight > alvo.clientHeight;
-      if (transbordou) {
-        celula.title = celula.textContent.trim();
-      } else {
-        celula.removeAttribute('title');
+  // --- tooltip rápido para células com conteúdo cortado ---
+  // Substitui o title nativo do navegador (aparece com atraso e sem estilo)
+  // por um balão fixo posicionado via getBoundingClientRect. Como usa
+  // position: fixed e fica anexado ao <body>, escapa de qualquer ancestral
+  // com overflow: hidden/auto (ex.: o wrapper da tabela tem overflow-x: auto,
+  // que também clipa o eixo Y e cortaria um tooltip posicionado com
+  // position: absolute nas primeiras linhas). Detecta overflow dinamicamente
+  // no hover, então funciona em qualquer <th>/<td> de qualquer tabela que use
+  // este componente, com qualquer forma de truncamento (nowrap+ellipsis,
+  // line-clamp, max-width em elemento interno etc.), sem precisar recalcular
+  // a cada renderização/paginação.
+  // Elementos com atributo data-tooltip="texto" (ex.: badge "+N" de uma lista
+  // de tags) mostram esse texto customizado em vez do textContent da célula.
+  let tooltipCelula = null;
+  let gatilhoTooltipAtivo = null;
+
+  function obterTooltipCelula() {
+    if (!tooltipCelula) {
+      tooltipCelula = document.createElement('div');
+      tooltipCelula.className = 'tabela-tooltip';
+      document.body.appendChild(tooltipCelula);
+    }
+    return tooltipCelula;
+  }
+
+  function elementoTransbordou(elemento) {
+    return elemento.scrollWidth > elemento.clientWidth + 1 || elemento.scrollHeight > elemento.clientHeight + 1;
+  }
+
+  function encontrarConteudoTruncado(celula) {
+    if (elementoTransbordou(celula)) return celula;
+    return Array.from(celula.querySelectorAll('*')).find(elementoTransbordou) || null;
+  }
+
+  // Posiciona perto do cursor (não do centro da célula) para tooltips de
+  // células largas ficarem coladas em onde o mouse realmente está.
+  const DESLOCAMENTO_CURSOR = 14;
+
+  function posicionarTooltipCelula(x, y, tooltip) {
+    const largura = tooltip.offsetWidth;
+    const altura = tooltip.offsetHeight;
+
+    let esquerda = x - largura / 2;
+    esquerda = Math.max(8, Math.min(esquerda, window.innerWidth - largura - 8));
+
+    let topo = y - altura - DESLOCAMENTO_CURSOR;
+    if (topo < 8) topo = y + DESLOCAMENTO_CURSOR;
+
+    tooltip.style.left = `${esquerda}px`;
+    tooltip.style.top = `${topo}px`;
+  }
+
+  function mostrarTooltipCelula(alvo, texto, x, y) {
+    const tooltip = obterTooltipCelula();
+    tooltip.textContent = texto;
+    tooltip.classList.add('tabela-tooltip--visivel');
+    posicionarTooltipCelula(x, y, tooltip);
+    gatilhoTooltipAtivo = alvo;
+  }
+
+  function esconderTooltipCelula() {
+    tooltipCelula?.classList.remove('tabela-tooltip--visivel');
+    gatilhoTooltipAtivo = null;
+  }
+
+  function aoPassarMouseCelula(evento) {
+    const gatilhoCustom = evento.target.closest('[data-tooltip]');
+    if (gatilhoCustom) {
+      if (gatilhoCustom !== gatilhoTooltipAtivo) {
+        mostrarTooltipCelula(gatilhoCustom, gatilhoCustom.dataset.tooltip, evento.clientX, evento.clientY);
       }
-    });
+      return;
+    }
+
+    const celula = evento.target.closest('th, td');
+    if (!celula || celula === gatilhoTooltipAtivo) return;
+    if (celula.querySelector('[data-tooltip]')) return; // tratado quando o mouse alcançar o gatilho
+
+    const truncado = encontrarConteudoTruncado(celula);
+    if (!truncado) return;
+    mostrarTooltipCelula(celula, celula.textContent.trim(), evento.clientX, evento.clientY);
+  }
+
+  function aoMoverMouseCelula(evento) {
+    if (!gatilhoTooltipAtivo || !tooltipCelula) return;
+    posicionarTooltipCelula(evento.clientX, evento.clientY, tooltipCelula);
+  }
+
+  function aoSairMouseCelula(evento) {
+    if (!gatilhoTooltipAtivo) return;
+    if (evento.relatedTarget && gatilhoTooltipAtivo.contains(evento.relatedTarget)) return;
+    esconderTooltipCelula();
+  }
+
+  if (tabela) {
+    tabela.addEventListener('mouseover', aoPassarMouseCelula);
+    tabela.addEventListener('mousemove', aoMoverMouseCelula);
+    tabela.addEventListener('mouseout', aoSairMouseCelula);
+    window.addEventListener('scroll', esconderTooltipCelula, true);
+    window.addEventListener('resize', esconderTooltipCelula);
   }
 
   function paginasParaExibir(atual, total) {
