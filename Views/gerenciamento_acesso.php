@@ -408,8 +408,6 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
 
     <script src="../Assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
-    <script src="../assets/JS/componentes/menuNIvel.js"></script>
-    <script src="../assets/JS/gerenciarPentest.js"></script>
 </body>
 
 </html>

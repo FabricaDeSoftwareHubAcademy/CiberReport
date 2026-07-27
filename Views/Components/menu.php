@@ -68,7 +68,7 @@
 
                 </li>
                 <li class="side_item">
-                    <a href="gerenciar_pentest.php">
+                    <a href="gerenciar-tipo-pentest.php">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
                     </a>
