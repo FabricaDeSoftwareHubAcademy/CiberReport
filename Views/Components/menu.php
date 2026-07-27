@@ -65,7 +65,7 @@ $itemMenuAtivo = static function (string ...$paginas) use ($paginaAtual): string
                     <div class="tooltip-item"><span>Projetos</span></div>
 
                 </li>
-                <li class="side_item">
+                <li class="side_item<?= $itemMenuAtivo('gerenciar-tipo-pentest.php') ?>">
                     <a href="gerenciar-tipo-pentest.php">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
@@ -122,7 +122,7 @@ $itemMenuAtivo = static function (string ...$paginas) use ($paginaAtual): string
                     <div class="tooltip-item"><span>Logs</span></div>
                 </li>
             </ul>
-            <button id="open_btn">
+            <button id="open_btn" type="button" aria-label="Abrir ou fechar menu" aria-expanded="<?= $sidebarAberto ? 'true' : 'false' ?>">
                 <i class="fa-solid fa-chevron-right" id="open_btn_icon"></i>
             </button>
         </div>

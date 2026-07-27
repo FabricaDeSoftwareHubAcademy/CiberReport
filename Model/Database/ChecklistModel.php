@@ -71,12 +71,41 @@ class ChecklistModel
         );
     }
 
+    public function buscarChecklistPorNomeChecklist(
+        string $nomeChecklist,
+        ?int $idIgnoradoChecklist = null
+    ): array|false {
+        $sqlChecklist = '
+            SELECT id, nome, descricao, categoria, habilitado
+            FROM checklist
+            WHERE nome = :nome
+        ';
+
+        $parametrosChecklist = ['nome' => $nomeChecklist];
+
+        if ($idIgnoradoChecklist !== null) {
+            $sqlChecklist .= ' AND id <> :id';
+            $parametrosChecklist['id'] = $idIgnoradoChecklist;
+        }
+
+        $sqlChecklist .= ' LIMIT 1';
+
+        $consultaChecklist = $this->pdo->prepare($sqlChecklist);
+        $consultaChecklist->execute($parametrosChecklist);
+
+        return $consultaChecklist->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function cadastrarChecklist(
         string $nomeChecklist,
         string $descricaoChecklist,
         string $categoriaChecklist,
         array $itensIdsChecklist
-    ): int {
+    ): int|false {
+        if ($this->buscarChecklistPorNomeChecklist($nomeChecklist) !== false) {
+            return false;
+        }
+
         try {
             $this->pdo->beginTransaction();
 
@@ -126,6 +155,10 @@ class ChecklistModel
         array $itensIdsChecklist
     ): bool {
         if (!$this->buscarChecklist($idChecklist)) {
+            return false;
+        }
+
+        if ($this->buscarChecklistPorNomeChecklist($nomeChecklist, $idChecklist) !== false) {
             return false;
         }
 

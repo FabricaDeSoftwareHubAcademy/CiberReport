@@ -397,7 +397,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
             </div>
         </div>
     </main>
-
+    <script src="../assets/JS/barraDePesquisa.js"></script>                                       
     <script src="../Assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
