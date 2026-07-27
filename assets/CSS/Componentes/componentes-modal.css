@@ -281,7 +281,7 @@
 .analista-item__cargo { font-size: var(--fonte-legenda); color: rgba(255,255,255,0.55); }
 
 /* Revisão */
-.revisao-secao { border: 1px solid var(--cor-borda-padrao); border-radius: var(--raio-lg); overflow: hidden; width: 100%; }
+.revisao-secao { border: 1px solid var(--cor-borda-padrao); border-radius: var(--raio-lg); overflow: hidden; width: 100%; margin-bottom: var(--espaco-md); }
 .revisao-secao__cabecalho { padding: var(--espaco-sm) var(--espaco-lg); background-color: var(--cor-branco-primario); display: flex; align-items: center; gap: var(--espaco-sm); border-bottom: 1px solid var(--cor-borda-padrao); }
 .revisao-secao__titulo { font-size: var(--fonte-apoio); font-weight: 600; color: var(--cor-texto-titulo); }
 .revisao-secao__corpo { padding: var(--espaco-md) var(--espaco-lg); display: flex; flex-wrap: wrap; gap: var(--espaco-md); }
@@ -344,14 +344,14 @@
 /* =============================================================================
    08. UTILITÁRIOS DE STEPPER (Controle de Páginas do Modal)
    ============================================================================= */
-.stepper-conteudo { 
-    display: none; 
+.stepper-conteudo {
+    display: none;
 }
 
-.stepper-conteudo.ativo { 
-    display: flex; 
-    flex-direction: column; 
-    gap: var(--espaco-lg); 
+.stepper-conteudo.ativo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-lg);
 }
 /* =============================================================================
    09. MODAL SEÇÃO (Container de isolamento visual)
