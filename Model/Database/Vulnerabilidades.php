@@ -2,9 +2,20 @@
     Class Vulnerabilidades
     {
         private $pdo;
-
+ 
         public $msgErro = "";
-
+ 
+        
+        const MAX_NOME = 150;
+        const MAX_CVE = 20;
+        const MAX_DESCRICAO = 255;
+        const MAX_DESCRICAO_TECNICA = 5000;
+        const MAX_IMPACTO = 3000;
+ 
+        
+        const CATEGORIAS_VALIDAS = ['API', 'Aplicação Web', 'Infraestrutura', 'Mobile', 'Rede'];
+        const SEVERIDADES_VALIDAS = ['Alta', 'Baixa', 'Crítica', 'Média'];
+ 
         public function conectar($nome_banco, $host, $usuario, $senha)
         {
             global $pdo;
@@ -15,11 +26,72 @@
                 $this->msgErro = $erro->getMessage();
             }
         }
-
+ 
+        
+        private function validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)
+        {
+            
+            $nome = trim($nome);
+            if (mb_strlen($nome, 'UTF-8') < 1 || mb_strlen($nome, 'UTF-8') > self::MAX_NOME) {
+                $this->msgErro = "Nome inválido (1 a " . self::MAX_NOME . " caracteres).";
+                return false;
+            }
+ 
+            
+            if (!is_numeric($cvss) || $cvss < 0 || $cvss > 10) {
+                $this->msgErro = "CVSS deve ser um número entre 0.0 e 10.0.";
+                return false;
+            }
+ 
+            
+            if ($cve !== '' && $cve !== null) {
+                if (mb_strlen($cve, 'UTF-8') > self::MAX_CVE || !preg_match('/^CVE-\d{4}-\d{4,}$/', $cve)) {
+                    $this->msgErro = "Formato de CVE inválido (ex: CVE-2024-0001).";
+                    return false;
+                }
+            }
+ 
+            
+            if (mb_strlen($descricao, 'UTF-8') > self::MAX_DESCRICAO) {
+                $this->msgErro = "Descrição muito longa (máx. " . self::MAX_DESCRICAO . " caracteres).";
+                return false;
+            }
+ 
+            
+            if (mb_strlen($descricao_tecnica, 'UTF-8') > self::MAX_DESCRICAO_TECNICA) {
+                $this->msgErro = "Descrição técnica muito longa (máx. " . self::MAX_DESCRICAO_TECNICA . " caracteres).";
+                return false;
+            }
+ 
+            
+            if (mb_strlen($impacto_negocio, 'UTF-8') > self::MAX_IMPACTO) {
+                $this->msgErro = "Impacto muito longo (máx. " . self::MAX_IMPACTO . " caracteres).";
+                return false;
+            }
+ 
+            
+            if (!in_array($categoria, self::CATEGORIAS_VALIDAS, true)) {
+                $this->msgErro = "Categoria inválida.";
+                return false;
+            }
+ 
+            
+            if (!in_array($severidade_vulnerabilidade, self::SEVERIDADES_VALIDAS, true)) {
+                $this->msgErro = "Severidade inválida.";
+                return false;
+            }
+ 
+            return true;
+        }
+ 
        public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
         {
             global $pdo;
  
+            
+            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)) {
+                return false;
+            }
  
             $verifica = $pdo->prepare("SELECT id FROM Vulnerabilidade WHERE nome = :nome AND projeto_id = :projeto_id");
             $verifica->bindValue(":nome", $nome);
@@ -27,6 +99,7 @@
             $verifica->execute();
  
             if ($verifica->rowCount() > 0) {
+                $this->msgErro = "Já existe uma vulnerabilidade com esse nome neste projeto.";
                 return false;
             }
  
@@ -86,6 +159,11 @@
         public function atualizarDadosVulnerabilidades($id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
         {
             global $pdo;
+ 
+            
+            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)) {
+                return false;
+            }
  
             $sql = $pdo->prepare("UPDATE Vulnerabilidade SET
                 nome = :nome,

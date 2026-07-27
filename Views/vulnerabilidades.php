@@ -100,9 +100,6 @@
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -136,9 +133,6 @@
                                 </button>
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
                         </td>
@@ -174,9 +168,6 @@
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -210,9 +201,6 @@
                                 </button>
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
                         </td>
@@ -260,38 +248,38 @@
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
                             <label class="campo__label" for="nomeVuln">Nome da Vulnerabilidade:</label>
-                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" />
+                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" maxlength="150" required />
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cvssScore">CVSS Score:</label>
-                            <input class="campo__input" type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" />
+                            <input class="campo__input" type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" min="0" max="10" step="0.1" required />
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" />
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}"title="formato:CVE-AAAA-NNNN"/>
                         </div>
                     </div>
 
                     <div class="campo">
                         <label class="campo__label" for="descricao">Descrição:</label>
-                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" />
+                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="255" required />
                     </div>
 
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="descTecnica">Descrição Técnica:</label>
-                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes"></textarea>
+                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="5000"></textarea>
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="impactos">Impactos:</label>
-                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial"></textarea>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="3000"></textarea>
                         </div>
                     </div>
 
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
-                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" />
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="100" />
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="severidade">Severidade:</label>
