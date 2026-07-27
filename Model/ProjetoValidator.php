@@ -49,23 +49,38 @@ class ProjetoValidator
         if (empty($dados_limpo['empresa_id'])) {
             $erros[] = 'A empresa é obrigatória.';
         }
-        if (empty($horas_contratadas)) {
+        if (empty($dados_limpo['horas_contratadas'])) {
             $erros[] = 'As horas contratadas são obrigatórias.';
         }
-        if (empty($tipo)) {
+        if (empty($dados_limpo['tipo'])) {
             $erros[] = 'O tipo do projeto é obrigatório.';
         }
-        if (empty($nivel_sigilo)) {
+        if (empty($dados_limpo['nivel_sigilo'])) {
             $erros[] = 'O nível de sigilo é obrigatório.';
         }
-        if (empty($escopo)) {
+        if (empty($dados_limpo['escopo'])) {
             $erros[] = 'O escopo é obrigatório.';
         }
-        if (empty($alvo)) {
+        if (empty($dados_limpo['alvo'])) {
             $erros[] = 'O alvo é obrigatório.';
         }
 
         if (count($erros) > 0) {
+            throw new Exception(implode("<br>", $erros));
+        }
+
+        $tipos_permitidos = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
+        $sigilos_permitidos = ['INTERNO', 'EXTERNO'];
+
+        if(!in_array($dados_limpo['tipo'], $tipos_permitidos)){
+            $erros[] = 'O tipo do projeto é inválido.';
+        }
+
+        if(!in_array($dados_limpo['nivel_sigilo'], $sigilos_permitidos)){
+            $erros[] = 'O nível de sigilo é inválido.';
+        }
+        
+        if(count($erros) > 0){
             throw new Exception(implode("<br>", $erros));
         }
     }
