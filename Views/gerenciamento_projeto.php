@@ -142,6 +142,5 @@ $dados = $controller->listar();
             </form>
         </div>
     </div>
-    <script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
 </body>
 </html>

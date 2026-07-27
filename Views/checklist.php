@@ -676,7 +676,6 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                                 $jsonSeguroChecklist
                                             ) ?>;
     </script>
-    <script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/checklist.js"></script>

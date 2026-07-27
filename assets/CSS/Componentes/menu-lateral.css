@@ -270,6 +270,17 @@
         transform: translateX(0);
     }
 
+    #sideBar.open-sidebar .logo-imagem {
+        left: auto;
+        right: var(--espaco-sm);
+        transform: none;
+    }
+
+    #sideBar #open_btn {
+        right: var(--espaco-sm);
+        z-index: 2;
+    }
+
     #sideBar .sidebar_content {
         flex: 1;
         min-height: 0;
