@@ -29,6 +29,25 @@ class ChecklistModel
         );
     }
 
+    public function listarChecklistAtivos(): array
+    {
+        $consultaChecklist = $this->pdo->query(
+            'SELECT
+                id,
+                nome,
+                descricao,
+                categoria,
+                habilitado
+            FROM checklist
+            WHERE habilitado = 1
+            ORDER BY nome'
+        );
+
+        return $consultaChecklist->fetchAll(
+            PDO::FETCH_ASSOC
+        );
+    }
+
     public function buscarChecklist(
         int $idChecklist
     ): array|false {
