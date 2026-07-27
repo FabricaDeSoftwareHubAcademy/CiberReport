@@ -330,10 +330,22 @@
     function filtrarCatalogoChecklist(filtroChecklist = '') {
         const termoChecklist = normalizarChecklist(filtroChecklist);
 
-        return catalogoCompletoChecklist().filter(itemChecklist =>
-            normalizarChecklist(itemChecklist.titulo).includes(termoChecklist)
-            || normalizarChecklist(itemChecklist.referencia).includes(termoChecklist)
-        );
+        return catalogoCompletoChecklist()
+            .filter(itemChecklist =>
+                normalizarChecklist(itemChecklist.titulo).includes(termoChecklist)
+                || normalizarChecklist(itemChecklist.referencia).includes(termoChecklist)
+            )
+            .sort((itemAChecklist, itemBChecklist) => {
+                const obrigatorioAChecklist = Number(itemAChecklist.obrigatorio) === 1;
+                const obrigatorioBChecklist = Number(itemBChecklist.obrigatorio) === 1;
+
+                if (obrigatorioAChecklist !== obrigatorioBChecklist) {
+                    return obrigatorioAChecklist ? -1 : 1;
+                }
+
+                return normalizarChecklist(itemAChecklist.titulo)
+                    .localeCompare(normalizarChecklist(itemBChecklist.titulo), 'pt-BR');
+            });
     }
 
     function renderizarGerenciamentoChecklist(filtroChecklist = '') {
@@ -738,3 +750,4 @@
     window.abrirNovoItemChecklist = abrirNovoItemChecklist;
     window.salvarItemCatalogoChecklist = salvarItemCatalogoChecklist;
 })();
+

@@ -19,11 +19,13 @@
 .group-card-projeto{
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 }
 .container-card-projetos{
+    flex: 1;
+    min-width: 280px;
     background-color: var(--cor-fundo-branco);
     border-radius: var(--raio-xl);
-    width: 20vw;
     height: 125px;
     justify-content: space-evenly;
     display: flex;

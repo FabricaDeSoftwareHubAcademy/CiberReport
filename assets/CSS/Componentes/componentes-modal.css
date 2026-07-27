@@ -54,6 +54,19 @@
 }
 
 /* =============================================================================
+   RESPONSIVIDADE: Força todas as grades de formulário a terem 1 coluna no celular
+   ============================================================================= */
+@media (max-width: 768px) {
+    .modal-grade > *,
+    .modal-grade--3 > *,
+    .modal-grade--4 > * {
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+    }
+}
+
+
+/* =============================================================================
    02. ELEMENTOS BÁSICOS DE FORMULÁRIO (Labels, Inputs, Textarea, Select)
    HTML esperado:
    <div class="campo">
@@ -118,7 +131,7 @@
     font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
-    resize: vertical;
+    resize: none;
     transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
     outline: none;
     line-height: 1.6;
@@ -145,24 +158,6 @@
     box-sizing: border-box;
 }
 .campo__select-seta { position: absolute; right: var(--espaco-md); pointer-events: none; color: var(--cor-texto-secundario); font-size: 1.2rem; }
-
-/* Botão "+" inline */
-.campo__botao-adicionar {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--raio-md);
-    background-color: var(--cor-azul-primaria);
-    color: var(--cor-fundo-branco);
-    border: none;
-    cursor: pointer;
-    font-size: 1.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color var(--transicao-rapida);
-}
-.campo__botao-adicionar:hover { background-color: var(--cor-azul-destaques); }
 
 /* =============================================================================
    03. COMPONENTES COMPLEXOS (Chips, Multi-tags, Dropzone, Toggle, Avatar)

@@ -22,7 +22,6 @@ $dados = $controller->listar();
     ?>
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
-            <button class="btn-novo-cadastro btn-projeto">Alocar Analista</button>
             <button class="btn-novo-cadastro btn-projeto" data-modal-target="modal-cadastro-projeto"><span>+</span>Novo Projeto</button>
         </div>
 

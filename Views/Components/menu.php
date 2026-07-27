@@ -72,7 +72,7 @@ $classeMenu = $sidebarAberto ? 'open-sidebar' : '';
                         <i class="fa-solid fa-terminal"></i>
                         <span class="item_description">Projetos</span>
                     </a>
-                    <div class="tooltip-item"><span>Vulnerabilidades</span></div>
+                    <div class="tooltip-item"><span>Projetos</span></div>
 
                 </li>
                 <li class="side_item">
