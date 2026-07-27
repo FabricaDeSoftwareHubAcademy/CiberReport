@@ -3,7 +3,8 @@ require_once __DIR__ . "/../bootstrap.php";
 require_once __DIR__ . "/../Model/Database/Projeto.php";
 
 
-class ProjetoController{
+class ProjetoController
+{
     private $projeto;
 
     public function __construct()
@@ -21,5 +22,4 @@ class ProjetoController{
     {
         return $this->projeto->listarDados();
     }
-
 }
