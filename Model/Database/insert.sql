@@ -86,19 +86,11 @@ INSERT INTO checklist_item (checklist_id, titulo, referencia, obrigatorio, habil
 -- ids gerados: 1 a 6
 
 -- ---------------------------------------------------------
--- modelo_pentest
--- ---------------------------------------------------------
-INSERT INTO modelo_pentest (checklist_id, nome, categoria, metodologia, framework, nv_risco, descricao, habilitado) VALUES
-(1, 'Pentest Aplicação Web Externa', 'Web Application', 'PTES', 'OWASP', 'ALTO', 'Modelo padrão para testes de intrusão em aplicações web expostas à internet.', 1),
-(2, 'Pentest Infraestrutura Interna', 'Rede Interna', 'OSSTMM', 'NIST', 'MEDIO', 'Modelo para avaliação de segurança em redes corporativas internas.', 1);
--- ids gerados: 1 a 2
-
--- ---------------------------------------------------------
 -- projeto
 -- ---------------------------------------------------------
-INSERT INTO projeto (empresa_id, modelo_pentest_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, habilitado) VALUES
-(1, 1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 76.50, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'portal.techpantanal.com.br, api.techpantanal.com.br', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 1),
-(2, 2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 64.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', '10.20.0.0/22', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 1);
+INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, habilitado) VALUES
+(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 76.50, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'portal.techpantanal.com.br, api.techpantanal.com.br', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 1),
+(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 64.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', '10.20.0.0/22', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
@@ -165,79 +157,93 @@ INSERT INTO banco_conhecimento (vulnerabilidade_id, titulo, categoria, conteudo,
 -- Tipos de Pentest
 -- ---------------------------------------------------------
 
-INSERT INTO pentest_tipos (nome, descricao_breve, descricao_completa, categoria, modelo, tecnica, frameworks, checklist, nivel_profundidade, horas_execucao, habilitado) VALUES
-(
-    'Web Application Pentest',
-    'Teste de penetração completo em aplicações web, incluindo OWASP Top 10 e lógica de negócio.',
-    'Avaliação abrangente de segurança em aplicações web com foco na identificação de vulnerabilidades do OWASP Top 10, falhas de autenticação, injeções, exposição de dados sensíveis e falhas na lógica de negócio.',
-    'WEB', 'Black Box', 'Híbrida', 'OWASP,PTES', 'OWASP', 'Standard Security Assessment', 40, 1
-),
-(
-    'Mobile App Security Assessment',
-    'Avaliação de segurança em aplicações mobile iOS e Android seguindo o OWASP MASVS.',
-    'Análise estática e dinâmica de aplicativos mobile para iOS e Android, verificando armazenamento inseguro de dados, comunicação insegura, controles de autenticação e controles do lado do cliente.',
-    'MOBILE', 'Gray Box', 'Manual', 'OWASP', 'OWASP MASVS', 'Deep Security Assessment', 32, 1
-),
-(
-    'Cloud Security Assessment',
-    'Avaliação de segurança em ambientes cloud (AWS, Azure, GCP) com foco em configurações e IAM.',
-    'Revisão completa de configurações de infraestrutura em nuvem, políticas de IAM, exposição de buckets, grupos de segurança, criptografia de dados em repouso e em trânsito, e conformidade com benchmarks CIS.',
-    'CLOUD', 'Black Box', 'Híbrida', 'NIST,CIS,CSA,MITRE ATT&CK,PTES,ISO 27001', 'CIS Benchmarks', 'Advanced Red Team', 60, 0
-),
-(
-    'Social Engineering Campaign',
-    'Campanha de engenharia social incluindo phishing, vishing e simulação de ameaças internas.',
-    'Simulação controlada de ataques de engenharia social para avaliar a conscientização dos colaboradores. Inclui campanhas de phishing por e-mail, testes de vishing por telefone e simulação de ameaça interna com acesso físico.',
-    'ENG. SOCIAL', 'Gray Box', 'Manual', 'MITRE ATT&CK', 'NIST SP 800-115', 'Standard Security Assessment', 24, 0
-),
-(
-    'Red Team Exercise',
-    'Exercício completo de Red Team simulando cenários reais de ataque APT contra a organização.',
-    'Simulação de ataque avançado e persistente (APT) cobrindo todas as fases do ciclo de vida do ataque: reconhecimento, armamento, entrega, exploração, instalação, comando e controle e ações sobre objetivos.',
-    'RED TEAMS', 'White Box', 'Automatizada', 'PTES,MITRE ATT&CK', 'PTES', 'Advanced Red Team', 120, 1
-),
-(
-    'Network Infrastructure Pentest',
-    'Teste de penetração em infraestrutura de rede interna e perimetral, incluindo switches e roteadores.',
-    'Avaliação de segurança da infraestrutura de rede cobrindo varredura de portas, análise de protocolos, enumeração de serviços, exploração de vulnerabilidades em dispositivos de rede e segmentação de VLANs.',
-    'WEB', 'Gray Box', 'Híbrida', 'NIST,PTES', 'CIS Benchmarks', 'Standard Security Assessment', 48, 0
-),
-(
-    'API Security Testing',
-    'Testes de segurança em APIs REST e GraphQL cobrindo o OWASP API Security Top 10.',
-    'Análise de segurança focada em interfaces de programação de aplicações, verificando autenticação, autorização em nível de objeto e função, exposição excessiva de dados, limitação de taxa e injeções via endpoints.',
-    'WEB', 'Black Box', 'Automatizada', 'OWASP,PTES', 'OWASP API Top 10', 'Deep Security Assessment', 20, 1
-),
-(
-    'IoT Security Assessment',
-    'Avaliação de segurança em dispositivos IoT, firmware e protocolos de comunicação embarcados.',
-    'Análise de firmware, interfaces de hardware, protocolos de comunicação (MQTT, CoAP, Zigbee) e superfícies de ataque em dispositivos IoT industriais e residenciais.',
-    'WEB', 'Gray Box', 'Manual', 'OWASP,NIST', 'OWASP IoT Top 10', 'Deep Security Assessment', 56, 1
-),
-(
-    'Active Directory Pentest',
-    'Teste de penetração focado em ambientes Active Directory, incluindo escalada de privilégios e movimentação lateral.',
-    'Simulação de ataques internos em ambientes Windows Active Directory cobrindo Kerberoasting, Pass-the-Hash, DCSync, abuso de ACLs e caminhos de escalada de domínio.',
-    'RED TEAMS', 'White Box', 'Híbrida', 'MITRE ATT&CK,PTES', 'CIS Benchmarks', 'Advanced Red Team', 80, 1
-),
-(
-    'Phishing Simulation',
-    'Simulação de campanhas de phishing direcionado para medir o índice de conscientização dos colaboradores.',
-    'Execução de campanhas de spear phishing personalizadas por setor, com rastreamento de cliques, coleta de credenciais em ambiente controlado e relatório de exposição por departamento.',
-    'ENG. SOCIAL', 'Black Box', 'Automatizada', 'MITRE ATT&CK', 'NIST SP 800-115', 'Basic Security Assessment', 16, 1
-),
-(
-    'Container & Kubernetes Security Review',
-    'Revisão de segurança em ambientes containerizados Docker e orquestração Kubernetes.',
-    'Auditoria de configurações de containers, imagens Docker, políticas de rede Kubernetes, RBAC, secrets management e exposição de APIs do cluster contra benchmarks CIS.',
-    'CLOUD', 'White Box', 'Automatizada', 'CIS,NIST,MITRE ATT&CK', 'CIS Benchmarks', 'Standard Security Assessment', 36, 0
-),
-(
-    'Thick Client Application Pentest',
-    'Teste de penetração em aplicações desktop (thick client), análise de comunicação e armazenamento local.',
-    'Avaliação de segurança em aplicações desktop cobrindo análise de tráfego entre cliente e servidor, armazenamento inseguro de dados locais, bypass de controles client-side e engenharia reversa de binários.',
-    'WEB', 'Gray Box', 'Manual', 'OWASP,PTES', 'OWASP', 'Deep Security Assessment', 44, 1
-);
+INSERT INTO categoria_pentest (nome, descricao, habilitado) VALUES
+('Web Application', 'Testes em aplicações web: OWASP Top 10, autenticação e lógica de negócio.', 1),
+('Mobile', 'Avaliação de apps iOS/Android: armazenamento, comunicação e controles client-side.', 1),
+('Cloud', 'Configurações, IAM e exposição em ambientes AWS, Azure e GCP.', 1),
+('Infraestrutura de Rede', 'Varredura, protocolos e vulnerabilidades em redes internas e perimetrais.', 1),
+('Engenharia Social', 'Phishing, vishing e simulação de ameaças internas para medir conscientização.', 1),
+('Red Team', 'Simulação de ataque real (APT) cobrindo todo o ciclo de vida da invasão.', 1),
+('API', 'APIs REST/GraphQL: autenticação, autorização e OWASP API Security Top 10.', 1),
+('IoT / OT', 'Firmware, protocolos embarcados (MQTT, Zigbee) e dispositivos industriais.', 1),
+('Active Directory / Identidade', 'Escalada de privilégios e movimentação lateral em ambientes AD.', 1),
+('Container & DevOps', 'Docker, Kubernetes, RBAC e pipelines CI/CD.', 1),
+('Thick Client / Desktop', 'Tráfego cliente-servidor, armazenamento local e engenharia reversa de binários.', 1),
+('Wireless', 'Segurança de redes Wi-Fi: criptografia, autenticação e pontos de acesso não autorizados.', 1),
+('Físico', 'Acesso físico: clonagem de crachá, tailgating e controles de perímetro.', 1);
+
+
+INSERT INTO framework (nome, descricao, habilitado) VALUES
+('OWASP', 'Top 10 de riscos e boas práticas de segurança em aplicações web.', 1),
+('PTES', 'Penetration Testing Execution Standard: padroniza as fases de um pentest, do pré-engajamento ao relatório.', 1),
+('NIST', 'NIST SP 800-115: guia técnico do governo dos EUA para testes e avaliações de segurança.', 1),
+('MITRE ATT&CK', 'Base de conhecimento de táticas e técnicas reais usadas por atacantes.', 1),
+('CIS', 'CIS Controls/Benchmarks: configurações e controles de segurança recomendados para sistemas e redes.', 1),
+('CSA', 'Cloud Security Alliance: boas práticas de segurança para ambientes em nuvem.', 1),
+('ISO 27001', 'Norma internacional de gestão de segurança da informação.', 1),
+('OSSTMM', 'Open Source Security Testing Methodology Manual: metodologia científica e baseada em métricas para testes de segurança.', 1),
+('ISSAF', 'Information Systems Security Assessment Framework: modelo de avaliação de segurança em 9 fases.', 1),
+('OWASP ASVS', 'Application Security Verification Standard: checklist de requisitos de segurança para aplicações web.', 1),
+('OWASP MASVS', 'Mobile Application Security Verification Standard: requisitos de segurança para apps mobile.', 1),
+('OWASP API Security Top 10', 'Principais riscos de segurança específicos de APIs REST/GraphQL.', 1),
+('CSA CCM', 'Cloud Controls Matrix: framework de controles de segurança específico para provedores e clientes cloud.', 1),
+('NIST CSF', 'NIST Cybersecurity Framework: framework de governança e gestão de risco em segurança cibernética.', 1);
+
+INSERT INTO tipo_pentest (categoria_id, nome, descricao_breve, descricao_completa, tecnica, nv_risco_padrao, nivel_profundidade, habilitado) VALUES
+(1, 'Web Application Pentest', 'Teste de penetração completo em aplicações web, incluindo OWASP Top 10 e lógica de negócio.', 'Avaliação abrangente de segurança em aplicações web com foco na identificação de vulnerabilidades do OWASP Top 10, falhas de autenticação, injeções, exposição de dados sensíveis e falhas na lógica de negócio.', 'HIBRIDA', 'ALTO', 'INTERMEDIATE', 1),
+(2, 'Mobile App Security Assessment', 'Avaliação de segurança em aplicações mobile iOS e Android seguindo o OWASP MASVS.', 'Análise estática e dinâmica de aplicativos mobile para iOS e Android, verificando armazenamento inseguro de dados, comunicação insegura, controles de autenticação e controles do lado do cliente.', 'MANUAL', 'MEDIO', 'ADVANCED', 1),
+(3, 'Cloud Security Assessment', 'Avaliação de segurança em ambientes cloud (AWS, Azure, GCP) com foco em configurações e IAM.', 'Revisão completa de configurações de infraestrutura em nuvem, políticas de IAM, exposição de buckets, grupos de segurança, criptografia de dados em repouso e em trânsito, e conformidade com benchmarks CIS.', 'HIBRIDA', 'ALTO', 'RED_TEAM', 0),
+(5, 'Social Engineering Campaign', 'Campanha de engenharia social incluindo phishing, vishing e simulação de ameaças internas.', 'Simulação controlada de ataques de engenharia social para avaliar a conscientização dos colaboradores. Inclui campanhas de phishing por e-mail, testes de vishing por telefone e simulação de ameaça interna com acesso físico.', 'MANUAL', 'MEDIO', 'INTERMEDIATE', 0),
+(6, 'Red Team Exercise', 'Exercício completo de Red Team simulando cenários reais de ataque APT contra a organização.', 'Simulação de ataque avançado e persistente (APT) cobrindo todas as fases do ciclo de vida do ataque: reconhecimento, armamento, entrega, exploração, instalação, comando e controle e ações sobre objetivos.', 'AUTOMATIZADA', 'CRITICO', 'RED_TEAM', 1),
+(4, 'Network Infrastructure Pentest', 'Teste de penetração em infraestrutura de rede interna e perimetral, incluindo switches e roteadores.', 'Avaliação de segurança da infraestrutura de rede cobrindo varredura de portas, análise de protocolos, enumeração de serviços, exploração de vulnerabilidades em dispositivos de rede e segmentação de VLANs.', 'HIBRIDA', 'ALTO', 'INTERMEDIATE', 0),
+(7, 'API Security Testing', 'Testes de segurança em APIs REST e GraphQL cobrindo o OWASP API Security Top 10.', 'Análise de segurança focada em interfaces de programação de aplicações, verificando autenticação, autorização em nível de objeto e função, exposição excessiva de dados, limitação de taxa e injeções via endpoints.', 'AUTOMATIZADA', 'ALTO', 'ADVANCED', 1),
+(8, 'IoT Security Assessment', 'Avaliação de segurança em dispositivos IoT, firmware e protocolos de comunicação embarcados.', 'Análise de firmware, interfaces de hardware, protocolos de comunicação (MQTT, CoAP, Zigbee) e superfícies de ataque em dispositivos IoT industriais e residenciais.', 'MANUAL', 'MEDIO', 'ADVANCED', 1),
+(9, 'Active Directory Pentest', 'Teste de penetração focado em ambientes Active Directory, incluindo escalada de privilégios e movimentação lateral.', 'Simulação de ataques internos em ambientes Windows Active Directory cobrindo Kerberoasting, Pass-the-Hash, DCSync, abuso de ACLs e caminhos de escalada de domínio.', 'HIBRIDA', 'CRITICO', 'RED_TEAM', 1),
+(5, 'Phishing Simulation', 'Simulação de campanhas de phishing direcionado para medir o índice de conscientização dos colaboradores.', 'Execução de campanhas de spear phishing personalizadas por setor, com rastreamento de cliques, coleta de credenciais em ambiente controlado e relatório de exposição por departamento.', 'AUTOMATIZADA', 'MEDIO', 'BASIC', 1),
+(10, 'Container & Kubernetes Security Review', 'Revisão de segurança em ambientes containerizados Docker e orquestração Kubernetes.', 'Auditoria de configurações de containers, imagens Docker, políticas de rede Kubernetes, RBAC, secrets management e exposição de APIs do cluster contra benchmarks CIS.', 'AUTOMATIZADA', 'ALTO', 'INTERMEDIATE', 0),
+(11, 'Thick Client Application Pentest', 'Teste de penetração em aplicações desktop (thick client), análise de comunicação e armazenamento local.', 'Avaliação de segurança em aplicações desktop cobrindo análise de tráfego entre cliente e servidor, armazenamento inseguro de dados locais, bypass de controles client-side e engenharia reversa de binários.', 'MANUAL', 'MEDIO', 'ADVANCED', 1);
+-- ids gerados: 1 Web Application Pentest, 2 Mobile App Security Assessment, 3 Cloud Security Assessment,
+-- 4 Social Engineering Campaign, 5 Red Team Exercise, 6 Network Infrastructure Pentest, 7 API Security Testing,
+-- 8 IoT Security Assessment, 9 Active Directory Pentest, 10 Phishing Simulation,
+-- 11 Container & Kubernetes Security Review, 12 Thick Client Application Pentest
+
+INSERT INTO tipo_pentest_framework (tipo_pentest_id, framework_id) VALUES
+(1, 1), (1, 2),
+(2, 1),
+(3, 3), (3, 5), (3, 6), (3, 4), (3, 2), (3, 7),
+(4, 4),
+(5, 2), (5, 4),
+(6, 3), (6, 2),
+(7, 1), (7, 2),
+(8, 1), (8, 3),
+(9, 4), (9, 2),
+(10, 4),
+(11, 5), (11, 3), (11, 4),
+(12, 1), (12, 2),
+(1, 10),
+(2, 11),
+(3, 13), (3, 14),
+(6, 8), (6, 9),
+(7, 12);
+-- novos vinculos: 1 Web App+ASVS, 2 Mobile+MASVS, 3 Cloud+CSA CCM/NIST CSF,
+-- 6 Rede+OSSTMM/ISSAF, 7 API+OWASP API Security Top 10
+
+-- vincula checklists inteiros já cadastrados aos tipos de pentest que fazem sentido
+-- (só existem 2 checklists mockados hoje; os demais tipos ficam sem checklist padrão por enquanto)
+INSERT INTO tipo_pentest_checklist (tipo_pentest_id, checklist_id) VALUES
+(1, 1),
+(7, 1),
+(12, 1),
+(6, 2),
+(11, 2);
+
+-- ---------------------------------------------------------
+-- projeto_tipo_pentest
+-- ---------------------------------------------------------
+INSERT INTO projeto_tipo_pentest (projeto_id, tipo_pentest_id, habilitado) VALUES
+(1, 1, 1),
+(1, 7, 1),
+(2, 6, 1);
 
 -- insert 03/07/2026
 
