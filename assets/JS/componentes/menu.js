@@ -49,3 +49,10 @@ overlayPesquisa.addEventListener('click', (e) => {
         overlayPesquisa.classList.remove('active');
     }
 });
+
+// Fecha a pesquisa ao sair da largura mobile
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 700) {
+        overlayPesquisa.classList.remove('active');
+    }
+});
