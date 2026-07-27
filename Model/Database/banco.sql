@@ -197,6 +197,7 @@ CREATE TABLE IF NOT EXISTS pentest_tipos (
     nivel_profundidade VARCHAR(50),
     horas_execucao    INT,
     habilitado        TINYINT NOT NULL DEFAULT 1
+);
 
 CREATE TABLE IF NOT EXISTS categoria_pentest (
   id INT NOT NULL AUTO_INCREMENT,
