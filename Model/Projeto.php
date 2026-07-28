@@ -20,7 +20,7 @@ class Projeto
     public function cadastrarProjeto(array $dados)
     {
         try {
-            $sql = $this->pdo->prepare("INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, habilitado) VALUES (:empresa_id, :nome, :data_inicio, :data_fim_prevista, :data_fim_real, :horas_contratadas, :horas_executadas, :tipo, :nivel_sigilo, :escopo, :alvo, :contrato, :restricao, :habilitado)");
+            $sql = $this->pdo->prepare("INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, status, habilitado) VALUES (:empresa_id, :nome, :data_inicio, :data_fim_prevista, :data_fim_real, :horas_contratadas, :horas_executadas, :tipo, :nivel_sigilo, :escopo, :alvo, :contrato, :restricao, :status, :habilitado)");
             $sql->bindValue(":empresa_id", $dados['empresa_id']);
             $sql->bindValue(":nome", $dados['nome']);
             $sql->bindValue(":data_inicio", $dados['data_inicio']);
@@ -34,6 +34,7 @@ class Projeto
             $sql->bindValue(":alvo", $dados['alvo']);
             $sql->bindValue(":contrato", $dados['contrato']);
             $sql->bindValue(":restricao", $dados['restricao']);
+            $sql->bindValue(":status", $dados['status']);
             $sql->bindValue(":habilitado", $dados['habilitado']);
             $sql->execute();
             return true;
@@ -51,7 +52,7 @@ class Projeto
     public function editarProjeto(array $dados)
     {
         try {
-            $sql = $this->pdo->prepare("UPDATE projeto SET empresa_id = :empresa_id, nome = :nome, data_inicio = :data_inicio, data_fim_prevista = :data_fim_prevista, data_fim_real = :data_fim_real, horas_contratadas = :horas_contratadas, horas_executadas = :horas_executadas, tipo = :tipo, nivel_sigilo = :nivel_sigilo, escopo = :escopo, alvo = :alvo, contrato = :contrato, restricao = :restricao, habilitado = :habilitado WHERE id = :id");
+            $sql = $this->pdo->prepare("UPDATE projeto SET empresa_id = :empresa_id, nome = :nome, data_inicio = :data_inicio, data_fim_prevista = :data_fim_prevista, data_fim_real = :data_fim_real, horas_contratadas = :horas_contratadas, horas_executadas = :horas_executadas, tipo = :tipo, nivel_sigilo = :nivel_sigilo, escopo = :escopo, alvo = :alvo, contrato = :contrato, restricao = :restricao, status = :status, habilitado = :habilitado WHERE id = :id");
             $sql->bindValue(":id", $dados['id']);
             $sql->bindValue(":empresa_id", $dados['empresa_id']);
             $sql->bindValue(":nome", $dados['nome']);
@@ -66,6 +67,7 @@ class Projeto
             $sql->bindValue(":alvo", $dados['alvo']);
             $sql->bindValue(":contrato", $dados['contrato']);
             $sql->bindValue(":restricao", $dados['restricao']);
+            $sql->bindValue(":status", $dados['status']);
             $sql->bindValue(":habilitado", $dados['habilitado']);
             $sql->execute();
             return true;
@@ -77,7 +79,7 @@ class Projeto
     public function excluirProjeto($id)
     {
         try {
-            $sql = $this->pdo->prepare("DELETE FROM projeto WHERE id = :id");
+            $sql = $this->pdo->prepare("UPDATE projeto SET habilitado = 0 WHERE id = :id");
             $sql->bindValue(":id", $id);
             $sql->execute();
             return true;

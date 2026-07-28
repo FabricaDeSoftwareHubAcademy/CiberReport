@@ -22,6 +22,7 @@ class ProjetoValidator
         $alvo = filter_var($dados['alvo'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $contrato = filter_var($dados['contrato'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $restricao = filter_var($dados['restricao'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $status = filter_var($dados['status'] ?? 'AGUARDANDO', FILTER_SANITIZE_SPECIAL_CHARS);
 
         return [
             'nome' => $nome,
@@ -36,6 +37,7 @@ class ProjetoValidator
             'alvo' => $alvo,
             'contrato' => $contrato,
             'restricao' => $restricao,
+            'status' => $status,
         ];
     }
     
@@ -71,6 +73,7 @@ class ProjetoValidator
 
         $tipos_permitidos = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
         $sigilos_permitidos = ['INTERNO', 'EXTERNO'];
+        $status_permitidos = ['AGUARDANDO', 'EM_ANDAMENTO', 'ENCERRADO', 'INATIVADO'];
 
         if(!in_array($dados_limpo['tipo'], $tipos_permitidos)){
             $erros[] = 'O tipo do projeto é inválido.';
@@ -80,6 +83,10 @@ class ProjetoValidator
             $erros[] = 'O nível de sigilo é inválido.';
         }
         
+        if(!in_array($dados_limpo['status'], $status_permitidos)){
+            $erros[] = 'O status do projeto é inválido.';
+        }
+
         if(count($erros) > 0){
             throw new Exception(implode("<br>", $erros));
         }
