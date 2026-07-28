@@ -15,13 +15,19 @@ class ChecklistModel
     {
         $consultaChecklist = $this->pdo->query(
             'SELECT
-                id,
-                nome,
-                descricao,
-                categoria,
-                habilitado
-            FROM checklist
-            ORDER BY nome'
+                c.id,
+                c.nome,
+                c.descricao,
+                c.categoria,
+                c.habilitado,
+                COALESCE(SUM(item.tempo_estimado_minutos), 0) AS tempo_estimado_total
+            FROM checklist AS c
+            LEFT JOIN checklist_item_vinculo AS vinculo
+                ON vinculo.checklist_id = c.id
+            LEFT JOIN checklist_item_catalogo AS item
+                ON item.id = vinculo.item_id
+            GROUP BY c.id, c.nome, c.descricao, c.categoria, c.habilitado
+            ORDER BY c.nome'
         );
 
         return $consultaChecklist->fetchAll(
@@ -204,52 +210,60 @@ class ChecklistModel
         int $idChecklist,
         array $itensIdsChecklist
     ): void {
-        $itensIdsChecklist =
-            $this->filtrarItensExistentesChecklist(
-                $itensIdsChecklist
-            );
+        $itensIdsChecklist = array_map('intval', $itensIdsChecklist);
+        $itensIdsChecklist = array_values(array_unique(array_filter(
+            $itensIdsChecklist,
+            static fn(int $idItemChecklist): bool => $idItemChecklist > 0
+        )));
 
         if (empty($itensIdsChecklist)) {
+            return;
+        }
+
+        $itensExistentesChecklist = $this->filtrarItensExistentesChecklist(
+            $itensIdsChecklist
+        );
+
+        // array_intersect preserva a ordem de $itensIdsChecklist (ordem
+        // escolhida pelo usuário), descartando apenas os ids inexistentes.
+        $itensValidosChecklist = array_intersect(
+            $itensIdsChecklist,
+            $itensExistentesChecklist
+        );
+
+        if (empty($itensValidosChecklist)) {
             return;
         }
 
         $consultaVinculoChecklist = $this->pdo->prepare(
             'INSERT INTO checklist_item_vinculo (
                 checklist_id,
-                item_id
+                item_id,
+                ordem
             )
             VALUES (
                 :checklist_id,
-                :item_id
+                :item_id,
+                :ordem
             )'
         );
 
-        foreach ($itensIdsChecklist as $idItemChecklist) {
+        $ordemChecklist = 1;
+
+        foreach ($itensValidosChecklist as $idItemChecklist) {
             $consultaVinculoChecklist->execute([
                 'checklist_id' => $idChecklist,
-                'item_id' => $idItemChecklist
+                'item_id' => $idItemChecklist,
+                'ordem' => $ordemChecklist
             ]);
+
+            $ordemChecklist++;
         }
     }
 
     private function filtrarItensExistentesChecklist(
         array $itensIdsChecklist
     ): array {
-        $itensIdsChecklist = array_map(
-            'intval',
-            $itensIdsChecklist
-        );
-
-        $itensIdsChecklist = array_filter(
-            $itensIdsChecklist,
-            static fn(int $idItemChecklist): bool =>
-            $idItemChecklist > 0
-        );
-
-        $itensIdsChecklist = array_values(
-            array_unique($itensIdsChecklist)
-        );
-
         if (empty($itensIdsChecklist)) {
             return [];
         }
@@ -364,12 +378,15 @@ class ChecklistModel
                 item.titulo,
                 item.referencia,
                 item.obrigatorio,
-                item.habilitado
+                item.habilitado,
+                item.descricao_resumida,
+                item.tempo_estimado_minutos,
+                vinculo.ordem
             FROM checklist_item_vinculo AS vinculo
             INNER JOIN checklist_item_catalogo AS item
                 ON item.id = vinculo.item_id
             WHERE vinculo.checklist_id = :checklist_id
-            ORDER BY item.titulo'
+            ORDER BY vinculo.ordem, item.titulo'
         );
 
         $consultaItensChecklist->execute([
@@ -407,7 +424,9 @@ class ChecklistModel
                 titulo,
                 referencia,
                 obrigatorio,
-                habilitado
+                habilitado,
+                descricao_resumida,
+                tempo_estimado_minutos
             FROM checklist_item_catalogo
             WHERE habilitado = 1
             ORDER BY titulo'
@@ -427,7 +446,9 @@ class ChecklistModel
                 titulo,
                 referencia,
                 obrigatorio,
-                habilitado
+                habilitado,
+                descricao_resumida,
+                tempo_estimado_minutos
             FROM checklist_item_catalogo
             WHERE id = :id'
         );
@@ -444,7 +465,9 @@ class ChecklistModel
     public function cadastrarItemCatalogoChecklist(
         string $tituloItemChecklist,
         string $referenciaItemChecklist,
-        int $obrigatorioItemChecklist
+        int $obrigatorioItemChecklist,
+        string $descricaoResumidaItemChecklist,
+        int $tempoEstimadoItemChecklist
     ): array|false {
         $itemExistenteChecklist =
             $this->buscarItemPorTituloChecklist(
@@ -463,7 +486,9 @@ class ChecklistModel
                 $this->reativarItemCatalogoChecklist(
                     $idItemChecklist,
                     $referenciaItemChecklist,
-                    $obrigatorioItemChecklist
+                    $obrigatorioItemChecklist,
+                    $descricaoResumidaItemChecklist,
+                    $tempoEstimadoItemChecklist
                 );
 
                 return $this->buscarItemCatalogoChecklist(
@@ -479,12 +504,16 @@ class ChecklistModel
                 titulo,
                 referencia,
                 obrigatorio,
+                descricao_resumida,
+                tempo_estimado_minutos,
                 habilitado
             )
             VALUES (
                 :titulo,
                 :referencia,
                 :obrigatorio,
+                :descricao_resumida,
+                :tempo_estimado_minutos,
                 1
             )'
         );
@@ -496,7 +525,12 @@ class ChecklistModel
                 ? $referenciaItemChecklist
                 : null,
             'obrigatorio' =>
-            $obrigatorioItemChecklist === 1 ? 1 : 0
+            $obrigatorioItemChecklist === 1 ? 1 : 0,
+            'descricao_resumida' =>
+            $descricaoResumidaItemChecklist !== ''
+                ? $descricaoResumidaItemChecklist
+                : null,
+            'tempo_estimado_minutos' => $tempoEstimadoItemChecklist
         ]);
 
         return $this->buscarItemCatalogoChecklist(
@@ -514,7 +548,9 @@ class ChecklistModel
                 titulo,
                 referencia,
                 obrigatorio,
-                habilitado
+                habilitado,
+                descricao_resumida,
+                tempo_estimado_minutos
             FROM checklist_item_catalogo
             WHERE titulo = :titulo
         ';
@@ -548,13 +584,17 @@ class ChecklistModel
     private function reativarItemCatalogoChecklist(
         int $idItemChecklist,
         string $referenciaItemChecklist,
-        int $obrigatorioItemChecklist
+        int $obrigatorioItemChecklist,
+        string $descricaoResumidaItemChecklist,
+        int $tempoEstimadoItemChecklist
     ): void {
         $consultaItemChecklist = $this->pdo->prepare(
             'UPDATE checklist_item_catalogo
             SET
                 referencia = :referencia,
                 obrigatorio = :obrigatorio,
+                descricao_resumida = :descricao_resumida,
+                tempo_estimado_minutos = :tempo_estimado_minutos,
                 habilitado = 1
             WHERE id = :id'
         );
@@ -566,7 +606,12 @@ class ChecklistModel
                 ? $referenciaItemChecklist
                 : null,
             'obrigatorio' =>
-            $obrigatorioItemChecklist === 1 ? 1 : 0
+            $obrigatorioItemChecklist === 1 ? 1 : 0,
+            'descricao_resumida' =>
+            $descricaoResumidaItemChecklist !== ''
+                ? $descricaoResumidaItemChecklist
+                : null,
+            'tempo_estimado_minutos' => $tempoEstimadoItemChecklist
         ]);
     }
 
@@ -574,7 +619,9 @@ class ChecklistModel
         int $idItemChecklist,
         string $tituloItemChecklist,
         string $referenciaItemChecklist,
-        int $obrigatorioItemChecklist
+        int $obrigatorioItemChecklist,
+        string $descricaoResumidaItemChecklist,
+        int $tempoEstimadoItemChecklist
     ): array|false {
         if (
             !$this->buscarItemCatalogoChecklist(
@@ -598,7 +645,9 @@ class ChecklistModel
             SET
                 titulo = :titulo,
                 referencia = :referencia,
-                obrigatorio = :obrigatorio
+                obrigatorio = :obrigatorio,
+                descricao_resumida = :descricao_resumida,
+                tempo_estimado_minutos = :tempo_estimado_minutos
             WHERE id = :id'
         );
 
@@ -610,7 +659,12 @@ class ChecklistModel
                 ? $referenciaItemChecklist
                 : null,
             'obrigatorio' =>
-            $obrigatorioItemChecklist === 1 ? 1 : 0
+            $obrigatorioItemChecklist === 1 ? 1 : 0,
+            'descricao_resumida' =>
+            $descricaoResumidaItemChecklist !== ''
+                ? $descricaoResumidaItemChecklist
+                : null,
+            'tempo_estimado_minutos' => $tempoEstimadoItemChecklist
         ]);
 
         return $this->buscarItemCatalogoChecklist(

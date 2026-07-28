@@ -31,6 +31,27 @@
             .replace(/'/g, '&#039;');
     }
 
+    function formatarTempoChecklist(valorChecklist) {
+        const totalMinutosChecklist = Math.round(Number(valorChecklist ?? 0));
+
+        if (totalMinutosChecklist <= 0) {
+            return '0h';
+        }
+
+        const horasChecklist = Math.floor(totalMinutosChecklist / 60);
+        const minutosChecklist = totalMinutosChecklist % 60;
+
+        if (horasChecklist === 0) {
+            return `${minutosChecklist}min`;
+        }
+
+        if (minutosChecklist === 0) {
+            return `${horasChecklist}h`;
+        }
+
+        return `${horasChecklist}h${String(minutosChecklist).padStart(2, '0')}`;
+    }
+
     function abrirModalChecklist(id) {
         elementoChecklist(id)?.classList.add('active');
     }
@@ -136,9 +157,18 @@
         const contadorChecklist = elementoChecklist('checklist-visualizar-total');
         const registrosChecklist = Array.isArray(itensChecklist) ? itensChecklist : [];
 
-        contadorChecklist.textContent = registrosChecklist.length === 1
+        const tempoTotalChecklist = registrosChecklist.reduce(
+            (somaChecklist, itemChecklist) => somaChecklist + Number(itemChecklist.tempo_estimado_minutos ?? 0),
+            0
+        );
+
+        const textoQuantidadeChecklist = registrosChecklist.length === 1
             ? '1 item'
             : `${registrosChecklist.length} itens`;
+
+        contadorChecklist.textContent = tempoTotalChecklist > 0
+            ? `${textoQuantidadeChecklist} · ~${formatarTempoChecklist(tempoTotalChecklist)}`
+            : textoQuantidadeChecklist;
 
         if (registrosChecklist.length === 0) {
             listaChecklist.innerHTML = `
@@ -159,7 +189,7 @@
 
                     <div class="checklist-visualizacao-texto">
                         <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
-                        <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')}</span>
+                        <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')} · ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}</span>
                     </div>
 
                     <span class="checklist-visualizacao-tipo ${obrigatorioChecklist ? 'checklist-tag--obrigatorio' : 'checklist-tag--opcional'}">
@@ -467,11 +497,16 @@
                             <span class="checklist-gerenciar-tag ${obrigatorioChecklist ? 'checklist-tag--obrigatorio' : 'checklist-tag--opcional'}">
                                 ${obrigatorioChecklist ? 'Obrigatório' : 'Opcional'}
                             </span>
+                            <span class="checklist-gerenciar-tag checklist-tag--opcional">
+                                <i class="fa-regular fa-clock"></i>
+                                ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}
+                            </span>
                             ${inativoChecklist ? '<span class="checklist-gerenciar-tag checklist-status--inativo">Inativo</span>' : ''}
                         </div>
 
                         <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
                         <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')}</span>
+                        ${itemChecklist.descricao_resumida ? `<span class="checklist-gerenciar-descricao">${escaparHtmlChecklist(itemChecklist.descricao_resumida)}</span>` : ''}
                     </div>
 
                     <div class="checklist-gerenciar-acoes">
@@ -526,8 +561,63 @@
             totalChecklist === 1 ? '1 selecionado' : `${totalChecklist} selecionados`;
     }
 
+    function atualizarTempoTotalChecklist() {
+        const resumoChecklist = elementoChecklist('checklist-tempo-resumo');
+        const totalChecklist = elementoChecklist('checklist-tempo-total');
+
+        const tempoTotalChecklist = Array.from(selecionadosChecklist.values()).reduce(
+            (somaChecklist, itemChecklist) => somaChecklist + Number(itemChecklist.tempo_estimado_minutos ?? 0),
+            0
+        );
+
+        if (resumoChecklist) {
+            resumoChecklist.hidden = selecionadosChecklist.size === 0;
+        }
+
+        if (totalChecklist) {
+            totalChecklist.textContent = formatarTempoChecklist(tempoTotalChecklist);
+        }
+    }
+
+    function ordemAtualChecklist() {
+        return Array.from(selecionadosChecklist.keys());
+    }
+
+    function reordenarSelecionadosChecklist(novaOrdemChecklist) {
+        const mapaAtualChecklist = new Map(selecionadosChecklist);
+        selecionadosChecklist.clear();
+
+        novaOrdemChecklist.forEach(idChecklist => {
+            if (mapaAtualChecklist.has(idChecklist)) {
+                selecionadosChecklist.set(idChecklist, mapaAtualChecklist.get(idChecklist));
+            }
+        });
+    }
+
+    function moverSelecionadoChecklist(idChecklist, direcaoChecklist) {
+        const ordemChecklist = ordemAtualChecklist();
+        const indiceChecklist = ordemChecklist.indexOf(idChecklist);
+        const novoIndiceChecklist = indiceChecklist + direcaoChecklist;
+
+        if (
+            indiceChecklist === -1
+            || novoIndiceChecklist < 0
+            || novoIndiceChecklist >= ordemChecklist.length
+        ) {
+            return;
+        }
+
+        [ordemChecklist[indiceChecklist], ordemChecklist[novoIndiceChecklist]] =
+            [ordemChecklist[novoIndiceChecklist], ordemChecklist[indiceChecklist]];
+
+        reordenarSelecionadosChecklist(ordemChecklist);
+        renderizarSelecionadosChecklist();
+    }
+
     function renderizarSelecionadosChecklist() {
         const listaChecklist = elementoChecklist('checklist-lista-selecionados');
+
+        atualizarTempoTotalChecklist();
 
         if (selecionadosChecklist.size === 0) {
             listaChecklist.innerHTML = `
@@ -542,26 +632,65 @@
             return;
         }
 
-        listaChecklist.innerHTML = Array.from(selecionadosChecklist.values()).map(itemChecklist => `
-            <div class="checklist-item-selecionado">
-                <div class="checklist-item-texto">
-                    <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
-                    <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')}</span>
-                </div>
+        const itensChecklist = Array.from(selecionadosChecklist.values());
 
-                <input type="hidden" name="itens_ids[]" value="${Number(itemChecklist.id)}">
+        listaChecklist.innerHTML = itensChecklist.map((itemChecklist, indiceChecklist) => {
+            const idChecklist = Number(itemChecklist.id);
+            const primeiroChecklist = indiceChecklist === 0;
+            const ultimoChecklist = indiceChecklist === itensChecklist.length - 1;
 
-                <button
-                    type="button"
-                    class="btn-excluir"
-                    data-checklist-selecionado-remover="${Number(itemChecklist.id)}"
-                    title="Remover item do checklist"
-                    aria-label="Remover item do checklist"
+            return `
+                <div
+                    class="checklist-item-selecionado"
+                    draggable="true"
+                    data-checklist-selecionado-id="${idChecklist}"
                 >
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
+                    <span class="checklist-item-arrastar" title="Arraste para reordenar">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </span>
+
+                    <div class="checklist-item-texto">
+                        <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
+                        <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')} · ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}</span>
+                    </div>
+
+                    <div class="checklist-item-ordem-acoes">
+                        <button
+                            type="button"
+                            class="checklist-item-mover"
+                            data-checklist-selecionado-subir="${idChecklist}"
+                            title="Mover para cima"
+                            aria-label="Mover item para cima"
+                            ${primeiroChecklist ? 'disabled' : ''}
+                        >
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+                        <button
+                            type="button"
+                            class="checklist-item-mover"
+                            data-checklist-selecionado-descer="${idChecklist}"
+                            title="Mover para baixo"
+                            aria-label="Mover item para baixo"
+                            ${ultimoChecklist ? 'disabled' : ''}
+                        >
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="itens_ids[]" value="${idChecklist}">
+
+                    <button
+                        type="button"
+                        class="btn-excluir"
+                        data-checklist-selecionado-remover="${idChecklist}"
+                        title="Remover item do checklist"
+                        aria-label="Remover item do checklist"
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
     }
 
     function abrirNovoItemChecklist() {
@@ -569,6 +698,8 @@
         elementoChecklist('checklist-item-titulo').value = '';
         elementoChecklist('checklist-item-referencia').value = '';
         elementoChecklist('checklist-item-obrigatorio').value = '1';
+        elementoChecklist('checklist-item-descricao-resumida').value = '';
+        elementoChecklist('checklist-item-tempo-estimado').value = '';
         elementoChecklist('checklist-titulo-modal-item').textContent = 'Cadastro de Item';
         elementoChecklist('checklist-subtitulo-modal-item').textContent =
             'Cadastre um novo item reutilizável';
@@ -599,6 +730,10 @@
             elementoChecklist('checklist-item-referencia').value = itemChecklist.referencia ?? '';
             elementoChecklist('checklist-item-obrigatorio').value =
                 Number(itemChecklist.obrigatorio) === 1 ? '1' : '0';
+            elementoChecklist('checklist-item-descricao-resumida').value =
+                itemChecklist.descricao_resumida ?? '';
+            elementoChecklist('checklist-item-tempo-estimado').value =
+                Number(itemChecklist.tempo_estimado_minutos ?? 0) || '';
             elementoChecklist('checklist-titulo-modal-item').textContent = 'Editar Item';
             elementoChecklist('checklist-subtitulo-modal-item').textContent =
                 'Altere os dados do item reutilizável';
@@ -616,10 +751,18 @@
         const tituloChecklist = elementoChecklist('checklist-item-titulo').value.trim();
         const referenciaChecklist = elementoChecklist('checklist-item-referencia').value.trim();
         const obrigatorioChecklist = elementoChecklist('checklist-item-obrigatorio').value;
+        const descricaoResumidaChecklist = elementoChecklist('checklist-item-descricao-resumida').value.trim();
+        const tempoEstimadoChecklist = Number(elementoChecklist('checklist-item-tempo-estimado').value) || 0;
 
         if (tituloChecklist === '') {
             alert('Informe o título do item.');
             elementoChecklist('checklist-item-titulo').focus();
+            return;
+        }
+
+        if (tempoEstimadoChecklist < 0) {
+            alert('O tempo estimado não pode ser negativo.');
+            elementoChecklist('checklist-item-tempo-estimado').focus();
             return;
         }
 
@@ -631,7 +774,9 @@
             const dadosChecklist = {
                 titulo: tituloChecklist,
                 referencia: referenciaChecklist,
-                obrigatorio: obrigatorioChecklist
+                obrigatorio: obrigatorioChecklist,
+                descricao_resumida: descricaoResumidaChecklist,
+                tempo_estimado_minutos: tempoEstimadoChecklist
             };
 
             if (!novoChecklist) {
@@ -815,13 +960,88 @@
         });
 
         elementoChecklist('checklist-lista-selecionados')?.addEventListener('click', eventoChecklist => {
-            const botaoChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-remover]');
+            const removerChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-remover]');
+            const subirChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-subir]');
+            const descerChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-descer]');
 
-            if (!botaoChecklist) {
+            if (removerChecklist) {
+                selecionadosChecklist.delete(Number(removerChecklist.dataset.checklistSelecionadoRemover));
+                renderizarSelecionadosChecklist();
                 return;
             }
 
-            selecionadosChecklist.delete(Number(botaoChecklist.dataset.checklistSelecionadoRemover));
+            if (subirChecklist) {
+                moverSelecionadoChecklist(Number(subirChecklist.dataset.checklistSelecionadoSubir), -1);
+                return;
+            }
+
+            if (descerChecklist) {
+                moverSelecionadoChecklist(Number(descerChecklist.dataset.checklistSelecionadoDescer), 1);
+            }
+        });
+
+        let arrastandoIdChecklist = null;
+
+        elementoChecklist('checklist-lista-selecionados')?.addEventListener('dragstart', eventoChecklist => {
+            const itemChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
+
+            if (!itemChecklist) {
+                return;
+            }
+
+            arrastandoIdChecklist = Number(itemChecklist.dataset.checklistSelecionadoId);
+            itemChecklist.classList.add('checklist-item-arrastando');
+            eventoChecklist.dataTransfer.effectAllowed = 'move';
+        });
+
+        elementoChecklist('checklist-lista-selecionados')?.addEventListener('dragend', eventoChecklist => {
+            eventoChecklist.target.closest('[data-checklist-selecionado-id]')
+                ?.classList.remove('checklist-item-arrastando');
+            arrastandoIdChecklist = null;
+        });
+
+        elementoChecklist('checklist-lista-selecionados')?.addEventListener('dragover', eventoChecklist => {
+            if (arrastandoIdChecklist === null) {
+                return;
+            }
+
+            eventoChecklist.preventDefault();
+            eventoChecklist.dataTransfer.dropEffect = 'move';
+        });
+
+        elementoChecklist('checklist-lista-selecionados')?.addEventListener('drop', eventoChecklist => {
+            if (arrastandoIdChecklist === null) {
+                return;
+            }
+
+            eventoChecklist.preventDefault();
+
+            const alvoChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
+
+            if (!alvoChecklist) {
+                return;
+            }
+
+            const idAlvoChecklist = Number(alvoChecklist.dataset.checklistSelecionadoId);
+
+            if (idAlvoChecklist === arrastandoIdChecklist) {
+                return;
+            }
+
+            const retanguloChecklist = alvoChecklist.getBoundingClientRect();
+            const depoisChecklist = eventoChecklist.clientY > retanguloChecklist.top + retanguloChecklist.height / 2;
+
+            const ordemChecklist = ordemAtualChecklist()
+                .filter(idChecklist => idChecklist !== arrastandoIdChecklist);
+            const indiceAlvoChecklist = ordemChecklist.indexOf(idAlvoChecklist);
+
+            ordemChecklist.splice(
+                depoisChecklist ? indiceAlvoChecklist + 1 : indiceAlvoChecklist,
+                0,
+                arrastandoIdChecklist
+            );
+
+            reordenarSelecionadosChecklist(ordemChecklist);
             renderizarSelecionadosChecklist();
         });
 

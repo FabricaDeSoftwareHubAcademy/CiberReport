@@ -17,6 +17,20 @@ function escaparHtmlChecklist(mixed $valorChecklist): string
     return htmlspecialchars((string) $valorChecklist, ENT_QUOTES, 'UTF-8');
 }
 
+function formatarTempoChecklist(int $minutosChecklist): string
+{
+    if ($minutosChecklist <= 0) {
+        return '0h';
+    }
+
+    $horasChecklist = intdiv($minutosChecklist, 60);
+    $restanteChecklist = $minutosChecklist % 60;
+
+    return $restanteChecklist === 0
+        ? "{$horasChecklist}h"
+        : sprintf('%dh%02d', $horasChecklist, $restanteChecklist);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acaoChecklist = $_POST['action'] ?? '';
 
@@ -182,7 +196,13 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <i class="fa-solid fa-filter sort-icon"></i>
                             </span>
                         </th>
-                        <th data-col="4" class="col-status">
+                        <th data-col="4">
+                            <span class="th-label">
+                                Tempo Estimado
+                                <i class="fa-solid fa-sort sort-icon"></i>
+                            </span>
+                        </th>
+                        <th data-col="5" class="col-status">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
@@ -203,6 +223,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <span class="checklist-categoria-badge">
                                     <?= escaparHtmlChecklist($checklist['categoria'] ?? '') ?>
                                 </span>
+                            </td>
+                            <td>
+                                ~<?= formatarTempoChecklist((int) $checklist['tempo_estimado_total']) ?>
                             </td>
                             <td class="col-status">
                                 <div class="checklist-status">
@@ -255,7 +278,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
                     <?php if (empty($checklists)): ?>
                         <tr>
-                            <td colspan="6" class="checklist-tabela-vazia">
+                            <td colspan="7" class="checklist-tabela-vazia">
                                 Nenhum checklist cadastrado.
                             </td>
                         </tr>
@@ -264,7 +287,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
                 <tfoot>
                     <tr>
-                        <td colspan="6" class="rodape-tabela">
+                        <td colspan="7" class="rodape-tabela">
                             <div class="paginacao"></div>
                         </td>
                     </tr>
@@ -420,6 +443,14 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                     <i class="fa-solid fa-list-check"></i>
                                     Gerenciar itens
                                 </button>
+                            </div>
+
+                            <div
+                                class="checklist-gerenciar-resumo"
+                                id="checklist-tempo-resumo"
+                                hidden>
+                                <span>Tempo estimado total</span>
+                                <strong id="checklist-tempo-total">0h</strong>
                             </div>
 
                             <div
@@ -658,15 +689,43 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                     </div>
 
                     <div class="campo">
-                        <label for="checklist-item-obrigatorio" class="campo__label">
-                            Obrigatório
+                        <label for="checklist-item-descricao-resumida" class="campo__label">
+                            Descrição resumida
                         </label>
-                        <div class="campo__select-wrapper">
-                            <select id="checklist-item-obrigatorio" class="campo__select">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                        <textarea
+                            id="checklist-item-descricao-resumida"
+                            class="campo__textarea"
+                            maxlength="255"
+                            placeholder="Resumo do que este item verifica..."></textarea>
+                    </div>
+
+                    <div class="checklist-dados-grid">
+                        <div class="campo">
+                            <label for="checklist-item-obrigatorio" class="campo__label">
+                                Obrigatório
+                            </label>
+                            <div class="campo__select-wrapper">
+                                <select id="checklist-item-obrigatorio" class="campo__select">
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                            </div>
+                        </div>
+
+                        <div class="campo">
+                            <label for="checklist-item-tempo-estimado" class="campo__label">
+                                Tempo estimado de execução
+                            </label>
+                            <input
+                                type="number"
+                                id="checklist-item-tempo-estimado"
+                                class="campo__input"
+                                placeholder="Ex: 90"
+                                min="0"
+                                step="5"
+                                inputmode="numeric">
+                            <small class="campo__ajuda">Em minutos. Ex: 90 = 1h30.</small>
                         </div>
                     </div>
                 </div>

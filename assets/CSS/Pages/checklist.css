@@ -118,9 +118,15 @@
     gap: var(--espaco-sm);
 }
 
-.checklist-categoria-cabecalho .campo__ajuda {
+.campo__ajuda {
+    display: block;
+    margin-top: var(--espaco-xs);
     color: var(--cor-texto-secundario);
     font-size: var(--fonte-legenda);
+}
+
+.checklist-categoria-cabecalho .campo__ajuda {
+    margin-top: 0;
     text-align: right;
 }
 
@@ -293,6 +299,50 @@
 
 .checklist-item-selecionado .btn-excluir {
     flex-shrink: 0;
+}
+
+.checklist-item-selecionado.checklist-item-arrastando {
+    opacity: 0.5;
+}
+
+.checklist-item-arrastar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--cor-texto-secundario);
+    cursor: grab;
+}
+
+.checklist-item-ordem-acoes {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.checklist-item-mover {
+    display: inline-flex;
+    width: 1.6rem;
+    height: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--raio-sm);
+    background: transparent;
+    color: var(--cor-texto-secundario);
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+.checklist-item-mover:hover:not(:disabled) {
+    background: var(--cor-cinza-hover);
+    color: var(--cor-azul-destaques);
+}
+
+.checklist-item-mover:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .checklist-gerenciar-topo {
