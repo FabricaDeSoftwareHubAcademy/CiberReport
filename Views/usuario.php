@@ -148,7 +148,7 @@ $usuarios = $controller->listar();
     </main>
     <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
          fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
-         o conteúdo quando o menu lateral abre/fecha. -->
+         o conteúdo quando o menu lateral abre/fecha.asdasa -->
     </div>
     </div>
 

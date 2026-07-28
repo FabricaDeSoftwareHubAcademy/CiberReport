@@ -174,6 +174,13 @@
     border-radius: var(--raio-md); display: flex; flex-wrap: wrap; gap: var(--espaco-xs);
     background-color: var(--cor-fundo-branco);
 }
+.campo__botao-adicionar {
+    flex-shrink: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--cor-borda-padrao); border-radius: var(--raio-md); background-color: var(--cor-fundo-branco);
+    color: var(--cor-texto-primario); font-size: 1.4rem; cursor: pointer; box-sizing: border-box;
+    transition: background-color var(--transicao-rapida), color var(--transicao-rapida), border-color var(--transicao-rapida);
+}
+.campo__botao-adicionar:hover { background-color: var(--cor-azul-primaria); border-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); }
 .chip { display: inline-flex; align-items: center; gap: var(--espaco-xs); padding: var(--espaco-xs) var(--espaco-sm); background-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); border-radius: var(--raio-full); font-size: var(--fonte-legenda); font-weight: 500; }
 .chip__remover { background: none; border: none; color: rgba(255, 255, 255, 0.75); cursor: pointer; display: flex; align-items: center; }
 .chip--leitura { background-color: var(--cor-branco-primario); color: var(--cor-texto-primario); border: 1px solid var(--cor-borda-padrao); }
