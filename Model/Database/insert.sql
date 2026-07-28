@@ -1,4 +1,4 @@
-USE cyber_report;
+USE ciber_report;
 
 -- ---------------------------------------------------------
 -- perfil_acesso
