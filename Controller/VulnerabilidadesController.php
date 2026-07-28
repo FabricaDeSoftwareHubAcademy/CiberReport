@@ -19,36 +19,37 @@ class VulnerabilidadesController
 
     public function listar()
     {
-        return $this->Vulnerabilidades->listar();
+        return $this->Vulnerabilidades->ListarVulnerabilidade();
     }
 
-    public function cadastrar()
+    public function cadastrarVulnerabilidade()
     {
-        $nome              = addslashes($_POST['nome'] ?? '');
-        $descricao_breve   = addslashes($_POST['descricao_breve'] ?? '');
-        $descricao_completa = addslashes($_POST['descricao_completa'] ?? '');
+        $id              = addslashes($_POST['id'] ?? '');
+        $projeto_id   = addslashes($_POST['projeto_id'] ?? '');
+        $nome = addslashes($_POST['nome'] ?? '');
+        $cvss         = addslashes($_POST['cvss'] ?? '');
+        $cve            = addslashes($_POST['cve'] ?? '');
+        $descricao           = addslashes($_POST['descricao'] ?? '');
+        $descricao_tecnica        = addslashes($_POST['descricao_tecnica'] ?? '');
         $categoria         = addslashes($_POST['categoria'] ?? '');
-        $modelo            = addslashes($_POST['modelo'] ?? '');
-        $tecnica           = addslashes($_POST['tecnica'] ?? '');
-        $frameworks        = addslashes($_POST['frameworks'] ?? '');
-        $checklist         = addslashes($_POST['checklist'] ?? '');
-        $nivel_profundidade = addslashes($_POST['nivel_profundidade'] ?? '');
-        $horas_execucao    = (int) ($_POST['horas_execucao'] ?? 0);
+        $severidade_vulnerabilidade = addslashes($_POST['severidade_vulnerabilidade'] ?? '');
+        $habilitado    = (int) ($_POST['habilitado'] ?? 0);
+        $impacto_negocio = addslashes($_POST['impacto_negocio'] ?? '');
 
         if (empty($nome) || empty($descricao_breve) || empty($categoria) || empty($modelo) || empty($tecnica)) {
             return false;
         }
 
-        return $this->Vulnerabilidades->cadastrar(
-            $nome, $descricao_breve, $descricao_completa,
-            $categoria, $modelo, $tecnica,
-            $frameworks, $checklist, $nivel_profundidade, $horas_execucao
+        return $this->Vulnerabilidades->cadastrarVulnerabilidade(
+            $id,$nome, $projeto_id,
+            $cvss, $cve, $descricao,
+            $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio
         );
     }
 
     public function excluir($id)
     {
-        $this->Vulnerabilidades->excluir((int) $id);
+        $this->Vulnerabilidades->excluirVulnerabilidades((int) $id);
     }
 
     public function alterarStatus($id, $status)

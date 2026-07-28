@@ -1,6 +1,6 @@
 <?php
 
-class GerenciarPerfil
+class GerenciarAcesso
 {
     private $pdo;
     public $msgerro = '';
@@ -34,14 +34,6 @@ class GerenciarPerfil
     public function excluir($id)
     {
         $sql = $this->pdo->prepare("DELETE FROM perfil_acesso WHERE id = :id");
-        $sql->bindValue(":id", $id);
-        $sql->execute();
-    }
-
-    public function alterarStatus($id, $status)
-    {
-        $sql = $this->pdo->prepare("UPDATE perfil_acesso SET habilitado = :habilitado WHERE id = :id");
-        $sql->bindValue(":habilitado", $status);
         $sql->bindValue(":id", $id);
         $sql->execute();
     }

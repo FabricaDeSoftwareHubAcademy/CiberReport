@@ -5,7 +5,7 @@
 }
 
 .checklist-tabela-descricao {
-    max-width: 180px;
+    max-width: 340px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -40,27 +40,10 @@
 }
 
 .checklist-status-texto {
+    display: inline-block;
+    min-width: 8ch;
     color: var(--cor-texto-secundario);
     font-size: var(--fonte-apoio);
-}
-
-.checklist-btn-visualizar {
-    display: inline-flex;
-    width: 2.25rem;
-    height: 2.25rem;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--cor-azul-destaques);
-    border-radius: var(--raio-sm);
-    background: transparent;
-    color: var(--cor-azul-destaques);
-    cursor: pointer;
-    transition: background-color var(--transicao-rapida), color var(--transicao-rapida);
-}
-
-.checklist-btn-visualizar:hover {
-    background: var(--cor-azul-destaques);
-    color: var(--cor-fundo-branco);
 }
 
 .checklist-tabela-vazia {
@@ -142,6 +125,7 @@
 }
 
 .checklist-categoria-combobox,
+.checklist-nome-combobox,
 .checklist-gerenciar-campo-pesquisa {
     position: relative;
 }
@@ -352,7 +336,7 @@
     max-height: 24rem;
     overflow-y: auto;
     margin-top: var(--espaco-md);
-    padding-right: var(--espaco-xs);
+    padding-right: var(--espaco-sm);
 }
 
 .checklist-gerenciar-card,
@@ -381,12 +365,8 @@
     background: var(--cor-cinza-hover);
 }
 
-.checklist-gerenciar-checkbox {
-    width: 1.1rem;
-    height: 1.1rem;
-    margin: 0.15rem 0 0;
-    accent-color: var(--cor-azul-destaques);
-    cursor: pointer;
+.checklist-gerenciar-card .meu-checkbox {
+    margin-top: 1.9rem;
 }
 
 .checklist-gerenciar-tags,
@@ -545,40 +525,13 @@
     border-radius: var(--raio-md);
 }
 
-.tabela-wrapper table {
-    min-width: 1100px;
-    table-layout: fixed;
+.checklist-gerenciar-acoes .btn-editar:hover i {
+    color: var(--cor-amarelo);
 }
 
-.tabela-wrapper th:nth-child(1),
-.tabela-wrapper td:nth-child(1) {
-    width: 4px;
+.tabela-wrapper th:last-child {
+    text-align: right;
 }
-
-.tabela-wrapper th:nth-child(2),
-.tabela-wrapper td:nth-child(2) {
-    width: 240px;
-}
-
-.tabela-wrapper th:nth-child(3),
-.tabela-wrapper td:nth-child(3) {
-    width: 240px;
-}
-
-.tabela-wrapper th:nth-child(4),
-.tabela-wrapper td:nth-child(4) {
-    width: 120px;
-}
-
-.tabela-wrapper th:nth-child(5),
-.tabela-wrapper td:nth-child(5) {
-    width: 120px;
-}
-.tabela-wrapper th:nth-child(6),
-.tabela-wrapper td:nth-child(6) {
-    width: 120px;
-}
-
 
 @media (max-width: 768px) {
     .checklist-dados-grid,

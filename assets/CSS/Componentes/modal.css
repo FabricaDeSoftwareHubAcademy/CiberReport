@@ -150,6 +150,12 @@
     scrollbar-width: thin;
     scrollbar-color: var(--cor-cinza-secundario) transparent;
 }
+.modal form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
 
 .modal__body::-webkit-scrollbar { width: 6px; }
 .modal__body::-webkit-scrollbar-thumb { background-color: var(--cor-cinza-secundario); border-radius: var(--raio-full); }
@@ -212,7 +218,7 @@
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--fonte-familia-corpo);
     font-size: var(--fonte-apoio);
     font-weight: 500;
     color: var(--cor-texto-secundario);

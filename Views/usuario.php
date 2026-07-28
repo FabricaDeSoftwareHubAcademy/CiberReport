@@ -62,7 +62,7 @@ $usuarios = $controller->listar();
     <?php $tituloPagina = 'Gerenciamento de Usuário';
     include_once 'Components/menu.php'; ?>
     <main>
-        <div class="ger-pentest-topo">
+        <div class="ger-usuario">
             <button class="btn-novo-cadastro" data-modal-target="modalNovoUsuario">
                 <i class="fa-solid fa-plus"></i>Novo Usuario
             </button>
@@ -93,7 +93,7 @@ $usuarios = $controller->listar();
                 <tbody>
                     <?php foreach ($usuarios as $usuario): ?>
                         <?php $ativo = (bool) $usuario['habilitado']; ?>
-                        <tr>
+                        <tr class="<?= $ativo ? '' : 'linha-inativa' ?>">
                             <td><?= htmlspecialchars($usuario['nome']) ?></td>
                             <td>
                                 <span class="ger-pentest-cat-badge">
@@ -148,7 +148,7 @@ $usuarios = $controller->listar();
     </main>
     <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
          fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
-         o conteúdo quando o menu lateral abre/fecha. -->
+         o conteúdo quando o menu lateral abre/fecha.asdasa -->
     </div>
     </div>
 

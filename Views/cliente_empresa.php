@@ -375,7 +375,7 @@ $dados = $controller->listarEmpresa();
                 </thead>
                 <tbody>
                     <?php foreach ($dados as $empresa): ?>
-                        <tr>
+                        <tr class="<?= $empresa['habilitado'] ? '' : 'linha-inativa' ?>">
                             <td>#<?= $empresa['id'] ?></td>
                             <td><?= htmlspecialchars($empresa['nome_fantasia']) ?></td>
                             <td><?= htmlspecialchars($empresa['cnpj']) ?></td>
@@ -422,7 +422,7 @@ $dados = $controller->listarEmpresa();
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
-<script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
+<script src="../assets/JS/barraDePesquisa.js"></script>
 <script src="../assets/JS/componentes/tabela.js"></script>
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>
@@ -430,13 +430,15 @@ $dados = $controller->listarEmpresa();
 <script>
     function toggleHabilitado(checkbox) {
         const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
+        const linha = checkbox.closest('tr');
         label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
- 
+        linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
         const body = new FormData();
         body.append('action', 'alterarHabilitado');
         body.append('id', checkbox.dataset.id);
         body.append('habilitado', checkbox.checked ? '1' : '0');
- 
+
         fetch('cliente_empresa.php', {
                 method: 'POST',
                 body
@@ -444,6 +446,7 @@ $dados = $controller->listarEmpresa();
             .catch(() => {
                 checkbox.checked = !checkbox.checked;
                 label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+                linha?.classList.toggle('linha-inativa', !checkbox.checked);
             });
     }
     

@@ -14,6 +14,7 @@ $dados = $controller->listar();
     <link rel="stylesheet" href="../assets/CSS/Pages/gerenciamento-projeto.css">
     <script src="../assets/JS/componentes/tabela.js" defer></script>
     <script src="../assets/JS/componentes/modal.js" defer></script>
+    <script src="../assets/JS/barraDePesquisa.js" defer></script>
 </head>
 <body class="corpo-ger-projetos">
     <?php
@@ -22,7 +23,6 @@ $dados = $controller->listar();
     ?>
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
-            <button class="btn-novo-cadastro btn-projeto">Alocar Analista</button>
             <button class="btn-novo-cadastro btn-projeto" data-modal-target="modal-cadastro-projeto"><span>+</span>Novo Projeto</button>
         </div>
 
@@ -143,6 +143,5 @@ $dados = $controller->listar();
             </form>
         </div>
     </div>
-    <script src="../Assets/JS/componentes/barraDePesquisa.js"></script>
 </body>
 </html>
