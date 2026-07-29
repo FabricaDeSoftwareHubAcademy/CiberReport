@@ -696,7 +696,13 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                             id="checklist-item-descricao-resumida"
                             class="campo__textarea"
                             maxlength="255"
-                            placeholder="Resumo do que este item verifica..."></textarea>
+                            placeholder="Resumo do que este item verifica..."
+                            oninput="contarDescricaoResumidaItemChecklist()"></textarea>
+
+                        <div class="checklist-contador">
+                            <span>Máximo de 255 caracteres</span>
+                            <span id="checklist-item-contador-descricao-resumida">0 / 255</span>
+                        </div>
                     </div>
 
                     <div class="checklist-dados-grid">

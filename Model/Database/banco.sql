@@ -268,17 +268,22 @@ ADD(
   telefone_responsavel VARCHAR(20) NOT NULL
 );
 
--- Descrição resumida e tempo estimado de execução (em minutos) de cada item do
--- catálogo. O tempo estimado será somado por checklist para alimentar a
--- estimativa de duração usada no cronômetro.
 ALTER TABLE checklist_item_catalogo
 ADD (
   descricao_resumida VARCHAR(255) DEFAULT NULL,
   tempo_estimado_minutos INT NOT NULL DEFAULT 0
 );
 
--- Ordem de exibição/execução do item dentro de cada checklist.
 ALTER TABLE checklist_item_vinculo
 ADD (
   ordem INT NOT NULL DEFAULT 0
 );
+
+ALTER TABLE checklist_item_catalogo
+ADD COLUMN tempo_estimado_minutos INT NOT NULL DEFAULT 0 AFTER tempo_estimado_horas;
+
+UPDATE checklist_item_catalogo
+SET tempo_estimado_minutos = ROUND(tempo_estimado_horas * 60);
+
+ALTER TABLE checklist_item_catalogo
+DROP COLUMN tempo_estimado_horas;

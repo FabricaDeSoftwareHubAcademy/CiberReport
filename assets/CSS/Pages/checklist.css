@@ -297,7 +297,25 @@
     font-size: var(--fonte-legenda);
 }
 
-.checklist-item-selecionado .btn-excluir {
+.checklist-gerenciar-titulo-linha {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: var(--espaco-xs);
+}
+
+.checklist-gerenciar-titulo-linha strong {
+    min-width: 0;
+}
+
+.checklist-gerenciar-titulo-linha span {
+    flex-shrink: 0;
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-legenda);
+}
+
+.checklist-item-selecionado .btn-excluir,
+.checklist-item-selecionado .checklist-visualizacao-numero {
     flex-shrink: 0;
 }
 

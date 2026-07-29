@@ -267,6 +267,15 @@
         }
     }
 
+    function contarDescricaoResumidaItemChecklist() {
+        const descricaoChecklist = elementoChecklist('checklist-item-descricao-resumida');
+        const contadorChecklist = elementoChecklist('checklist-item-contador-descricao-resumida');
+
+        if (descricaoChecklist && contadorChecklist) {
+            contadorChecklist.textContent = `${descricaoChecklist.value.length} / 255`;
+        }
+    }
+
     function nomeCategoriaChecklist(categoriaChecklist) {
         return typeof categoriaChecklist === 'string'
             ? categoriaChecklist
@@ -504,9 +513,11 @@
                             ${inativoChecklist ? '<span class="checklist-gerenciar-tag checklist-status--inativo">Inativo</span>' : ''}
                         </div>
 
-                        <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
-                        <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')}</span>
-                        ${itemChecklist.descricao_resumida ? `<span class="checklist-gerenciar-descricao">${escaparHtmlChecklist(itemChecklist.descricao_resumida)}</span>` : ''}
+                        <div class="checklist-gerenciar-titulo-linha">
+                            <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
+                            ${itemChecklist.referencia ? `<span>${escaparHtmlChecklist(itemChecklist.referencia)}</span>` : ''}
+                        </div>
+                        <span>${escaparHtmlChecklist(itemChecklist.descricao_resumida || 'Sem descrição resumida')}</span>
                     </div>
 
                     <div class="checklist-gerenciar-acoes">
@@ -649,6 +660,8 @@
                         <i class="fa-solid fa-grip-vertical"></i>
                     </span>
 
+                    <span class="checklist-visualizacao-numero">${indiceChecklist + 1}</span>
+
                     <div class="checklist-item-texto">
                         <strong>${escaparHtmlChecklist(itemChecklist.titulo)}</strong>
                         <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')} · ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}</span>
@@ -704,6 +717,7 @@
         elementoChecklist('checklist-subtitulo-modal-item').textContent =
             'Cadastre um novo item reutilizável';
         elementoChecklist('checklist-btn-salvar-item').textContent = 'SALVAR';
+        contarDescricaoResumidaItemChecklist();
 
         abrirModalChecklist('checklist-modal-item');
 
@@ -738,6 +752,7 @@
             elementoChecklist('checklist-subtitulo-modal-item').textContent =
                 'Altere os dados do item reutilizável';
             elementoChecklist('checklist-btn-salvar-item').textContent = 'SALVAR ALTERAÇÕES';
+            contarDescricaoResumidaItemChecklist();
 
             abrirModalChecklist('checklist-modal-item');
         } catch (erroChecklist) {
@@ -1082,6 +1097,7 @@
     window.editarDaVisualizacaoChecklist = editarDaVisualizacaoChecklist;
     window.limparFormularioChecklist = limparFormularioChecklist;
     window.contarDescricaoChecklist = contarDescricaoChecklist;
+    window.contarDescricaoResumidaItemChecklist = contarDescricaoResumidaItemChecklist;
     window.abrirGerenciamentoItensChecklist = abrirGerenciamentoItensChecklist;
     window.aplicarItensGerenciadosChecklist = aplicarItensGerenciadosChecklist;
     window.abrirNovoItemChecklist = abrirNovoItemChecklist;
