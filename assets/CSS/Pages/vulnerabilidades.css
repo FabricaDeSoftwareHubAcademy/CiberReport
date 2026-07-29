@@ -1,3 +1,8 @@
+campo__label--obrigatorio::after {
+    content: " *";
+    color: #e74c3c;
+    font-weight: 700;
+}
 
 .barra-acoes {
     display: flex;
