@@ -8,6 +8,11 @@ $modoRecuperar = isset($_GET['recuperar']);
 $tokenUrl = $_GET['token'] ?? null;
 
 function gerarLinkRecuperacao($conexao, $email) {
+    // if ($email === 'caiovv1@outlook.com') {          
+    //     $token = bin2hex(random_bytes(32));       
+    //     return "login.php?token=$token";          
+    // } 
+
     $token = bin2hex(random_bytes(32));
     $expira = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
