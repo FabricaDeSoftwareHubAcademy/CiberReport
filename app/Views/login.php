@@ -8,6 +8,11 @@ $modoRecuperar = isset($_GET['recuperar']);
 $tokenUrl = $_GET['token'] ?? null;
 
 function gerarLinkRecuperacao($conexao, $email) {
+    // if ($email === 'caiovv1@outlook.com') {          
+    //     $token = bin2hex(random_bytes(32));       
+    //     return "login.php?token=$token";          
+    // } 
+
     $token = bin2hex(random_bytes(32));
     $expira = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
@@ -127,9 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                         <label>E-mail</label>
                         <input type="email" name="email" placeholder="email@example.com">
                         <?php if ($mensagem): ?><p class="erro-login"><?= htmlspecialchars($mensagem) ?></p><?php endif; ?>
-                        <button type="submit" name="recuperar" value="1">Enviar link</button>
+                        <button type="submit" name="recuperar" value="1"class="btn-enviar-link-login">Enviar link</button>
                     </form>
-                    <a href="login.php">Voltar ao login</a>
+                    <a href="login.php" class="btn-voltar-login">Voltar ao login</a>
 
                 <?php else: ?>
 
@@ -142,8 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                         <?php if ($erro): ?>
                             <p class="erro-login"><?= htmlspecialchars ($erro) ?></p>
                         <?php endif; ?>
-                        <a href="login.php?recuperar">Esqueceu a senha?</a>
-                        <button type="submit">Entrar</button>
+                        <a href="login.php?recuperar" class="esqueceu-senha-login">Esqueceu a senha?</a>
+                        <button type="submit" class="btn-entrar-login">Entrar</button>
                     </form>
 
                 <?php endif; ?>
