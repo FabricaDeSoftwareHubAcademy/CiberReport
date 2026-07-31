@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
- 
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,7 @@
         }
     </style>
 </head>
- 
+
 <body>
     <?php $tituloPagina = 'Vulnerabilidades';
     include_once 'Components/menu.php'; ?>
@@ -26,7 +26,7 @@
                 Nova Vulnerabilidade
             </button>
         </div>
- 
+
         <div class="cards-resumo">
             <div class="card-resumo">
                 <span class="card-label">Críticas</span>
@@ -45,7 +45,7 @@
                 <span class="card-valor baixa">0.0</span>
             </div>
         </div>
- 
+
         <div class="tabela-wrapper">
             <table class="tabela" id="tabela">
                 <thead>
@@ -62,11 +62,11 @@
                         <th data-col="3">
                             <span class="th-label">Resumo <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
-                        <th data-col="4" data-tipo="risco">
-                            <span class="th-label">Severidade <i class="fa-solid fa-sort sort-icon"></i></span>
+                        <th data-col="4" data-tipo="risco" data-filtro="lista">
+                            <span class="th-label">Severidade <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por Severidade"></i></span>
                         </th>
-                        <th data-col="5" data-tipo="risco">
-                            <span class="th-label">Criticidade <i class="fa-solid fa-sort sort-icon"></i></span>
+                        <th data-col="5" data-tipo="risco" data-filtro="lista">
+                            <span class="th-label">Criticidade <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por Criticidade"></i></span>
                         </th>
                         <th data-col="6">
                             <span class="th-label">CVSS <i class="fa-solid fa-sort sort-icon"></i></span>
@@ -221,10 +221,10 @@
                 </tfoot>
             </table>
         </div>
- 
+
         <div class="modal-overlay" id="modalVulnerabilidade">
             <div class="modal modal--xl">
- 
+
                 <div class="modal__header">
                     <div class="modal__header-icone">
                         <i class="fa-solid fa-shield-halved"></i>
@@ -235,13 +235,13 @@
                     </div>
                     <button class="modal__fechar" data-modal-close>&#x2715;</button>
                 </div>
- 
+
                 <div class="modal__body">
                     <div class="modal-secao__titulo">
                         <i class="modal-secao__titulo-icone fa-solid fa-circle-info"></i>
                         <strong>Dados da Vulnerabilidade</strong>
                     </div>
- 
+
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="nomeVuln">Nome da Vulnerabilidade:</label>
@@ -253,15 +253,15 @@
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}"title="formato:CVE-AAAA-NNNN"/>
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" title="formato:CVE-AAAA-NNNN" />
                         </div>
                     </div>
- 
+
                     <div class="campo">
                         <label class="campo__label campo__label--obrigatorio" for="descricao">Descrição:</label>
                         <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="255" required />
                     </div>
- 
+
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="descTecnica">Descrição Técnica:</label>
@@ -272,7 +272,7 @@
                             <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="3000" required></textarea>
                         </div>
                     </div>
- 
+
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
@@ -292,7 +292,7 @@
                             </div>
                         </div>
                     </div>
- 
+
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="categoria">Categoria:</label>
@@ -324,18 +324,18 @@
                         </div>
                     </div>
                 </div>
- 
+
                 <footer class="modal__footer">
                     <button class="btn-cancelar" data-modal-close>Cancelar</button>
                     <button class="btn-botao-verde" id="btnSalvar">Salvar</button>
                 </footer>
- 
+
             </div>
         </div>
     </main>
- 
+
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
 </body>
- 
+
 </html>
