@@ -62,10 +62,10 @@
                         <th data-col="3">
                             <span class="th-label">Resumo <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
-                        <th data-col="4" data-tipo="data">
+                        <th data-col="4" data-tipo="risco">
                             <span class="th-label">Severidade <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
-                        <th data-col="5" data-tipo="data">
+                        <th data-col="5" data-tipo="risco">
                             <span class="th-label">Criticidade <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
                         <th data-col="6">
@@ -215,16 +215,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="8" class="rodape-tabela">
-                            <div class="paginacao">
-                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
-                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
-                                <button class="pag-num" aria-label="Página 2">2</button>
-                                <button class="pag-num" aria-label="Página 3">3</button>
-                                <button class="pag-num" aria-label="Página 4">4</button>
-                                <button class="pag-num" aria-label="Página 5">5</button>
-                                <button class="pag-num" aria-label="Página 6">6</button>
-                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
-                            </div>
+                            <div class="paginacao"></div>
                         </td>
                     </tr>
                 </tfoot>
