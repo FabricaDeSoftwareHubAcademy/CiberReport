@@ -24,6 +24,7 @@ class ChecklistModel
             FROM checklist AS c
             LEFT JOIN checklist_item_vinculo AS vinculo
                 ON vinculo.checklist_id = c.id
+                AND vinculo.habilitado = 1
             LEFT JOIN checklist_item_catalogo AS item
                 ON item.id = vinculo.item_id
             GROUP BY c.id, c.nome, c.descricao, c.categoria, c.habilitado
@@ -187,11 +188,7 @@ class ChecklistModel
                 'categoria' => $categoriaChecklist
             ]);
 
-            $this->excluirVinculosChecklist(
-                $idChecklist
-            );
-
-            $this->salvarVinculosChecklist(
+            $this->reconciliarVinculosChecklist(
                 $idChecklist,
                 $itensIdsChecklist
             );
@@ -206,10 +203,9 @@ class ChecklistModel
         }
     }
 
-    private function salvarVinculosChecklist(
-        int $idChecklist,
+    private function prepararItensValidosChecklist(
         array $itensIdsChecklist
-    ): void {
+    ): array {
         $itensIdsChecklist = array_map('intval', $itensIdsChecklist);
         $itensIdsChecklist = array_values(array_unique(array_filter(
             $itensIdsChecklist,
@@ -217,18 +213,25 @@ class ChecklistModel
         )));
 
         if (empty($itensIdsChecklist)) {
-            return;
+            return [];
         }
 
         $itensExistentesChecklist = $this->filtrarItensExistentesChecklist(
             $itensIdsChecklist
         );
 
-        // array_intersect preserva a ordem de $itensIdsChecklist (ordem
-        // escolhida pelo usuário), descartando apenas os ids inexistentes.
-        $itensValidosChecklist = array_intersect(
+        return array_values(array_intersect(
             $itensIdsChecklist,
             $itensExistentesChecklist
+        ));
+    }
+
+    private function salvarVinculosChecklist(
+        int $idChecklist,
+        array $itensIdsChecklist
+    ): void {
+        $itensValidosChecklist = $this->prepararItensValidosChecklist(
+            $itensIdsChecklist
         );
 
         if (empty($itensValidosChecklist)) {
@@ -259,6 +262,136 @@ class ChecklistModel
 
             $ordemChecklist++;
         }
+    }
+
+    private function reconciliarVinculosChecklist(
+        int $idChecklist,
+        array $itensIdsChecklist
+    ): void {
+        $itensValidosChecklist = $this->prepararItensValidosChecklist(
+            $itensIdsChecklist
+        );
+
+        $vinculosAtuaisChecklist = $this->listarVinculosChecklist(
+            $idChecklist
+        );
+
+        $mapaVinculosChecklist = [];
+        $itensAtivosAtualmenteChecklist = [];
+
+        foreach ($vinculosAtuaisChecklist as $vinculoChecklist) {
+            $idItemVinculoChecklist = (int) $vinculoChecklist['item_id'];
+            $mapaVinculosChecklist[$idItemVinculoChecklist] =
+                (int) $vinculoChecklist['id'];
+
+            if ((int) $vinculoChecklist['habilitado'] === 1) {
+                $itensAtivosAtualmenteChecklist[] = $idItemVinculoChecklist;
+            }
+        }
+
+        if (empty($itensValidosChecklist)) {
+            $this->inativarVinculosChecklist($idChecklist);
+            return;
+        }
+
+        $consultaInserirChecklist = $this->pdo->prepare(
+            'INSERT INTO checklist_item_vinculo (
+                checklist_id,
+                item_id,
+                ordem,
+                habilitado
+            )
+            VALUES (
+                :checklist_id,
+                :item_id,
+                :ordem,
+                1
+            )'
+        );
+
+        $consultaAtualizarChecklist = $this->pdo->prepare(
+            'UPDATE checklist_item_vinculo
+            SET ordem = :ordem, habilitado = 1
+            WHERE id = :id'
+        );
+
+        $ordemChecklist = 1;
+        $itensMantidosChecklist = [];
+
+        foreach ($itensValidosChecklist as $idItemChecklist) {
+            if (isset($mapaVinculosChecklist[$idItemChecklist])) {
+                $consultaAtualizarChecklist->execute([
+                    'id' => $mapaVinculosChecklist[$idItemChecklist],
+                    'ordem' => $ordemChecklist
+                ]);
+
+                $itensMantidosChecklist[] = $idItemChecklist;
+            } else {
+                $consultaInserirChecklist->execute([
+                    'checklist_id' => $idChecklist,
+                    'item_id' => $idItemChecklist,
+                    'ordem' => $ordemChecklist
+                ]);
+            }
+
+            $ordemChecklist++;
+        }
+
+        $itensParaInativarChecklist = array_diff(
+            $itensAtivosAtualmenteChecklist,
+            $itensMantidosChecklist
+        );
+
+        foreach ($itensParaInativarChecklist as $idItemInativarChecklist) {
+            $this->inativarVinculoPorIdChecklist(
+                $mapaVinculosChecklist[$idItemInativarChecklist]
+            );
+        }
+    }
+
+    private function listarVinculosChecklist(
+        int $idChecklist
+    ): array {
+        $consultaChecklist = $this->pdo->prepare(
+            'SELECT id, item_id, habilitado
+            FROM checklist_item_vinculo
+            WHERE checklist_id = :checklist_id'
+        );
+
+        $consultaChecklist->execute([
+            'checklist_id' => $idChecklist
+        ]);
+
+        return $consultaChecklist->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function inativarVinculosChecklist(
+        int $idChecklist
+    ): void {
+        $consultaChecklist = $this->pdo->prepare(
+            'UPDATE checklist_item_vinculo
+            SET habilitado = 0
+            WHERE checklist_id = :checklist_id
+              AND habilitado = 1'
+        );
+
+        $consultaChecklist->execute([
+            'checklist_id' => $idChecklist
+        ]);
+    }
+
+    private function inativarVinculoPorIdChecklist(
+        int $idVinculoChecklist
+    ): void {
+        $consultaChecklist = $this->pdo->prepare(
+            'UPDATE checklist_item_vinculo
+            SET habilitado = 0
+            WHERE id = :id'
+        );
+
+        $consultaChecklist->execute([
+            'id' => $idVinculoChecklist
+        ]);
     }
 
     private function filtrarItensExistentesChecklist(
@@ -295,50 +428,10 @@ class ChecklistModel
         );
     }
 
-    private function excluirVinculosChecklist(
-        int $idChecklist
-    ): void {
-        $consultaVinculosChecklist = $this->pdo->prepare(
-            'DELETE FROM checklist_item_vinculo
-            WHERE checklist_id = :checklist_id'
-        );
-
-        $consultaVinculosChecklist->execute([
-            'checklist_id' => $idChecklist
-        ]);
-    }
-
     public function excluirChecklist(
         int $idChecklist
     ): bool {
-        if (!$this->buscarChecklist($idChecklist)) {
-            return false;
-        }
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $this->excluirVinculosChecklist(
-                $idChecklist
-            );
-
-            $consultaChecklist = $this->pdo->prepare(
-                'DELETE FROM checklist
-                WHERE id = :id'
-            );
-
-            $consultaChecklist->execute([
-                'id' => $idChecklist
-            ]);
-
-            $this->pdo->commit();
-
-            return true;
-        } catch (Throwable $erroChecklist) {
-            $this->desfazerTransacaoChecklist();
-
-            throw $erroChecklist;
-        }
+        return $this->alterarStatusChecklist($idChecklist, 0);
     }
 
     public function alterarStatusChecklist(
@@ -386,6 +479,7 @@ class ChecklistModel
             INNER JOIN checklist_item_catalogo AS item
                 ON item.id = vinculo.item_id
             WHERE vinculo.checklist_id = :checklist_id
+              AND vinculo.habilitado = 1
             ORDER BY vinculo.ordem, item.titulo'
         );
 
@@ -672,13 +766,34 @@ class ChecklistModel
         );
     }
 
+    public function alterarStatusItemCatalogoChecklist(
+        int $idItemChecklist,
+        int $statusItemChecklist
+    ): bool {
+        if (!$this->buscarItemCatalogoChecklist($idItemChecklist)) {
+            return false;
+        }
+
+        $consultaItemChecklist = $this->pdo->prepare(
+            'UPDATE checklist_item_catalogo
+            SET habilitado = :habilitado
+            WHERE id = :id'
+        );
+
+        return $consultaItemChecklist->execute([
+            'id' => $idItemChecklist,
+            'habilitado' => $statusItemChecklist === 1 ? 1 : 0
+        ]);
+    }
+
     private function contarVinculosItemChecklist(
         int $idItemChecklist
     ): int {
         $consultaVinculosChecklist = $this->pdo->prepare(
             'SELECT COUNT(*)
             FROM checklist_item_vinculo
-            WHERE item_id = :item_id'
+            WHERE item_id = :item_id
+              AND habilitado = 1'
         );
 
         $consultaVinculosChecklist->execute([

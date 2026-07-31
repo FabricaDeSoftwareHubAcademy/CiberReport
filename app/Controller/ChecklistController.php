@@ -257,4 +257,20 @@ class ChecklistController
                 $idItemChecklist
             );
     }
+
+    public function alterarStatusItemCatalogoChecklist(
+        int $idItemChecklist,
+        int $statusItemChecklist
+    ): bool {
+        if ($idItemChecklist <= 0) {
+            return false;
+        }
+
+        $statusItemChecklist = $statusItemChecklist === 1 ? 1 : 0;
+
+        return $this->checklistModel->alterarStatusItemCatalogoChecklist(
+            $idItemChecklist,
+            $statusItemChecklist
+        );
+    }
 }

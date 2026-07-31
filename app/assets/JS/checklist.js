@@ -52,6 +52,14 @@
         return `${horasChecklist}h${String(minutosChecklist).padStart(2, '0')}`;
     }
 
+    function confirmarChecklist(mensagemChecklist) {
+        return confirm(mensagemChecklist);
+    }
+
+    function notificarChecklist(mensagemChecklist, tipoChecklist = 'info') {
+        alert(mensagemChecklist);
+    }
+
     function abrirModalChecklist(id) {
         elementoChecklist(id)?.classList.add('active');
     }
@@ -121,7 +129,7 @@
 
             linhaChecklist?.classList.toggle('linha-inativa', !campoChecklist.checked);
 
-            alert('Não foi possível alterar o status.');
+            notificarChecklist('Não foi possível alterar o status.', 'erro');
         }
     }
 
@@ -144,11 +152,17 @@
                 ? 'checklist-visualizacao-status checklist-status--ativo'
                 : 'checklist-visualizacao-status checklist-status--inativo';
 
+            if (Array.isArray(registroChecklist.itens)) {
+                registroChecklist.itens.forEach(itemChecklist => {
+                    atualizarItemCatalogoChecklist(itemChecklist, false);
+                });
+            }
+
             renderizarVisualizacaoChecklist(registroChecklist.itens);
             abrirModalChecklist('checklist-modal-visualizar');
         } catch (erroChecklist) {
             console.error(erroChecklist);
-            alert('Não foi possível visualizar o checklist.');
+            notificarChecklist('Não foi possível visualizar o checklist.', 'erro');
         }
     }
 
@@ -183,8 +197,13 @@
         listaChecklist.innerHTML = registrosChecklist.map((itemChecklist, indiceChecklist) => {
             const obrigatorioChecklist = Number(itemChecklist.obrigatorio) === 1;
 
+            const idChecklist = Number(itemChecklist.id);
+
             return `
-                <div class="checklist-visualizacao-item">
+                <div
+                    class="checklist-visualizacao-item"
+                    data-checklist-visualizacao-item-id="${idChecklist}"
+                >
                     <span class="checklist-visualizacao-numero">${indiceChecklist + 1}</span>
 
                     <div class="checklist-visualizacao-texto">
@@ -192,9 +211,21 @@
                         <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')} · ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}</span>
                     </div>
 
-                    <span class="checklist-visualizacao-tipo ${obrigatorioChecklist ? 'checklist-tag--obrigatorio' : 'checklist-tag--opcional'}">
-                        ${obrigatorioChecklist ? 'Obrigatório' : 'Opcional'}
-                    </span>
+                    <div class="checklist-visualizacao-item-acoes">
+                        <span class="checklist-visualizacao-tipo ${obrigatorioChecklist ? 'checklist-tag--obrigatorio' : 'checklist-tag--opcional'}">
+                            ${obrigatorioChecklist ? 'Obrigatório' : 'Opcional'}
+                        </span>
+
+                        <button
+                            type="button"
+                            class="checklist-btn-visualizar"
+                            data-checklist-visualizacao-item-visualizar="${idChecklist}"
+                            title="Visualizar item"
+                            aria-label="Visualizar item"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -204,7 +235,7 @@
         const idChecklist = Number(elementoChecklist('checklist-visualizar-id').value);
 
         if (idChecklist <= 0) {
-            alert('Checklist não encontrado.');
+            notificarChecklist('Checklist não encontrado.', 'aviso');
             return;
         }
 
@@ -228,6 +259,7 @@
             if (Array.isArray(registroChecklist.itens)) {
                 registroChecklist.itens.forEach(itemChecklist => {
                     selecionadosChecklist.set(Number(itemChecklist.id), itemChecklist);
+                    atualizarItemCatalogoChecklist(itemChecklist, false);
                 });
             }
 
@@ -239,7 +271,7 @@
             abrirModalChecklist('checklist-modal-formulario');
         } catch (erroChecklist) {
             console.error(erroChecklist);
-            alert('Erro ao carregar checklist para edição.');
+            notificarChecklist('Erro ao carregar checklist para edição.', 'erro');
         }
     }
 
@@ -272,7 +304,10 @@
         const contadorChecklist = elementoChecklist('checklist-item-contador-descricao-resumida');
 
         if (descricaoChecklist && contadorChecklist) {
-            contadorChecklist.textContent = `${descricaoChecklist.value.length} / 255`;
+            const totalChecklist = descricaoChecklist.value.length;
+            contadorChecklist.textContent = totalChecklist === 1
+                ? '1 caractere'
+                : `${totalChecklist} caracteres`;
         }
     }
 
@@ -455,11 +490,20 @@
                 || normalizarChecklist(itemChecklist.referencia).includes(termoChecklist)
             )
             .sort((itemAChecklist, itemBChecklist) => {
-                const obrigatorioAChecklist = Number(itemAChecklist.obrigatorio) === 1;
-                const obrigatorioBChecklist = Number(itemBChecklist.obrigatorio) === 1;
+                const inativoAChecklist = Number(itemAChecklist.habilitado) === 0;
+                const inativoBChecklist = Number(itemBChecklist.habilitado) === 0;
 
-                if (obrigatorioAChecklist !== obrigatorioBChecklist) {
-                    return obrigatorioAChecklist ? -1 : 1;
+                if (inativoAChecklist !== inativoBChecklist) {
+                    return inativoAChecklist ? 1 : -1;
+                }
+
+                if (!inativoAChecklist) {
+                    const obrigatorioAChecklist = Number(itemAChecklist.obrigatorio) === 1;
+                    const obrigatorioBChecklist = Number(itemBChecklist.obrigatorio) === 1;
+
+                    if (obrigatorioAChecklist !== obrigatorioBChecklist) {
+                        return obrigatorioAChecklist ? -1 : 1;
+                    }
                 }
 
                 return normalizarChecklist(itemAChecklist.titulo)
@@ -490,7 +534,7 @@
 
             return `
                 <div
-                    class="checklist-gerenciar-card ${selecionadoChecklist ? 'checklist-card--selecionado' : ''}"
+                    class="checklist-gerenciar-card ${selecionadoChecklist ? 'checklist-card--selecionado' : ''} ${inativoChecklist ? 'checklist-gerenciar-card--inativo' : ''}"
                     data-checklist-item-id="${idChecklist}"
                 >
                     <input
@@ -523,6 +567,16 @@
                     <div class="checklist-gerenciar-acoes">
                         <button
                             type="button"
+                            class="checklist-btn-visualizar"
+                            data-checklist-item-visualizar="${idChecklist}"
+                            title="Visualizar item"
+                            aria-label="Visualizar item"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                        <button
+                            type="button"
                             class="btn-editar"
                             data-checklist-item-editar="${idChecklist}"
                             title="Editar item"
@@ -531,21 +585,133 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
 
-                        <button
-                            type="button"
-                            class="btn-excluir"
-                            data-checklist-item-remover="${idChecklist}"
-                            title="Excluir ou desativar item"
-                            aria-label="Excluir ou desativar item"
-                        >
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        ${inativoChecklist ? `
+                            <button
+                                type="button"
+                                class="checklist-btn-ativar"
+                                data-checklist-item-ativar-rapido="${idChecklist}"
+                                title="Ativar item"
+                                aria-label="Ativar item"
+                            >
+                                <i class="fa-solid fa-circle-check"></i>
+                            </button>
+                        ` : `
+                            <button
+                                type="button"
+                                class="btn-excluir"
+                                data-checklist-item-remover="${idChecklist}"
+                                title="Excluir ou desativar item"
+                                aria-label="Excluir ou desativar item"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        `}
                     </div>
                 </div>
             `;
         }).join('');
 
         atualizarContadorChecklist();
+    }
+
+    function visualizarItemChecklist(idChecklist) {
+        const itemChecklist = catalogoCompletoChecklist().find(
+            registroChecklist => Number(registroChecklist.id) === idChecklist
+        );
+
+        if (!itemChecklist) {
+            notificarChecklist('Item não encontrado.', 'aviso');
+            return;
+        }
+
+        const ativoChecklist = Number(itemChecklist.habilitado) !== 0;
+
+        elementoChecklist('checklist-item-visualizar-id').value = idChecklist;
+        elementoChecklist('checklist-item-visualizar-titulo').textContent = itemChecklist.titulo;
+        elementoChecklist('checklist-item-visualizar-referencia').textContent =
+            itemChecklist.referencia || 'Sem referência';
+        elementoChecklist('checklist-item-visualizar-tempo').textContent =
+            `~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}`;
+        elementoChecklist('checklist-item-visualizar-descricao').textContent =
+            itemChecklist.descricao_resumida || 'Nenhuma descrição informada.';
+
+        const statusChecklist = elementoChecklist('checklist-item-visualizar-status');
+        statusChecklist.textContent = ativoChecklist ? 'Ativo' : 'Inativo';
+        statusChecklist.className = ativoChecklist
+            ? 'checklist-visualizacao-status checklist-status--ativo'
+            : 'checklist-visualizacao-status checklist-status--inativo';
+
+        const botaoAtivarChecklist = elementoChecklist('checklist-item-btn-ativar');
+        botaoAtivarChecklist.dataset.statusAlvo = ativoChecklist ? '0' : '1';
+        botaoAtivarChecklist.classList.toggle('btn-botao-verde', !ativoChecklist);
+        botaoAtivarChecklist.classList.toggle('btn-vermelho', ativoChecklist);
+        elementoChecklist('checklist-item-btn-ativar-texto').textContent =
+            ativoChecklist ? 'DESATIVAR ITEM' : 'ATIVAR ITEM';
+        elementoChecklist('checklist-item-btn-ativar-icone').className =
+            ativoChecklist ? 'fa-solid fa-ban' : 'fa-solid fa-check';
+
+        abrirModalChecklist('checklist-modal-item-visualizar');
+    }
+
+    async function definirStatusItemCatalogoChecklist(idChecklist, statusAlvoChecklist) {
+        const mensagemConfirmacaoChecklist = statusAlvoChecklist === 1
+            ? 'Tem certeza que deseja ativar este item?'
+            : 'Tem certeza que deseja desativar este item?';
+
+        if (!confirmarChecklist(mensagemConfirmacaoChecklist)) {
+            return false;
+        }
+
+        try {
+            const resultadoChecklist = await enviarChecklist('alterarStatusItemCatalogoChecklist', {
+                id: idChecklist,
+                habilitado: statusAlvoChecklist
+            });
+
+            if (!resultadoChecklist.ok) {
+                throw new Error('Status não alterado.');
+            }
+
+            const itemChecklist = catalogoCompletoChecklist().find(
+                registroChecklist => Number(registroChecklist.id) === idChecklist
+            );
+
+            if (itemChecklist) {
+                atualizarItemCatalogoChecklist({ ...itemChecklist, habilitado: statusAlvoChecklist }, false);
+            }
+
+            renderizarGerenciamentoChecklist(elementoChecklist('checklist-pesquisa-itens').value);
+            renderizarSelecionadosChecklist();
+            notificarChecklist(
+                statusAlvoChecklist === 1 ? 'Item ativado com sucesso.' : 'Item desativado com sucesso.',
+                'sucesso'
+            );
+            return true;
+        } catch (erroChecklist) {
+            console.error(erroChecklist);
+            notificarChecklist('Não foi possível alterar o status do item.', 'erro');
+            return false;
+        }
+    }
+
+    async function alternarStatusItemCatalogoChecklist() {
+        const idChecklist = Number(elementoChecklist('checklist-item-visualizar-id').value);
+        const botaoAtivarChecklist = elementoChecklist('checklist-item-btn-ativar');
+        const statusAlvoChecklist = Number(botaoAtivarChecklist.dataset.statusAlvo ?? 1);
+
+        if (idChecklist <= 0) {
+            return;
+        }
+
+        const sucessoChecklist = await definirStatusItemCatalogoChecklist(idChecklist, statusAlvoChecklist);
+
+        if (sucessoChecklist) {
+            fecharModalChecklist('checklist-modal-item-visualizar');
+        }
+    }
+
+    async function ativarItemRapidoChecklist(idChecklist) {
+        await definirStatusItemCatalogoChecklist(idChecklist, 1);
     }
 
     function alternarGerenciadoChecklist(idChecklist, marcadoChecklist) {
@@ -559,6 +725,14 @@
 
         if (marcadoChecklist) {
             gerenciadosChecklist.set(idChecklist, itemChecklist);
+
+            const jaExisteChecklist = catalogoChecklist.some(
+                registroChecklist => Number(registroChecklist.id) === idChecklist
+            );
+
+            if (!jaExisteChecklist) {
+                catalogoChecklist.push(itemChecklist);
+            }
         } else {
             gerenciadosChecklist.delete(idChecklist);
         }
@@ -605,26 +779,6 @@
         });
     }
 
-    function moverSelecionadoChecklist(idChecklist, direcaoChecklist) {
-        const ordemChecklist = ordemAtualChecklist();
-        const indiceChecklist = ordemChecklist.indexOf(idChecklist);
-        const novoIndiceChecklist = indiceChecklist + direcaoChecklist;
-
-        if (
-            indiceChecklist === -1
-            || novoIndiceChecklist < 0
-            || novoIndiceChecklist >= ordemChecklist.length
-        ) {
-            return;
-        }
-
-        [ordemChecklist[indiceChecklist], ordemChecklist[novoIndiceChecklist]] =
-            [ordemChecklist[novoIndiceChecklist], ordemChecklist[indiceChecklist]];
-
-        reordenarSelecionadosChecklist(ordemChecklist);
-        renderizarSelecionadosChecklist();
-    }
-
     function renderizarSelecionadosChecklist() {
         const listaChecklist = elementoChecklist('checklist-lista-selecionados');
 
@@ -647,8 +801,6 @@
 
         listaChecklist.innerHTML = itensChecklist.map((itemChecklist, indiceChecklist) => {
             const idChecklist = Number(itemChecklist.id);
-            const primeiroChecklist = indiceChecklist === 0;
-            const ultimoChecklist = indiceChecklist === itensChecklist.length - 1;
 
             return `
                 <div
@@ -667,30 +819,17 @@
                         <span>${escaparHtmlChecklist(itemChecklist.referencia || 'Sem referência')} · ~${formatarTempoChecklist(itemChecklist.tempo_estimado_minutos)}</span>
                     </div>
 
-                    <div class="checklist-item-ordem-acoes">
-                        <button
-                            type="button"
-                            class="checklist-item-mover"
-                            data-checklist-selecionado-subir="${idChecklist}"
-                            title="Mover para cima"
-                            aria-label="Mover item para cima"
-                            ${primeiroChecklist ? 'disabled' : ''}
-                        >
-                            <i class="fa-solid fa-chevron-up"></i>
-                        </button>
-                        <button
-                            type="button"
-                            class="checklist-item-mover"
-                            data-checklist-selecionado-descer="${idChecklist}"
-                            title="Mover para baixo"
-                            aria-label="Mover item para baixo"
-                            ${ultimoChecklist ? 'disabled' : ''}
-                        >
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                    </div>
-
                     <input type="hidden" name="itens_ids[]" value="${idChecklist}">
+
+                    <button
+                        type="button"
+                        class="checklist-btn-visualizar"
+                        data-checklist-selecionado-visualizar="${idChecklist}"
+                        title="Visualizar item"
+                        aria-label="Visualizar item"
+                    >
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
 
                     <button
                         type="button"
@@ -757,7 +896,7 @@
             abrirModalChecklist('checklist-modal-item');
         } catch (erroChecklist) {
             console.error(erroChecklist);
-            alert('Não foi possível carregar o item.');
+            notificarChecklist('Não foi possível carregar o item.', 'erro');
         }
     }
 
@@ -770,13 +909,13 @@
         const tempoEstimadoChecklist = Number(elementoChecklist('checklist-item-tempo-estimado').value) || 0;
 
         if (tituloChecklist === '') {
-            alert('Informe o título do item.');
+            notificarChecklist('Informe o título do item.', 'aviso');
             elementoChecklist('checklist-item-titulo').focus();
             return;
         }
 
         if (tempoEstimadoChecklist < 0) {
-            alert('O tempo estimado não pode ser negativo.');
+            notificarChecklist('O tempo estimado não pode ser negativo.', 'aviso');
             elementoChecklist('checklist-item-tempo-estimado').focus();
             return;
         }
@@ -801,7 +940,7 @@
             const resultadoChecklist = await enviarChecklist(acaoChecklist, dadosChecklist);
 
             if (!resultadoChecklist.ok || !resultadoChecklist.item) {
-                alert(resultadoChecklist.mensagem || 'Não foi possível salvar o item.');
+                notificarChecklist(resultadoChecklist.mensagem || 'Não foi possível salvar o item.', 'erro');
                 return;
             }
 
@@ -809,9 +948,10 @@
             fecharModalChecklist('checklist-modal-item');
             renderizarGerenciamentoChecklist(elementoChecklist('checklist-pesquisa-itens').value);
             renderizarSelecionadosChecklist();
+            notificarChecklist(resultadoChecklist.mensagem, 'sucesso');
         } catch (erroChecklist) {
             console.error(erroChecklist);
-            alert('Erro ao salvar item.');
+            notificarChecklist('Erro ao salvar item.', 'erro');
         }
     }
 
@@ -837,7 +977,7 @@
     }
 
     async function removerItemCatalogoChecklist(idChecklist) {
-        const confirmouChecklist = confirm(
+        const confirmouChecklist = confirmarChecklist(
             'Deseja remover este item? Se estiver sendo utilizado em algum checklist, ele será apenas desativado.'
         );
 
@@ -852,7 +992,7 @@
             );
 
             if (!resultadoChecklist.ok) {
-                alert(resultadoChecklist.mensagem || 'Não foi possível remover o item.');
+                notificarChecklist(resultadoChecklist.mensagem || 'Não foi possível remover o item.', 'erro');
                 return;
             }
 
@@ -869,10 +1009,10 @@
 
             renderizarGerenciamentoChecklist(elementoChecklist('checklist-pesquisa-itens').value);
             renderizarSelecionadosChecklist();
-            alert(resultadoChecklist.mensagem);
+            notificarChecklist(resultadoChecklist.mensagem, 'sucesso');
         } catch (erroChecklist) {
             console.error(erroChecklist);
-            alert('Erro ao remover item.');
+            notificarChecklist('Erro ao remover item.', 'erro');
         }
     }
 
@@ -913,6 +1053,20 @@
             fecharCategoriasChecklist();
         });
 
+        elementoChecklist('checklist-visualizar-itens')?.addEventListener('click', eventoChecklist => {
+            const botaoChecklist = eventoChecklist.target.closest('[data-checklist-visualizacao-item-visualizar]');
+            const itemChecklist = eventoChecklist.target.closest('[data-checklist-visualizacao-item-id]');
+
+            if (botaoChecklist) {
+                visualizarItemChecklist(Number(botaoChecklist.dataset.checklistVisualizacaoItemVisualizar));
+                return;
+            }
+
+            if (itemChecklist) {
+                visualizarItemChecklist(Number(itemChecklist.dataset.checklistVisualizacaoItemId));
+            }
+        });
+
         elementoChecklist('checklist-nome')?.addEventListener('input', eventoChecklist => {
             renderizarNomesChecklist(eventoChecklist.target.value);
             atualizarValidacaoNomeChecklist();
@@ -936,6 +1090,14 @@
             }
 
             fecharNomesChecklist();
+
+            if (!confirmarChecklist(
+                'Já existe um checklist com esse nome. Abrir ele para edição vai descartar o que '
+                + 'você digitou neste formulário. Quer continuar?'
+            )) {
+                return;
+            }
+
             editarChecklist(Number(opcaoChecklist.dataset.checklistNomeId));
         });
 
@@ -944,10 +1106,17 @@
         });
 
         elementoChecklist('checklist-lista-gerenciamento')?.addEventListener('click', eventoChecklist => {
+            const visualizarChecklistBotao = eventoChecklist.target.closest('[data-checklist-item-visualizar]');
             const editarChecklistBotao = eventoChecklist.target.closest('[data-checklist-item-editar]');
             const removerChecklistBotao = eventoChecklist.target.closest('[data-checklist-item-remover]');
+            const ativarRapidoChecklistBotao = eventoChecklist.target.closest('[data-checklist-item-ativar-rapido]');
             const checkboxChecklist = eventoChecklist.target.closest('[data-checklist-item-checkbox]');
             const cardChecklist = eventoChecklist.target.closest('[data-checklist-item-id]');
+
+            if (visualizarChecklistBotao) {
+                visualizarItemChecklist(Number(visualizarChecklistBotao.dataset.checklistItemVisualizar));
+                return;
+            }
 
             if (editarChecklistBotao) {
                 editarItemChecklist(Number(editarChecklistBotao.dataset.checklistItemEditar));
@@ -956,6 +1125,11 @@
 
             if (removerChecklistBotao) {
                 removerItemCatalogoChecklist(Number(removerChecklistBotao.dataset.checklistItemRemover));
+                return;
+            }
+
+            if (ativarRapidoChecklistBotao) {
+                ativarItemRapidoChecklist(Number(ativarRapidoChecklistBotao.dataset.checklistItemAtivarRapido));
                 return;
             }
 
@@ -976,8 +1150,8 @@
 
         elementoChecklist('checklist-lista-selecionados')?.addEventListener('click', eventoChecklist => {
             const removerChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-remover]');
-            const subirChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-subir]');
-            const descerChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-descer]');
+            const visualizarChecklistBotao = eventoChecklist.target.closest('[data-checklist-selecionado-visualizar]');
+            const cardChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
 
             if (removerChecklist) {
                 selecionadosChecklist.delete(Number(removerChecklist.dataset.checklistSelecionadoRemover));
@@ -985,17 +1159,28 @@
                 return;
             }
 
-            if (subirChecklist) {
-                moverSelecionadoChecklist(Number(subirChecklist.dataset.checklistSelecionadoSubir), -1);
+            if (visualizarChecklistBotao) {
+                visualizarItemChecklist(Number(visualizarChecklistBotao.dataset.checklistSelecionadoVisualizar));
                 return;
             }
 
-            if (descerChecklist) {
-                moverSelecionadoChecklist(Number(descerChecklist.dataset.checklistSelecionadoDescer), 1);
+            if (cardChecklist) {
+                visualizarItemChecklist(Number(cardChecklist.dataset.checklistSelecionadoId));
             }
         });
 
         let arrastandoIdChecklist = null;
+
+        function limparIndicadoresArrastarChecklist() {
+            elementoChecklist('checklist-lista-selecionados')
+                ?.querySelectorAll('.checklist-item-selecionado--arrastar-antes, .checklist-item-selecionado--arrastar-depois')
+                .forEach(itemChecklist => {
+                    itemChecklist.classList.remove(
+                        'checklist-item-selecionado--arrastar-antes',
+                        'checklist-item-selecionado--arrastar-depois'
+                    );
+                });
+        }
 
         elementoChecklist('checklist-lista-selecionados')?.addEventListener('dragstart', eventoChecklist => {
             const itemChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
@@ -1012,6 +1197,7 @@
         elementoChecklist('checklist-lista-selecionados')?.addEventListener('dragend', eventoChecklist => {
             eventoChecklist.target.closest('[data-checklist-selecionado-id]')
                 ?.classList.remove('checklist-item-arrastando');
+            limparIndicadoresArrastarChecklist();
             arrastandoIdChecklist = null;
         });
 
@@ -1022,6 +1208,23 @@
 
             eventoChecklist.preventDefault();
             eventoChecklist.dataTransfer.dropEffect = 'move';
+
+            const alvoChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
+
+            limparIndicadoresArrastarChecklist();
+
+            if (!alvoChecklist || Number(alvoChecklist.dataset.checklistSelecionadoId) === arrastandoIdChecklist) {
+                return;
+            }
+
+            const retanguloChecklist = alvoChecklist.getBoundingClientRect();
+            const depoisChecklist = eventoChecklist.clientY > retanguloChecklist.top + retanguloChecklist.height / 2;
+
+            alvoChecklist.classList.add(
+                depoisChecklist
+                    ? 'checklist-item-selecionado--arrastar-depois'
+                    : 'checklist-item-selecionado--arrastar-antes'
+            );
         });
 
         elementoChecklist('checklist-lista-selecionados')?.addEventListener('drop', eventoChecklist => {
@@ -1030,6 +1233,7 @@
             }
 
             eventoChecklist.preventDefault();
+            limparIndicadoresArrastarChecklist();
 
             const alvoChecklist = eventoChecklist.target.closest('[data-checklist-selecionado-id]');
 
@@ -1063,14 +1267,14 @@
         elementoChecklist('checklist-formulario')?.addEventListener('submit', eventoChecklist => {
             if (selecionadosChecklist.size === 0) {
                 eventoChecklist.preventDefault();
-                alert('Selecione pelo menos um item para o checklist.');
+                notificarChecklist('Selecione pelo menos um item para o checklist.', 'aviso');
                 return;
             }
 
             if (nomeDuplicadoChecklist(elementoChecklist('checklist-nome').value)) {
                 eventoChecklist.preventDefault();
                 atualizarValidacaoNomeChecklist();
-                alert('Já existe um checklist com esse nome. Escolha outro nome ou edite o checklist existente.');
+                notificarChecklist('Já existe um checklist com esse nome. Escolha outro nome ou edite o checklist existente.', 'aviso');
             }
         });
 
@@ -1091,6 +1295,8 @@
         renderizarSelecionadosChecklist();
     });
 
+    window.confirmarChecklist = confirmarChecklist;
+    window.notificarChecklist = notificarChecklist;
     window.alternarStatusChecklist = alternarStatusChecklist;
     window.visualizarChecklist = visualizarChecklist;
     window.editarChecklist = editarChecklist;
@@ -1102,5 +1308,6 @@
     window.aplicarItensGerenciadosChecklist = aplicarItensGerenciadosChecklist;
     window.abrirNovoItemChecklist = abrirNovoItemChecklist;
     window.salvarItemCatalogoChecklist = salvarItemCatalogoChecklist;
+    window.alternarStatusItemCatalogoChecklist = alternarStatusItemCatalogoChecklist;
 })();
 
