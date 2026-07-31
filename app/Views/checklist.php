@@ -245,7 +245,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                         class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir checklist"
-                                        onclick="return confirm('Excluir este checklist?')">
+                                        data-modal-target="popupExcluir"
+                                        data-popup-href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
+                                        onclick="return false;">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -686,6 +688,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
             </div>
         </div>
 
+        <?php include 'Components/popup_excluir.php'; ?>
+        <?php include 'Components/toast.php'; ?>
+
     </main>
 
     <script>
@@ -710,6 +715,8 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                             ) ?>;
     </script>
     <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="../assets/JS/componentes/popup-confirmacao.js"></script>
+    <script src="../assets/JS/componentes/toast.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/checklist.js"></script>
     <script src="../assets/JS/barraDePesquisa.js"></script>
