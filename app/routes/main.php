@@ -2,4 +2,4 @@
 
 use http\Route;
 
-Route::get('/','');
+Route::GET('arquivo123','index');
