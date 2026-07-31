@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Database/EmpresaModel.php";
-require_once __DIR__ . "/../Model/Database/EnderecoModel.php";
+require_once __DIR__ . "/../Model/Database/Empresa.php";
+require_once __DIR__ . "/../Model/Database/Endereco.php";
 
 
 class CadastroEmpresaController
