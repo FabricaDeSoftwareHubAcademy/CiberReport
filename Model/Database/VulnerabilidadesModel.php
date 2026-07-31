@@ -4,15 +4,15 @@
         private $pdo;
 
         public $msgErro = "";
-
-
-        const MAX_NOME = 150;
+ 
+        
+        const MAX_NOME = 20;
         const MAX_CVE = 20;
-        const MAX_DESCRICAO = 255;
-        const MAX_DESCRICAO_TECNICA = 5000;
-        const MAX_IMPACTO = 3000;
-
-
+        const MAX_DESCRICAO = 120;
+        const MAX_DESCRICAO_TECNICA = 150;
+        const MAX_IMPACTO = 200;
+ 
+        
         const CATEGORIAS_VALIDAS = ['API', 'Aplicação Web', 'Infraestrutura', 'Mobile', 'Rede'];
         const SEVERIDADES_VALIDAS = ['Alta', 'Baixa', 'Crítica', 'Média'];
 
