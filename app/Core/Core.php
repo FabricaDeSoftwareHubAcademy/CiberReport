@@ -1,47 +1,52 @@
-<?php
+<?php 
 
 namespace Core;
 
+use http\Request;
+use http\Response;
+
 class Core
 {
-
-    /**
-     * Registra uma rota.
-     *
-     * @param string|null $permission  ex: 'user.read'  |  null = pública
-     */
-    
-
-    public static function dispatch(array $routes): void
+    public static function dispatch(array $routes)
     {
-        $config = require __DIR__ . '/../../config/app.php';
-        $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri    = str_replace($config['base_folder'], '/', $uri);
-        $method = $_SERVER['REQUEST_METHOD'];
+        $url = '/';
 
-        foreach ($routes as $route) {
-            if ($route['method'] === $method && $route['uri'] === $uri) {
+        isset($_GET['url']) && $url .= $_GET['url'];
 
-                // ── Verificação por PERMISSION (não por role) ──
-                // if ($route['permission'] !== null) {
-                //     Auth::requirePermission($route['permission']);
-                // }
-                // ───────────────────────────────────────────────
+        $url !== '/' && $url = rtrim($url, '/');
+        
+        $prefixController = 'Controller\\';
+        $routeFound = false;
 
-                [$controllerName, $methodName] = explode('@', $route['controller']);
-                $controllerClass = "Controllers\\{$controllerName}";
+        foreach($routes as $route) {
+            $pattern = '#^'. preg_replace('/{id}/', '([\w-]+)',$route['path']) . '$#';
 
-                if (class_exists($controllerClass)) {
-                    $obj = new $controllerClass();
-                    if (method_exists($obj, $methodName)) {
-                        $obj->$methodName();
-                        return;
-                    }
-                }
+            if(preg_match($pattern,$url,$matches)){
+              array_shift($matches);
+
+              $routeFound = true;
+
+              if($route['method'] !== Request::method()){
+                Response::json([
+                    'error' => true,
+                    'sucess' => false,
+                    'message' => 'Desculpa, metodo não encontrado'
+                ],405);
+                return;
+              }
+              
+              [$controller, $action] = explode('@', $route['action']);
+
+              $controller = $prefixController . $controller;
+              $extendController = new $controller();
+              $extendController->$action(new Request, new Response, $matches);
             }
         }
 
-        http_response_code(404);
-        echo "404 - Page Not Found";
+         if(!$routeFound){
+            $controller = $prefixController."NotFoundController";
+            $extendController = new $controller;
+            $extendController->index(new Request, new Response);       
+        }
     }
 }

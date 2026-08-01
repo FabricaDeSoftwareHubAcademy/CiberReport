@@ -2,4 +2,4 @@
 
 use http\Route;
 
-Route::GET('arquivo123','index');
+Route::GET('/', 'HomeController@index');
