@@ -76,7 +76,7 @@
             formularioChecklist.append(chave, valor);
         });
 
-        const respostaChecklist = await fetch('checklist.php', {
+        const respostaChecklist = await fetch(`${window.baseUrl}checklist`, {
             method: 'POST',
             body: formularioChecklist
         });

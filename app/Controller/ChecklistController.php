@@ -1,7 +1,13 @@
 <?php
+
+namespace Controller;
+
+use Core\Controller;
+use ChecklistModel;
+
 require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
-class ChecklistController
+class ChecklistController extends Controller
 {
     private ChecklistModel $checklistModel;
 
@@ -9,6 +15,11 @@ class ChecklistController
     {
         $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->checklistModel = new ChecklistModel($conexao);
+    }
+
+    public function index()
+    {
+        $this->view('checklist');
     }
 
     public function listarChecklist(): array
