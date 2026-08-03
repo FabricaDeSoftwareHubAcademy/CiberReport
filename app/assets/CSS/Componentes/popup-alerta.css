@@ -59,7 +59,7 @@
 
 .popup-alerta__icone--sucesso {
     background-color: var(--cor-verde-secundario);
-    color: var(--cor-azul-primaria);
+    color: var(--cor-verde);
 }
 
 .popup-alerta__titulo {
@@ -84,6 +84,7 @@
 }
 
 .popup-alerta__acoes .btn-cancelar,
-.popup-alerta__acoes .btn-vermelho {
+.popup-alerta__acoes .btn-vermelho,
+.popup-alerta__acoes .btn-botao-verde {
     min-width: 110px;
 }
