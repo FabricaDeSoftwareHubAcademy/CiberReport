@@ -6,6 +6,7 @@ $dados = $controller->listar();
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@ $dados = $controller->listar();
     <script src="../assets/JS/componentes/modal.js" defer></script>
     <script src="../assets/JS/barraDePesquisa.js" defer></script>
 </head>
+
 <body class="corpo-ger-projetos">
     <?php
         $tituloPagina = 'Gerenciamento de Projeto';
@@ -45,7 +47,7 @@ $dados = $controller->listar();
                     <span class="subtitle-card-projeto">07</span>
                 </div>
             </div>
-    
+
             <div class="tabela-wrapper tabela-gerenciamento-projeto">
                 <table id="table">
                     <thead>
@@ -115,7 +117,7 @@ $dados = $controller->listar();
                 </table>
             </div>
         </div>
-        
+
     </main>
 
     <div class="modal-overlay" id="modal-cadastro-projeto">
@@ -134,14 +136,15 @@ $dados = $controller->listar();
                         <div class="campo">
                             <label class="campo__label" for="nome-cleinte">cliente</label>
                             <select name="cliente" id="cliente" aria-placeholder="Selecione um cliente" class="campo__select">
-    
+
                             </select>
                             <button class="btn-novo-cadastro">+</button>
                         </div>
-                </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>
