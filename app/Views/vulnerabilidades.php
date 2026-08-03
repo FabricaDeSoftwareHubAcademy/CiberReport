@@ -30,19 +30,19 @@
         <div class="cards-resumo">
             <div class="card-resumo">
                 <span class="card-label">Críticas</span>
-                <span class="card-valor critica">0.3</span>
+                <span class="card-valor critica" id="qtdCriticas">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Altas</span>
-                <span class="card-valor alta">0.0</span>
+                <span class="card-valor alta" id="qtdAltas">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Médias</span>
-                <span class="card-valor media">0.1</span>
+                <span class="card-valor media" id="qtdMedias">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Baixas</span>
-                <span class="card-valor baixa">0.0</span>
+                <span class="card-valor baixa" id="qtdBaixas">0</span>
             </div>
         </div>
  
@@ -74,143 +74,24 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 001</span>
-                                    <span class="contrib">9 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=1" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=2" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=3" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Injeção de SQL baseado em tempo (SQL Injection)</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td class="cvss">9.8</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 002</span>
-                                    <span class="contrib">6 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=4" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=5" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=6" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Script entre sites armazenados (XSS)</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td class="cvss">9.3</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon media-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 003</span>
-                                    <span class="contrib">4 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=7" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=8" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=9" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Possibilidade de falsificação.</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-media">Média</span></td>
-                        <td><span class="badge badge-media">Médio</span></td>
-                        <td class="cvss">7.2</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 004</span>
-                                    <span class="contrib">3 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=10" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=11" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=12" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Fraqueza na proteção contra ataques de força bruta.</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td class="cvss">7.9</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                <tbody id="corpoTabelaVulnerabilidades">
+                    <?php /*
+                        Linhas removidas — dados mocados eram só placeholder de layout.
+                        Aqui entra o loop PHP puxando do banco (PDO), algo como:
+ 
+                        <?php foreach ($vulnerabilidades as $v): ?>
+                            <tr>
+                                <td>...<?= htmlspecialchars($v['id']) ?>...</td>
+                                <td><?= htmlspecialchars($v['titulo']) ?></td>
+                                <td class="ativo-link"><?= htmlspecialchars($v['ativo']) ?></td>
+                                <td class="resumo-texto"><?= htmlspecialchars($v['resumo']) ?></td>
+                                <td><span class="badge badge-<?= $v['severidade'] ?>"><?= ucfirst($v['severidade']) ?></span></td>
+                                <td><span class="badge badge-<?= $v['criticidade'] ?>"><?= ucfirst($v['criticidade']) ?></span></td>
+                                <td class="cvss"><?= htmlspecialchars($v['cvss']) ?></td>
+                                <td>...botões de ação...</td>
+                            </tr>
+                        <?php endforeach; ?>
+                    */ ?>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -253,30 +134,30 @@
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" oninput="mascararCVE(this)" title="formato: CVE-AAAA-NNNN" value="CVE-" />
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" title="formato: CVE-AAAA-NNNN" value="CVE-" />
                         </div>
                     </div>
  
                     <div class="campo">
                         <label class="campo__label campo__label--obrigatorio" for="descricao">Descrição:</label>
-                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="255" required />
+                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="100" required />
                     </div>
  
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="descTecnica">Descrição Técnica:</label>
-                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="5000" required></textarea>
+                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="150" required></textarea>
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="impactos">Impactos:</label>
-                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="3000" required></textarea>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="200" required></textarea>
                         </div>
                     </div>
  
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
-                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="100" />
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="20" />
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="severidade">Severidade:</label>
@@ -338,5 +219,3 @@
     <script src="../assets/JS/componentes/modal.js"></script>
     <script src="app/JS/Vulnerabilidades.js"></script>
 </body>
- 
-</html>

@@ -7,10 +7,10 @@
  
         
         const MAX_NOME = 20;
-        const MAX_CVE = 20;
-        const MAX_DESCRICAO = 120;
+        const MAX_CVE = 30;
+        const MAX_DESCRICAO = 100;
         const MAX_DESCRICAO_TECNICA = 150;
-        const MAX_IMPACTO = 200;
+        const MAX_IMPACTO = 100;
  
         
         const CATEGORIAS_VALIDAS = ['API', 'Aplicação Web', 'Infraestrutura', 'Mobile', 'Rede'];
