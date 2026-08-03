@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . "/../bootstrap.php";
-require_once __DIR__ . "/../Model/Database/Vulnerabilidades.php";
+require_once __DIR__ . "/../Model/conexao.php";
+require_once __DIR__ . "/../Model/Database/VulnerabilidadesModel.php";
 
 class VulnerabilidadesController
 {
@@ -8,13 +8,8 @@ class VulnerabilidadesController
 
     public function __construct()
     {
-        $this->Vulnerabilidades = new Vulnerabilidades();
-        $this->Vulnerabilidades->conectar(
-            $_ENV['DB_NAME'],
-            $_ENV['DB_HOST'],
-            $_ENV['DB_USER'],
-            $_ENV['DB_PASS']
-        );
+        global $conexao;
+        $this->Vulnerabilidades = new Vulnerabilidades($conexao);
     }
 
     public function listar()

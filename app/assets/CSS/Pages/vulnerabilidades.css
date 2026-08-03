@@ -1,3 +1,8 @@
+campo__label--obrigatorio::after {
+    content: " *";
+    color: #e74c3c;
+    font-weight: 700;
+}
 
 .barra-acoes {
     display: flex;
@@ -176,83 +181,6 @@
 .cvss {
     font-weight: 700;
     color: #1d1d1d;
-}
-
-.acoes {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.acoes button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    padding: 5px;
-    border-radius: 6px;
-    color: #666;
-    transition: 0.3s;
-}
-
-.acoes button:hover {
-    background: #f1f5f9;
-    color: #1d1d1d;
-}
-
-.acoes .tabela-btn-excluir:hover {
-    color: #e74c3c;
-    background: #fdecea;
-}
-
-.acoes .tabela-btn-editar:hover {
-    color: #008cff;
-    background: #e8f4ff;
-}
-
-.rodape-tabela {
-    padding: 16px;
-    border-top: 1px solid #eee;
-}
-
-.paginacao {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.pag-btn,
-.pag-num {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 13px;
-    color: #4c6177;
-    padding: 5px 9px;
-    border-radius: 6px;
-    transition: 0.3s;
-    font-weight: 600;
-}
-
-.pag-btn:hover,
-.pag-num:hover {
-    background: #e8f4ff;
-    color: #008cff;
-}
-
-.pag-num.ativo {
-    background: #008cff;
-    color: #fff;
-    font-weight: 700;
-}
-
-.pag-ellipsis {
-    font-size: 13px;
-    color: #aaa;
-    padding: 0 4px;
-    user-select: none;
 }
 
 @media (max-width: 900px) {
