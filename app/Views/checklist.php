@@ -17,6 +17,20 @@ function escaparHtmlChecklist(mixed $valorChecklist): string
     return htmlspecialchars((string) $valorChecklist, ENT_QUOTES, 'UTF-8');
 }
 
+function formatarTempoChecklist(int $minutosChecklist): string
+{
+    if ($minutosChecklist <= 0) {
+        return '0h';
+    }
+
+    $horasChecklist = intdiv($minutosChecklist, 60);
+    $restanteChecklist = $minutosChecklist % 60;
+
+    return $restanteChecklist === 0
+        ? "{$horasChecklist}h"
+        : sprintf('%dh%02d', $horasChecklist, $restanteChecklist);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acaoChecklist = $_POST['action'] ?? '';
 
@@ -74,6 +88,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 )
             ]);
 
+        case 'alterarStatusItemCatalogoChecklist':
+            $idItemChecklist = (int) ($_POST['id'] ?? 0);
+            $habilitadoItemChecklist = (int) ($_POST['habilitado'] ?? 0);
+
+            responderJsonChecklist([
+                'ok' => $controllerChecklist->alterarStatusItemCatalogoChecklist(
+                    $idItemChecklist,
+                    $habilitadoItemChecklist
+                )
+            ]);
+
         case 'buscarChecklist':
             $idChecklist = (int) ($_POST['id'] ?? 0);
             $registroChecklist = $controllerChecklist->buscarComItensChecklist($idChecklist);
@@ -85,12 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['nome'])) {
-        $resultadoChecklist = !empty($_POST['id'])
-            ? $controllerChecklist->atualizarChecklist()
-            : $controllerChecklist->cadastrarChecklist();
+        $criandoChecklist = empty($_POST['id']);
+        $resultadoChecklist = $criandoChecklist
+            ? $controllerChecklist->cadastrarChecklist()
+            : $controllerChecklist->atualizarChecklist();
 
         if ($resultadoChecklist) {
-            header('Location: checklist.php');
+            $tipoSucessoChecklist = $criandoChecklist ? 'criado' : 'atualizado';
+            header("Location: checklist.php?sucesso={$tipoSucessoChecklist}");
             exit;
         }
 
@@ -104,6 +131,14 @@ if (isset($_GET['excluir'])) {
     $controllerChecklist->excluirChecklist((int) $_GET['excluir']);
     header('Location: checklist.php');
     exit;
+}
+
+$mensagemSucessoChecklist = '';
+
+if (($_GET['sucesso'] ?? '') === 'criado') {
+    $mensagemSucessoChecklist = 'Checklist cadastrado com sucesso.';
+} elseif (($_GET['sucesso'] ?? '') === 'atualizado') {
+    $mensagemSucessoChecklist = 'Checklist atualizado com sucesso.';
 }
 
 $checklists = $controllerChecklist->listarChecklist();
@@ -182,7 +217,13 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <i class="fa-solid fa-filter sort-icon"></i>
                             </span>
                         </th>
-                        <th data-col="4" class="col-status">
+                        <th data-col="4">
+                            <span class="th-label">
+                                Tempo Estimado
+                                <i class="fa-solid fa-sort sort-icon"></i>
+                            </span>
+                        </th>
+                        <th data-col="5" class="col-status">
                             <span class="th-label">Status</span>
                         </th>
                         <th>Ações</th>
@@ -203,6 +244,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                 <span class="checklist-categoria-badge">
                                     <?= escaparHtmlChecklist($checklist['categoria'] ?? '') ?>
                                 </span>
+                            </td>
+                            <td>
+                                ~<?= formatarTempoChecklist((int) $checklist['tempo_estimado_total']) ?>
                             </td>
                             <td class="col-status">
                                 <div class="checklist-status">
@@ -239,15 +283,6 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                         onclick="editarChecklist(<?= (int) $checklist['id'] ?>)">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-
-                                    <a
-                                        href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
-                                        class="tabela-btn-excluir"
-                                        title="Excluir"
-                                        aria-label="Excluir checklist"
-                                        onclick="return confirm('Excluir este checklist?')">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -255,7 +290,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
                     <?php if (empty($checklists)): ?>
                         <tr>
-                            <td colspan="6" class="checklist-tabela-vazia">
+                            <td colspan="7" class="checklist-tabela-vazia">
                                 Nenhum checklist cadastrado.
                             </td>
                         </tr>
@@ -264,7 +299,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
                 <tfoot>
                     <tr>
-                        <td colspan="6" class="rodape-tabela">
+                        <td colspan="7" class="rodape-tabela">
                             <div class="paginacao"></div>
                         </td>
                     </tr>
@@ -420,6 +455,14 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                     <i class="fa-solid fa-list-check"></i>
                                     Gerenciar itens
                                 </button>
+                            </div>
+
+                            <div
+                                class="checklist-gerenciar-resumo"
+                                id="checklist-tempo-resumo"
+                                hidden>
+                                <span>Tempo estimado total</span>
+                                <strong id="checklist-tempo-total">0h</strong>
                             </div>
 
                             <div
@@ -658,15 +701,47 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                     </div>
 
                     <div class="campo">
-                        <label for="checklist-item-obrigatorio" class="campo__label">
-                            Obrigatório
+                        <label for="checklist-item-descricao-resumida" class="campo__label">
+                            Descrição resumida
                         </label>
-                        <div class="campo__select-wrapper">
-                            <select id="checklist-item-obrigatorio" class="campo__select">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                        <textarea
+                            id="checklist-item-descricao-resumida"
+                            class="campo__textarea"
+                            placeholder="Resumo do que este item verifica..."
+                            oninput="contarDescricaoResumidaItemChecklist()"></textarea>
+
+                        <div class="checklist-contador">
+                            <span id="checklist-item-contador-descricao-resumida">0 caracteres</span>
+                        </div>
+                    </div>
+
+                    <div class="checklist-dados-grid">
+                        <div class="campo">
+                            <label for="checklist-item-obrigatorio" class="campo__label">
+                                Obrigatório
+                            </label>
+                            <div class="campo__select-wrapper">
+                                <select id="checklist-item-obrigatorio" class="campo__select">
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                            </div>
+                        </div>
+
+                        <div class="campo">
+                            <label for="checklist-item-tempo-estimado" class="campo__label">
+                                Tempo estimado de execução
+                            </label>
+                            <input
+                                type="number"
+                                id="checklist-item-tempo-estimado"
+                                class="campo__input"
+                                placeholder="Ex: 90"
+                                min="0"
+                                step="5"
+                                inputmode="numeric">
+                            <small class="campo__ajuda">Em minutos. Ex: 90 = 1h30.</small>
                         </div>
                     </div>
                 </div>
@@ -681,6 +756,81 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         id="checklist-btn-salvar-item"
                         onclick="salvarItemCatalogoChecklist()">
                         SALVAR
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="checklist-modal-item-visualizar">
+            <div class="modal modal--lg">
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Visualizar Item</h2>
+                        <p class="modal__subtitulo">Detalhes do item reutilizável</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="modal__fechar"
+                        data-modal-close
+                        aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body checklist-visualizacao">
+                    <input type="hidden" id="checklist-item-visualizar-id">
+
+                    <section class="checklist-visualizacao-secao">
+                        <div class="checklist-visualizacao-cabecalho">
+                            <div class="checklist-visualizacao-titulo">
+                                <i class="fa-solid fa-list-check"></i>
+                                <h3>Dados do Item</h3>
+                            </div>
+                            <span
+                                id="checklist-item-visualizar-status"
+                                class="checklist-visualizacao-status"></span>
+                        </div>
+
+                        <div class="checklist-visualizacao-dados">
+                            <div class="checklist-visualizacao-campo checklist-visualizacao-campo--largo">
+                                <span class="checklist-visualizacao-label">Título</span>
+                                <strong id="checklist-item-visualizar-titulo"></strong>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo">
+                                <span class="checklist-visualizacao-label">Referência</span>
+                                <strong id="checklist-item-visualizar-referencia"></strong>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo">
+                                <span class="checklist-visualizacao-label">Tempo estimado</span>
+                                <strong id="checklist-item-visualizar-tempo"></strong>
+                            </div>
+
+                            <div class="checklist-visualizacao-campo checklist-visualizacao-campo--largo">
+                                <span class="checklist-visualizacao-label">Descrição resumida</span>
+                                <p id="checklist-item-visualizar-descricao"></p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn-cancelar" data-modal-close>
+                        FECHAR
+                    </button>
+                    <button
+                        type="button"
+                        class="btn-botao-verde"
+                        id="checklist-item-btn-ativar"
+                        onclick="alternarStatusItemCatalogoChecklist()">
+                        <i class="fa-solid fa-check" id="checklist-item-btn-ativar-icone"></i>
+                        <span id="checklist-item-btn-ativar-texto">ATIVAR ITEM</span>
                     </button>
                 </div>
             </div>
@@ -708,6 +858,11 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                                 $erroFormularioChecklist,
                                                 $jsonSeguroChecklist
                                             ) ?>;
+
+        window.mensagemSucessoChecklist = <?= json_encode(
+                                                $mensagemSucessoChecklist,
+                                                $jsonSeguroChecklist
+                                            ) ?>;
     </script>
     <script src="../assets/JS/componentes/modal.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
@@ -716,10 +871,18 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     <?php if ($erroFormularioChecklist !== ''): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                alert(window.erroFormularioChecklist);
+                window.notificarChecklist(window.erroFormularioChecklist, 'erro');
                 document
                     .getElementById('checklist-modal-formulario')
                     ?.classList.add('active');
+            });
+        </script>
+    <?php endif; ?>
+    <?php if ($mensagemSucessoChecklist !== ''): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.notificarChecklist(window.mensagemSucessoChecklist, 'sucesso');
+                history.replaceState(null, '', 'checklist.php');
             });
         </script>
     <?php endif; ?>
