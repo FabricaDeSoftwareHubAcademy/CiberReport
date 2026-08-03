@@ -402,8 +402,42 @@ $usuarios = $controller->listar();
         </div>
     </div>
 
+    <?php include 'Components/toast.php'; ?>
+
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="../assets/JS/componentes/toast.js"></script>
+    <script>
+        function toggleHabilitado(checkbox) {
+            const label = checkbox.closest('.ger-pentest-status-cell').querySelector('.ger-pentest-toggle-label');
+            const linha = checkbox.closest('tr');
+            label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+            linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+            const body = new FormData();
+            body.append('action', 'alterarHabilitado');
+            body.append('id', checkbox.dataset.id);
+            body.append('habilitado', checkbox.checked ? '1' : '0');
+
+            fetch('usuario.php', {
+                    method: 'POST',
+                    body
+                })
+                .then(() => {
+                    window.exibirToast?.(
+                        checkbox.checked ? 'sucesso' : 'info',
+                        checkbox.checked ? 'O usuário foi ativado.' : 'O usuário foi desativado.'
+                    );
+                })
+                .catch(() => {
+                    checkbox.checked = !checkbox.checked;
+                    label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+                    linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+                    window.exibirToast?.('erro', 'Não foi possível alterar o status.');
+                });
+        }
+    </script>
 </body>
 
 </html>

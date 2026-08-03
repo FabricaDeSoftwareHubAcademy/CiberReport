@@ -554,6 +554,7 @@ $dados = $controller->listarEmpresa();
         </div>
     </section>
 </main>
+<?php include 'Components/toast.php'; ?>
 <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
      fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
      o conteúdo quando o menu lateral abre/fecha. -->
@@ -564,6 +565,7 @@ $dados = $controller->listarEmpresa();
 <script src="../assets/JS/componentes/modal.js"></script>
 <script src="../assets/JS/Buscarcep.js"></script>
 <script src="../assets/JS/mascaras.js"></script>
+<script src="../assets/JS/componentes/toast.js"></script>
 <script>
     function toggleHabilitado(checkbox) {
         const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
@@ -580,10 +582,18 @@ $dados = $controller->listarEmpresa();
                 method: 'POST',
                 body
             })
+            .then(() => {
+                window.exibirToast?.(
+                    checkbox.checked ? 'sucesso' : 'info',
+                    checkbox.checked ? 'A empresa foi ativada.' : 'A empresa foi desativada.'
+                );
+            })
             .catch(() => {
                 checkbox.checked = !checkbox.checked;
                 label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
                 linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+                window.exibirToast?.('erro', 'Não foi possível alterar o status.');
             });
     }
     

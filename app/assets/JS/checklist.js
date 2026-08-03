@@ -119,6 +119,13 @@
             }
 
             linhaChecklist?.classList.toggle('linha-inativa', !campoChecklist.checked);
+
+            window.exibirToast?.(
+                habilitadoChecklist ? 'sucesso' : 'info',
+                habilitadoChecklist
+                    ? 'O checklist foi ativado.'
+                    : 'O checklist foi desativado.'
+            );
         } catch (erroChecklist) {
             console.error(erroChecklist);
             campoChecklist.checked = !campoChecklist.checked;
@@ -129,7 +136,7 @@
 
             linhaChecklist?.classList.toggle('linha-inativa', !campoChecklist.checked);
 
-            notificarChecklist('Não foi possível alterar o status.', 'erro');
+            window.exibirToast?.('erro', 'Não foi possível alterar o status.');
         }
     }
 
