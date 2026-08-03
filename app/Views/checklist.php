@@ -283,6 +283,17 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                         onclick="editarChecklist(<?= (int) $checklist['id'] ?>)">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
+
+                                    <a
+                                        href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
+                                        class="tabela-btn-excluir"
+                                        title="Excluir"
+                                        aria-label="Excluir checklist"
+                                        data-modal-target="popupExcluir"
+                                        data-popup-href="checklist.php?excluir=<?= (int) $checklist['id'] ?>"
+                                        onclick="return false;">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -761,6 +772,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
             </div>
         </div>
 
+        <?php include 'Components/popup_excluir.php'; ?>
+        <?php include 'Components/toast.php'; ?>
+        
         <div class="modal-overlay" id="checklist-modal-item-visualizar">
             <div class="modal modal--lg">
                 <div class="modal__header">
@@ -865,6 +879,8 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                             ) ?>;
     </script>
     <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="../assets/JS/componentes/popup-confirmacao.js"></script>
+    <script src="../assets/JS/componentes/toast.js"></script>
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/checklist.js"></script>
     <script src="../assets/JS/barraDePesquisa.js"></script>
@@ -886,7 +902,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
             });
         </script>
     <?php endif; ?>
-    
+
 </body>
 
 </html>
