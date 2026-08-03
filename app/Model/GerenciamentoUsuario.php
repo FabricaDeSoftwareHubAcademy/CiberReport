@@ -1,4 +1,6 @@
 <?php
+namespace Model;
+use PDO;
 
 class GerenUsuario
 {
@@ -7,6 +9,7 @@ class GerenUsuario
 
     public function __construct($pdo)
     {
+
         $this->pdo = $pdo;
     }
 
