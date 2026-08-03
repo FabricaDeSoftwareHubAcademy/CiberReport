@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
-
+ 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +8,14 @@
     <link rel="stylesheet" href="../assets/CSS/style.css">
     <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
     <link rel="stylesheet" href="../assets/CSS/Pages/vulnerabilidades.css" />
+    <style>
+        .campo__label .obrigatorio {
+            color: #e53935;
+            margin-left: 2px;
+        }
+    </style>
 </head>
-
+ 
 <body>
     <?php $tituloPagina = 'Vulnerabilidades';
     include_once 'Components/menu.php'; ?>
@@ -20,7 +26,7 @@
                 Nova Vulnerabilidade
             </button>
         </div>
-
+ 
         <div class="cards-resumo">
             <div class="card-resumo">
                 <span class="card-label">Críticas</span>
@@ -39,7 +45,7 @@
                 <span class="card-valor baixa">0.0</span>
             </div>
         </div>
-
+ 
         <div class="tabela-wrapper">
             <table class="tabela" id="tabela">
                 <thead>
@@ -56,11 +62,11 @@
                         <th data-col="3">
                             <span class="th-label">Resumo <i class="fa-solid fa-sort sort-icon"></i></span>
                         </th>
-                        <th data-col="4" data-tipo="data">
-                            <span class="th-label">Severidade <i class="fa-solid fa-sort sort-icon"></i></span>
+                        <th data-col="4" data-tipo="risco" data-filtro="lista">
+                            <span class="th-label">Severidade <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por Severidade"></i></span>
                         </th>
-                        <th data-col="5" data-tipo="data">
-                            <span class="th-label">Criticidade <i class="fa-solid fa-sort sort-icon"></i></span>
+                        <th data-col="5" data-tipo="risco" data-filtro="lista">
+                            <span class="th-label">Criticidade <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por Criticidade"></i></span>
                         </th>
                         <th data-col="6">
                             <span class="th-label">CVSS <i class="fa-solid fa-sort sort-icon"></i></span>
@@ -100,9 +106,6 @@
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -136,9 +139,6 @@
                                 </button>
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </div>
                         </td>
@@ -174,9 +174,6 @@
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -211,9 +208,6 @@
                                 <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </button>
-                                <button class="tabela-btn-excluir" title="Excluir" aria-label="Excluir">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -221,25 +215,16 @@
                 <tfoot>
                     <tr>
                         <td colspan="8" class="rodape-tabela">
-                            <div class="paginacao">
-                                <button class="pag-btn" aria-label="Página anterior">Anterior</button>
-                                <button class="pag-num ativo" aria-label="Página 1" aria-current="page">1</button>
-                                <button class="pag-num" aria-label="Página 2">2</button>
-                                <button class="pag-num" aria-label="Página 3">3</button>
-                                <button class="pag-num" aria-label="Página 4">4</button>
-                                <button class="pag-num" aria-label="Página 5">5</button>
-                                <button class="pag-num" aria-label="Página 6">6</button>
-                                <button class="pag-btn" aria-label="Próxima página">Próximo</button>
-                            </div>
+                            <div class="paginacao"></div>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-
+ 
         <div class="modal-overlay" id="modalVulnerabilidade">
             <div class="modal modal--xl">
-
+ 
                 <div class="modal__header">
                     <div class="modal__header-icone">
                         <i class="fa-solid fa-shield-halved"></i>
@@ -250,53 +235,53 @@
                     </div>
                     <button class="modal__fechar" data-modal-close>&#x2715;</button>
                 </div>
-
+ 
                 <div class="modal__body">
                     <div class="modal-secao__titulo">
                         <i class="modal-secao__titulo-icone fa-solid fa-circle-info"></i>
                         <strong>Dados da Vulnerabilidade</strong>
                     </div>
-
+ 
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
-                            <label class="campo__label" for="nomeVuln">Nome da Vulnerabilidade:</label>
-                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" />
+                            <label class="campo__label campo__label--obrigatorio" for="nomeVuln">Nome da Vulnerabilidade:</label>
+                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" maxlength="150" required />
                         </div>
                         <div class="campo">
-                            <label class="campo__label" for="cvssScore">CVSS Score:</label>
-                            <input class="campo__input" type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" />
+                            <label class="campo__label campo__label--obrigatorio" for="cvssScore">CVSS Score:</label>
+                            <input class="campo__input" type="text" id="cvssScore" name="cvssScore" placeholder="0.0 - 10.0" inputmode="decimal" maxlength="4" required />
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" />
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" oninput="mascararCVE(this)" title="formato: CVE-AAAA-NNNN" value="CVE-" />
                         </div>
                     </div>
-
+ 
                     <div class="campo">
-                        <label class="campo__label" for="descricao">Descrição:</label>
-                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" />
+                        <label class="campo__label campo__label--obrigatorio" for="descricao">Descrição:</label>
+                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="255" required />
                     </div>
-
+ 
                     <div class="modal-grade">
                         <div class="campo">
-                            <label class="campo__label" for="descTecnica">Descrição Técnica:</label>
-                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes"></textarea>
+                            <label class="campo__label campo__label--obrigatorio" for="descTecnica">Descrição Técnica:</label>
+                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="5000" required></textarea>
                         </div>
                         <div class="campo">
-                            <label class="campo__label" for="impactos">Impactos:</label>
-                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial"></textarea>
+                            <label class="campo__label campo__label--obrigatorio" for="impactos">Impactos:</label>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="3000" required></textarea>
                         </div>
                     </div>
-
+ 
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
-                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" />
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="100" />
                         </div>
                         <div class="campo">
-                            <label class="campo__label" for="severidade">Severidade:</label>
+                            <label class="campo__label campo__label--obrigatorio" for="severidade">Severidade:</label>
                             <div class="campo__select-wrapper">
-                                <select class="campo__select" id="severidade" name="severidade">
+                                <select class="campo__select" id="severidade" name="severidade" required>
                                     <option value="" disabled selected>Selecione a severidade</option>
                                     <option value="alta">Alta</option>
                                     <option value="baixa">Baixa</option>
@@ -307,12 +292,12 @@
                             </div>
                         </div>
                     </div>
-
+ 
                     <div class="modal-grade">
                         <div class="campo">
-                            <label class="campo__label" for="categoria">Categoria:</label>
+                            <label class="campo__label campo__label--obrigatorio" for="categoria">Categoria:</label>
                             <div class="campo__select-wrapper">
-                                <select class="campo__select" id="categoria" name="categoria">
+                                <select class="campo__select" id="categoria" name="categoria" required>
                                     <option value="" disabled selected>Selecione a categoria</option>
                                     <option value="api">API</option>
                                     <option value="web">Aplicação Web</option>
@@ -324,9 +309,9 @@
                             </div>
                         </div>
                         <div class="campo">
-                            <label class="campo__label" for="status">Status:</label>
+                            <label class="campo__label campo__label--obrigatorio" for="status">Status:</label>
                             <div class="campo__select-wrapper">
-                                <select class="campo__select" id="status" name="status">
+                                <select class="campo__select" id="status" name="status" required>
                                     <option value="" disabled selected>Selecione o status</option>
                                     <option value="aberta">Aberta</option>
                                     <option value="aceita">Aceita</option>
@@ -339,18 +324,19 @@
                         </div>
                     </div>
                 </div>
-
+ 
                 <footer class="modal__footer">
                     <button class="btn-cancelar" data-modal-close>Cancelar</button>
                     <button class="btn-botao-verde" id="btnSalvar">Salvar</button>
                 </footer>
-
+ 
             </div>
         </div>
     </main>
-
+ 
     <script src="../assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="app/JS/Vulnerabilidades.js"></script>
 </body>
-
+ 
 </html>

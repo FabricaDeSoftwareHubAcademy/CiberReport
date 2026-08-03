@@ -20,6 +20,14 @@ if (isset($_GET['id_empresa'])) {
     $dados_endereco_editar = $controller->buscarDadosEnderecoEmpresa($dados_empresa_editar['endereco_id']);
 }
 
+$dados_empresa_visualizar = [];
+$dados_endereco_visualizar = [];
+if (isset($_GET['id_empresa_visualizar'])) {
+    $id_empresa_visualizar = addslashes($_GET['id_empresa_visualizar']);
+    $dados_empresa_visualizar = $controller->buscarDadosEmpresa($id_empresa_visualizar);
+    $dados_endereco_visualizar = $controller->buscarDadosEnderecoEmpresa($dados_empresa_visualizar['endereco_id']);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
     $controller->editarEmpresa();
     header("Location: cliente_empresa.php");
@@ -343,6 +351,132 @@ $dados = $controller->listarEmpresa();
         </div>
         
 
+        <div class="modal-overlay<?= !empty($dados_empresa_visualizar) ? ' active' : '' ?>" id="modalVisualizar">
+            <div class="modal modal--xxl">
+
+                <div class="modal__header">
+                    <div class="modal__header-icone">
+                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
+                    </div>
+                    <div class="modal__header-texto">
+                        <h2 class="modal__titulo">Visualizar Cadastro</h2>
+                        <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
+                    </div>
+                    <button type="button" class="modal__fechar" data-modal-close="modalVisualizar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal__body">
+
+                    <div class="modal-secao">
+                        <div class="modal-secao__titulo">
+                            <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
+                            <h3>Dados da Empresa</h3>
+                        </div>
+                        <div class="modal-grade modal-grade--4">
+                            <div class="campo">
+                                <label class="campo__label">Nome da Empresa</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_empresa_visualizar['nome_fantasia'] ?? ''; ?>" readonly />
+                            </div>
+                        </div>
+                        <div class="modal-grade modal-grade--4">
+                            <div class="campo">
+                                <label class="campo__label">Razão Social</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_empresa_visualizar['razao_social'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Telefone</label>
+                                <div class="campo__input-wrapper">
+                                    <i class="fa fa-phone campo__input-icone"></i>
+                                    <input type="text" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_visualizar['telefone'] ?? ''; ?>" readonly />
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">E-mail</label>
+                                <div class="campo__input-wrapper">
+                                    <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                    <input type="email" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_visualizar['email_contato'] ?? ''; ?>" readonly />
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">CNPJ</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_empresa_visualizar['cnpj'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">CEP</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['cep'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Endereço</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['rua'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Número</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['numero'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Complemento</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['complemento'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Bairro</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['bairro'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Cidade</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['cidade'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Estado</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['estado'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">País</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_endereco_visualizar['pais'] ?? ''; ?>" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-secao">
+                        <div class="modal-secao__titulo">
+                            <i class="fa-solid fa-user modal-secao__titulo-icone"></i>
+                            <h3>Dados do Responsável</h3>
+                        </div>
+                        <div class="modal-grade modal-grade--4">
+                            <div class="campo">
+                                <label class="campo__label">Nome do Responsável</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_empresa_visualizar['responsavel'] ?? ''; ?>" readonly />
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">Telefone</label>
+                                <div class="campo__input-wrapper">
+                                    <i class="fa fa-phone campo__input-icone"></i>
+                                    <input type="text" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_visualizar['telefone_responsavel'] ?? ''; ?>" readonly />
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">E-mail</label>
+                                <div class="campo__input-wrapper">
+                                    <i class="fa-solid fa-envelope campo__input-icone"></i>
+                                    <input type="email" class="campo__input campo__input--com-icone-esq" value="<?php echo $dados_empresa_visualizar['email_responsavel'] ?? ''; ?>" readonly />
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label class="campo__label">CPF</label>
+                                <input type="text" class="campo__input" value="<?php echo $dados_empresa_visualizar['cpf_responsavel'] ?? ''; ?>" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal__footer modal__footer-cliente">
+                    <button type="button" class="btn-cancelar" data-modal-close="modalVisualizar">FECHAR</button>
+                </div>
+
+            </div>
+        </div>
 
 
        <div class="tabela-wrapper">
@@ -395,6 +529,9 @@ $dados = $controller->listarEmpresa();
                                 <div class="acoes">
                                     <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="cliente_empresa.php?id_empresa_visualizar=<?= $empresa['id'] ?>" class="tabela-btn-visualizar" title="Visualizar" aria-label="Visualizar">
+                                        <i class="fa-solid fa-eye"></i>
                                     </a>
                                 </div>
                             </td>
@@ -464,6 +601,7 @@ $dados = $controller->listarEmpresa();
         if (window.location.search.includes('id_empresa')) {
             const url = new URL(window.location.href);
             url.searchParams.delete('id_empresa');
+            url.searchParams.delete('id_empresa_visualizar');
             window.history.replaceState({}, '', url);
         }
     }
@@ -494,6 +632,17 @@ $dados = $controller->listarEmpresa();
                 limparIdEmpresaDaUrl();
             }
         });
+        const modalVisualizar = document.getElementById('modalVisualizar');
+        if (modalVisualizar) {
+            modalVisualizar.querySelectorAll('[data-modal-close]').forEach(botao => {
+                botao.addEventListener('click', limparIdEmpresaDaUrl);
+            });
+            modalVisualizar.addEventListener('click', (e) => {
+                if (e.target === modalVisualizar) {
+                    limparIdEmpresaDaUrl();
+                }
+            });
+        }
     });
 </script>
 </html>

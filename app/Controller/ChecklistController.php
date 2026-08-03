@@ -1,6 +1,4 @@
 <?php
-
-require_once __DIR__ . '/../Model/conexao.php';
 require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
 class ChecklistController
@@ -9,8 +7,7 @@ class ChecklistController
 
     public function __construct()
     {
-        global $conexao;
-
+        $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->checklistModel = new ChecklistModel($conexao);
     }
 
@@ -175,7 +172,9 @@ class ChecklistController
             ->cadastrarItemCatalogoChecklist(
                 $dadosItemChecklist['titulo'],
                 $dadosItemChecklist['referencia'],
-                $dadosItemChecklist['obrigatorio']
+                $dadosItemChecklist['obrigatorio'],
+                $dadosItemChecklist['descricao_resumida'],
+                $dadosItemChecklist['tempo_estimado_minutos']
             );
     }
 
@@ -198,7 +197,9 @@ class ChecklistController
                 $idItemChecklist,
                 $dadosItemChecklist['titulo'],
                 $dadosItemChecklist['referencia'],
-                $dadosItemChecklist['obrigatorio']
+                $dadosItemChecklist['obrigatorio'],
+                $dadosItemChecklist['descricao_resumida'],
+                $dadosItemChecklist['tempo_estimado_minutos']
             );
     }
 
@@ -214,6 +215,18 @@ class ChecklistController
             $_POST['obrigatorio'] ?? 1
         );
 
+        $descricaoResumidaItemChecklist = trim(
+            $_POST['descricao_resumida'] ?? ''
+        );
+
+        $tempoEstimadoItemChecklist = (int) (
+            $_POST['tempo_estimado_minutos'] ?? 0
+        );
+
+        if ($tempoEstimadoItemChecklist < 0) {
+            $tempoEstimadoItemChecklist = 0;
+        }
+
         if ($tituloItemChecklist === '') {
             return false;
         }
@@ -222,7 +235,9 @@ class ChecklistController
             'titulo' => $tituloItemChecklist,
             'referencia' => $referenciaItemChecklist,
             'obrigatorio' =>
-            $obrigatorioItemChecklist === 1 ? 1 : 0
+            $obrigatorioItemChecklist === 1 ? 1 : 0,
+            'descricao_resumida' => $descricaoResumidaItemChecklist,
+            'tempo_estimado_minutos' => $tempoEstimadoItemChecklist
         ];
     }
 
@@ -238,5 +253,21 @@ class ChecklistController
             ->removerItemCatalogoChecklist(
                 $idItemChecklist
             );
+    }
+
+    public function alterarStatusItemCatalogoChecklist(
+        int $idItemChecklist,
+        int $statusItemChecklist
+    ): bool {
+        if ($idItemChecklist <= 0) {
+            return false;
+        }
+
+        $statusItemChecklist = $statusItemChecklist === 1 ? 1 : 0;
+
+        return $this->checklistModel->alterarStatusItemCatalogoChecklist(
+            $idItemChecklist,
+            $statusItemChecklist
+        );
     }
 }

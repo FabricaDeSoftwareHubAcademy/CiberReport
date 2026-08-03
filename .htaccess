@@ -1,9 +1,7 @@
-# RewriteEngine On
+RewriteEngine On
 
-# Prevent directory listing
-# Options -Indexes
+Options -Indexes
 
-# Rewriting to index.php
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^(.*)$ index.php [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
