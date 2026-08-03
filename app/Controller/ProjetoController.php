@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Projeto.php";
+namespace Controller;
 
+use Model\Projeto;
 
 class ProjetoController
 {

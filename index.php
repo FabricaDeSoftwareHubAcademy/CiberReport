@@ -1,7 +1,8 @@
 <?php
 
-use \Core\Core;
-use \http\Route;
+use Core\Router;
+
+session_start();
 
 spl_autoload_register(function ($class) {
     $file = __DIR__ . '/app/' . str_replace('\\', '/', $class) . '.php';
@@ -10,13 +11,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-session_start();
-
 $config = require __DIR__ . '/config/app.php';
-
 define("BASE_URL", $config['base_folder']);
-
 require_once __DIR__ . "/app/routes/main.php";
-
-Core::dispatch(Route::routes());
-
+Router::dispatch();

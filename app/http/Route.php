@@ -3,7 +3,6 @@ namespace http;
 
 class Route
 {
-
     private static array $routes = [];
 
     private static function add(string $method, string $path, string $action): void
