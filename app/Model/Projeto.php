@@ -1,5 +1,7 @@
 <?php
+namespace Model;
 
+use PDO;
 class Projeto
 {
     private $pdo;
@@ -37,7 +39,7 @@ class Projeto
             $sql->bindValue(":habilitado", $dados['habilitado']);
             $sql->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->msgErro = $e->getMessage();
             return false;
         }
@@ -69,7 +71,7 @@ class Projeto
             $sql->bindValue(":habilitado", $dados['habilitado']);
             $sql->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->msgErro = $e->getMessage();
             return false;
         }
@@ -81,7 +83,7 @@ class Projeto
             $sql->bindValue(":id", $id);
             $sql->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->msgErro = $e->getMessage();
             return false;
         }

@@ -1,6 +1,6 @@
 <?php
-session_start();
-require "../Model/conexao.php";
+
+$conexao = require __DIR__ . "/../Model/conexao.php";
 
 $erro = null;
 $mensagem = null;
@@ -10,7 +10,7 @@ $tokenUrl = $_GET['token'] ?? null;
 function gerarLinkRecuperacao($conexao, $email) {
     // if ($email === 'caiovv1@outlook.com') {          
     //     $token = bin2hex(random_bytes(32));       
-    //     return "login.php?token=$token";          
+    //     return BASE_URL . "login?token=$token";          
     // } 
 
     $token = bin2hex(random_bytes(32));
@@ -20,7 +20,7 @@ function gerarLinkRecuperacao($conexao, $email) {
     $stmt->execute([$token, $expira, $email]);
 
     if ($stmt->rowCount() > 0) {
-        return "login.php?token=$token";
+        return BASE_URL . "login?token=$token";
     }
     return null;
 }
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
             if (password_verify($senha, $usuario['senha'])) {
                 $_SESSION['usuario_id']   = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
-                header("Location: gerenciar-tipo-pentest.php");
+                header("Location: " . BASE_URL . "gerenciar-pentest");
                 exit;
             }
         }
@@ -88,9 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER REPORT</title>
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/login.css">
+    <title><?= htmlspecialchars($title ?? 'CYBER REPORT') ?></title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/login.css">
 </head>
 
 <body>
@@ -99,19 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
         <div class="geral">
         <section class="lado-esq">
             <div class="cyber-report">
-                <img src="../assets/img/Gemini_Generated_Image_rh5rtirh5rtirh5r-removebg-preview 1.png" alt="" class="logo-report">
+                <img src="<?= BASE_URL ?>app/assets/img/Gemini_Generated_Image_rh5rtirh5rtirh5r-removebg-preview 1.png" alt="" class="logo-report">
             </div>
             <div class="hackers">
-                <img src="../assets/img/img.png" class="sombra-esq">
-                <img src="../assets/img/img.png" class="sombra-dir">
+                <img src="<?= BASE_URL ?>app/assets/img/img.png" class="sombra-esq">
+                <img src="<?= BASE_URL ?>app/assets/img/img.png" class="sombra-dir">
             </div>
             <div class="principal">
-                <img src="../assets/img/img.png" alt="">
+                <img src="<?= BASE_URL ?>app/assets/img/img.png" alt="">
             </div>
         </section>
         <section class="lado-dir">
             <div class="login-topo">
-                <img src="../assets/img/Logo Direito.png" alt="" class="logo-baikal">
+                <img src="<?= BASE_URL ?>app/assets/img/Logo Direito.png" alt="" class="logo-baikal">
             </div>    
             <div class="login-box">
                 <?php if ($tokenUrl): ?>
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                         <?php if ($mensagem): ?><p class="erro-login"><?= htmlspecialchars($mensagem) ?></p><?php endif; ?>
                         <button type="submit" name="recuperar" value="1"class="btn-enviar-link-login">Enviar link</button>
                     </form>
-                    <a href="login.php" class="btn-voltar-login">Voltar ao login</a>
+                    <a href="<?= BASE_URL ?>" class="btn-voltar-login">Voltar ao login</a>
 
                 <?php else: ?>
 
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                         <?php if ($erro): ?>
                             <p class="erro-login"><?= htmlspecialchars ($erro) ?></p>
                         <?php endif; ?>
-                        <a href="login.php?recuperar" class="esqueceu-senha-login">Esqueceu a senha?</a>
+                        <a href="<?= BASE_URL ?>?recuperar" class="esqueceu-senha-login">Esqueceu a senha?</a>
                         <button type="submit" class="btn-entrar-login">Entrar</button>
                     </form>
 
