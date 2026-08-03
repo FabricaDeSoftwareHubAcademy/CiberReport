@@ -22,8 +22,7 @@
     <main>
         <div class="barra-acoes">
             <button class="btn-novo-cadastro" data-modal-target="modalVulnerabilidade">
-                <i class="fa-solid fa-square-plus"></i>
-                Nova Vulnerabilidade
+                <i class="fa-solid fa-plus"></i>Nova Vulnerabilidade
             </button>
         </div>
  

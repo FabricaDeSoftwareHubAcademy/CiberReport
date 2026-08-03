@@ -24,7 +24,7 @@ $dados = $controller->listar();
     ?>
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
-            <button class="btn-novo-cadastro btn-projeto" data-modal-target="modal-cadastro-projeto"><span>+</span>Novo Projeto</button>
+            <button class="btn-novo-cadastro" data-modal-target="modal-cadastro-projeto"><i class="fa-solid fa-plus"></i>Novo Projeto</button>
         </div>
 
         <div class="group-card-tabela">

@@ -189,8 +189,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                 class="btn-novo-cadastro"
                 data-modal-target="checklist-modal-formulario"
                 onclick="limparFormularioChecklist()">
-                <i class="fa-solid fa-plus"></i>
-                <span class="texto">Novo Checklist</span>
+                <i class="fa-solid fa-plus"></i>Novo Checklist
             </button>
         </div>
 
