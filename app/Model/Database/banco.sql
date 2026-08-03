@@ -267,3 +267,34 @@ ADD(
   cpf_responsavel CHAR(11) NOT NULL,
   telefone_responsavel VARCHAR(20) NOT NULL
 );
+
+ALTER TABLE checklist_item_catalogo
+ADD (
+  descricao_resumida TEXT DEFAULT NULL,
+  tempo_estimado_minutos INT NOT NULL DEFAULT 0
+);
+
+ALTER TABLE checklist_item_vinculo
+ADD (
+  ordem INT NOT NULL DEFAULT 0
+);
+
+-- Vínculo item-checklist é inativado (não excluído) quando o item sai do
+-- checklist, pra não quebrar log/auditoria que referencie esse id. Se o
+-- item voltar pro checklist, a mesma linha é reativada.
+ALTER TABLE checklist_item_vinculo
+ADD (
+  habilitado TINYINT NOT NULL DEFAULT 1
+);
+
+ALTER TABLE checklist_item_catalogo
+ADD COLUMN tempo_estimado_minutos INT NOT NULL DEFAULT 0 AFTER tempo_estimado_horas;
+
+UPDATE checklist_item_catalogo
+SET tempo_estimado_minutos = ROUND(tempo_estimado_horas * 60);
+
+ALTER TABLE checklist_item_catalogo
+DROP COLUMN tempo_estimado_horas;
+
+ALTER TABLE checklist_item_catalogo
+MODIFY COLUMN descricao_resumida TEXT DEFAULT NULL;
