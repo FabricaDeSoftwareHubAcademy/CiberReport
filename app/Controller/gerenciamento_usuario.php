@@ -1,15 +1,24 @@
 <?php 
-require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Database/gerenciamento_perfil.php";
 
-class GerenciamentoUsuarioController
+namespace Controller;
+
+use Core\Controller;
+use Model\GerenUsuario;
+
+class GerenciamentoUsuarioController extends Controller
 {
     private  $usuario;
 
     public function __construct()
     {
         global $conexao;
+        
         $this->usuario = new GerenUsuario($conexao);
+    }
+
+     public function index()
+    {
+        $this->view('usuario.php');
     }
 
     public function listar()

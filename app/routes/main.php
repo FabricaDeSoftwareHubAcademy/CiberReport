@@ -2,4 +2,8 @@
 
 use http\Route;
 
-Route::get('/','');
+Route::GET('/', 'AuthController@index');
+Route::POST('/', 'AuthController@index');
+
+Route::GET('/gerenciar-pentest','TipoPentestController@index');
+Route::POST('/gerenciar-pentest','TipoPentestController@index');

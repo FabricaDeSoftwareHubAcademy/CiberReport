@@ -1,6 +1,4 @@
 <?php
-
-require_once __DIR__ . '/../Model/conexao.php';
 require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
 
 class ChecklistController
@@ -9,8 +7,7 @@ class ChecklistController
 
     public function __construct()
     {
-        global $conexao;
-
+        $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->checklistModel = new ChecklistModel($conexao);
     }
 

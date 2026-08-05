@@ -1,7 +1,12 @@
 <?php
-require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Projeto.php";
+
+namespace Controller;
+
 require_once __DIR__ . "/../Model/ProjetoValidator.php";
+
+use Exception;
+use Model\Projeto;
+use ProjetoValidator;
 
 class ProjetoController
 {
@@ -9,7 +14,7 @@ class ProjetoController
 
     public function __construct()
     {
-        global $conexao;
+        $conexao = require __DIR__ . "/../Model/conexao.php";
         $this->projeto = new Projeto($conexao);
     }
 

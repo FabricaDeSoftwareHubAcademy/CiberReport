@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . "/../Controller/ProjetoController.php";
+use Controller\ProjetoController;
+
 $controller = new ProjetoController();
 $dados = $controller->listar();
 ?>
