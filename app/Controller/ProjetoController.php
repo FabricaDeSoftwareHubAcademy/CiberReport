@@ -3,8 +3,10 @@
 namespace Controller;
 
 require_once __DIR__ . "/../Model/ProjetoValidator.php";
+require_once __DIR__ . "/../Model/EmpresaModel.php";
 
 use Core\Controller;
+use Empresa;
 use Exception;
 use Model\Projeto;
 use ProjetoValidator;
@@ -12,11 +14,13 @@ use ProjetoValidator;
 class ProjetoController extends Controller
 {
     private $projeto;
+    private $empresa;
 
     public function __construct()
     {
         $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->projeto = new Projeto($conexao);
+        $this->empresa = new Empresa($conexao);
     }
 
     public function index()
@@ -27,6 +31,11 @@ class ProjetoController extends Controller
     public function listar()
     {
         return $this->projeto->listarDados();
+    }
+
+    public function listarEmpresasAtivas()
+    {
+        return $this->empresa->listarEmpresasAtivasParaSelecao();
     }
 
     public function cadastrar()

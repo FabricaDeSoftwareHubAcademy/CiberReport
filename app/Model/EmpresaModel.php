@@ -41,6 +41,18 @@ class Empresa
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function listarEmpresasAtivasParaSelecao()
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT id, nome_fantasia, razao_social
+             FROM empresa
+             WHERE habilitado = 1
+             ORDER BY COALESCE(nome_fantasia, razao_social)"
+        );
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function buscarDadosEmpresa($id_empresa)
     {
         $sql = $this->pdo->prepare("SELECT * FROM empresa WHERE id = :id");
