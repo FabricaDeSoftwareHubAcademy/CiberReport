@@ -39,8 +39,6 @@ class ProjetoController extends Controller
                 $dadosLimpos['contrato'] = $caminhoContrato;
             }
 
-            $dadosLimpos['habilitado'] = 1;
-
             if ($this->projeto->cadastrarProjeto($dadosLimpos)) {
                 return "Projeto cadastrado com sucesso!";
             } else {
@@ -60,8 +58,6 @@ class ProjetoController extends Controller
             if ($caminhoContrato !== false) {
                 $dadosLimpos['contrato'] = $caminhoContrato;
             }
-
-            $dadosLimpos['habilitado'] = 1;
 
             if ($this->projeto->editarProjeto($dadosLimpos)) {
                 return "Projeto atualizado com sucesso!";
