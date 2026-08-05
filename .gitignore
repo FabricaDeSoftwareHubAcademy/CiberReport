@@ -2,3 +2,4 @@
 Dockerfile
 docker-compose.yml
 .contexto-ia.md
+banco_dev.sql
