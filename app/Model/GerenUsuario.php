@@ -28,7 +28,7 @@ class GerenUsuario
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function cadastrarUsuario($nome, $telefone, $cpf, $cargo, $especialidade, $email, $perfil_id)
+    public function cadastrarUsuario($nome, $telefone, $cpf, $cargo, $especialidade, $email, $perfil_id, $senha): bool
     {
         $sql = $this->pdo->prepare(
             "INSERT INTO usuario (perfil_id, nome, cpf, email, senha, telefone, cargo, especialidade) 
@@ -37,14 +37,41 @@ class GerenUsuario
         $sql->bindValue(":perfil_id", $perfil_id);
         $sql->bindValue(":nome", $nome);
         $sql->bindValue(":cpf", $cpf);
+        $sql->bindValue(":senha", $senha);
         $sql->bindValue(":email", $email);
         $sql->bindValue(":telefone", $telefone);
         $sql->bindValue(":cargo", $cargo);
         $sql->bindValue(":especialidade", $especialidade);
         $sql->execute();
 
-        return $this->pdo->lastInsertId();
+        return true;
     }
+
+    public function ListarCargo()
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT cargo FROM usuario"
+        );
+
+        $sql->execute();
+
+        return $sql->featchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function ListarCargoPorId($id)
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT cargo FROM usuario WHERE id = :id"
+        );
+
+        $sql->bindValue(":id",$id);
+
+        $sql->execute();
+
+        return $sql->featch(PDO::FETCH_ASSOC);
+    }
+
+    
     
     public function atualizarFotoUsuario($id, $foto)
     {
@@ -53,21 +80,6 @@ class GerenUsuario
         $sql->bindValue(":id", $id);
         $sql->execute();
     }
-
-    public function atualizarDadosEmpresa($nome, $telefone, $cpf, $cargo, $especialidade, $email, $perfil_id)
-    {
-        $sql = $this->pdo->prepare("UPDATE usuario SET nome = :nome, telefone = :telefone, cargo = :cargo, email = :email, cpf = :cpf, responsavel = :responsavel WHERE id = :id");
-        $sql->bindValue(":nome", $nome);
-        $sql->bindValue(":telefone", $telefone);
-        $sql->bindValue(":cpf", $cpf);
-        $sql->bindValue(":cargo", $cargo);
-        $sql->bindValue(":especialidade", $especialidade);
-        $sql->bindValue(":email", $email);
-        $sql->bindValue(":perfil", $perfil_id);
-        $sql->execute();
-        return $this->pdo->lastInsertId();
-    }
-
 
     public function excluirUsuario($id)
     {
