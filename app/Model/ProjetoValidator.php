@@ -2,107 +2,135 @@
 
 class ProjetoValidator
 {
-    public static function processarCadastro(array $dados)
+    public static function processarCadastro(array $dados): array
     {
+        $dados['data_fim_real'] = null;
+        $dados['status'] = 'PLANEJADO';
+
         $dadosLimpos = self::sanitizar($dados);
         self::validarRegras($dadosLimpos);
+
         return $dadosLimpos;
     }
-    private static function sanitizar(array $dados): array
-    {
-        $nome = filter_var($dados['nome'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $empresa_id = filter_var($dados['empresa_id'], FILTER_VALIDATE_INT);
-        $data_inicio = filter_var($dados['data_inicio'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $data_fim_prevista = filter_var($dados['data_fim_prevista'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $data_fim_real = filter_var($dados['data_fim_real'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $horas_contratadas = filter_var($dados['horas_contratadas'] ?? '', FILTER_VALIDATE_FLOAT);
-        $tipo = filter_var($dados['tipo'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $nivel_sigilo = filter_var($dados['nivel_sigilo'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $escopo = filter_var($dados['escopo'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $alvo = filter_var($dados['alvo'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $contrato = filter_var($dados['contrato'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $restricao = filter_var($dados['restricao'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $status = filter_var($dados['status'] ?? 'AGUARDANDO', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        return [
-            'nome' => $nome,
-            'empresa_id' => $empresa_id,
-            'data_inicio' => $data_inicio,
-            'data_fim_prevista' => $data_fim_prevista,
-            'data_fim_real' => $data_fim_real,
-            'horas_contratadas' => $horas_contratadas,
-            'tipo' => $tipo,
-            'nivel_sigilo' => $nivel_sigilo,
-            'escopo' => $escopo,
-            'alvo' => $alvo,
-            'contrato' => $contrato,
-            'restricao' => $restricao,
-            'status' => $status,
-        ];
-    }
-    
-    private static function validarRegras(array $dados_limpo): void
-    {
-        $erros = [];
-
-        if (empty($dados_limpo['nome'])) {
-            $erros[] = 'O nome do projeto é obrigatório.';
-        }
-        if (empty($dados_limpo['empresa_id'])) {
-            $erros[] = 'A empresa é obrigatória.';
-        }
-        if (empty($dados_limpo['horas_contratadas'])) {
-            $erros[] = 'As horas contratadas são obrigatórias.';
-        }
-        if (empty($dados_limpo['tipo'])) {
-            $erros[] = 'O tipo do projeto é obrigatório.';
-        }
-        if (empty($dados_limpo['nivel_sigilo'])) {
-            $erros[] = 'O nível de sigilo é obrigatório.';
-        }
-        if (empty($dados_limpo['escopo'])) {
-            $erros[] = 'O escopo é obrigatório.';
-        }
-        if (empty($dados_limpo['alvo'])) {
-            $erros[] = 'O alvo é obrigatório.';
-        }
-
-        if (count($erros) > 0) {
-            throw new Exception(implode("<br>", $erros));
-        }
-
-        $tipos_permitidos = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
-        $sigilos_permitidos = ['INTERNO', 'EXTERNO'];
-        $status_permitidos = ['AGUARDANDO', 'EM_ANDAMENTO', 'ENCERRADO', 'INATIVADO'];
-
-        if(!in_array($dados_limpo['tipo'], $tipos_permitidos)){
-            $erros[] = 'O tipo do projeto é inválido.';
-        }
-
-        if(!in_array($dados_limpo['nivel_sigilo'], $sigilos_permitidos)){
-            $erros[] = 'O nível de sigilo é inválido.';
-        }
-        
-        if(!in_array($dados_limpo['status'], $status_permitidos)){
-            $erros[] = 'O status do projeto é inválido.';
-        }
-
-        if(count($erros) > 0){
-            throw new Exception(implode("<br>", $erros));
-        }
-    }
-
-    public static function processarEdicao(array $dados)
+    public static function processarEdicao(array $dados): array
     {
         $dadosLimpos = self::sanitizar($dados);
-        self::validarRegras($dadosLimpos);
-        $id = filter_var($dados['id'] ?? NULL, FILTER_VALIDATE_INT);
+        $id = filter_var($dados['id'] ?? null, FILTER_VALIDATE_INT);
 
-        if (!$id){
-            throw new Exception('O ID do projeto é obrigatório para edição');
+        if ($id === false || $id <= 0) {
+            throw new Exception('O ID do projeto é obrigatório para edição.');
         }
+
+        self::validarRegras($dadosLimpos);
         $dadosLimpos['id'] = $id;
 
         return $dadosLimpos;
+    }
+
+    private static function sanitizar(array $dados): array
+    {
+        return [
+            'nome' => trim((string) ($dados['nome'] ?? '')),
+            'empresa_id' => filter_var($dados['empresa_id'] ?? null, FILTER_VALIDATE_INT),
+            'data_inicio' => self::normalizarData($dados['data_inicio'] ?? null, 'início'),
+            'data_fim_prevista' => self::normalizarData($dados['data_fim_prevista'] ?? null, 'fim prevista'),
+            'data_fim_real' => self::normalizarData($dados['data_fim_real'] ?? null, 'fim real'),
+            'horas_contratadas' => filter_var(
+                $dados['horas_contratadas'] ?? null,
+                FILTER_VALIDATE_FLOAT
+            ),
+            'modalidade' => trim((string) ($dados['modalidade'] ?? '')),
+            'nivel_sigilo' => trim((string) ($dados['nivel_sigilo'] ?? '')),
+            'escopo' => trim((string) ($dados['escopo'] ?? '')),
+            'contrato' => trim((string) ($dados['contrato'] ?? '')),
+            'restricao' => trim((string) ($dados['restricao'] ?? '')),
+            'status' => trim((string) ($dados['status'] ?? 'PLANEJADO')),
+        ];
+    }
+
+    private static function normalizarData(mixed $valor, string $campo): ?string
+    {
+        $dataInformada = trim((string) ($valor ?? ''));
+
+        if ($dataInformada === '') {
+            return null;
+        }
+
+        $data = DateTimeImmutable::createFromFormat('!Y-m-d', $dataInformada);
+        $errosData = DateTimeImmutable::getLastErrors();
+        $formatoInvalido = $errosData !== false
+            && ($errosData['warning_count'] > 0 || $errosData['error_count'] > 0);
+
+        if ($data === false || $formatoInvalido || $data->format('Y-m-d') !== $dataInformada) {
+            throw new Exception("A data de {$campo} é inválida.");
+        }
+
+        return $dataInformada;
+    }
+
+    private static function validarRegras(array $dadosLimpos): void
+    {
+        $erros = [];
+
+        if ($dadosLimpos['nome'] === '') {
+            $erros[] = 'O nome do projeto é obrigatório.';
+        }
+
+        if ($dadosLimpos['empresa_id'] === false || $dadosLimpos['empresa_id'] <= 0) {
+            $erros[] = 'A empresa é obrigatória.';
+        }
+
+        if ($dadosLimpos['horas_contratadas'] === false || $dadosLimpos['horas_contratadas'] <= 0) {
+            $erros[] = 'As horas contratadas devem ser maiores que zero.';
+        }
+
+        if ($dadosLimpos['modalidade'] === '') {
+            $erros[] = 'A modalidade do projeto é obrigatória.';
+        }
+
+        if ($dadosLimpos['nivel_sigilo'] === '') {
+            $erros[] = 'O nível de sigilo é obrigatório.';
+        }
+
+        if ($dadosLimpos['escopo'] === '') {
+            $erros[] = 'O escopo é obrigatório.';
+        }
+
+        $modalidadesPermitidas = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
+        $sigilosPermitidos = ['INTERNO', 'EXTERNO'];
+        $statusPermitidos = ['PLANEJADO', 'EM_ANDAMENTO', 'PAUSADO', 'CONCLUIDO', 'CANCELADO'];
+
+        if (!in_array($dadosLimpos['modalidade'], $modalidadesPermitidas, true)) {
+            $erros[] = 'A modalidade do projeto é inválida.';
+        }
+
+        if (!in_array($dadosLimpos['nivel_sigilo'], $sigilosPermitidos, true)) {
+            $erros[] = 'O nível de sigilo é inválido.';
+        }
+
+        if (!in_array($dadosLimpos['status'], $statusPermitidos, true)) {
+            $erros[] = 'O status do projeto é inválido.';
+        }
+
+        if (
+            $dadosLimpos['data_inicio'] !== null
+            && $dadosLimpos['data_fim_prevista'] !== null
+            && $dadosLimpos['data_fim_prevista'] < $dadosLimpos['data_inicio']
+        ) {
+            $erros[] = 'A data de fim prevista não pode ser anterior à data de início.';
+        }
+
+        if (
+            $dadosLimpos['data_inicio'] !== null
+            && $dadosLimpos['data_fim_real'] !== null
+            && $dadosLimpos['data_fim_real'] < $dadosLimpos['data_inicio']
+        ) {
+            $erros[] = 'A data de fim real não pode ser anterior à data de início.';
+        }
+
+        if (count($erros) > 0) {
+            throw new Exception(implode('<br>', $erros));
+        }
     }
 }
