@@ -1,16 +1,25 @@
-<?php 
+<?php
 
-require_once __DIR__ . "/../Model/conexao.php";
+namespace Controller;
+
+use Core\Controller;
+use GerenciarAcesso;
+
 require_once __DIR__ . "/../Model/GerenciarAcesso.php";
 
-class gerenciarAcessoController
+class GerenciarAcessoController extends Controller
 {
     private $gerenciarAcesso;
 
     public function __construct()
     {
-        global $conexao;
+        $conexao = require __DIR__ . "/../Model/conexao.php";
         $this->gerenciarAcesso = new GerenciarAcesso($conexao);
+    }
+
+    public function index()
+    {
+        $this->view('gerenciamento_acesso');
     }
 
     public function listar()

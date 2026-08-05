@@ -54,14 +54,14 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <div class="tooltip-item"><span>Dashboard</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('cliente_empresa.php') ?>">
-                    <a href="<?= BASE_URL ?>cliente_empresa.php" class="margin-lef">
+                    <a href="<?= BASE_URL ?>cliente-empresa" class="margin-lef">
                         <i class="fa-solid fa-address-book"></i>
                         <span class="item_description">Clientes</span>
                     </a>
                     <div class="tooltip-item"><span>Clientes</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('gerenciamento_projeto.php') ?>">
-                    <a href="<?= BASE_URL ?>gerenciamento_projeto.php">
+                    <a href="<?= BASE_URL ?>gerenciamento-projeto">
                         <i class="fa-solid fa-terminal"></i>
                         <span class="item_description">Projetos</span>
                     </a>
@@ -76,14 +76,14 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <div class="tooltip-item"><span>Pentest</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('checklist.php') ?>">
-                    <a href="<?= BASE_URL ?>checklist.php">
+                    <a href="<?= BASE_URL ?>checklist">
                         <i class="fa-solid fa-list-check"></i>
                         <span class="item_description">Checklist</span>
                     </a>
                     <div class="tooltip-item"><span>Checklist</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('vulnerabilidades.php') ?>">
-                    <a href="<?= BASE_URL ?>vulnerabilidades.php">
+                    <a href="<?= BASE_URL ?>vulnerabilidades">
                         <i class="fa-solid fa-bug"></i>
                         <span class="item_description">Vulnerabilidades</span>
                     </a>
@@ -97,14 +97,14 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <div class="tooltip-item"><span>Conhecimento</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('usuario.php') ?>">
-                    <a href="<?= BASE_URL ?>usuario.php" class="margin-lef">
+                    <a href="<?= BASE_URL ?>usuario" class="margin-lef">
                         <i class="fa-solid fa-users"></i>
                         <span class="item_description">Usuários</span>
                     </a>
                     <div class="tooltip-item"><span>Usuários</span></div>
                 </li>
                 <li class="side_item<?= $itemMenuAtivo('gerenciamento_acesso.php') ?>">
-                    <a href="<?= BASE_URL ?>gerenciamento_acesso.php">
+                    <a href="<?= BASE_URL ?>gerenciamento-acesso">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>

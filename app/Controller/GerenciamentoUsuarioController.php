@@ -11,14 +11,14 @@ class GerenciamentoUsuarioController extends Controller
 
     public function __construct()
     {
-        global $conexao;
-        
+        $conexao = require __DIR__ . '/../Model/conexao.php';
+
         $this->usuario = new GerenUsuario($conexao);
     }
 
      public function index()
     {
-        $this->view('usuario.php');
+        $this->view('usuario');
     }
 
     public function listar()

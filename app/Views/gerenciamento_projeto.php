@@ -12,11 +12,11 @@ $dados = $controller->listar();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Projetos</title>
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/gerenciamento-projeto.css">
-    <script src="../assets/JS/componentes/tabela.js" defer></script>
-    <script src="../assets/JS/componentes/modal.js" defer></script>
-    <script src="../assets/JS/barraDePesquisa.js" defer></script>
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/gerenciamento-projeto.css">
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js" defer></script>
 </head>
 
 <body class="corpo-ger-projetos">
@@ -26,7 +26,7 @@ $dados = $controller->listar();
     ?>
     <main class="main-gerenciamento-projeto">
         <div class="group-btn-projeto">
-            <button class="btn-novo-cadastro btn-projeto" data-modal-target="modal-cadastro-projeto"><span>+</span>Novo Projeto</button>
+            <button class="btn-novo-cadastro" data-modal-target="modal-cadastro-projeto"><i class="fa-solid fa-plus"></i>Novo Projeto</button>
         </div>
 
         <div class="group-card-tabela">

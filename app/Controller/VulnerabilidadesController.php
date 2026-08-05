@@ -1,15 +1,25 @@
 <?php
-require_once __DIR__ . "/../Model/conexao.php";
+
+namespace Controller;
+
+use Core\Controller;
+use Vulnerabilidades;
+
 require_once __DIR__ . "/../Model/Database/VulnerabilidadesModel.php";
 
-class VulnerabilidadesController
+class VulnerabilidadesController extends Controller
 {
     private $Vulnerabilidades;
 
     public function __construct()
     {
-        global $conexao;
+        $conexao = require __DIR__ . "/../Model/conexao.php";
         $this->Vulnerabilidades = new Vulnerabilidades($conexao);
+    }
+
+    public function index()
+    {
+        $this->view('vulnerabilidades');
     }
 
     public function listar()

@@ -1,6 +1,8 @@
 <?php
 
-require_once '../Controller/ChecklistController.php';
+use Controller\ChecklistController;
+
+require_once __DIR__ . '/../Controller/ChecklistController.php';
 
 $controllerChecklist = new ChecklistController();
 $erroFormularioChecklist = '';
@@ -117,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($resultadoChecklist) {
             $tipoSucessoChecklist = $criandoChecklist ? 'criado' : 'atualizado';
-            header("Location: checklist.php?sucesso={$tipoSucessoChecklist}");
+            header("Location: " . BASE_URL . "checklist?sucesso={$tipoSucessoChecklist}");
             exit;
         }
 
@@ -129,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if (isset($_GET['excluir'])) {
     $controllerChecklist->excluirChecklist((int) $_GET['excluir']);
-    header('Location: checklist.php');
+    header('Location: ' . BASE_URL . 'checklist');
     exit;
 }
 
@@ -167,8 +169,8 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/checklist.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/checklist.css">
 
     <title>Cadastro de Checklist</title>
 </head>
@@ -187,8 +189,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                 class="btn-novo-cadastro"
                 data-modal-target="checklist-modal-formulario"
                 onclick="limparFormularioChecklist()">
-                <i class="fa-solid fa-plus"></i>
-                <span class="texto">Novo Checklist</span>
+                <i class="fa-solid fa-plus"></i>Novo Checklist
             </button>
         </div>
 
@@ -283,6 +284,17 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                         onclick="editarChecklist(<?= (int) $checklist['id'] ?>)">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
+
+                                    <a
+                                        href="<?= BASE_URL ?>checklist?excluir=<?= (int) $checklist['id'] ?>"
+                                        class="tabela-btn-excluir"
+                                        title="Excluir"
+                                        aria-label="Excluir checklist"
+                                        data-modal-target="popupExcluir"
+                                        data-popup-href="<?= BASE_URL ?>checklist?excluir=<?= (int) $checklist['id'] ?>"
+                                        onclick="return false;">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -311,7 +323,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
             <div class="modal modal--xxl">
                 <div class="modal__header">
                     <div class="modal__header-icone">
-                        <img src="../assets/img/Icon_Checklist.png" alt="Cadastro de Checklist">
+                        <img src="<?= BASE_URL ?>app/assets/img/Icon_Checklist.png" alt="Cadastro de Checklist">
                     </div>
 
                     <div class="modal__header-texto">
@@ -334,7 +346,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
 
                 <form
                     method="POST"
-                    action="checklist.php"
+                    action="<?= BASE_URL ?>checklist"
                     class="checklist-formulario"
                     id="checklist-formulario">
                     <input type="hidden" name="id" id="checklist-id">
@@ -761,6 +773,9 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
             </div>
         </div>
 
+        <?php include 'Components/popup_excluir.php'; ?>
+        <?php include 'Components/toast.php'; ?>
+        
         <div class="modal-overlay" id="checklist-modal-item-visualizar">
             <div class="modal modal--lg">
                 <div class="modal__header">
@@ -839,6 +854,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     </main>
 
     <script>
+        window.baseUrl = <?= json_encode(BASE_URL) ?>;
         window.categoriasChecklist = <?= json_encode(
                                             $categoriasChecklist,
                                             $jsonSeguroChecklist
@@ -864,10 +880,12 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                                                 $jsonSeguroChecklist
                                             ) ?>;
     </script>
-    <script src="../assets/JS/componentes/modal.js"></script>
-    <script src="../assets/JS/componentes/tabela.js"></script>
-    <script src="../assets/JS/checklist.js"></script>
-    <script src="../assets/JS/barraDePesquisa.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/checklist.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js"></script>
     <?php if ($erroFormularioChecklist !== ''): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -882,11 +900,11 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 window.notificarChecklist(window.mensagemSucessoChecklist, 'sucesso');
-                history.replaceState(null, '', 'checklist.php');
+                history.replaceState(null, '', window.baseUrl + 'checklist');
             });
         </script>
     <?php endif; ?>
-    
+
 </body>
 
 </html>

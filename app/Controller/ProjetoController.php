@@ -4,18 +4,24 @@ namespace Controller;
 
 require_once __DIR__ . "/../Model/ProjetoValidator.php";
 
+use Core\Controller;
 use Exception;
 use Model\Projeto;
 use ProjetoValidator;
 
-class ProjetoController
+class ProjetoController extends Controller
 {
     private $projeto;
 
     public function __construct()
     {
-        $conexao = require __DIR__ . "/../Model/conexao.php";
+        $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->projeto = new Projeto($conexao);
+    }
+
+    public function index()
+    {
+        $this->view('gerenciamento_projeto');
     }
 
     public function listar()

@@ -1,17 +1,19 @@
 <?php
-require_once "../Controller/GerenciarAcessoController.php";
+use Controller\GerenciarAcessoController;
+
+require_once __DIR__ . "/../Controller/GerenciarAcessoController.php";
 
 $controller = new GerenciarAcessoController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
     $controller->cadastrar();
-    header("Location: gerenciamento_perfis.php");
+    header("Location: " . BASE_URL . "gerenciamento-acesso");
     exit;
 }
 
 if (isset($_GET['excluir'])) {
     $controller->excluir($_GET['excluir']);
-    header("Location: gerenciamento_perfis.php");
+    header("Location: " . BASE_URL . "gerenciamento-acesso");
     exit;
 }
 
@@ -32,9 +34,9 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
-    <link rel="stylesheet" href="../assets/CSS/Componentes/gerenciamento-acesso.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/button.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/gerenciamento-acesso.css">
 </head>
 
 <body>
@@ -80,7 +82,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                     <a
-                                        href="gerenciamento_perfis.php?excluir=<?= $perfis['id'] ?>"
+                                        href="<?= BASE_URL ?>gerenciamento-acesso?excluir=<?= $perfis['id'] ?>"
                                         class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir"
@@ -120,7 +122,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                     <button class="modal__fechar" data-modal-close="modalNovoPerfil" type="button">X</button>
                 </div>
 
-                <form class="modal__body" method="post" action="gerenciamento_perfis.php" id="formPerfil">
+                <form class="modal__body" method="post" action="<?= BASE_URL ?>gerenciamento-acesso" id="formPerfil">
                     <input type="hidden" name="id" id="perfil-id" value="">
 
                     <div class="form-step form-step-active">
@@ -397,9 +399,9 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
             </div>
         </div>
     </main>
-    <script src="../assets/JS/barraDePesquisa.js"></script>                                       
-    <script src="../Assets/JS/componentes/tabela.js"></script>
-    <script src="../assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
 </body>
 
 </html>

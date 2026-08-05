@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vulnerabilidades</title>
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/vulnerabilidades.css" />
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/button.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/vulnerabilidades.css" />
     <style>
         .campo__label .obrigatorio {
             color: #e53935;
@@ -22,8 +22,7 @@
     <main>
         <div class="barra-acoes">
             <button class="btn-novo-cadastro" data-modal-target="modalVulnerabilidade">
-                <i class="fa-solid fa-square-plus"></i>
-                Nova Vulnerabilidade
+                <i class="fa-solid fa-plus"></i>Nova Vulnerabilidade
             </button>
         </div>
  
@@ -334,9 +333,9 @@
         </div>
     </main>
  
-    <script src="../assets/JS/componentes/tabela.js"></script>
-    <script src="../assets/JS/componentes/modal.js"></script>
-    <script src="app/JS/Vulnerabilidades.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/Vulnerabilidades.js"></script>
 </body>
  
 </html>
