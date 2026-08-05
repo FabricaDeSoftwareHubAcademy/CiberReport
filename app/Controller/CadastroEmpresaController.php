@@ -7,7 +7,7 @@ use Empresa;
 use Endereco;
 
 require_once __DIR__ . "/../Model/EmpresaModel.php";
-require_once __DIR__ . "/../Model/EnderecoModel.php";
+require_once __DIR__ . "/../Model/Database/EnderecoModel.php";
 
 
 
