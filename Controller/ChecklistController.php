@@ -19,6 +19,11 @@ class ChecklistController
         return $this->checklistModel->listarChecklist();
     }
 
+    public function listarChecklistAtivos(): array
+    {
+        return $this->checklistModel->listarChecklistAtivos();
+    }
+
     public function cadastrarChecklist(): int|false
     {
         $dadosChecklist = $this->obterDadosChecklist();

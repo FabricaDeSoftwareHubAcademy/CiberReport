@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once __DIR__ . "/../Model/conexao.php";
 require_once __DIR__ . "/../Model/Database/gerenciamento_perfil.php";
 
@@ -73,7 +73,7 @@ class GerenciamentoUsuarioController
 
         return false;
     }
-    
+
     public function excluir($id)
     {
         $this->usuario->excluirUsuario((int) $id);
@@ -84,6 +84,3 @@ class GerenciamentoUsuarioController
         $this->usuario->alterarStatusUsuario((int) $id, (int) $status);
     }
 }
-
-
-?>

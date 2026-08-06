@@ -1,7 +1,7 @@
 <?php
-require_once "../Controller/GerenciarPerfilController.php";
+require_once "../Controller/GerenciarAcessoController.php";
 
-$controller = new GerenciarPerfilController();
+$controller = new GerenciarAcessoController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
     $controller->cadastrar();
@@ -12,14 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
 if (isset($_GET['excluir'])) {
     $controller->excluir($_GET['excluir']);
     header("Location: gerenciamento_perfis.php");
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'alterarHabilitado') {
-    $id         = (int) ($_POST['id'] ?? 0);
-    $habilitado = (int) ($_POST['habilitado'] ?? 0);
-    $controller->alterarStatus($id, $habilitado);
-    echo json_encode(['ok' => true]);
     exit;
 }
 
@@ -131,7 +123,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                 <form class="modal__body" method="post" action="gerenciamento_perfis.php" id="formPerfil">
                     <input type="hidden" name="id" id="perfil-id" value="">
 
-                    <div class="form-step">
+                    <div class="form-step form-step-active">
                         <div class="modal-grade">
                             <div class="campo">
                                 <label class="campo__label" for="nome">Nome do perfil</label>
@@ -408,8 +400,6 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
 
     <script src="../Assets/JS/componentes/tabela.js"></script>
     <script src="../assets/JS/componentes/modal.js"></script>
-    <script src="../assets/JS/componentes/menuNIvel.js"></script>
-    <script src="../assets/JS/gerenciarPentest.js"></script>
 </body>
 
 </html>

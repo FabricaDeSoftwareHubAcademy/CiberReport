@@ -46,10 +46,14 @@
 .clientes-toggle-label {
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-secundario);
-    min-width: 42px;
 }
 
 
-
+.modal__footer-cliente{
+    border-top: none !important;
+}
+.modal__footer-cliente-edicao{
+    border-top: none !important;
+}
 
 

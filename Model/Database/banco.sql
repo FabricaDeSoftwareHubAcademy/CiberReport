@@ -79,23 +79,9 @@ CREATE TABLE IF NOT EXISTS checklist_item (
   PRIMARY KEY (id)
   -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
 );
-CREATE TABLE IF NOT EXISTS modelo_pentest (
-  id INT NOT NULL AUTO_INCREMENT,
-  checklist_id INT NOT NULL,
-  nome VARCHAR(255) NOT NULL,
-  categoria VARCHAR(80) NOT NULL,
-  metodologia VARCHAR(80) NOT NULL,
-  framework VARCHAR(80) NOT NULL,
-  nv_risco ENUM('BAIXO', 'MEDIO', 'ALTO', 'CRITICO') NOT NULL,
-  descricao TEXT,
-  habilitado TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (id)
-  -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
-);
 CREATE TABLE IF NOT EXISTS projeto (
   id INT NOT NULL AUTO_INCREMENT,
   empresa_id INT NOT NULL,
-  modelo_pentest_id INT NOT NULL,
   nome VARCHAR(80) NOT NULL,
   data_inicio DATE DEFAULT NULL,
   data_fim_prevista DATE DEFAULT NULL,
@@ -110,8 +96,18 @@ CREATE TABLE IF NOT EXISTS projeto (
   restricao TEXT,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
-  -- FOREIGN KEY (empresa_id) REFERENCES empresa(id),
-  -- FOREIGN KEY (modelo_pentest_id) REFERENCES modelo_pentest(id)
+  -- FOREIGN KEY (empresa_id) REFERENCES empresa(id)
+);
+
+-- Liga um projeto a um ou mais tipos de pentest (N:N).
+-- Matheus Kill: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
+CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
+  projeto_id INT NOT NULL,
+  tipo_pentest_id INT NOT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (projeto_id, tipo_pentest_id)
+  -- FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  -- FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id)
 );
 CREATE TABLE IF NOT EXISTS projeto_usuario (
   projeto_id INT NOT NULL,
@@ -146,7 +142,7 @@ CREATE TABLE IF NOT EXISTS cronometro_log (
   PRIMARY KEY (id)
   -- FOREIGN KEY (cronometro_id) REFERENCES cronometro_registro(id),
   -- FOREIGN KEY (ip_analista) REFERENCES cronometro_registro(ip_analista),
-  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo), 
+  -- FOREIGN KEY (ip_alvo) REFERENCES cronometro_registro(ip_alvo),
   -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
@@ -188,7 +184,7 @@ CREATE TABLE IF NOT EXISTS banco_conhecimento (
   -- FOREIGN KEY (vulnerabilidade_id) REFERENCES vulnerabilidade(id)
 );
 
-CREATE TABLE pentest_tipos (
+CREATE TABLE IF NOT EXISTS pentest_tipos (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     nome              VARCHAR(255) NOT NULL,
     descricao_breve   VARCHAR(500),
@@ -203,7 +199,50 @@ CREATE TABLE pentest_tipos (
     habilitado        TINYINT NOT NULL DEFAULT 1
 );
 
-ALTER TABLE checklist
+CREATE TABLE IF NOT EXISTS categoria_pentest (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(80) NOT NULL UNIQUE,
+  descricao VARCHAR(255) DEFAULT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS framework (
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(80) NOT NULL UNIQUE,
+  descricao VARCHAR(255) DEFAULT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS tipo_pentest (
+  id INT NOT NULL AUTO_INCREMENT,
+  categoria_id INT NOT NULL,
+  nome VARCHAR(150) NOT NULL,
+  descricao_breve VARCHAR(500) DEFAULT NULL,
+  descricao_completa TEXT,
+  tecnica ENUM('MANUAL', 'SEMI_AUTOMATIZADA', 'AUTOMATIZADA', 'HIBRIDA') NOT NULL,
+  nv_risco_padrao ENUM('BAIXO', 'MEDIO', 'ALTO', 'CRITICO') NOT NULL,
+  nivel_profundidade ENUM('BASIC', 'INTERMEDIATE', 'ADVANCED', 'RED_TEAM') NOT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_tipo_pentest_nome (nome)
+  -- FOREIGN KEY (categoria_id) REFERENCES categoria_pentest(id)
+);
+CREATE TABLE IF NOT EXISTS tipo_pentest_framework (
+  tipo_pentest_id INT NOT NULL,
+  framework_id INT NOT NULL,
+  PRIMARY KEY (tipo_pentest_id, framework_id)
+  -- FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id),
+  -- FOREIGN KEY (framework_id) REFERENCES framework(id)
+);
+CREATE TABLE IF NOT EXISTS tipo_pentest_checklist (
+  tipo_pentest_id INT NOT NULL,
+  checklist_id INT NOT NULL,
+  PRIMARY KEY (tipo_pentest_id, checklist_id)
+  -- FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id),
+  -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
+);
+
+ALTER TABLE  checklist
 MODIFY COLUMN descricao VARCHAR(1000) DEFAULT NULL;
 
 CREATE TABLE IF NOT EXISTS checklist_item_catalogo (
@@ -220,4 +259,11 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   checklist_id INT NOT NULL,
   item_id INT NOT NULL,
   PRIMARY KEY (id)
+);
+
+ALTER TABLE empresa
+ADD(
+  email_responsavel VARCHAR(255) NOT NULL,
+  cpf_responsavel CHAR(11) NOT NULL,
+  telefone_responsavel VARCHAR(20) NOT NULL
 );
