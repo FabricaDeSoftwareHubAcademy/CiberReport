@@ -54,7 +54,7 @@ $usuarios = $controller->listar();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/gerenciamento_usuario.css">
+    <link rel="stylesheet" href="../assets/CSS/Pages/gerenciar_usuario.css">
     <title>Gerenciamento de Usuário</title>
 </head>
 
@@ -233,7 +233,7 @@ $usuarios = $controller->listar();
                             </div>
                         </div>
                     </div>
-                    <footer>
+                    <footer class="modal__footer">
                         <button type="button" class="btn-cancelar" data-modal-close data-botao-passo="cancelar">Cancelar</button>
                         <button type="submit" class="btn-botao-verde" data-botao-passo="salvar">Salvar</button>
                     </footer>
