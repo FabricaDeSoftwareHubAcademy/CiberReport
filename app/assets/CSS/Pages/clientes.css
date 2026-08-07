@@ -1,0 +1,59 @@
+@import url('../reset.css');
+@import url('../style.css');
+
+
+.main-content {
+    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.button-cadastro {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--espaco-md);
+}
+
+
+
+.modal-clientes-msg-erro {
+    width: 100%;
+    color: #d32f2f;
+    font-size: var(--fonte-legenda);
+    margin-bottom: var(--espaco-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+}
+
+
+
+.modal-grade--4 > * {
+    flex: 1 1 calc(25% - var(--espaco-md));
+}
+
+
+.clientes-status-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+} 
+
+.clientes-status-cell input:checked ~ .clientes-toggle-label {
+    color: var(--cor-texto-primario);
+}
+
+.clientes-toggle-label {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+}
+
+
+.modal__footer-cliente{
+    border-top: none !important;
+}
+.modal__footer-cliente-edicao{
+    border-top: none !important;
+}
+
+

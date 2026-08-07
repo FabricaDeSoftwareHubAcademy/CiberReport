@@ -1,0 +1,203 @@
+campo__label--obrigatorio::after {
+    content: " *";
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+.barra-acoes {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--espaco-md);
+}
+
+.cards-resumo {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.card-resumo {
+    background: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.card-resumo:hover {
+    border-color: #008cff;
+    box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.1);
+}
+
+.card-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2f2f2f;
+}
+
+.card-valor {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card-valor.critica {
+    color: #e74c3c;
+}
+.card-valor.alta {
+    color: #e67e22;
+}
+.card-valor.media {
+    color: #d4ac0d;
+}
+.card-valor.baixa {
+    color: #27ae60;
+}
+
+.id-cell {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.folder-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.folder-icon.critica-bg {
+    background: #fdecea;
+    color: #e74c3c;
+}
+.folder-icon.media-bg {
+    background: #fef9e7;
+    color: #d4ac0d;
+}
+
+.id-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.id-num {
+    font-weight: 600;
+    color: #1d1d1d;
+    font-size: 13px;
+}
+
+.contrib {
+    font-size: 11px;
+    color: #999;
+}
+
+.avatares {
+    display: flex;
+    margin-top: 3px;
+}
+
+.avatares img {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    margin-right: -4px;
+    object-fit: cover;
+}
+
+.ativo-link {
+    color: #008cff;
+    font-size: 12px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.resumo-texto {
+    color: #666;
+    font-size: 12px;
+    max-width: 140px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-critica {
+    color: #e74c3c;
+    background: #fdecea;
+}
+.badge-alta {
+    color: #e67e22;
+    background: #fef5ec;
+}
+.badge-media {
+    color: #d4ac0d;
+    background: #fef9e7;
+}
+.badge-baixa {
+    color: #27ae60;
+    background: #eafaf1;
+}
+
+.cvss {
+    font-weight: 700;
+    color: #1d1d1d;
+}
+
+@media (max-width: 900px) {
+    .header {
+        padding: 15px 20px;
+    }
+
+    .titulo-pagina {
+        font-size: 22px;
+    }
+
+    .cards-resumo {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px 0;
+    }
+
+    .tabela-wrapper {
+        padding: 0 0 20px;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-right: 20px;
+    }
+
+    .titulo-pagina {
+        font-size: 18px;
+    }
+
+    .cards-resumo {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 16px 0;
+    }
+
+    .tabela-wrapper {
+        padding: 0 0 16px;
+    }
+}

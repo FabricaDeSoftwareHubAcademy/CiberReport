@@ -1,0 +1,90 @@
+/* =============================================================================
+   POPUP DE ALERTA / CONFIRMAÇÃO
+   Reaproveita o overlay do modal (.modal-overlay) e adiciona um cartão
+   centralizado próprio, sem cabeçalho, para confirmações rápidas
+   (excluir, inativar, reativar, salvar, etc.).
+
+   HTML esperado:
+   <div class="modal-overlay popup-alerta-overlay" id="popupID">
+       <div class="popup-alerta">
+           <div class="popup-alerta__icone popup-alerta__icone--perigo">
+               <i class="fa-solid fa-trash"></i>
+           </div>
+           <h2 class="popup-alerta__titulo">Confirmar Exclusão</h2>
+           <p class="popup-alerta__texto">Texto de apoio...</p>
+           <div class="popup-alerta__acoes">
+               <button class="btn-cancelar" data-modal-close>Não, voltar</button>
+               <a class="btn-vermelho" data-popup-confirmar>Sim, Excluir</a>
+           </div>
+       </div>
+   </div>
+   ============================================================================= */
+.popup-alerta-overlay {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.popup-alerta {
+    position: relative;
+    background-color: var(--cor-fundo-branco);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-2xl), 0 0 0 1px rgb(0 0 0 / 0.03);
+    width: 400px;
+    max-width: 95vw;
+    padding: var(--espaco-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--espaco-sm);
+    animation: modal-entrar var(--transicao-base) ease both;
+}
+
+.popup-alerta__icone {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--raio-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: var(--espaco-sm);
+}
+
+.popup-alerta__icone--perigo {
+    background-color: var(--cor-vermelho-secundario);
+    color: var(--cor-vermelho-destaque);
+}
+
+.popup-alerta__icone--sucesso {
+    background-color: var(--cor-verde-secundario);
+    color: var(--cor-verde);
+}
+
+.popup-alerta__titulo {
+    font-size: var(--fonte-subsecao);
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+    margin: 0;
+}
+
+.popup-alerta__texto {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+    margin: 0;
+}
+
+.popup-alerta__acoes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-md);
+    margin-top: var(--espaco-md);
+}
+
+.popup-alerta__acoes .btn-cancelar,
+.popup-alerta__acoes .btn-vermelho,
+.popup-alerta__acoes .btn-botao-verde {
+    min-width: 110px;
+}
