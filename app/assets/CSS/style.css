@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css");
 @import url("reset.css");
 @import url("Componentes/menuNIvel.css");
@@ -16,6 +16,8 @@
 html {
     /* Definindo dessa forma, fica facil trabalhar com rem. 1.6rem = 16px  1rem = 10px */
     font-size: 62.5%;
+    height: 100%;
+    overflow: hidden;
 }
 
 :root {
@@ -66,8 +68,8 @@ html {
     --cor-borda-sucesso: #43b75d;
 
     /* --- Tipografia — famílias --- */
-    --fonte-familia-titulo: "Poppins", sans-serif;
-    --fonte-familia-corpo: "Poppins", sans-serif;
+    --fonte-familia-titulo: "Chakra Petch", sans-serif;
+    --fonte-familia-corpo: "Work Sans", sans-serif;
 
     /* --- Tipografia — tamanhos --- */
     --fonte-titulo: 3.4rem;
@@ -128,7 +130,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 h1,
@@ -150,4 +153,5 @@ h6 {
 
 .main-content > main {
     padding: var(--espaco-xl);
+    padding-top: var(--espaco-md);
 }
