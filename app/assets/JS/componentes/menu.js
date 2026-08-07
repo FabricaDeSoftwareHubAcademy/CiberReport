@@ -1,4 +1,6 @@
 const sideBar = document.getElementById('sideBar');
+const sobrePerfil = document.getElementById('sobrePerfil');
+const imagemUsuario = document.querySelector('.imagem-usuario');
 const dropdown = document.getElementById('dropdown');
 const pesquisaMobileBtn = document.querySelector('.pesquisa-mobile button');
 const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
@@ -42,6 +44,19 @@ overlayPesquisa.addEventListener('click', (e) => {
     if (!e.target.closest('.barra-pesquisa')) {
         overlayPesquisa.classList.remove('active');
     }
+});
+
+imagemUsuario.addEventListener('click', (evento) => {
+    evento.stopPropagation();
+    sobrePerfil.classList.toggle('active');
+});
+
+sobrePerfil.addEventListener('mouseleave', () => {
+    sobrePerfil.classList.remove('active');
+});
+
+document.addEventListener('click', () => {
+    sobrePerfil.classList.remove('active');
 });
 
 // Fecha a pesquisa ao sair da largura mobile

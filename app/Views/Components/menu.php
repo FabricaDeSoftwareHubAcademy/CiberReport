@@ -170,6 +170,16 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
             <div class="perfis">
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="<?= BASE_URL ?>app/assets/img/foto-perfil.jpg" alt="" />
+                <div id="sobrePerfil">
+                    <div class="sobre-perfil__dados">
+                        <strong><?= htmlspecialchars($nomeUsuario) ?></strong>
+                        <span>Gerente</span>
+                    </div>
+                    <button type="button" class="sobre-perfil__editar">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                        Editar Perfil
+                    </button>
+                </div>
                 <div class="description-user">
                     <p><?= $nomeUsuario ?></p>
                     <p>Gerente</p>

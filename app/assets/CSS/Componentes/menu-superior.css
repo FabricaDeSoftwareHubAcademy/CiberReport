@@ -28,17 +28,77 @@
 }
 .perfis {
     display: flex;
+    position: relative;
     align-items: center;
     gap: 20px;
     text-align: center;
 }
 
+#sobrePerfil {
+    position: absolute;
+    display: none;
+    top: 0;
+    right: var(--espaco-md);
+    z-index: 100;
+    width: 240px;
+    padding-top: 55px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+#sobrePerfil.active {
+    display: block;
+}
+
+.sobre-perfil__dados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 15px 20px;
+}
+
+.sobre-perfil__dados strong {
+    font-size: var(--fonte-texto);
+}
+
+.sobre-perfil__dados span {
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+}
+
+.sobre-perfil__editar {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-sm);
+    padding: var(--espaco-md);
+    border: 0;
+    border-top: 1px solid var(--cor-borda-padrao);
+    background-color: transparent;
+    color: var(--cor-azul-destaques);
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sobre-perfil__editar:hover {
+    background-color: #f3f4f6;
+    border-radius: 0px 0px 8px 8px;
+}
+
 .imagem-usuario {
+    position: relative;
+    z-index: 101;
+    cursor: pointer;
     height: 70px;
     width: 70px;
     object-fit: cover;
     border-radius: 50%;
 }
+
 
 .notificacao {
     display: flex;
@@ -236,6 +296,8 @@
     transform: scale(0.92);
 }
 
+
+
 @media (max-width: 1016px) {
     #menu-superior {
         width: 100vw;
@@ -261,7 +323,11 @@
         gap: 0;
     }
 
-    .perfis img {
+    #sobrePerfil {
+        right: 0;
+    }
+
+    .perfis > .imagem-usuario {
         height: 50px;
         width: 50px;
     }
