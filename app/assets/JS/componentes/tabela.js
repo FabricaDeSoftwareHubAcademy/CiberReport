@@ -87,9 +87,16 @@
     label.textContent = 'Linhas por página:';
     label.setAttribute('for', 'itens-por-pagina-select');
 
+    const seletorWrapper = document.createElement('div');
+    seletorWrapper.className = 'itens-por-pagina__select-wrapper';
+
     const select = document.createElement('select');
     select.className = 'itens-por-pagina__select';
     select.id = 'itens-por-pagina-select';
+
+    const seta = document.createElement('i');
+    seta.className = 'fa-solid fa-chevron-down itens-por-pagina__seta';
+    seta.setAttribute('aria-hidden', 'true');
 
     const opcoesExibidas = OPCOES_LINHAS_POR_PAGINA.includes(linhasPorPagina)
       ? OPCOES_LINHAS_POR_PAGINA
@@ -151,8 +158,11 @@
     });
     inputCustom.addEventListener('blur', aplicarValorCustom);
 
+    seletorWrapper.appendChild(select);
+    seletorWrapper.appendChild(seta);
+
     containerItensPorPagina.appendChild(label);
-    containerItensPorPagina.appendChild(select);
+    containerItensPorPagina.appendChild(seletorWrapper);
     containerItensPorPagina.appendChild(inputCustom);
   }
 

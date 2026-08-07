@@ -3,6 +3,30 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    max-height: calc(100vh - var(--altura-menu-superior) - 12rem);
+    overflow-y: auto;
+    border-radius: var(--raio-md);
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-cinza-secundario) transparent;
+}
+
+.tabela-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tabela-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+    margin: var(--raio-md);
+}
+
+.tabela-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--cor-cinza-secundario);
+    border-radius: var(--raio-full);
+}
+
+.tabela-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cor-texto-secundario);
 }
 
 .tabela-wrapper table {
@@ -12,8 +36,8 @@
     border-spacing: 0;
     background-color: var(--cor-fundo-branco);
     border: 1px solid var(--cor-borda-padrao);
+    border-top: none;
     border-radius: var(--raio-md);
-    overflow: hidden;
     font-size: var(--fonte-apoio);
     color: var(--cor-texto-primario);
 }
@@ -26,12 +50,16 @@
     border-bottom: 1px solid var(--cor-borda-padrao);
 }
 
-.tabela-wrapper th {
+.tabela-wrapper thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background-color: var(--cor-azul-primaria);
     color: var(--cor-branco-primario);
     font-weight: 500;
     font-size: var(--fonte-apoio);
     white-space: nowrap;
+    border-bottom: none;
 }
 
 .tabela-wrapper .th-label {
@@ -323,10 +351,16 @@
 }
 
 .tabela-wrapper tfoot td.rodape-tabela {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
     background-color: var(--cor-azul-primaria);
     color: var(--cor-branco-primario);
     padding: var(--espaco-sm) var(--espaco-md);
     border-bottom: none;
+    border-bottom-left-radius: var(--raio-md);
+    border-bottom-right-radius: var(--raio-md);
+    box-shadow: 0 -1px 0 var(--cor-azul-primaria);
 }
 
 .tabela-wrapper .rodape-tabela-conteudo {
@@ -366,26 +400,61 @@
     color: var(--cor-branco-primario);
 }
 
+.tabela-wrapper .itens-por-pagina__select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
 .tabela-wrapper .itens-por-pagina__select {
+    appearance: none;
+    -webkit-appearance: none;
     background-color: var(--cor-fundo-branco);
     color: var(--cor-texto-primario);
-    border: none;
+    border: 1px solid transparent;
     border-radius: var(--raio-sm);
     font-size: var(--fonte-apoio);
     font-family: inherit;
-    padding: var(--espaco-xs) var(--espaco-sm);
+    min-height: 2.6rem;
+    box-sizing: border-box;
+    padding: var(--espaco-xs) var(--espaco-xs) var(--espaco-xs) var(--espaco-xs);
     cursor: pointer;
+    outline: none;
+    transition: box-shadow var(--transicao-rapida), border-color var(--transicao-rapida);
+}
+
+.tabela-wrapper .itens-por-pagina__select:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+
+
+.tabela-wrapper .itens-por-pagina__seta {
+    position: absolute;
+    right: 0.6rem;
+    pointer-events: none;
+    color: var(--cor-texto-secundario);
+    font-size: 0.85rem;
 }
 
 .tabela-wrapper .itens-por-pagina__input {
     width: 4.5rem;
+    min-height: 2.6rem;
     background-color: var(--cor-fundo-branco);
     color: var(--cor-texto-primario);
-    border: none;
+    border: 1px solid transparent;
     border-radius: var(--raio-sm);
     font-size: var(--fonte-apoio);
     font-family: inherit;
-    padding: var(--espaco-xs) var(--espaco-sm);
+    padding: var(--espaco-xs) var(--espaco-xs);
+    box-sizing: border-box;
+    outline: none;
+    transition: box-shadow var(--transicao-rapida), border-color var(--transicao-rapida);
+}
+
+.tabela-wrapper .itens-por-pagina__input:focus-visible {
+    border-color: var(--cor-azul-destaques);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
 }
 
 .tabela-wrapper .pag-btn,
@@ -443,13 +512,24 @@
 
 .tabela-wrapper .ir-para__input {
     width: 8rem;
-    min-height: 3.2rem;
+    min-height: 2.6rem;
     background-color: var(--cor-fundo-branco);
     color: var(--cor-texto-primario);
-    border: none;
+    border: 1px solid transparent;
     border-radius: var(--raio-sm);
     font-size: var(--fonte-apoio);
     font-family: inherit;
-    padding: var(--espaco-xs) var(--espaco-sm);
+    padding: var(--espaco-xs) var(--espaco-xs);
     box-sizing: border-box;
+    outline: none;
+    transition: box-shadow var(--transicao-rapida), border-color var(--transicao-rapida);
 }
+
+.tabela-wrapper .ir-para__input::placeholder {
+    color: var(--cor-texto-secundario);
+}
+
+.tabela-wrapper .ir-para__input:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
