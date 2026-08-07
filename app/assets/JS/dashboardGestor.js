@@ -56,16 +56,35 @@
     return projetosMock.filter((projeto) => projeto.status === 'EM_ANDAMENTO');
   }
 
+  const DIAS_PRAZO_MAXIMO = 180;
+  const DIAS_PRAZO_PADRAO = 15;
+  const COOKIE_DIAS_PRAZO = 'dashboardGestorDiasPrazo';
+
+  function obterCookie(nome) {
+    const linha = document.cookie.split('; ').find((item) => item.startsWith(nome + '='));
+    return linha ? decodeURIComponent(linha.split('=')[1]) : null;
+  }
+
+  function definirCookie(nome, valor) {
+    const expira = new Date();
+    expira.setFullYear(expira.getFullYear() + 1);
+    document.cookie = `${nome}=${encodeURIComponent(valor)}; expires=${expira.toUTCString()}; path=/; samesite=lax`;
+  }
+
   function lerDiasPrazo() {
     const valor = parseInt(document.getElementById('input-dias-prazo').value, 10);
-    return !isNaN(valor) && valor > 0 ? valor : 15;
+    if (isNaN(valor) || valor <= 0) return DIAS_PRAZO_PADRAO;
+    return Math.min(valor, DIAS_PRAZO_MAXIMO);
   }
 
   // --- placeholder de navegação ---
-  // A Dashboard do Projeto ainda não existe (é a próxima etapa). Por ora só
-  // registramos qual projeto foi clicado; quando a rota existir, trocar por
-  // window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto.
+  // A Dashboard do Projeto ainda não existe (é a próxima etapa). Por ora
+  // avisamos o usuário via toast em vez de não fazer nada; quando a rota
+  // existir, trocar por window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto.
   function irParaDashboardProjeto(idProjeto) {
+    if (window.exibirToast) {
+      exibirToast('info', 'Estamos preparando os detalhes deste projeto — em breve você poderá abri-los por aqui.', 'Em breve');
+    }
     console.log('TODO: abrir Dashboard do Projeto para o projeto', idProjeto);
   }
 
@@ -74,6 +93,25 @@
     if (!campoBusca) return;
     campoBusca.value = nomeAnalista;
     campoBusca.dispatchEvent(new Event('input', { bubbles: true }));
+    exibirChipFiltro(nomeAnalista);
+  }
+
+  function exibirChipFiltro(nomeAnalista) {
+    const chip = document.getElementById('filtro-ativo-chip');
+    const nomeSpan = document.getElementById('filtro-ativo-nome');
+    if (!chip || !nomeSpan) return;
+    nomeSpan.textContent = nomeAnalista;
+    chip.hidden = false;
+  }
+
+  function limparFiltroAnalista() {
+    const campoBusca = document.querySelector('.input-pesquisaSuperior input[type="text"]');
+    const chip = document.getElementById('filtro-ativo-chip');
+    if (campoBusca) {
+      campoBusca.value = '';
+      campoBusca.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    if (chip) chip.hidden = true;
   }
 
   // --- cards ---
@@ -115,16 +153,24 @@
     if (!corpo) return;
     corpo.innerHTML = '';
 
-    projetosAtivos().forEach((projeto) => {
+    const ativos = projetosAtivos();
+
+    if (!ativos.length) {
+      corpo.innerHTML = '<tr><td colspan="7" style="text-align:center">Nenhum projeto em andamento no momento.</td></tr>';
+      return;
+    }
+
+    ativos.forEach((projeto) => {
       const linha = document.createElement('tr');
       linha.dataset.projetoId = String(projeto.id);
+      const classeVuln = projeto.vulnerabilidades_criticas_altas > 0 ? ' class="celula-vuln-grave"' : '';
       linha.innerHTML = `
         <td>${projeto.nome}</td>
         <td>${projeto.cliente}</td>
         <td>${projeto.responsavel_tecnico}</td>
         <td>${formatarDataBR(projeto.data_inicio)}</td>
         <td>${formatarDataBR(projeto.data_fim_prevista)}</td>
-        <td>${projeto.vulnerabilidades_total}</td>
+        <td${classeVuln}>${projeto.vulnerabilidades_total}</td>
         <td>${formatarDataBR(projeto.updated_at)}</td>
       `;
       linha.addEventListener('click', () => irParaDashboardProjeto(projeto.id));
@@ -147,7 +193,7 @@
       .slice(0, 5);
 
     if (!proximos.length) {
-      lista.innerHTML = '<li class="prazo-item__vazio">Nenhum projeto ativo.</li>';
+      lista.innerHTML = '<li class="prazo-item__vazio">Nenhum projeto em andamento.</li>';
       return;
     }
 
@@ -188,7 +234,8 @@
     const grafico = new ApexCharts(container, {
       chart: {
         type: 'bar',
-        height: 320,
+        height: 220,
+        fontFamily: 'var(--fonte-familia-corpo)',
         toolbar: { show: false },
         events: {
           dataPointSelection: (evento, contextoGrafico, config) => {
@@ -237,7 +284,8 @@
     const grafico = new ApexCharts(container, {
       chart: {
         type: 'donut',
-        height: 300,
+        height: 190,
+        fontFamily: 'var(--fonte-familia-corpo)',
         events: {
           dataPointSelection: (evento, contextoGrafico, config) => {
             const nomeAnalista = nomes[config.dataPointIndex];
@@ -249,7 +297,21 @@
       labels: nomes,
       colors: nomes.map((_, indice) => cores[indice % cores.length]),
       legend: { show: false },
-      dataLabels: { enabled: true }
+      dataLabels: { enabled: true },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Ativos',
+                formatter: () => String(valores.reduce((soma, valor) => soma + valor, 0))
+              }
+            }
+          }
+        }
+      }
     });
 
     grafico.render();
@@ -257,19 +319,34 @@
   }
 
   // --- init ---
+  const inputDiasPrazo = document.getElementById('input-dias-prazo');
+  const diasSalvos = parseInt(obterCookie(COOKIE_DIAS_PRAZO), 10);
+  if (!isNaN(diasSalvos) && diasSalvos > 0) {
+    inputDiasPrazo.value = Math.min(diasSalvos, DIAS_PRAZO_MAXIMO);
+  }
+
   renderizarTabela();
   renderizarCards();
   renderizarProximosPrazos();
 
-  document.getElementById('input-dias-prazo').addEventListener('input', () => {
+  inputDiasPrazo.addEventListener('input', () => {
+    definirCookie(COOKIE_DIAS_PRAZO, lerDiasPrazo());
     renderizarCards();
     renderizarProximosPrazos();
   });
+
+  const botaoLimparFiltro = document.getElementById('btn-limpar-filtro');
+  if (botaoLimparFiltro) {
+    botaoLimparFiltro.addEventListener('click', limparFiltroAnalista);
+  }
 
   if (window.ApexCharts) {
     inicializarGraficoVulnerabilidades();
     inicializarGraficoAlocacao();
   } else {
     console.warn('ApexCharts não carregou (CDN indisponível?) — gráficos da Dashboard do Gestor não serão exibidos.');
+    const mensagemFallback = '<p style="text-align:center;color:var(--cor-texto-secundario);padding:2rem 0;">Gráfico indisponível no momento.</p>';
+    document.querySelector('#grafico-vulnerabilidades').innerHTML = mensagemFallback;
+    document.querySelector('#grafico-alocacao').innerHTML = mensagemFallback;
   }
 })();

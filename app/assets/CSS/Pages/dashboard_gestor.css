@@ -1,31 +1,31 @@
 .main-dashboard-gestor {
     display: flex;
     flex-direction: column;
-    gap: var(--espaco-lg);
+    gap: var(--espaco-sm);
 }
 
 /* --- Cards de KPI --- */
 .group-cards-gestor {
     display: flex;
-    gap: 20px;
+    gap: var(--espaco-sm);
     flex-wrap: wrap;
 }
 
 .card-gestor {
     flex: 1;
-    min-width: 240px;
+    min-width: 200px;
     background-color: var(--cor-fundo-branco);
-    border-radius: var(--raio-xl);
+    border-radius: var(--raio-lg);
     box-shadow: var(--sombra-xs);
-    padding: var(--espaco-md) var(--espaco-lg);
+    padding: var(--espaco-sm) var(--espaco-md);
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    gap: var(--espaco-sm);
+    justify-content: space-between;
+    gap: var(--espaco-xs);
 }
 
 .card-gestor__titulo {
-    font-size: var(--fonte-apoio);
+    font-size: var(--fonte-legenda);
     font-weight: 500;
     color: var(--cor-texto-primario);
     display: flex;
@@ -35,7 +35,7 @@
 }
 
 .card-gestor__valor {
-    font-size: var(--fonte-subtitulo);
+    font-size: var(--fonte-secao);
     font-weight: 700;
     color: var(--cor-texto-titulo);
 }
@@ -48,6 +48,15 @@
     color: var(--cor-laranja);
 }
 
+.card-gestor__config {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--espaco-xs);
+    font-size: var(--fonte-legenda);
+    color: var(--cor-texto-secundario);
+}
+
 .card-gestor__input-dias {
     width: 4.5rem;
     font-size: var(--fonte-apoio);
@@ -57,27 +66,33 @@
     text-align: center;
 }
 
+.card-gestor__info {
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-legenda);
+    cursor: help;
+}
+
 /* --- Gráficos --- */
 .group-graficos-gestor {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 20px;
+    gap: var(--espaco-sm);
     align-items: stretch;
 }
 
 .grafico-card {
     background-color: var(--cor-fundo-branco);
-    border-radius: var(--raio-xl);
+    border-radius: var(--raio-lg);
     box-shadow: var(--sombra-xs);
-    padding: var(--espaco-lg);
+    padding: var(--espaco-sm) var(--espaco-md);
     display: flex;
     flex-direction: column;
-    gap: var(--espaco-md);
+    gap: var(--espaco-xs);
     min-width: 0;
 }
 
 .grafico-card__titulo {
-    font-size: var(--fonte-texto);
+    font-size: var(--fonte-apoio);
     font-weight: 600;
     color: var(--cor-texto-titulo);
 }
@@ -99,10 +114,10 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 4px var(--espaco-sm);
+    padding: 2px var(--espaco-sm);
     border-radius: var(--raio-full);
     color: var(--cor-fundo-branco);
-    font-size: var(--fonte-legenda);
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     border: none;
@@ -118,41 +133,92 @@
 /* --- Tabela + próximos prazos --- */
 .group-tabela-prazos {
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 20px;
+    grid-template-columns: 1fr 280px;
+    gap: var(--espaco-sm);
     align-items: start;
+}
+
+.tabela-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-xs);
+    min-width: 0;
 }
 
 .tabela-dashboard-gestor tbody tr {
     cursor: pointer;
 }
 
+.tabela-dashboard-gestor tbody tr:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+.celula-vuln-grave {
+    color: var(--cor-vermelho-destaque);
+    font-weight: 700;
+}
+
+.filtro-ativo-chip[hidden] {
+    display: none;
+}
+
+.filtro-ativo-chip {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    padding: var(--espaco-xs) var(--espaco-sm);
+    border-radius: var(--raio-full);
+    background-color: var(--cor-azul-primaria);
+    color: var(--cor-fundo-branco);
+    font-size: var(--fonte-legenda);
+}
+
+.filtro-ativo-chip strong {
+    font-weight: 700;
+}
+
+.filtro-ativo-chip button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
 .proximos-prazos-card {
     background-color: var(--cor-fundo-branco);
-    border-radius: var(--raio-xl);
+    border-radius: var(--raio-lg);
     box-shadow: var(--sombra-xs);
-    padding: var(--espaco-lg);
+    padding: var(--espaco-sm) var(--espaco-md);
+    max-height: 340px;
+    overflow-y: auto;
 }
 
 .proximos-prazos-card__titulo {
-    font-size: var(--fonte-texto);
+    font-size: var(--fonte-apoio);
     font-weight: 600;
     color: var(--cor-texto-titulo);
-    margin-bottom: var(--espaco-md);
+    margin-bottom: var(--espaco-sm);
 }
 
 .lista-proximos-prazos {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--espaco-sm);
+    gap: var(--espaco-xs);
 }
 
 .lista-proximos-prazos li {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: var(--espaco-sm);
+    gap: 1px;
+    padding: var(--espaco-xs) var(--espaco-sm);
     border-radius: var(--raio-md);
     border: 1px solid var(--cor-borda-padrao);
     cursor: pointer;

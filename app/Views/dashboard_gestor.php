@@ -30,16 +30,23 @@
                 <span class="card-gestor__valor" id="valor-analistas-nao-alocados">--</span>
             </div>
             <div class="card-gestor card-gestor--alerta">
-                <h2 class="card-gestor__titulo">Vulnerabilidades Críticas/Altas em Aberto</h2>
+                <h2 class="card-gestor__titulo">
+                    Vulnerabilidades Graves em Aberto
+                    <i class="fa-solid fa-circle-info card-gestor__info" title="Soma severidade Crítica + Alta apenas dos projetos em andamento"></i>
+                </h2>
                 <span class="card-gestor__valor" id="valor-vulns-criticas">--</span>
             </div>
             <div class="card-gestor card-gestor--prazo">
                 <h2 class="card-gestor__titulo">
-                    Prazos Vencendo em
-                    <input type="number" id="input-dias-prazo" class="card-gestor__input-dias" min="1" step="1" value="15" aria-label="Quantidade de dias para considerar prazo em risco">
-                    dias
+                    Prazos em Risco
+                    <i class="fa-solid fa-circle-info card-gestor__info" title="Inclui projetos em andamento já vencidos e os que vencem dentro do prazo definido abaixo."></i>
                 </h2>
                 <span class="card-gestor__valor" id="valor-prazos-risco">--</span>
+                <label class="card-gestor__config">
+                    Alertar com antecedência de
+                    <input type="number" id="input-dias-prazo" class="card-gestor__input-dias" min="1" max="180" step="1" value="15" aria-label="Quantidade de dias para considerar prazo em risco">
+                    dias
+                </label>
             </div>
         </section>
 
@@ -49,14 +56,22 @@
                 <div id="grafico-vulnerabilidades"></div>
             </div>
             <div class="grafico-card grafico-card--pizza">
-                <h2 class="grafico-card__titulo">Projetos Alocados</h2>
+                <h2 class="grafico-card__titulo">Projetos por Analista</h2>
                 <div id="grafico-alocacao"></div>
                 <ul class="legenda-alocacao" id="legenda-alocacao"></ul>
             </div>
         </section>
 
         <section class="group-tabela-prazos">
-            <div class="tabela-wrapper tabela-dashboard-gestor">
+            <div class="tabela-coluna">
+                <div class="filtro-ativo-chip" id="filtro-ativo-chip" hidden>
+                    <i class="fa-solid fa-filter"></i>
+                    Filtrado por <strong id="filtro-ativo-nome"></strong>
+                    <button type="button" id="btn-limpar-filtro" aria-label="Limpar filtro">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="tabela-wrapper tabela-dashboard-gestor">
                 <table id="table">
                     <thead>
                         <tr>
@@ -94,6 +109,7 @@
                         </tr>
                     </tfoot>
                 </table>
+                </div>
             </div>
 
             <aside class="proximos-prazos-card">
@@ -103,6 +119,7 @@
         </section>
 
     </main>
+    <?php include 'Components/toast.php'; ?>
     </div>
     </div>
 
@@ -110,6 +127,7 @@
          precisa popular <tbody id="table"> antes de tabela.js rodar (ele se
          auto-inicializa ao ser executado e lê as linhas existentes no DOM). -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
 </body>
