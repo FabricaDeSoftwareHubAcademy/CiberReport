@@ -46,8 +46,8 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                 </div>
             </div>
             <ul id="side_itens">
-                <li class="side_item<?= $itemMenuAtivo('dashboard.php') ?>">
-                    <a href="#">
+                <li class="side_item<?= $itemMenuAtivo('dashboard_gestor.php') ?>">
+                    <a href="<?= BASE_URL ?>dashboard-gestor">
                         <i class="fa-solid fa-chart-column"></i>
                         <span class="item_description">Dashboard</span>
                     </a>

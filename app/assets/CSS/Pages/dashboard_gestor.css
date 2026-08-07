@@ -1,0 +1,205 @@
+.main-dashboard-gestor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-lg);
+}
+
+/* --- Cards de KPI --- */
+.group-cards-gestor {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card-gestor {
+    flex: 1;
+    min-width: 240px;
+    background-color: var(--cor-fundo-branco);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-xs);
+    padding: var(--espaco-md) var(--espaco-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: var(--espaco-sm);
+}
+
+.card-gestor__titulo {
+    font-size: var(--fonte-apoio);
+    font-weight: 500;
+    color: var(--cor-texto-primario);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--espaco-xs);
+}
+
+.card-gestor__valor {
+    font-size: var(--fonte-subtitulo);
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+}
+
+.card-gestor--alerta .card-gestor__valor {
+    color: var(--cor-vermelho-destaque);
+}
+
+.card-gestor--prazo .card-gestor__valor {
+    color: var(--cor-laranja);
+}
+
+.card-gestor__input-dias {
+    width: 4.5rem;
+    font-size: var(--fonte-apoio);
+    padding: 2px var(--espaco-xs);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-sm);
+    text-align: center;
+}
+
+/* --- Gráficos --- */
+.group-graficos-gestor {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.grafico-card {
+    background-color: var(--cor-fundo-branco);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-xs);
+    padding: var(--espaco-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-md);
+    min-width: 0;
+}
+
+.grafico-card__titulo {
+    font-size: var(--fonte-texto);
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+}
+
+.grafico-card--pizza {
+    align-items: center;
+}
+
+.legenda-alocacao {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-sm);
+    width: 100%;
+}
+
+.legenda-alocacao li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px var(--espaco-sm);
+    border-radius: var(--raio-full);
+    color: var(--cor-fundo-branco);
+    font-size: var(--fonte-legenda);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.legenda-alocacao .legenda-ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--cor-fundo-branco);
+}
+
+/* --- Tabela + próximos prazos --- */
+.group-tabela-prazos {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+
+.tabela-dashboard-gestor tbody tr {
+    cursor: pointer;
+}
+
+.proximos-prazos-card {
+    background-color: var(--cor-fundo-branco);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-xs);
+    padding: var(--espaco-lg);
+}
+
+.proximos-prazos-card__titulo {
+    font-size: var(--fonte-texto);
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+    margin-bottom: var(--espaco-md);
+}
+
+.lista-proximos-prazos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-sm);
+}
+
+.lista-proximos-prazos li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--espaco-sm);
+    border-radius: var(--raio-md);
+    border: 1px solid var(--cor-borda-padrao);
+    cursor: pointer;
+}
+
+.lista-proximos-prazos li:hover {
+    border-color: var(--cor-borda-foco);
+}
+
+.prazo-item__nome {
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+}
+
+.prazo-item__cliente {
+    font-size: var(--fonte-legenda);
+    color: var(--cor-texto-secundario);
+}
+
+.prazo-item__data {
+    font-size: var(--fonte-legenda);
+    font-weight: 600;
+    align-self: flex-start;
+    padding: 1px var(--espaco-xs);
+    border-radius: var(--raio-sm);
+    margin-top: 2px;
+}
+
+.prazo-item__data--vencido {
+    color: var(--cor-vermelho-destaque);
+    background-color: var(--cor-vermelho-secundario);
+}
+
+.prazo-item__data--em-risco {
+    color: var(--cor-laranja);
+    background-color: var(--cor-laranja-secundario);
+}
+
+.prazo-item__vazio {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+}
+
+@media (max-width: 1100px) {
+    .group-graficos-gestor,
+    .group-tabela-prazos {
+        grid-template-columns: 1fr;
+    }
+}
