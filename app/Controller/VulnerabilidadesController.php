@@ -41,12 +41,12 @@ class VulnerabilidadesController extends Controller
         $habilitado    = (int) ($_POST['habilitado'] ?? 0);
         $impacto_negocio = addslashes($_POST['impacto_negocio'] ?? '');
 
-        if (empty($nome) || empty($descricao_breve) || empty($categoria) || empty($modelo) || empty($tecnica)) {
+        if (empty($nome) || empty($descricao) || empty($categoria) || empty($severidade_vulnerabilidade)) {
             return false;
         }
 
         return $this->Vulnerabilidades->cadastrarVulnerabilidade(
-            $id,$nome, $projeto_id,
+            $id, $projeto_id, $nome,
             $cvss, $cve, $descricao,
             $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio
         );
