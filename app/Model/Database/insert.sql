@@ -88,9 +88,9 @@ INSERT INTO checklist_item (checklist_id, titulo, referencia, obrigatorio, habil
 -- ---------------------------------------------------------
 -- projeto
 -- ---------------------------------------------------------
-INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, habilitado) VALUES
-(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 76.50, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'portal.techpantanal.com.br, api.techpantanal.com.br', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 1),
-(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 64.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', '10.20.0.0/22', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 1);
+INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, modalidade, nivel_sigilo, escopo, contrato, restricao, status, habilitado) VALUES
+(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 'CONCLUIDO', 1),
+(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 'EM_ANDAMENTO', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------

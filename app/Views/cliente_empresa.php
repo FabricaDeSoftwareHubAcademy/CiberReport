@@ -67,8 +67,8 @@ $dados = $controller->listarEmpresa();
 
 
         <div class="button-cadastro">
-            <button class="btn-novo-cadastro btn-modal-novo-cadastro" data-modal-target="modalClientes">
-                <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
+            <button class="btn-novo-cadastro" data-modal-target="modalClientes">
+                <i class="fa-solid fa-plus"></i>Novo Cadastro
             </button>
         </div>
 

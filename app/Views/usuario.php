@@ -195,15 +195,11 @@ $usuarios = $controller->listar();
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio">Telefone</label>
-                            <input type="tel" name="telefone" class="campo__input" required>
+                            <input type="tel" name="telefone" class="campo__input" oninput="mascararTelefone(this)" required>
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio">CPF</label>
-                            <input type="text" name="cpf" class="campo__input" placeholder="xxx.xxx.xxx-xx" required>
-                        </div>
-                        <div class="campo">
-                            <label class="campo__label campo__label--obrigatorio">Senha</label>
-                            <input type="password" name="senha" class="campo__input" placeholder="Digite a senha" required minlength="6">
+                            <input type="text" name="cpf" class="campo__input" placeholder="xxx.xxx.xxx-xx"  required>
                         </div>
                         <div class="campo">
                             <label class="campo__label">Cargo</label>
@@ -276,7 +272,7 @@ $usuarios = $controller->listar();
                     </div>
                     <div class="campo">
                         <label class="campo__label">Telefone</label>
-                        <input type="tel" class="campo__input" data-campo="telefone" readonly>
+                        <input type="tel" class="campo__input" oninput="mascararTelefone(this)" data-campo="telefone" readonly>
                     </div>
                     <div class="campo">
                         <label class="campo__label">CPF</label>

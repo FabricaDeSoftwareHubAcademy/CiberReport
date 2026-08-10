@@ -34,7 +34,7 @@ class GerenciamentoUsuarioController extends Controller
         $cargo          = trim($_POST['cargo'] ?? '');
         $especialidade  = trim($_POST['especialidade'] ?? '');
         $email          = trim($_POST['email'] ?? '');
-        $senha          = $_POST['senha'] ?? '';
+        $senha          =  $this->gerarSenha();
         $perfil_id      = $_POST['perfil_id'] ?? '';
 
         // Campos obrigatórios (batendo com o NOT NULL do banco)
@@ -91,6 +91,19 @@ class GerenciamentoUsuarioController extends Controller
     public function alterarStatus($id, $status)
     {
         $this->usuario->alterarStatusUsuario((int) $id, (int) $status);
+    }
+
+    public function gerarSenha(int $tamanho = 29): string
+    {
+        $caracteres = 'abcdefghijklmnopqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'0123456789'.'!@#$%&*_-+=';
+        $senha = '';
+        $maximo = strlen($caracteres) - 1;
+
+        for($i = 0; $i < $tamanho; $i++){
+           $senha .= $caracteres[random_int(0, $maximo)]; 
+        }
+
+        return $senha;
     }
 }
 
