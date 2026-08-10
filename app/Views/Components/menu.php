@@ -1,8 +1,8 @@
 <?php
 
 namespace Components;
-
 $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
+require_once __DIR__ . '/sobre_perfil.php';
 ?>
 
 <!--
@@ -140,10 +140,12 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
     <!-- <p></p> -->
     <div class="main-content">
         <header id="menu-superior">
-            <div class="logo-menuSuperior">
+           <div class="logo-menuSuperior">
                 <img src="<?= BASE_URL ?>app/assets/img/logo-baikal-icone.svg" alt="" />
+            </div> 
+            <div class="tituloMenuSuperior">
+                <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             </div>
-            <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             <!-- barra de pesquisa para desktop -->
             <form class="input-pesquisaSuperior">
                 <input type="text" placeholder="Buscar..." id="busca" />
@@ -151,31 +153,33 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <i class="fa-brands fa-sistrix"></i>
                 </button>
             </form>
-
-            <!-- pesquisa para formato mobile -->
-            <div class="pesquisa-mobile">
-                <button>
-                    <i class="fa-brands fa-sistrix" class='color: #9ca3af;'></i>
-                </button>
-            </div>
-            <!-- overlay-pesquisa -->
-            <form class="overlay-pesquisaMobile">
-                <div class="barra-pesquisa" id="busca-mobile">
-                    <input type="text" placeholder="Buscar..." />
+            
+            <div class="perfis">
+                <!-- pesquisa para formato mobile -->
+                <div class="pesquisa-mobile">
                     <button>
-                        <i class="fa-brands fa-sistrix"></i>
+                        <i class="fa-brands fa-sistrix" class='color: #9ca3af;'></i>
                     </button>
                 </div>
-            </form>
-            <div class="perfis">
+                <!-- overlay-pesquisa -->
+                <form class="overlay-pesquisaMobile">
+                    <div class="barra-pesquisa" id="busca-mobile">
+                        <input type="text" placeholder="Buscar..." />
+                        <button>
+                            <i class="fa-brands fa-sistrix"></i>
+                        </button>
+                    </div>
+                </form>
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="<?= BASE_URL ?>app/assets/img/foto-perfil.jpg" alt="" />
                 <div id="sobrePerfil">
                     <div class="sobre-perfil__dados">
-                        <strong><?= htmlspecialchars($nomeUsuario) ?></strong>
-                        <span>Gerente</span>
+                        <div class="sobre-perfil__identificacao">
+                            <strong><?= htmlspecialchars($nomeUsuario) ?></strong>
+                            <span>Gerente</span>
+                        </div>
                     </div>
-                    <button type="button" class="sobre-perfil__editar">
+                    <button type="button" class="sobre-perfil__editar" data-modal-target="modalSobrePerfil">
                         <i class="fa-regular fa-pen-to-square"></i>
                         Editar Perfil
                     </button>
