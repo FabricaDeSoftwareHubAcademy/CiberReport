@@ -1,0 +1,14 @@
+.foto_sobre {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.foto_sobre > img {
+    width: 16rem;
+    height: 16rem;
+    border-radius: var(--raio-full);
+    object-fit: cover;
+}

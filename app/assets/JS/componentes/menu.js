@@ -1,6 +1,6 @@
 const sideBar = document.getElementById('sideBar');
 const sobrePerfil = document.getElementById('sobrePerfil');
-const imagemUsuario = document.querySelector('.imagem-usuario');
+const imagemUsuario = document.querySelector('.perfis > .imagem-usuario');
 const dropdown = document.getElementById('dropdown');
 const pesquisaMobileBtn = document.querySelector('.pesquisa-mobile button');
 const overlayPesquisa = document.querySelector('.overlay-pesquisaMobile');
