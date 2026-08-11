@@ -119,7 +119,6 @@
         </section>
 
     </main>
-    <?php include 'Components/toast.php'; ?>
     </div>
     </div>
 
@@ -127,7 +126,6 @@
          precisa popular <tbody id="table"> antes de tabela.js rodar (ele se
          auto-inicializa ao ser executado e lê as linhas existentes no DOM). -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
 </body>

@@ -155,3 +155,33 @@ h6 {
     padding: var(--espaco-xl);
     padding-top: var(--espaco-md);
 }
+
+/* --- SCROLLBAR PADRÃO ---
+   Definição única do estilo de scrollbar do sistema.
+   Para aplicar em um novo container com overflow, apenas adicione
+   o seletor no grupo abaixo — não duplique as regras. */
+.tabela-wrapper,
+.tabela-wrapper tbody,
+.modal__body,
+.lista-proximos-prazos {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-cinza-secundario) transparent;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--cor-cinza-secundario);
+        border-radius: var(--raio-full);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--cor-texto-secundario);
+    }
+}

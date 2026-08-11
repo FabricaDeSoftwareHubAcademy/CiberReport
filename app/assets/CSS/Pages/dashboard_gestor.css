@@ -192,19 +192,23 @@
 }
 
 .proximos-prazos-card {
-    background-color: var(--cor-fundo-branco);
-    border-radius: var(--raio-lg);
+    background-color: var(--cor-azul-primaria);
+    border-radius: var(--raio-md);
     box-shadow: var(--sombra-xs);
-    padding: var(--espaco-sm) var(--espaco-md);
+    padding: var(--espaco-sm) var(--espaco-xs) var(--espaco-sm) var(--espaco-md);
     max-height: 340px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .proximos-prazos-card__titulo {
     font-size: var(--fonte-apoio);
     font-weight: 600;
-    color: var(--cor-texto-titulo);
+    color: var(--cor-branco-primario);
     margin-bottom: var(--espaco-sm);
+    padding-right: var(--espaco-sm);
+    flex-shrink: 0;
 }
 
 .lista-proximos-prazos {
@@ -212,6 +216,9 @@
     display: flex;
     flex-direction: column;
     gap: var(--espaco-xs);
+    overflow-y: auto;
+    min-height: 0;
+    padding-right: var(--espaco-xs);
 }
 
 .lista-proximos-prazos li {
@@ -222,6 +229,7 @@
     border-radius: var(--raio-md);
     border: 1px solid var(--cor-borda-padrao);
     cursor: pointer;
+    background-color: var(--cor-fundo-branco);
 }
 
 .lista-proximos-prazos li:hover {

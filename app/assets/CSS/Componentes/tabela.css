@@ -6,27 +6,6 @@
     max-height: calc(100vh - var(--altura-menu-superior) - 12rem);
     overflow-y: auto;
     border-radius: var(--raio-md);
-    scrollbar-width: thin;
-    scrollbar-color: var(--cor-cinza-secundario) transparent;
-}
-
-.tabela-wrapper::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.tabela-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-    margin: var(--raio-md);
-}
-
-.tabela-wrapper::-webkit-scrollbar-thumb {
-    background-color: var(--cor-cinza-secundario);
-    border-radius: var(--raio-full);
-}
-
-.tabela-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: var(--cor-texto-secundario);
 }
 
 .tabela-wrapper table {

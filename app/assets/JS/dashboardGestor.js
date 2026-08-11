@@ -78,13 +78,10 @@
   }
 
   // --- placeholder de navegação ---
-  // A Dashboard do Projeto ainda não existe (é a próxima etapa). Por ora
-  // avisamos o usuário via toast em vez de não fazer nada; quando a rota
-  // existir, trocar por window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto.
+  // A Dashboard do Projeto ainda não existe (é a próxima etapa). Por ora só
+  // registramos qual projeto foi clicado; quando a rota existir, trocar por
+  // window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto.
   function irParaDashboardProjeto(idProjeto) {
-    if (window.exibirToast) {
-      exibirToast('info', 'Estamos preparando os detalhes deste projeto — em breve você poderá abri-los por aqui.', 'Em breve');
-    }
     console.log('TODO: abrir Dashboard do Projeto para o projeto', idProjeto);
   }
 
@@ -219,9 +216,7 @@
 
   // --- gráficos ---
   function obterCoresTokens() {
-    const estilo = getComputedStyle(document.documentElement);
-    return ['--cor-azul-destaques', '--cor-vermelho-destaque', '--cor-amarelo', '--cor-verde', '--cor-baikal-1']
-      .map((nomeVariavel) => estilo.getPropertyValue(nomeVariavel).trim());
+    return ['#006ab5', '#00a38c', '#0080bd', '#00af5d', '#ffa600', '#0093ae', '#61b525'];
   }
 
   function inicializarGraficoVulnerabilidades() {
@@ -229,7 +224,6 @@
     if (!container) return;
 
     const ativos = projetosAtivos();
-    const cores = obterCoresTokens();
 
     const grafico = new ApexCharts(container, {
       chart: {
@@ -246,7 +240,7 @@
       },
       series: [{ name: 'Vulnerabilidades', data: ativos.map((projeto) => projeto.vulnerabilidades_total) }],
       xaxis: { categories: ativos.map((projeto) => projeto.cliente) },
-      colors: [cores[0]],
+      colors: ['#006ab5'],
       dataLabels: { enabled: false },
       plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } }
     });
@@ -284,7 +278,7 @@
     const grafico = new ApexCharts(container, {
       chart: {
         type: 'donut',
-        height: 190,
+        height: 210,
         fontFamily: 'var(--fonte-familia-corpo)',
         events: {
           dataPointSelection: (evento, contextoGrafico, config) => {
