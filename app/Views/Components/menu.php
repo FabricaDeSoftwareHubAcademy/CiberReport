@@ -5,25 +5,6 @@ namespace Components;
 $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
 ?>
 
-<!--
-    COMO USAR O MENU LATERAL
-    ========================
-
-    PASSO 1 — inclua o menu no topo do <body> com o título da página:
-        $tituloPagina = 'Nome da Página'; include_once 'Components/menu.php'; Envolva essa linha com a tag do php
-
-    PASSO 2 — adicione o conteúdo dentro de uma tag <main>:
-        <main>
-            conteúdo da página...
-        </main>
-
-    PASSO 3 — OBRIGATÓRIO: após o </main>, feche as divs abertas pelo menu:
-        primeira  </div> → fecha .main-content
-        segunda   </div> → fecha .menu
-
-    Sem esse fechamento o <main> fica fora do flex row da sidebar
-    e o efeito de "empurrar" o conteúdo não funciona.
--->
 <div class="menu">
     <?php
     $sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
@@ -68,7 +49,7 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <div class="tooltip-item"><span>Projetos</span></div>
 
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('gerenciar-tipo-pentest.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('gerenciar_tipo_pentest.php') ?>">
                     <a href="<?= BASE_URL ?>gerenciar-pentest">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
