@@ -25,3 +25,6 @@ Route::POST('/gerenciamento-acesso','GerenciarAcessoController@index');
 
 Route::GET('/gerenciamento-projeto','ProjetoController@index');
 Route::POST('/gerenciamento-projeto','ProjetoController@index');
+
+Route::GET('/dashboard-gestor','DashboardGestorController@index');
+Route::POST('/dashboard-gestor','DashboardGestorController@index');
