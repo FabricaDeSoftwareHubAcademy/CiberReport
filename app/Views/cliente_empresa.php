@@ -83,9 +83,7 @@ $dados = $controller->listarEmpresa();
                         <h2 class="modal__titulo">Cadastro de Empresa</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalClientes">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <form action="" method="post">
@@ -224,9 +222,7 @@ $dados = $controller->listarEmpresa();
                         <h2 class="modal__titulo">Edição de Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalEditar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <form action="<?= BASE_URL ?>cliente-empresa" method="post">
@@ -364,9 +360,7 @@ $dados = $controller->listarEmpresa();
                         <h2 class="modal__titulo">Visualizar Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalVisualizar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body">
