@@ -2,5 +2,5 @@
 
 return [
     'app_name' => 'CiberReport',
-    'base_folder' => '/', // Crucial for routing
+    'base_folder' => '/CiberReport/', // Crucial for routing
 ];
