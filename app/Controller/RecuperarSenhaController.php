@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../Model/UsuarioModel.php';
-require_once __DIR__ . '/../../config/mailconfig.php';
+require_once __DIR__ . '/../../config/mailer.php';
 
 function processarRecuperarSenha(PDO $conexao, string $email): string {
     $usuarioModel = new UsuarioModel($conexao);
@@ -19,7 +19,7 @@ function processarRecuperarSenha(PDO $conexao, string $email): string {
     $usuarioModel->salvarTokenRecuperacao($email, $token, $expira);
 
     $link = BASE_URL . "login?token=$token";
-    // enviarEmailRecuperacao($email, $usuario['nome'], $link);
+    enviarEmailRecuperacao($email, $usuario['nome'], $link);
 
     return $mensagemPadrao;
 }
