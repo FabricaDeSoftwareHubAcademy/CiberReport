@@ -60,7 +60,7 @@ class Projeto
     }
     public function listarDados()
     {
-        $sql = $this->pdo->prepare("SELECT projeto.*, empresa.nome_fantasia FROM projeto INNER JOIN empresa ON projeto.empresa_id = empresa.id ORDER BY projeto.nome");
+        $sql = $this->pdo->prepare("SELECT projeto.*, empresa.nome_fantasia FROM projeto INNER JOIN empresa ON projeto.empresa_id = empresa.id WHERE projeto.habilitado = 1 ORDER BY projeto.created_at DESC");
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
