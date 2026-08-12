@@ -119,7 +119,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                         <h2 class="modal__titulo">Cadastro de Perfil</h2>
                         <p class="modal__subtitulo">Informações do perfil de acesso</p>
                     </div>
-                    <button class="modal__fechar" data-modal-close="modalNovoPerfil" type="button">X</button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <form class="modal__body" method="post" action="<?= BASE_URL ?>gerenciamento-acesso" id="formPerfil">

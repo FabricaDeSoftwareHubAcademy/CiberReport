@@ -141,7 +141,7 @@ $empresas = $controller->listarEmpresasAtivas();
                     <h2 class="modal__titulo">Cadastro de Projeto</h2>
                     <p class="modal__subtitulo">Informações da empresa contratante e do projeto</p>
                 </div>
-                <button class="modal__fechar" data-modal-close="modal-cadastro-projeto"><i class="fa-solid fa-xmark"></i></button>
+                <button type="button" class="modal__fechar" data-modal-close>&times;</button>
             </div>
             <div class="modal__body">
                 <form action="" method="post">
