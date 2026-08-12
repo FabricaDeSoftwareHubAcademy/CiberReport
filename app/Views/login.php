@@ -1,54 +1,23 @@
 <?php
 
 $conexao = require __DIR__ . "/../Model/conexao.php";
+require_once __DIR__ . "/../Controller/LoginController.php";
+require_once __DIR__ . "/../Controller/RecuperarSenhaController.php";
+require_once __DIR__ . "/../Controller/RedefinirSenhaController.php";
 
 $erro = null;
 $mensagem = null;
 $modoRecuperar = isset($_GET['recuperar']);
 $tokenUrl = $_GET['token'] ?? null;
 
-function gerarLinkRecuperacao($conexao, $email) {
-    // if ($email === 'caiovv1@outlook.com') {          
-    //     $token = bin2hex(random_bytes(32));       
-    //     return BASE_URL . "login?token=$token";          
-    // } 
-
-    $token = bin2hex(random_bytes(32));
-    $expira = date('Y-m-d H:i:s', strtotime('+1 hour'));
-
-    $stmt = $conexao->prepare("UPDATE usuario SET reset_token = ?, reset_token_expira = ? WHERE email = ?");
-    $stmt->execute([$token, $expira, $email]);
-
-    if ($stmt->rowCount() > 0) {
-        return BASE_URL . "login?token=$token";
-    }
-    return null;
-}
-
-function redefinirSenha($conexao, $token, $novaSenha) {
-    $stmt = $conexao->prepare("SELECT id FROM usuario WHERE reset_token = ? AND reset_token_expira > NOW()");
-    $stmt->execute([$token]);
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$usuario) {
-        return false;
-    }
-
-    $hash = password_hash($novaSenha, PASSWORD_BCRYPT);
-    $conexao->prepare("UPDATE usuario SET senha = ?, reset_token = NULL, reset_token_expira = NULL WHERE id = ?")
-            ->execute([$hash, $usuario['id']]);
-    return true;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
 
-    $link = gerarLinkRecuperacao($conexao, trim($_POST['email'] ?? ''));
-    $mensagem = $link ? "Link gerado: $link" : "E-mail não encontrado.";
+    $mensagem = processarRecuperarSenha($conexao, trim($_POST['email'] ?? ''));
     $modoRecuperar = true;
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
 
-    if (redefinirSenha($conexao, $_POST['token'], $_POST['senha'] ?? '')) {
+    if (processarRedefinirSenha($conexao, $_POST['token'], $_POST['senha'] ?? '')) {
         $mensagem = "Senha redefinida! Faça login com a nova senha.";
     } else {
         $erro = "Link inválido ou expirado.";
@@ -57,28 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
     }
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
 
-    if (empty($email) || empty($senha)) {
-        $erro = "Preencha todos os campos.";
-    } else {
-        $stmt = $conexao->prepare("SELECT id, nome, senha FROM usuario WHERE email = ?");
-        $stmt->execute([$email]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC); 
+    $resultado = processarLogin($conexao, trim($_POST['email'] ?? ''), $_POST['senha'] ?? '');
 
-        if ($usuario) {
-
-            if (password_verify($senha, $usuario['senha'])) {
-                $_SESSION['usuario_id']   = $usuario['id'];
-                $_SESSION['usuario_nome'] = $usuario['nome'];
-                header("Location: " . BASE_URL . "gerenciar-pentest");
-                exit;
-            }
-        }
-
-        $erro = "E-mail ou senha inválidos.";
+    if ($resultado['sucesso']) {
+        $_SESSION['usuario_id']   = $resultado['usuario']['id'];
+        $_SESSION['usuario_nome'] = $resultado['usuario']['nome'];
+        header("Location: " . BASE_URL . "gerenciar-pentest");
+        exit;
     }
+
+    $erro = $resultado['erro'];
 }
 ?>
 
