@@ -36,9 +36,6 @@ $empresas = $controller->listarEmpresasAtivas();
             <p role="status"><?= htmlspecialchars((string) $resultadoCadastro) ?></p>
         <?php endif; ?>
 
-        <div class="group-btn-projeto">
-            <button class="btn-novo-cadastro" data-modal-target="modal-cadastro-projeto"><i class="fa-solid fa-plus"></i>Novo Projeto</button>
-        </div>
 
         <div class="group-card-tabela">
             <div class="group-card-projeto">
@@ -58,6 +55,10 @@ $empresas = $controller->listarEmpresasAtivas();
                     <h2 class="title-card-projeto">Vulnerabilidades Críticas</h2>
                     <span class="subtitle-card-projeto">07</span>
                 </div>
+            </div>
+
+            <div class="group-btn-projeto">
+                <button class="btn-novo-cadastro" data-modal-target="modal-cadastro-projeto"><i class="fa-solid fa-plus"></i>Novo Projeto</button>
             </div>
 
             <div class="tabela-wrapper tabela-gerenciamento-projeto">
@@ -132,90 +133,33 @@ $empresas = $controller->listarEmpresasAtivas();
 
     </main>
 
-    <div class="modal-overlay" id="modal-cadastro-projeto">
-        <div class="modal modal--md">
+    <div class="modal-overlay" data-modal-target="modal-cadastro-projeto" id="modal-cadastro-projeto">
+        <div class="modal modal--xl">
             <div class="modal__header">
-                <div class="modal__header-icone"><i class="fa-solid fa-shield"></i></div>
+                <div class="modal__header-icone"><i class=""></i></div>
                 <div class="modal__header-texto">
                     <h2 class="modal__titulo">Cadastro de Projeto</h2>
                     <p class="modal__subtitulo">Informações da empresa contratante e do projeto</p>
                 </div>
                 <button type="button" class="modal__fechar" data-modal-close>&times;</button>
             </div>
-            <form class="modal__body" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="cadastrar">
-                <div class="form-step">
-                    <div class="modal-grade">
-                        <div class="campo">
-                            <label class="campo__label" for="empresa_id">Cliente</label>
-                            <select name="empresa_id" id="empresa_id" class="campo__select" required>
-                                <option value="">Selecione um cliente</option>
-                                <?php foreach ($empresas as $empresa): ?>
-                                    <option value="<?= (int) $empresa['id'] ?>">
-                                        <?= htmlspecialchars($empresa['nome_fantasia'] ?: $empresa['razao_social']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+            <div class="modal__body">
+                <form action="" method="post">
+                    <section class="modal__secao">
+                        <h3 class="modal__secao-titulo">Informações do Cliente</h3>
+                        <div class="modal__secao-conteudo">
+                            <div class="input-group">
+                                <label for="nome_cliente">Nome da Empresa</label>
+                                <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Digite o nome da empresa" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="nome_projeto">Nome do Projeto</label>
+                                <input type="text" name="nome_projeto" id="nome_projeto" placeholder="Digite o nome do projeto" required>
+                            </div>
                         </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="nome">Nome do projeto</label>
-                            <input type="text" name="nome" id="nome" required>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="data_inicio">Data de início</label>
-                            <input type="date" name="data_inicio" id="data_inicio">
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="data_fim_prevista">Previsão de término</label>
-                            <input type="date" name="data_fim_prevista" id="data_fim_prevista">
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="horas_contratadas">Horas contratadas</label>
-                            <input type="number" name="horas_contratadas" id="horas_contratadas" min="0.01" step="0.01" required>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="modalidade">Modalidade</label>
-                            <select name="modalidade" id="modalidade" required>
-                                <option value="">Selecione</option>
-                                <option value="BLACK BOX">Black Box</option>
-                                <option value="GRAY BOX">Gray Box</option>
-                                <option value="WHITE BOX">White Box</option>
-                            </select>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="nivel_sigilo">Nível de sigilo</label>
-                            <select name="nivel_sigilo" id="nivel_sigilo" required>
-                                <option value="">Selecione</option>
-                                <option value="INTERNO">Interno</option>
-                                <option value="EXTERNO">Externo</option>
-                            </select>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="escopo">Escopo</label>
-                            <textarea name="escopo" id="escopo" required></textarea>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="restricao">Restrições</label>
-                            <textarea name="restricao" id="restricao"></textarea>
-                        </div>
-
-                        <div class="campo">
-                            <label class="campo__label" for="contrato">Contrato em PDF</label>
-                            <input type="file" name="contrato" id="contrato" accept="application/pdf">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-novo-cadastro">Cadastrar projeto</button>
-            </form>
+                    </section>
+                </form>
+            </div>
         </div>
     </div>
 </body>
