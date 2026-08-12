@@ -216,7 +216,7 @@
 
   // --- gráficos ---
   function obterCoresTokens() {
-    return ['#006ab5', '#00a38c', '#0080bd', '#00af5d', '#ffa600', '#0093ae', '#61b525'];
+    return ['#0a6bb5', '#00a9d1', '#00966f', '#4cc61e', '#c8e61e', '#ffd200', '#ff8c00', '#ff0000', '#ff1f6b', '#e6007e', '#7b2d8e', '#4b3f96'];
   }
 
   function inicializarGraficoVulnerabilidades() {
@@ -240,9 +240,10 @@
       },
       series: [{ name: 'Vulnerabilidades', data: ativos.map((projeto) => projeto.vulnerabilidades_total) }],
       xaxis: { categories: ativos.map((projeto) => projeto.cliente) },
-      colors: ['#006ab5'],
+      colors: obterCoresTokens(),
       dataLabels: { enabled: false },
-      plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } }
+      legend: { show: false },
+      plotOptions: { bar: { borderRadius: 4, columnWidth: '55%', distributed: true } }
     });
 
     grafico.render();
