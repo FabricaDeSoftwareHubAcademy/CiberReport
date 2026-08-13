@@ -5,6 +5,6 @@ return [
     'username'   => 'fabrica544adm@outlook.com',
     'password'   => 'qkgrfeqpbgqlvyyc',
     'encryption' => 'tls',
-    'from_email' => 'fabrica544adm@outlook.com',
+    'from_email' => 'caiovv1@outlook.com',
     'from_name'  => 'CiberReport'
 ];
