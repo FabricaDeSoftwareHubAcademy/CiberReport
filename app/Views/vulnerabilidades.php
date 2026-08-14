@@ -232,7 +232,7 @@
                         <h2 class="modal__titulo">Nova Vulnerabilidade</h2>
                         <p class="modal__subtitulo">Informação da vulnerabilidade encontrada.</p>
                     </div>
-                    <button class="modal__fechar" data-modal-close>&#x2715;</button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
  
                 <div class="modal__body">

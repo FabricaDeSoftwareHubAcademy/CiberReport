@@ -1,0 +1,305 @@
+#modalSobrePerfil .modal {
+    width: min(1200px, 95vw);
+    max-height: none;
+}
+
+#modalSobrePerfil .modal__footer {
+    border-top: none;
+}
+
+#modalSobrePerfil .modal__body {
+    overflow-y: visible;
+}
+
+.sobre-perfil__corpo {
+    display: grid;
+    grid-template-columns: minmax(28rem, 0.8fr) minmax(42rem, 1.2fr);
+    gap: var(--espaco-md);
+    padding: var(--espaco-md) var(--espaco-lg);
+}
+
+.sobre-perfil__corpo > .foto_sobre {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.sobre-perfil__corpo > .sobre-perfil__secao:nth-of-type(1) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.sobre-perfil__corpo > .sobre-perfil__secao:nth-of-type(2) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.sobre-perfil__corpo > .sobre-perfil__secao:nth-of-type(2) .modal-grade > * {
+    flex: 1 1 100%;
+    min-width: 100%;
+}
+
+.sobre-perfil__corpo > .editar-perfil-item {
+    grid-column: 1 / -1;
+    grid-row: 3;
+}
+
+.sobre-perfil__corpo > .sobre-perfil__secao:nth-of-type(4) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.foto_sobre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-xs);
+    padding-bottom: var(--espaco-sm);
+}
+
+.foto_sobre__imagem {
+    position: relative;
+}
+
+.foto_sobre__imagem img {
+    width: 10rem;
+    height: 10rem;
+    display: block;
+    border: 3px solid var(--cor-fundo-branco);
+    border-radius: var(--raio-full);
+    box-shadow: var(--sombra-md);
+    object-fit: cover;
+}
+
+.foto_sobre__editar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 3.6rem;
+    height: 3.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--cor-fundo-branco);
+    border-radius: var(--raio-full);
+    background-color: var(--cor-azul-destaques);
+    color: var(--cor-fundo-branco);
+    cursor: pointer;
+    box-shadow: var(--sombra-sm);
+    transition: filter var(--transicao-rapida), transform var(--transicao-rapida);
+}
+
+.foto_sobre__editar:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+.foto_sobre > span {
+    margin-top: var(--espaco-xs);
+    color: var(--cor-texto-titulo);
+    font-size: var(--fonte-secao);
+    font-weight: 600;
+}
+
+.foto_sobre > small {
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+}
+
+.sobre-perfil__secao {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-md);
+    padding: var(--espaco-md);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-lg);
+    background-color: var(--cor-fundo-branco);
+}
+
+.sobre-perfil__secao-titulo {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+    color: var(--cor-texto-titulo);
+}
+
+.sobre-perfil__secao-titulo i {
+    width: 2rem;
+    color: var(--cor-azul-primaria);
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.sobre-perfil__secao-titulo h3 {
+    margin: 0;
+    font-size: var(--fonte-texto);
+    font-weight: 600;
+}
+
+#modalSobrePerfil .campo__input {
+    height: 4.8rem;
+    border-color: transparent;
+    background-color: var(--cor-branco-primario);
+}
+
+#modalSobrePerfil .campo__input:hover:not(:focus) {
+    border-color: var(--cor-cinza-secundario);
+}
+
+#modalSobrePerfil .campo__input:focus {
+    background-color: var(--cor-fundo-branco);
+}
+
+.sobre-perfil__input-wrapper .campo__input {
+    padding-right: 4.8rem;
+}
+
+.sobre-perfil__input-status {
+    position: absolute;
+    right: var(--espaco-md);
+    color: var(--cor-texto-secundario);
+    font-size: 2rem;
+    pointer-events: none;
+}
+
+.sobre-perfil__input-status--ok {
+    color: var(--cor-verde);
+}
+
+.sobre-perfil__ajuda {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    margin: 0;
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-legenda);
+}
+
+.editar-perfil-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-md);
+    padding: var(--espaco-md) var(--espaco-lg);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-lg);
+    background-color: var(--cor-branco-primario);
+}
+
+.editar-perfil-item__icone {
+    flex-shrink: 0;
+    color: var(--cor-azul-primaria);
+    font-size: 2rem;
+}
+
+.Editar-email-usuario {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.editar-nome-usuario {
+    color: var(--cor-texto-titulo);
+    font-size: var(--fonte-texto);
+    font-weight: 500;
+}
+
+.editar-descricao-usuario {
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+}
+
+#modalSobrePerfil .switch {
+    flex-shrink: 0;
+}
+
+.sobre-perfil__tabela-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+}
+
+.sobre-perfil__tabela {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: var(--fonte-apoio);
+}
+
+.sobre-perfil__tabela th,
+.sobre-perfil__tabela td {
+    padding: 1rem var(--espaco-sm);
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.sobre-perfil__tabela thead {
+    background-color: var(--cor-texto-titulo);
+    color: var(--cor-fundo-branco);
+}
+
+.sobre-perfil__tabela th {
+    font-weight: 500;
+}
+
+.sobre-perfil__tabela tbody tr:not(:last-child) {
+    border-bottom: 1px solid var(--cor-borda-padrao);
+}
+
+.sobre-perfil__tabela tbody tr:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+.sobre-perfil__tabela th:last-child,
+.sobre-perfil__tabela td:last-child {
+    text-align: right;
+}
+
+.sobre-perfil__status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 9rem;
+    padding: var(--espaco-xs) var(--espaco-md);
+    border: 1px solid currentColor;
+    border-radius: var(--raio-full);
+    font-size: var(--fonte-legenda);
+    font-weight: 500;
+}
+
+.sobre-perfil__status--sucesso {
+    background-color: var(--cor-verde-secundario);
+    color: var(--cor-verde);
+}
+
+.sobre-perfil__status--verificado {
+    background-color: rgba(0, 106, 181, 0.08);
+    color: var(--cor-azul-destaques);
+}
+
+@media (max-width: 768px) {
+    .sobre-perfil__secao {
+        padding: var(--espaco-md);
+    }
+
+    .editar-perfil-item {
+        align-items: flex-start;
+        padding: var(--espaco-md);
+    }
+
+    .editar-descricao-usuario {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .foto_sobre__imagem img {
+        width: 9.6rem;
+        height: 9.6rem;
+    }
+
+    .editar-perfil-item__icone {
+        display: none;
+    }
+}
