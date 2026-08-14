@@ -41,11 +41,11 @@ INSERT INTO perfil_permissao (perfil_id, permissao_id) VALUES
 -- usuario
 -- ---------------------------------------------------------
 INSERT INTO usuario (perfil_id, nome, cpf, email, senha, telefone, cargo, especialidade, habilitado, ultimo_login) VALUES
-(1, 'Admin', '00011122233', 'fabrica544adm@outlook.com', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
-(2, 'Mariana Souza', '11122233344', 'caiovv1@outlook.com', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
-(2, 'Rafael Lima', '22233344455', 'rafael.lima@cyberreport.com.br', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
-(2, 'Bianca Carvalho', '33344455566', 'bianca.carvalho@cyberreport.com.br', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
-(3, 'Carlos Mendes', '44455566677', 'carlos.mendes@empresacliente.com.br', '$2y$10$wxyz5678abcd1234efgh90', '(67) 99456-7890', 'Gerente de TI', NULL, 1, '2026-06-20 08:22:00');
+(1, 'Admin', '00011122233', 'fabrica544adm@gmail.com', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
+(2, 'Caio', '11122233344', 'caiovv1@outlook.com', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
+(2, 'Rafael Rodela', '22233344455', 'rjvrafael22@gmail.com', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
+(2, 'Fabio', '33344455566', 'fabioelie@hotmail.com', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
+(3, 'Izadora', '44455566677', 'izadoraaparecidasilvapereira@gmail.com', '$2y$10$wxyz5678abcd1234efgh90', '(67) 99456-7890', 'Gerente de TI', NULL, 1, '2026-06-20 08:22:00');
 -- ids gerados: 1 a 5
 
 -- ---------------------------------------------------------

@@ -18,7 +18,7 @@ function processarRecuperarSenha(PDO $conexao, string $email): string {
 
     $usuarioModel->salvarTokenRecuperacao($email, $token, $expira);
 
-    $link = BASE_URL . "login?token=$token";
+    $link = BASE_URL . "?token=$token";
     enviarEmailRecuperacao($email, $usuario['nome'], $link);
 
     return $mensagemPadrao;

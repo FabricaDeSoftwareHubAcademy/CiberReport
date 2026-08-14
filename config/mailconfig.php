@@ -1,10 +1,10 @@
 <?php
 return [
-    'host'       => 'smtp-mail.outlook.com',
+    'host'       => 'smtp.gmail.com',
     'port'       => 587,
-    'username'   => 'fabrica544adm@outlook.com',
-    'password'   => 'qkgrfeqpbgqlvyyc',
+    'username'   => 'fabrica544adm@gmail.com',
+    'password'   => 'qxzruhixiooryelg',
     'encryption' => 'tls',
-    'from_email' => 'caiovv1@outlook.com',
+    'from_email' => 'fabrica544adm@gmail.com',
     'from_name'  => 'CiberReport'
 ];
