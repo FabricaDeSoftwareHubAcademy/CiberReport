@@ -335,13 +335,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         </p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <form
@@ -507,13 +501,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         <p class="modal__subtitulo">Informações e itens vinculados</p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body checklist-visualizacao">
@@ -598,13 +586,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         </p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body">
@@ -674,13 +656,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         </p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body">
@@ -788,13 +764,7 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
                         <p class="modal__subtitulo">Detalhes do item reutilizável</p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="modal__fechar"
-                        data-modal-close
-                        aria-label="Fechar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body checklist-visualizacao">
