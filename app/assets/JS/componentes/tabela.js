@@ -1,8 +1,8 @@
 (function () {
-  const corpo = document.querySelector('table tbody');
+  const corpo = document.querySelector('.tabela-wrapper table tbody');
   if (!corpo) return;
 
-  const cabecalhos = document.querySelectorAll('table thead th[data-col]');
+  const cabecalhos = document.querySelectorAll('.tabela-wrapper table thead th[data-col]');
   let colunaOrdenada = null;
   let ordemAscendente = true;
   let termoBuscaGlobal = '';
