@@ -1,29 +1,10 @@
 <?php
 
 namespace Components;
-
 $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
+require_once __DIR__ . '/sobre_perfil.php';
 ?>
 
-<!--
-    COMO USAR O MENU LATERAL
-    ========================
-
-    PASSO 1 — inclua o menu no topo do <body> com o título da página:
-        $tituloPagina = 'Nome da Página'; include_once 'Components/menu.php'; Envolva essa linha com a tag do php
-
-    PASSO 2 — adicione o conteúdo dentro de uma tag <main>:
-        <main>
-            conteúdo da página...
-        </main>
-
-    PASSO 3 — OBRIGATÓRIO: após o </main>, feche as divs abertas pelo menu:
-        primeira  </div> → fecha .main-content
-        segunda   </div> → fecha .menu
-
-    Sem esse fechamento o <main> fica fora do flex row da sidebar
-    e o efeito de "empurrar" o conteúdo não funciona.
--->
 <div class="menu">
     <?php
     $sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
@@ -46,8 +27,8 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                 </div>
             </div>
             <ul id="side_itens">
-                <li class="side_item<?= $itemMenuAtivo('dashboard.php') ?>">
-                    <a href="#">
+                <li class="side_item<?= $itemMenuAtivo('dashboard_gestor.php') ?>">
+                    <a href="<?= BASE_URL ?>dashboard-gestor">
                         <i class="fa-solid fa-chart-column"></i>
                         <span class="item_description">Dashboard</span>
                     </a>
@@ -68,7 +49,7 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <div class="tooltip-item"><span>Projetos</span></div>
 
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('gerenciar-tipo-pentest.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('gerenciar_tipo_pentest.php') ?>">
                     <a href="<?= BASE_URL ?>gerenciar-pentest">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
@@ -140,10 +121,12 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
     <!-- <p></p> -->
     <div class="main-content">
         <header id="menu-superior">
-            <div class="logo-menuSuperior">
+           <div class="logo-menuSuperior">
                 <img src="<?= BASE_URL ?>app/assets/img/logo-baikal-icone.svg" alt="" />
+            </div> 
+            <div class="tituloMenuSuperior">
+                <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             </div>
-            <h1><?= htmlspecialchars($tituloPagina ?? 'Título da Página') ?></h1>
             <!-- barra de pesquisa para desktop -->
             <form class="input-pesquisaSuperior">
                 <input type="text" placeholder="Buscar..." id="busca" />
@@ -151,25 +134,37 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'NOME';
                     <i class="fa-brands fa-sistrix"></i>
                 </button>
             </form>
-
-            <!-- pesquisa para formato mobile -->
-            <div class="pesquisa-mobile">
-                <button>
-                    <i class="fa-brands fa-sistrix" class='color: #9ca3af;'></i>
-                </button>
-            </div>
-            <!-- overlay-pesquisa -->
-            <form class="overlay-pesquisaMobile">
-                <div class="barra-pesquisa" id="busca-mobile">
-                    <input type="text" placeholder="Buscar..." />
+            
+            <div class="perfis">
+                <!-- pesquisa para formato mobile -->
+                <div class="pesquisa-mobile">
                     <button>
-                        <i class="fa-brands fa-sistrix"></i>
+                        <i class="fa-brands fa-sistrix" class='color: #9ca3af;'></i>
                     </button>
                 </div>
-            </form>
-            <div class="perfis">
+                <!-- overlay-pesquisa -->
+                <form class="overlay-pesquisaMobile">
+                    <div class="barra-pesquisa" id="busca-mobile">
+                        <input type="text" placeholder="Buscar..." />
+                        <button>
+                            <i class="fa-brands fa-sistrix"></i>
+                        </button>
+                    </div>
+                </form>
                 <i class="fa-regular fa-bell notificacao"></i>
                 <img class="imagem-usuario" src="<?= BASE_URL ?>app/assets/img/foto-perfil.jpg" alt="" />
+                <div id="sobrePerfil">
+                    <div class="sobre-perfil__dados">
+                        <div class="sobre-perfil__identificacao">
+                            <strong><?= htmlspecialchars($nomeUsuario) ?></strong>
+                            <span>Gerente</span>
+                        </div>
+                    </div>
+                    <button type="button" class="sobre-perfil__editar" data-modal-target="modalSobrePerfil">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                        Editar Perfil
+                    </button>
+                </div>
                 <div class="description-user">
                     <p><?= $nomeUsuario ?></p>
                     <p>Gerente</p>
