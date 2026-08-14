@@ -1,7 +1,6 @@
 <?php
 
 $conexao = require __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Controller/LoginController.php";
 require_once __DIR__ . "/../Controller/RecuperarSenhaController.php";
 require_once __DIR__ . "/../Controller/RedefinirSenhaController.php";
 
@@ -25,19 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
         $tokenUrl = null;
     }
 
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $resultado = processarLogin($conexao, trim($_POST['email'] ?? ''), $_POST['senha'] ?? '');
-
-    if ($resultado['sucesso']) {
-        $_SESSION['usuario_id']   = $resultado['usuario']['id'];
-        $_SESSION['usuario_nome'] = $resultado['usuario']['nome'];
-        header("Location: " . BASE_URL . "gerenciar-pentest");
-        exit;
-    }
-
-    $erro = $resultado['erro'];
-}
+} 
 ?>
 
 <!DOCTYPE html>

@@ -1,9 +1,10 @@
 <?php
 
 use http\Route;
-
-Route::GET('/', 'AuthController@index');
-Route::POST('/', 'AuthController@index');
+Route::GET('/', 'AuthController@exibirLogin');
+Route::GET('/login', 'AuthController@exibirLogin');
+Route::POST('/login', 'AuthController@login');
+Route::POST('/logout', 'AuthController@logout');
 
 Route::GET('/gerenciar-pentest','TipoPentestController@index');
 Route::POST('/gerenciar-pentest','TipoPentestController@index');
