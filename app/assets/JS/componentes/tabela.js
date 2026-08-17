@@ -80,13 +80,6 @@
   }
 
   // --- espaçamento em branco ---
-  // Mantém a tabela sempre ocupando toda a altura disponível do wrapper
-  // (que reserva essa altura via CSS, ver .tabela-wrapper), mesmo quando a
-  // página atual tem poucas linhas ou quando não há dados suficientes para
-  // preenchê-la. As linhas reais ficam no topo; uma única linha espaçadora
-  // (altura calculada, não uma linha por vez) ocupa o restante do espaço
-  // acima do rodapé (paginação) — evita depender de "quantas linhas em
-  // branco" cada tela precisa.
   let linhaEspacadora = null;
 
   function obterLinhaEspacadora() {
@@ -101,10 +94,6 @@
     return linhaEspacadora;
   }
 
-  // Algumas páginas (ex.: gerenciar-tipo-pentest.css) sobrescrevem o layout
-  // padrão e tornam o próprio <tbody> a área rolável (overflow-y) em vez do
-  // .tabela-wrapper. Detecta qual dos dois é o container com altura limitada
-  // para basear o cálculo do espaçamento no elemento certo em cada página.
   function containerComScroll() {
     if (['auto', 'scroll'].includes(window.getComputedStyle(corpo).overflowY)) {
       return corpo;
@@ -114,11 +103,7 @@
 
   function alturaConteudoAtual(container) {
     if (container === corpo) return corpo.scrollHeight;
-    const theadEl = tabela.querySelector('thead');
-    const tfootEl = tabela.querySelector('tfoot');
-    return (theadEl ? theadEl.offsetHeight : 0)
-      + corpo.offsetHeight
-      + (tfootEl ? tfootEl.offsetHeight : 0);
+    return tabela.getBoundingClientRect().height;
   }
 
   function ajustarEspacamento() {
@@ -126,17 +111,15 @@
     const container = containerComScroll();
     if (!container) return;
 
-    // Mede sempre sem a espaçadora no DOM (não só com altura 0): uma <tr> já
-    // renderizada não encolhe de forma confiável só por mudar o style.height
-    // (o layout automático da tabela mantém a altura anterior), então a
-    // única medição confiável é com o elemento efetivamente removido.
     const espacadora = obterLinhaEspacadora();
     espacadora.remove();
-    const diferenca = container.clientHeight - alturaConteudoAtual(container);
+
+    const alturaContainer = container === corpo ? corpo.clientHeight : container.getBoundingClientRect().height;
+    const diferenca = Math.floor(alturaContainer - alturaConteudoAtual(container)) - 1;
 
     espacadora.querySelector('td').colSpan = tabela.querySelectorAll('thead th').length || 1;
     espacadora.style.height = diferenca > 0 ? `${diferenca}px` : '0px';
-    corpo.appendChild(espacadora); // sempre por último, mesmo após reordenar/paginar
+    corpo.appendChild(espacadora);
   }
 
   let redimensionamentoTimeout = null;
