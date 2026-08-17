@@ -163,7 +163,8 @@ h6 {
    o seletor no grupo abaixo — não duplique as regras. */
 .tabela-wrapper,
 .tabela-wrapper tbody,
-.modal__body {
+.modal__body,
+.lista-alocacao {
     scrollbar-width: thin;
     scrollbar-color: var(--cor-cinza-secundario) transparent;
 

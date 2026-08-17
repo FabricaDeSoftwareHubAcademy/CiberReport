@@ -4,16 +4,15 @@
     gap: var(--espaco-sm);
 }
 
-/* --- Cards de KPI --- */
 .group-cards-gestor {
     display: flex;
+    flex-direction: column;
     gap: var(--espaco-sm);
-    flex-wrap: wrap;
+    min-width: 0;
 }
 
 .card-gestor {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 0;
     background-color: var(--cor-fundo-branco);
     border-radius: var(--raio-lg);
     box-shadow: var(--sombra-xs);
@@ -73,10 +72,9 @@
     cursor: help;
 }
 
-/* --- Gráficos --- */
 .group-graficos-gestor {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 60fr 20fr 20fr;
     gap: var(--espaco-sm);
     align-items: stretch;
 }
@@ -92,19 +90,25 @@
     min-width: 0;
 }
 
+.grafico-card--alocacao {
+    padding-right: var(--espaco-xs);
+}
+
 .grafico-card__titulo {
     font-size: var(--fonte-apoio);
     font-weight: 600;
     color: var(--cor-texto-titulo);
 }
 
-/* --- Ocupação por Analista (lista de barras, uma por analista) --- */
 .lista-alocacao {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: var(--espaco-sm);
     width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: var(--espaco-sm);
 }
 
 .alocacao-item {
@@ -155,7 +159,6 @@
     background-color: var(--cor-verde);
 }
 
-/* Quanto mais perto do limite do analista, mais quente a cor da barra e do número */
 .alocacao-item[data-nivel="atencao"] .alocacao-item__barra {
     background-color: var(--cor-amarelo);
 }
@@ -180,7 +183,6 @@
     color: var(--cor-vermelho-destaque);
 }
 
-/* --- Tabela --- */
 .group-tabela-prazos {
     display: grid;
     grid-template-columns: 1fr;
@@ -236,17 +238,49 @@
     background-color: var(--cor-laranja-secundario);
 }
 
+.celula-dias-restantes {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.celula-dias-restantes--vencido {
+    color: var(--cor-vermelho-destaque);
+}
+
+.celula-dias-restantes--risco {
+    color: var(--cor-laranja);
+}
+
 .celula-vuln-critica {
     text-align: center;
 }
 
-.celula-vuln-critica__icone {
-    color: var(--cor-cinza-terciario);
-    font-size: 1rem;
+.checkbox-vuln-critica {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--cor-cinza-terciario);
+    border-radius: 4px;
+    background-color: var(--cor-fundo-branco);
+    cursor: default;
+    display: inline-grid;
+    place-content: center;
 }
 
-.celula-vuln-critica__icone--marcado {
-    color: var(--cor-vermelho-destaque);
+.checkbox-vuln-critica:checked {
+    background-color: var(--cor-vermelho-destaque);
+    border-color: var(--cor-vermelho-destaque);
+}
+
+.checkbox-vuln-critica:checked::before {
+    content: "";
+    width: 4px;
+    height: 8px;
+    border: solid var(--cor-fundo-branco);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
 }
 
 .oculto-visualmente {

@@ -26,19 +26,6 @@
   }
 
   // --- dados mockados ---
-  // Estrutura espelha os campos reais de `projeto`/`empresa`/`vulnerabilidade`
-  // (ver app/Model/Database/banco.sql) para facilitar a troca por dados de um
-  // endpoint real no futuro, quando a alocação analista<->projeto existir.
-  // `dias_aviso_prazo`: antecedência (em dias) configurada no próprio projeto
-  // para considerá-lo "em risco" — proposta aprovada pela equipe, ainda sem
-  // campo real no cadastro de projeto (ver docs/dashboard.md). Projetos sem
-  // esse valor caem no fallback `DIAS_PRAZO_PADRAO`.
-  // `analistas_alocados`: nomes de todos os analistas trabalhando no projeto
-  // (espelha `projeto_usuario`, N:N — ver banco.sql), diferente de
-  // `responsavel_tecnico` que é só o responsável principal. Também mockado,
-  // pela mesma razão que a Ocupação por Analista (sem Model/tela reais ainda).
-  // `checklist_itens_total`/`checklist_itens_concluidos`: espelham
-  // `checklist_item` — usados só pelo gráfico "Progresso por Projeto".
   const projetosMock = [
     { id: 1, nome: 'Pentest WEB - Cliente Atacado', cliente: 'Cliente1', responsavel_tecnico: 'André', analistas_alocados: ['André', 'Ana'], status: 'EM_ANDAMENTO', data_inicio: d(-40), data_fim_prevista: d(20), data_fim_real: null, updated_at: d(-2), vulnerabilidades_total: 14, vulnerabilidades_criticas: 3, vulnerabilidades_altas: 2, dias_aviso_prazo: 15, checklist_itens_total: 24, checklist_itens_concluidos: 14 },
     { id: 2, nome: 'Pentest WEB - Cliente Magazine Luiza', cliente: 'Cliente2', responsavel_tecnico: 'Marcos', analistas_alocados: ['Marcos'], status: 'EM_ANDAMENTO', data_inicio: d(-35), data_fim_prevista: d(3), data_fim_real: null, updated_at: d(-1), vulnerabilidades_total: 9, vulnerabilidades_criticas: 1, vulnerabilidades_altas: 1, dias_aviso_prazo: 5, checklist_itens_total: 18, checklist_itens_concluidos: 16 },
@@ -54,25 +41,18 @@
     { id: 12, nome: 'Pentest Mobile - Cliente Doze', cliente: 'Cliente12', responsavel_tecnico: 'João', analistas_alocados: ['João'], status: 'CONCLUIDO', data_inicio: d(-470), data_fim_prevista: d(-422), data_fim_real: d(-420), updated_at: d(-420), vulnerabilidades_total: 5, vulnerabilidades_criticas: 0, vulnerabilidades_altas: 0, dias_aviso_prazo: 15, checklist_itens_total: 9, checklist_itens_concluidos: 9 }
   ];
 
-  // `limite_projetos`: quantos projetos em andamento esse analista pode
-  // assumir ao mesmo tempo — hoje é um valor mockado por analista; no
-  // cadastro real vira um campo setado pelo gestor ao criar/editar o
-  // analista (ver docs/dashboard.md).
   const analistasMock = [
     { id: 1, nome: 'André', limite_projetos: 2 },
     { id: 2, nome: 'José', limite_projetos: 3 },
     { id: 3, nome: 'Marcos', limite_projetos: 6 },
     { id: 4, nome: 'João', limite_projetos: 4 },
-    { id: 5, nome: 'Ana', limite_projetos: 2 } // sem projeto EM_ANDAMENTO no mock -> aparece como 0/2
+    { id: 5, nome: 'Ana', limite_projetos: 2 }
   ];
 
   function projetosAtivos() {
     return projetosMock.filter((projeto) => projeto.status === 'EM_ANDAMENTO');
   }
 
-  // Fallback quando um projeto não tem `dias_aviso_prazo` definido (ver
-  // docs/dashboard.md) — não deve acontecer no mock atual, mas serve de
-  // valor padrão sugerido ao cadastrar um projeto novo.
   const DIAS_PRAZO_PADRAO = 15;
 
   function projetoVencido(projeto) {
@@ -84,13 +64,18 @@
     return new Date(projeto.data_fim_prevista) <= diasAPartirDeHoje(antecedencia);
   }
 
-  // Badge exibido ao lado da Data Fim Prevista na tabela — mesmo critério
-  // (vencido/em risco) usado no card "Prazos em Risco", só que linha a linha,
-  // pra não depender de abrir nada pra saber quais projetos estão em risco.
+  // `nivel` (vencido/risco) alimenta tanto o badge da Data Fim Prevista quanto
+  // a cor da coluna "Dias Restantes" — os dois sempre concordam porque usam a
+  // mesma classificação.
   function rotuloPrazo(projeto) {
-    if (projetoVencido(projeto)) return { texto: 'Vencido', classe: 'badge-prazo--vencido' };
-    if (projetoEmRisco(projeto)) return { texto: 'Em risco', classe: 'badge-prazo--risco' };
+    if (projetoVencido(projeto)) return { texto: 'Vencido', nivel: 'vencido' };
+    if (projetoEmRisco(projeto)) return { texto: 'Em risco', nivel: 'risco' };
     return null;
+  }
+
+  function calcularDiasRestantes(projeto) {
+    const prazo = new Date(projeto.data_fim_prevista);
+    return Math.round((prazo - hoje) / (1000 * 60 * 60 * 24));
   }
 
   function calcularProgresso(projeto) {
@@ -100,27 +85,47 @@
     return { concluidos, total, percentual };
   }
 
-  // --- placeholder de navegação ---
-  // A Dashboard do Projeto ainda não existe (é a próxima etapa). Por ora só
-  // registramos qual projeto foi clicado; quando a rota existir, trocar por
-  // window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto.
+  // TODO: trocar por window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto quando a rota existir.
   function irParaDashboardProjeto(idProjeto) {
     console.log('TODO: abrir Dashboard do Projeto para o projeto', idProjeto);
   }
 
-  function filtrarTabelaPorAnalista(nomeAnalista) {
+  // Filtra a tabela reaproveitando a busca global de `tabela.js` (dispara
+  // 'input' no mesmo campo usado pela busca do menu) — não há acesso direto
+  // ao estado interno de filtro de `tabela.js` a partir daqui, então isso é
+  // o único gancho disponível sem alterar o componente compartilhado.
+  // `termoBusca` é o texto realmente usado no filtro (precisa dar match no
+  // `textContent` das linhas); `rotuloChip` é só o texto exibido no chip
+  // "Filtrado por X" — podem divergir (ver `filtrarTabelaPorPrazoRisco`).
+  function filtrarTabela(termoBusca, rotuloChip) {
     const campoBusca = document.querySelector('.input-pesquisaSuperior input[type="text"]');
     if (!campoBusca) return;
-    campoBusca.value = nomeAnalista;
+    campoBusca.value = termoBusca;
     campoBusca.dispatchEvent(new Event('input', { bubbles: true }));
-    exibirChipFiltro(nomeAnalista);
+    exibirChipFiltro(rotuloChip);
   }
 
-  function exibirChipFiltro(nomeAnalista) {
+  function filtrarTabelaPorAnalista(nomeAnalista) {
+    filtrarTabela(nomeAnalista, nomeAnalista);
+  }
+
+  function filtrarTabelaPorProjeto(nomeProjeto) {
+    filtrarTabela(nomeProjeto, nomeProjeto);
+  }
+
+  // Não há coluna/badge único que sirva de termo de busca pros dois casos
+  // (badge é "Vencido" OU "Em risco" — ver `rotuloPrazo`), então as linhas
+  // vencidas ganham um marcador oculto "em risco" em `renderizarTabela()``
+  // só pra dar match nessa busca; "Em risco" já dá match sozinho.
+  function filtrarTabelaPorPrazoRisco() {
+    filtrarTabela('em risco', 'Prazos em risco/vencidos');
+  }
+
+  function exibirChipFiltro(rotulo) {
     const chip = document.getElementById('filtro-ativo-chip');
     const nomeSpan = document.getElementById('filtro-ativo-nome');
     if (!chip || !nomeSpan) return;
-    nomeSpan.textContent = nomeAnalista;
+    nomeSpan.textContent = rotulo;
     chip.hidden = false;
   }
 
@@ -164,7 +169,7 @@
     const ativos = projetosAtivos();
 
     if (!ativos.length) {
-      corpo.innerHTML = '<tr><td colspan="6" style="text-align:center">Nenhum projeto em andamento no momento.</td></tr>';
+      corpo.innerHTML = '<tr><td colspan="7" style="text-align:center">Nenhum projeto em andamento no momento.</td></tr>';
       return;
     }
 
@@ -175,6 +180,7 @@
       const badgePrazo = rotuloPrazo(projeto);
       const temCritica = projeto.vulnerabilidades_criticas > 0;
       const analistas = projeto.analistas_alocados || [];
+      const diasRestantes = calcularDiasRestantes(projeto);
 
       linha.innerHTML = `
         <td>${projeto.nome}</td>
@@ -183,11 +189,12 @@
         <td class="celula-analistas" data-valores='${JSON.stringify(analistas)}'>${analistas.join(', ') || '-'}</td>
         <td class="celula-prazo">
           <span class="celula-prazo__data">${formatarDataBR(projeto.data_fim_prevista)}</span>
-          ${badgePrazo ? `<span class="badge-prazo ${badgePrazo.classe}">${badgePrazo.texto}</span>` : ''}
+          ${badgePrazo ? `<span class="badge-prazo badge-prazo--${badgePrazo.nivel}">${badgePrazo.texto}</span>` : ''}
+          ${badgePrazo?.nivel === 'vencido' ? '<span class="oculto-visualmente" aria-hidden="true">em risco</span>' : ''}
         </td>
+        <td class="celula-dias-restantes${badgePrazo ? ` celula-dias-restantes--${badgePrazo.nivel}` : ''}">${diasRestantes}</td>
         <td class="celula-vuln-critica">
-          <i class="fa-solid ${temCritica ? 'fa-square-check celula-vuln-critica__icone celula-vuln-critica__icone--marcado' : 'fa-square celula-vuln-critica__icone'}" aria-hidden="true" title="${temCritica ? 'Vulnerabilidade crítica em aberto' : 'Nenhuma vulnerabilidade crítica em aberto'}"></i>
-          <span class="oculto-visualmente">${temCritica ? 'Sim' : 'Não'}</span>
+          <input type="checkbox" class="checkbox-vuln-critica" ${temCritica ? 'checked' : ''} disabled title="${temCritica ? 'Vulnerabilidade crítica em aberto' : 'Nenhuma vulnerabilidade crítica em aberto'}" />
         </td>
       `;
       linha.addEventListener('click', () => irParaDashboardProjeto(projeto.id));
@@ -216,12 +223,16 @@
         events: {
           dataPointSelection: (evento, contextoGrafico, config) => {
             const projeto = ativos[config.dataPointIndex];
-            if (projeto) irParaDashboardProjeto(projeto.id);
+            if (projeto) filtrarTabelaPorProjeto(projeto.nome);
           }
         }
       },
       series: [{ name: 'Progresso', data: percentuais }],
-      xaxis: { categories: ativos.map((projeto) => projeto.cliente) },
+      xaxis: {
+        // Categoria como array: ApexCharts quebra em várias linhas em vez de truncar/rotacionar.
+        categories: ativos.map((projeto) => projeto.nome.split(' - ')),
+        labels: { rotate: 0, trim: false, style: { fontSize: '11px' } }
+      },
       yaxis: { max: 100, labels: { formatter: (valor) => `${valor}%` } },
       colors: obterCoresTokens(),
       dataLabels: {
@@ -229,7 +240,17 @@
         formatter: (valor) => `${valor}%`,
         style: { colors: ['#fff'] }
       },
-      tooltip: { y: { formatter: (valor) => `${valor}%` } },
+      tooltip: {
+        y: {
+          formatter: (valor, { dataPointIndex }) => {
+            const projeto = ativos[dataPointIndex];
+            if (!projeto) return `${valor}%`;
+            const dias = calcularDiasRestantes(projeto);
+            const rotuloDias = dias < 0 ? `Vencido há ${Math.abs(dias)} dia(s)` : dias === 0 ? 'Vence hoje' : `Faltam ${dias} dia(s)`;
+            return `${valor}% · ${rotuloDias}`;
+          }
+        }
+      },
       legend: { show: false },
       plotOptions: { bar: { borderRadius: 4, columnWidth: '55%', distributed: true } }
     });
@@ -237,11 +258,6 @@
     grafico.render();
   }
 
-  // Faixas de ocupação (% do limite individual do analista) -> nível de
-  // severidade. Cada nível mapeia para um dos tokens de status já existentes
-  // em style.css (verde/amarelo/laranja/vermelho), do menos para o mais
-  // próximo do limite. Ver docs/dashboard.md para a justificativa de usar
-  // uma escala fixa de 4 degraus em vez de um gradiente contínuo.
   function nivelOcupacao(percentual) {
     if (percentual >= 100) return 'critico';
     if (percentual >= 80) return 'alerta';
@@ -305,17 +321,11 @@
     botaoLimparFiltro.addEventListener('click', limparFiltroAnalista);
   }
 
-  // Card "Projetos em Andamento": a tabela já só lista projetos ativos, então
-  // o clique aqui apenas garante a visão padrão, limpando qualquer filtro
-  // (ex.: filtro por analista) que esteja aplicado no momento.
   const cardEmAndamento = document.getElementById('card-em-andamento');
   if (cardEmAndamento) {
     cardEmAndamento.addEventListener('click', limparFiltroAnalista);
   }
 
-  // Card "Vulnerabilidades Críticas em Aberto": filtrar a tabela pelos projetos
-  // com vulnerabilidade crítica ainda não corrigida é trabalho futuro (ver
-  // docs/dashboard.md) — hoje o clique não tem efeito.
   const cardVulnsCriticas = document.getElementById('card-vulns-criticas');
   if (cardVulnsCriticas) {
     cardVulnsCriticas.addEventListener('click', () => {
@@ -323,8 +333,13 @@
     });
   }
 
-  // Lista de ocupação por analista é HTML/CSS puro (sem ApexCharts), então
-  // renderiza sempre, independente do CDN do gráfico de barras ter carregado.
+  // Card "Prazos em Risco/Vencidos": filtra a tabela pelos mesmos projetos
+  // contados no card (ver `projetoEmRisco` — já inclui os vencidos).
+  const cardPrazosRisco = document.getElementById('card-prazos-risco');
+  if (cardPrazosRisco) {
+    cardPrazosRisco.addEventListener('click', filtrarTabelaPorPrazoRisco);
+  }
+
   renderizarAlocacaoAnalistas();
 
   if (window.ApexCharts) {

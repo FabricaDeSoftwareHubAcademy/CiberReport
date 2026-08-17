@@ -16,27 +16,6 @@
     ?>
     <main class="main-dashboard-gestor">
 
-        <section class="group-cards-gestor">
-            <div class="card-gestor card-gestor--clicavel" id="card-vulns-criticas">
-                <h2 class="card-gestor__titulo">
-                    Vulnerabilidades Críticas em Aberto
-                    <i class="fa-solid fa-circle-info card-gestor__info" title="Soma somente severidade Crítica, apenas dos projetos em andamento"></i>
-                </h2>
-                <span class="card-gestor__valor" id="valor-vulns-criticas">--</span>
-            </div>
-            <div class="card-gestor card-gestor--clicavel" id="card-em-andamento">
-                <h2 class="card-gestor__titulo">Projetos em Andamento</h2>
-                <span class="card-gestor__valor" id="valor-em-andamento">--</span>
-            </div>
-            <div class="card-gestor card-gestor--prazo">
-                <h2 class="card-gestor__titulo">
-                    Prazos em Risco
-                    <i class="fa-solid fa-circle-info card-gestor__info" title="Inclui projetos em andamento já vencidos e os que estão dentro do prazo de aviso configurado em cada projeto."></i>
-                </h2>
-                <span class="card-gestor__valor" id="valor-prazos-risco">--</span>
-            </div>
-        </section>
-
         <section class="group-graficos-gestor">
             <div class="grafico-card">
                 <h2 class="grafico-card__titulo">
@@ -51,6 +30,26 @@
                     <i class="fa-solid fa-circle-info card-gestor__info" title="Projetos em andamento de cada analista em relação ao limite máximo de alocação simultânea definido no cadastro dele. Clique em um analista para filtrar a tabela."></i>
                 </h2>
                 <ul class="lista-alocacao" id="lista-alocacao"></ul>
+            </div>
+            <div class="group-cards-gestor">
+                <div class="card-gestor card-gestor--clicavel" id="card-vulns-criticas">
+                    <h2 class="card-gestor__titulo">
+                        Vulnerabilidades Críticas em Aberto
+                        <i class="fa-solid fa-circle-info card-gestor__info" title="Soma somente severidade Crítica, apenas dos projetos em andamento"></i>
+                    </h2>
+                    <span class="card-gestor__valor" id="valor-vulns-criticas">--</span>
+                </div>
+                <div class="card-gestor card-gestor--clicavel" id="card-em-andamento">
+                    <h2 class="card-gestor__titulo">Projetos em Andamento</h2>
+                    <span class="card-gestor__valor" id="valor-em-andamento">--</span>
+                </div>
+                <div class="card-gestor card-gestor--prazo card-gestor--clicavel" id="card-prazos-risco">
+                    <h2 class="card-gestor__titulo">
+                        Prazos em Risco/Vencidos
+                        <i class="fa-solid fa-circle-info card-gestor__info" title="Inclui projetos em andamento já vencidos e os que estão dentro do prazo de aviso configurado em cada projeto. Clique para filtrar a tabela."></i>
+                    </h2>
+                    <span class="card-gestor__valor" id="valor-prazos-risco">--</span>
+                </div>
             </div>
         </section>
 
@@ -82,17 +81,18 @@
                                 <th data-col="4" data-filtro="data">
                                     <span class="th-label">Data Fim Prevista <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por data fim prevista"></i></span>
                                 </th>
-                                <th data-col="5" data-filtro="lista">
+                                <th data-col="5" data-filtro="numero">
+                                    <span class="th-label">Dias Restantes <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="6" data-filtro="lista">
                                     <span class="th-label">Crítica<i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por vulnerabilidade crítica em aberto"></i></span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- linhas geradas por dashboardGestor.js a partir do mock, antes do tabela.js rodar -->
-                        </tbody>
+                        <tbody></tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6" class="rodape-tabela">
+                                <td colspan="7" class="rodape-tabela">
                                     <div class="paginacao"></div>
                                 </td>
                             </tr>
@@ -106,9 +106,7 @@
     </div>
     </div>
 
-    <!-- ApexCharts precisa carregar antes de dashboardGestor.js, que por sua vez
-         precisa popular <tbody id="table"> antes de tabela.js rodar (ele se
-         auto-inicializa ao ser executado e lê as linhas existentes no DOM). -->
+    <!-- ordem importa: dashboardGestor.js precisa popular a tabela antes de tabela.js rodar -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>

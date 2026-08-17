@@ -21,13 +21,13 @@ Os cards "Projetos Concluídos (ano)" e "Analistas Não Alocados" foram removido
 
 1. **Vulnerabilidades Críticas em Aberto**
 2. **Projetos em Andamento**
-3. **Prazos em Risco**
+3. **Prazos em Risco/Vencidos**
 
 Comportamento de clique nos cards:
 
 - **Vulnerabilidades Críticas em Aberto** (`#card-vulns-criticas`): hoje o clique não faz nada (só um `console.log('TODO...')` em `dashboardGestor.js`). **Trabalho futuro:** ao clicar, deve filtrar a tabela pelos projetos que ainda têm vulnerabilidade crítica em aberto (não corrigida).
 - **Projetos em Andamento** (`#card-em-andamento`): como a tabela já só lista projetos com `status === 'EM_ANDAMENTO'`, o clique hoje apenas limpa qualquer filtro ativo (ex.: filtro por analista vindo do gráfico de pizza), voltando à visão padrão — que já é "somente projetos ativos".
-- **Prazos em Risco**: sem comportamento de clique — voltou a ser um card de KPI só leitura. Chegou a ser feito um popover ancorado ao card com a lista de projetos em risco, mas foi removido: a equipe decidiu que esse detalhamento vai aparecer como colunas novas na própria tabela de projetos (ex.: prazo de aviso do projeto, status vencido/em risco), em vez de uma interação separada no card. A lista fixa "Próximos Prazos" que existia antes do popover também não volta — o bloco lateral continua removido e a tabela ocupa a largura toda (ver seção abaixo sobre a regra de "em risco" por projeto, que segue valendo para a contagem do card e vai alimentar essas colunas futuras). **Feito:** ver [Tabela de projetos — colunas revisadas](#tabela-de-projetos--colunas-revisadas) — a coluna "Data Fim Prevista" ganhou o badge vencido/em risco linha a linha.
+- ~~**Prazos em Risco**: sem comportamento de clique — voltou a ser um card de KPI só leitura.~~ Revertido: o card foi renomeado para **"Prazos em Risco/Vencidos"** e ganhou clique de volta (`#card-prazos-risco`), agora filtrando a tabela pelos mesmos projetos somados no card (`projetoEmRisco`, que já inclui os vencidos — ver [Prazo em risco — antecedência por projeto (mockada)](#prazo-em-risco--antecedência-por-projeto-mockada)). Reaproveita o mesmo mecanismo de `filtrarTabelaPorAnalista` (escreve no campo de busca global de `tabela.js` e mostra o chip "Filtrado por X"), generalizado em `filtrarTabela(termoBusca, rotuloChip)`. Como não existe um termo único que dê match nos dois badges ("Vencido" e "Em risco"), as linhas vencidas ganham um marcador oculto (`.oculto-visualmente[aria-hidden]`, texto "em risco") só para a busca encontrar; visualmente e para leitor de tela o badge continua mostrando "Vencido". A coluna "Data Fim Prevista" mantém o badge vencido/em risco linha a linha (ver [Tabela de projetos — colunas revisadas](#tabela-de-projetos--colunas-revisadas)).
 
 ## Card de Vulnerabilidades — critério mudou de Crítica+Alta para só Crítica
 
