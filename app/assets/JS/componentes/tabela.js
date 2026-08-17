@@ -50,7 +50,7 @@
   }
 
   function todasLinhas() {
-    return Array.from(corpo.querySelectorAll('tr'));
+    return Array.from(corpo.querySelectorAll('tr:not(.tabela-linha-vazia)'));
   }
 
   function linhasFiltradas() {
@@ -62,6 +62,7 @@
   }
 
   function exibirPagina(pagina) {
+    removerLinhasVazias();
     const filtradas = new Set(linhasFiltradas());
     const inicio = (pagina - 1) * linhasPorPagina;
     const fim = inicio + linhasPorPagina;
@@ -76,7 +77,81 @@
     });
     paginaAtual = Math.min(pagina, totalPaginas());
     renderizarBotoes();
+    preencherLinhasVazias();
   }
+
+  // --- preenchimento com linhas em branco ---
+  // Mantém a tabela sempre ocupando toda a altura disponível do wrapper
+  // (que reserva essa altura via CSS, ver .tabela-wrapper), mesmo quando a
+  // página atual tem poucas linhas ou quando não há dados suficientes para
+  // preenchê-la. As linhas reais ficam no topo; o restante do espaço vira
+  // linhas em branco acima do rodapé (paginação).
+  function removerLinhasVazias() {
+    corpo.querySelectorAll('tr.tabela-linha-vazia').forEach((linha) => linha.remove());
+  }
+
+  // Algumas páginas (ex.: gerenciar-tipo-pentest.css) sobrescrevem o layout
+  // padrão e tornam o próprio <tbody> a área rolável (overflow-y) em vez do
+  // .tabela-wrapper. Detecta qual dos dois é o container com altura limitada
+  // para basear o cálculo de preenchimento no elemento certo em cada página.
+  function containerComScroll() {
+    if (['auto', 'scroll'].includes(window.getComputedStyle(corpo).overflowY)) {
+      return corpo;
+    }
+    return tabela.closest('.tabela-wrapper');
+  }
+
+  function alturaConteudoAtual(container) {
+    if (container === corpo) return corpo.scrollHeight;
+    const theadEl = tabela.querySelector('thead');
+    const tfootEl = tabela.querySelector('tfoot');
+    return (theadEl ? theadEl.offsetHeight : 0)
+      + corpo.offsetHeight
+      + (tfootEl ? tfootEl.offsetHeight : 0);
+  }
+
+  function criarLinhaVazia(numColunas) {
+    const linhaVazia = document.createElement('tr');
+    linhaVazia.className = 'tabela-linha-vazia';
+    linhaVazia.setAttribute('aria-hidden', 'true');
+    const celula = document.createElement('td');
+    celula.colSpan = numColunas;
+    celula.innerHTML = '&nbsp;';
+    linhaVazia.appendChild(celula);
+    return linhaVazia;
+  }
+
+  function preencherLinhasVazias() {
+    if (!tabela) return;
+    const container = containerComScroll();
+    if (!container) return;
+    if (container.clientHeight - alturaConteudoAtual(container) <= 0) return;
+
+    // Insere linha por linha e mede o DOM real a cada passo: usar a altura de
+    // uma linha de dados (que pode variar por causa de texto que quebra em
+    // várias linhas, ver imagem do card "Projeto") como referência subestimava
+    // a quantidade necessária e deixava um vão antes do rodapé.
+    const numColunas = tabela.querySelectorAll('thead th').length || 1;
+    let tentativas = 0;
+    while (container.clientHeight - alturaConteudoAtual(container) > 0 && tentativas < 500) {
+      corpo.appendChild(criarLinhaVazia(numColunas));
+      tentativas++;
+    }
+
+    if (container.clientHeight - alturaConteudoAtual(container) < 0) {
+      const linhasVazias = corpo.querySelectorAll('tr.tabela-linha-vazia');
+      if (linhasVazias.length) linhasVazias[linhasVazias.length - 1].remove();
+    }
+  }
+
+  let redimensionamentoTimeout = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(redimensionamentoTimeout);
+    redimensionamentoTimeout = setTimeout(() => {
+      removerLinhasVazias();
+      preencherLinhasVazias();
+    }, 150);
+  });
 
   function renderizarSeletorItensPorPagina() {
     if (!containerItensPorPagina) return;

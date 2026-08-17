@@ -8,6 +8,19 @@
     overflow-x: hidden;
 }
 
+main {
+    height: calc(100vh - var(--altura-menu-superior));
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.tabela-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+}
+
 .button-cadastro {
     display: flex;
     justify-content: flex-end;

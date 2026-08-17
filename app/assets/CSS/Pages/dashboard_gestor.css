@@ -1,6 +1,8 @@
 .main-dashboard-gestor {
+    height: calc(100vh - var(--altura-menu-superior));
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
     gap: var(--espaco-sm);
 }
 
@@ -186,8 +188,11 @@
 .group-tabela-prazos {
     display: grid;
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     gap: var(--espaco-sm);
-    align-items: start;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
 }
 
 .tabela-coluna {
@@ -195,6 +200,13 @@
     flex-direction: column;
     gap: var(--espaco-xs);
     min-width: 0;
+    min-height: 0;
+}
+
+.tabela-wrapper.tabela-dashboard-gestor {
+    height: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .tabela-dashboard-gestor tbody tr {
