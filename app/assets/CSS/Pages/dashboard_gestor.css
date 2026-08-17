@@ -308,7 +308,8 @@
 }
 
 .filtro-ativo-chip[hidden] {
-    display: none;
+    display: flex;
+    visibility: hidden;
 }
 
 .filtro-ativo-chip {
