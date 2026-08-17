@@ -855,7 +855,6 @@ $jsonSeguroChecklist = JSON_UNESCAPED_UNICODE
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/checklist.js"></script>
-    <script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js"></script>
     <?php if ($erroFormularioChecklist !== ''): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {

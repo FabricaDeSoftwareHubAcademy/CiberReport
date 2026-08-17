@@ -62,7 +62,6 @@
   }
 
   function exibirPagina(pagina) {
-    removerLinhasVazias();
     const filtradas = new Set(linhasFiltradas());
     const inicio = (pagina - 1) * linhasPorPagina;
     const fim = inicio + linhasPorPagina;
@@ -77,23 +76,35 @@
     });
     paginaAtual = Math.min(pagina, totalPaginas());
     renderizarBotoes();
-    preencherLinhasVazias();
+    ajustarEspacamento();
   }
 
-  // --- preenchimento com linhas em branco ---
+  // --- espaçamento em branco ---
   // Mantém a tabela sempre ocupando toda a altura disponível do wrapper
   // (que reserva essa altura via CSS, ver .tabela-wrapper), mesmo quando a
   // página atual tem poucas linhas ou quando não há dados suficientes para
-  // preenchê-la. As linhas reais ficam no topo; o restante do espaço vira
-  // linhas em branco acima do rodapé (paginação).
-  function removerLinhasVazias() {
-    corpo.querySelectorAll('tr.tabela-linha-vazia').forEach((linha) => linha.remove());
+  // preenchê-la. As linhas reais ficam no topo; uma única linha espaçadora
+  // (altura calculada, não uma linha por vez) ocupa o restante do espaço
+  // acima do rodapé (paginação) — evita depender de "quantas linhas em
+  // branco" cada tela precisa.
+  let linhaEspacadora = null;
+
+  function obterLinhaEspacadora() {
+    if (!linhaEspacadora) {
+      linhaEspacadora = document.createElement('tr');
+      linhaEspacadora.className = 'tabela-linha-vazia';
+      linhaEspacadora.setAttribute('aria-hidden', 'true');
+      const celula = document.createElement('td');
+      celula.innerHTML = '&nbsp;';
+      linhaEspacadora.appendChild(celula);
+    }
+    return linhaEspacadora;
   }
 
   // Algumas páginas (ex.: gerenciar-tipo-pentest.css) sobrescrevem o layout
   // padrão e tornam o próprio <tbody> a área rolável (overflow-y) em vez do
   // .tabela-wrapper. Detecta qual dos dois é o container com altura limitada
-  // para basear o cálculo de preenchimento no elemento certo em cada página.
+  // para basear o cálculo do espaçamento no elemento certo em cada página.
   function containerComScroll() {
     if (['auto', 'scroll'].includes(window.getComputedStyle(corpo).overflowY)) {
       return corpo;
@@ -110,47 +121,28 @@
       + (tfootEl ? tfootEl.offsetHeight : 0);
   }
 
-  function criarLinhaVazia(numColunas) {
-    const linhaVazia = document.createElement('tr');
-    linhaVazia.className = 'tabela-linha-vazia';
-    linhaVazia.setAttribute('aria-hidden', 'true');
-    const celula = document.createElement('td');
-    celula.colSpan = numColunas;
-    celula.innerHTML = '&nbsp;';
-    linhaVazia.appendChild(celula);
-    return linhaVazia;
-  }
-
-  function preencherLinhasVazias() {
+  function ajustarEspacamento() {
     if (!tabela) return;
     const container = containerComScroll();
     if (!container) return;
-    if (container.clientHeight - alturaConteudoAtual(container) <= 0) return;
 
-    // Insere linha por linha e mede o DOM real a cada passo: usar a altura de
-    // uma linha de dados (que pode variar por causa de texto que quebra em
-    // várias linhas, ver imagem do card "Projeto") como referência subestimava
-    // a quantidade necessária e deixava um vão antes do rodapé.
-    const numColunas = tabela.querySelectorAll('thead th').length || 1;
-    let tentativas = 0;
-    while (container.clientHeight - alturaConteudoAtual(container) > 0 && tentativas < 500) {
-      corpo.appendChild(criarLinhaVazia(numColunas));
-      tentativas++;
-    }
+    // Mede sempre sem a espaçadora no DOM (não só com altura 0): uma <tr> já
+    // renderizada não encolhe de forma confiável só por mudar o style.height
+    // (o layout automático da tabela mantém a altura anterior), então a
+    // única medição confiável é com o elemento efetivamente removido.
+    const espacadora = obterLinhaEspacadora();
+    espacadora.remove();
+    const diferenca = container.clientHeight - alturaConteudoAtual(container);
 
-    if (container.clientHeight - alturaConteudoAtual(container) < 0) {
-      const linhasVazias = corpo.querySelectorAll('tr.tabela-linha-vazia');
-      if (linhasVazias.length) linhasVazias[linhasVazias.length - 1].remove();
-    }
+    espacadora.querySelector('td').colSpan = tabela.querySelectorAll('thead th').length || 1;
+    espacadora.style.height = diferenca > 0 ? `${diferenca}px` : '0px';
+    corpo.appendChild(espacadora); // sempre por último, mesmo após reordenar/paginar
   }
 
   let redimensionamentoTimeout = null;
   window.addEventListener('resize', () => {
     clearTimeout(redimensionamentoTimeout);
-    redimensionamentoTimeout = setTimeout(() => {
-      removerLinhasVazias();
-      preencherLinhasVazias();
-    }, 150);
+    redimensionamentoTimeout = setTimeout(ajustarEspacamento, 150);
   });
 
   function renderizarSeletorItensPorPagina() {
