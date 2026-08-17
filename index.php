@@ -12,6 +12,10 @@ spl_autoload_register(function ($class) {
 });
 
 $config = require __DIR__ . '/config/app.php';
-define("BASE_URL", $config['base_folder']);
+
+$protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+$dominio   = $_SERVER['HTTP_HOST'];
+define("BASE_URL", $protocolo . $dominio . $config['base_folder']);
+
 require_once __DIR__ . "/app/routes/main.php";
 Router::dispatch();

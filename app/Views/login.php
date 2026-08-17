@@ -79,9 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                     <form method="POST">
                         <input type="hidden" name="token" value="<?= htmlspecialchars($tokenUrl) ?>">
                         <label>Nova senha</label>
-                        <input type="password" name="senha" placeholder="senha">
+                        <input type="password" name="senha" placeholder="Confirme sua senha">
                         <?php if ($erro): ?><p class="erro-login"><?= htmlspecialchars($erro) ?></p><?php endif; ?>
-                        <button type="submit">Redefinir senha</button>
+                        <button class="btn-redefinir-senha-login" type="submit">Redefinir senha</button>
                     </form>
 
                 <?php elseif ($modoRecuperar): ?>
