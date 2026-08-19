@@ -8,6 +8,7 @@ $erro = null;
 $mensagem = null;
 $modoRecuperar = isset($_GET['recuperar']);
 $tokenUrl = $_GET['token'] ?? null;
+$sucessoRedefinicao = isset($_GET['senha_redefinida']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
 
@@ -17,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
 
     if (processarRedefinirSenha($conexao, $_POST['token'], $_POST['senha'] ?? '')) {
-        $mensagem = "Senha redefinida! Faça login com a nova senha.";
+        header("Location: " . BASE_URL . "?senha_redefinida=1");
+        exit;
     } else {
         $erro = "Link inválido ou expirado.";
         $modoRecuperar = false;
@@ -39,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
 </head>
 
 <body>
-    <!-- <h1>CYBER REPORT</h1> -->
     <main>
         <div class="geral">
         <section class="lado-esq">
@@ -65,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                     <form method="POST">
                         <input type="hidden" name="token" value="<?= htmlspecialchars($tokenUrl) ?>">
                         <label>Nova senha</label>
-                        <input type="password" name="senha" placeholder="senha">
+                        <input type="password" name="senha" placeholder="Confirme sua senha">
                         <?php if ($erro): ?><p class="erro-login"><?= htmlspecialchars($erro) ?></p><?php endif; ?>
-                        <button type="submit">Redefinir senha</button>
+                        <button class="btn-redefinir-senha-login" type="submit">Redefinir senha</button>
                     </form>
 
                 <?php elseif ($modoRecuperar): ?>
@@ -77,20 +78,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
                         <label>E-mail</label>
                         <input type="email" name="email" placeholder="email@example.com">
                         <?php if ($mensagem): ?><p class="erro-login"><?= htmlspecialchars($mensagem) ?></p><?php endif; ?>
-                        <button type="submit" name="recuperar" value="1"class="btn-enviar-link-login">Enviar link</button>
+                        <button type="submit" name="recuperar" value="1" class="btn-enviar-link-login">Enviar link</button>
                     </form>
                     <a href="<?= BASE_URL ?>" class="btn-voltar-login">Voltar ao login</a>
 
                 <?php else: ?>
 
                     <h2>LOGIN</h2>
+                    <?php if ($sucessoRedefinicao): ?>
+                        <p class="sucesso-login">Senha redefinida! Faça login com a nova senha.</p>
+                    <?php endif; ?>
                     <form method="POST">
                         <label>E-mail</label>
                         <input type="email" name="email" placeholder="email@example.com">
                         <label>Senha</label>
                         <input type="password" name="senha" placeholder="senha">
                         <?php if ($erro): ?>
-                            <p class="erro-login"><?= htmlspecialchars ($erro) ?></p>
+                            <p class="erro-login"><?= htmlspecialchars($erro) ?></p>
                         <?php endif; ?>
                         <a href="<?= BASE_URL ?>?recuperar" class="esqueceu-senha-login">Esqueceu a senha?</a>
                         <button type="submit" class="btn-entrar-login">Entrar</button>
