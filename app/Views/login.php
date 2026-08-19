@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recuperar'])) {
     if ($resultado['sucesso']) {
         $_SESSION['usuario_id']   = $resultado['usuario']['id'];
         $_SESSION['usuario_nome'] = $resultado['usuario']['nome'];
-        header("Location: " . BASE_URL . "gerenciar-pentest");
+        header("Location: " . BASE_URL . "dashboard-gestor");
         exit;
     }
 
