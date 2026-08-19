@@ -106,7 +106,6 @@
     </div>
     </div>
 
-    <!-- ordem importa: dashboardGestor.js precisa popular a tabela antes de tabela.js rodar -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>

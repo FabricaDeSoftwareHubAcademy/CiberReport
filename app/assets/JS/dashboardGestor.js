@@ -1,4 +1,5 @@
 (function () {
+  // --- helpers de data ---
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
 
@@ -25,7 +26,7 @@
     return `${dia}/${mes}/${ano}`;
   }
 
-  // --- dados mockados ---
+  // --- dados mock ---
   const projetosMock = [
     { id: 1, nome: 'Pentest WEB - Cliente Atacado', cliente: 'Cliente1', responsavel_tecnico: 'André', analistas_alocados: ['André'], status: 'EM_ANDAMENTO', data_inicio: d(-40), data_fim_prevista: d(20), data_fim_real: null, updated_at: d(-2), vulnerabilidades_total: 14, vulnerabilidades_criticas: 3, vulnerabilidades_altas: 2, dias_aviso_prazo: 15, checklist_itens_total: 24, checklist_itens_concluidos: 14 },
     { id: 2, nome: 'Pentest WEB - Cliente Magazine Luiza', cliente: 'Cliente2', responsavel_tecnico: 'Marcos', analistas_alocados: ['Marcos'], status: 'EM_ANDAMENTO', data_inicio: d(-35), data_fim_prevista: d(3), data_fim_real: null, updated_at: d(-1), vulnerabilidades_total: 9, vulnerabilidades_criticas: 1, vulnerabilidades_altas: 1, dias_aviso_prazo: 5, checklist_itens_total: 18, checklist_itens_concluidos: 16 },
@@ -49,11 +50,20 @@
     { id: 5, nome: 'Ana', limite_projetos: 2 }
   ];
 
+  // --- constantes ---
+  const DIAS_PRAZO_PADRAO = 15;
+
+  const RESUMO_NIVEL = {
+    ok: 'dentro do limite',
+    atencao: 'atenção: perto do limite',
+    alerta: 'alerta: quase no limite',
+    critico: 'no limite ou acima dele'
+  };
+
+  // --- lógica / cálculo ---
   function projetosAtivos() {
     return projetosMock.filter((projeto) => projeto.status === 'EM_ANDAMENTO');
   }
-
-  const DIAS_PRAZO_PADRAO = 15;
 
   function projetoVencido(projeto) {
     return new Date(projeto.data_fim_prevista) < hoje;
@@ -64,9 +74,6 @@
     return new Date(projeto.data_fim_prevista) <= diasAPartirDeHoje(antecedencia);
   }
 
-  // `nivel` (vencido/risco) alimenta tanto o badge da Data Fim Prevista quanto
-  // a cor da coluna "Dias Restantes" — os dois sempre concordam porque usam a
-  // mesma classificação.
   function rotuloPrazo(projeto) {
     if (projetoVencido(projeto)) return { texto: 'Vencido', nivel: 'vencido' };
     if (projetoEmRisco(projeto)) return { texto: 'Em risco', nivel: 'risco' };
@@ -85,18 +92,20 @@
     return { concluidos, total, percentual };
   }
 
+  function nivelOcupacao(percentual) {
+    if (percentual >= 100) return 'critico';
+    if (percentual >= 80) return 'alerta';
+    if (percentual >= 60) return 'atencao';
+    return 'ok';
+  }
+
   // TODO: trocar por window.location.href = BASE_URL + 'dashboard-projeto/' + idProjeto quando a rota existir.
   function irParaDashboardProjeto(idProjeto) {
     console.log('TODO: abrir Dashboard do Projeto para o projeto', idProjeto);
   }
 
-  // Filtra a tabela reaproveitando a busca global de `tabela.js` (dispara
-  // 'input' no mesmo campo usado pela busca do menu) — não há acesso direto
-  // ao estado interno de filtro de `tabela.js` a partir daqui, então isso é
-  // o único gancho disponível sem alterar o componente compartilhado.
-  // `termoBusca` é o texto realmente usado no filtro (precisa dar match no
-  // `textContent` das linhas); `rotuloChip` é só o texto exibido no chip
-  // "Filtrado por X" — podem divergir (ver `filtrarTabelaPorPrazoRisco`).
+  // --- filtros ---
+  // Filtra a tabela reaproveitando a busca global de `tabela.js`
   function filtrarTabela(termoBusca, rotuloChip) {
     const campoBusca = document.querySelector('.input-pesquisaSuperior input[type="text"]');
     if (!campoBusca) return;
@@ -113,12 +122,12 @@
     filtrarTabela(nomeProjeto, nomeProjeto);
   }
 
-  // Não há coluna/badge único que sirva de termo de busca pros dois casos
-  // (badge é "Vencido" OU "Em risco" — ver `rotuloPrazo`), então as linhas
-  // vencidas ganham um marcador oculto "em risco" em `renderizarTabela()``
-  // só pra dar match nessa busca; "Em risco" já dá match sozinho.
   function filtrarTabelaPorPrazoRisco() {
     filtrarTabela('em risco', 'Prazos em risco/vencidos');
+  }
+
+  function filtrarTabelaPorVulnCritica() {
+    filtrarTabela('vulnerabilidade critica em aberto', 'Vulnerabilidades críticas em aberto');
   }
 
   function exibirChipFiltro(rotulo) {
@@ -139,7 +148,7 @@
     if (chip) chip.hidden = true;
   }
 
-  // --- cards ---
+  // --- renderização: cards ---
   function renderizarCards() {
     const ativos = projetosAtivos();
 
@@ -160,7 +169,7 @@
     }
   }
 
-  // --- tabela ---
+  // --- renderização: tabela ---
   function renderizarTabela() {
     const corpo = document.querySelector('#table tbody');
     if (!corpo) return;
@@ -195,6 +204,7 @@
         <td class="celula-dias-restantes${badgePrazo ? ` celula-dias-restantes--${badgePrazo.nivel}` : ''}">${diasRestantes}</td>
         <td class="celula-vuln-critica">
           <input type="checkbox" class="checkbox-vuln-critica" ${temCritica ? 'checked' : ''} disabled title="${temCritica ? 'Vulnerabilidade crítica em aberto' : 'Nenhuma vulnerabilidade crítica em aberto'}" />
+          ${temCritica ? '<span class="oculto-visualmente" aria-hidden="true">vulnerabilidade critica em aberto</span>' : ''}
         </td>
       `;
       linha.addEventListener('click', () => irParaDashboardProjeto(projeto.id));
@@ -202,7 +212,7 @@
     });
   }
 
-  // --- gráficos ---
+  // --- renderização: gráficos ---
   function obterCoresTokens() {
     return ['#0a6bb5', '#00a9d1', '#00966f', '#4cc61e', '#c8e61e', '#ffd200', '#ff8c00', '#ff0000', '#ff1f6b', '#e6007e', '#7b2d8e', '#4b3f96'];
   }
@@ -258,20 +268,7 @@
     grafico.render();
   }
 
-  function nivelOcupacao(percentual) {
-    if (percentual >= 100) return 'critico';
-    if (percentual >= 80) return 'alerta';
-    if (percentual >= 60) return 'atencao';
-    return 'ok';
-  }
-
-  const RESUMO_NIVEL = {
-    ok: 'dentro do limite',
-    atencao: 'atenção: perto do limite',
-    alerta: 'alerta: quase no limite',
-    critico: 'no limite ou acima dele'
-  };
-
+  // --- renderização: alocação de analistas ---
   function renderizarAlocacaoAnalistas() {
     const lista = document.getElementById('lista-alocacao');
     if (!lista) return;
@@ -328,13 +325,9 @@
 
   const cardVulnsCriticas = document.getElementById('card-vulns-criticas');
   if (cardVulnsCriticas) {
-    cardVulnsCriticas.addEventListener('click', () => {
-      console.log('TODO: filtrar tabela por projetos com vulnerabilidade crítica em aberto não corrigida');
-    });
+    cardVulnsCriticas.addEventListener('click', filtrarTabelaPorVulnCritica);
   }
 
-  // Card "Prazos em Risco/Vencidos": filtra a tabela pelos mesmos projetos
-  // contados no card (ver `projetoEmRisco` — já inclui os vencidos).
   const cardPrazosRisco = document.getElementById('card-prazos-risco');
   if (cardPrazosRisco) {
     cardPrazosRisco.addEventListener('click', filtrarTabelaPorPrazoRisco);
