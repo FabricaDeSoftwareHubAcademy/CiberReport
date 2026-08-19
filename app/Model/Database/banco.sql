@@ -268,3 +268,8 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
+
+ALTER TABLE usuario
+ADD COLUMN reset_token VARCHAR(64) NULL,
+ADD COLUMN reset_token_expira DATETIME NULL,
+ADD INDEX idx_reset_token (reset_token);
