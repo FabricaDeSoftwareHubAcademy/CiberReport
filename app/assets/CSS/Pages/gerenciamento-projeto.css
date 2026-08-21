@@ -1,16 +1,12 @@
 .group-btn-projeto{
     display: flex;
-    gap: 25px;
-    justify-content: end;
-}
-.btn-projeto{
-    width: 200px;
+    justify-content: flex-end;
+    margin-bottom: var(--espaco-md);
 }
 .main-gerenciamento-projeto{
     overflow-y: hidden;
 }
 .group-card-tabela{
-    padding: 10px;
     width: 100%;
     gap: 10px;
     display: flex;

@@ -41,11 +41,11 @@ INSERT INTO perfil_permissao (perfil_id, permissao_id) VALUES
 -- usuario
 -- ---------------------------------------------------------
 INSERT INTO usuario (perfil_id, nome, cpf, email, senha, telefone, cargo, especialidade, habilitado, ultimo_login) VALUES
-(1, 'Admin', '00011122233', 'admin@senac.com.br', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
-(2, 'Mariana Souza', '11122233344', 'mariana.souza@cyberreport.com.br', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
-(2, 'Rafael Lima', '22233344455', 'rafael.lima@cyberreport.com.br', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
-(2, 'Bianca Carvalho', '33344455566', 'bianca.carvalho@cyberreport.com.br', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
-(3, 'Carlos Mendes', '44455566677', 'carlos.mendes@empresacliente.com.br', '$2y$10$wxyz5678abcd1234efgh90', '(67) 99456-7890', 'Gerente de TI', NULL, 1, '2026-06-20 08:22:00');
+(1, 'Admin', '00011122233', 'fabrica544adm@gmail.com', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
+(2, 'Caio', '11122233344', 'caiovv1@outlook.com', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
+(2, 'Rafael Rodela', '22233344455', 'rjvrafael22@gmail.com', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
+(2, 'Fabio', '33344455566', 'fabioelie@hotmail.com', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
+(3, 'Izadora', '44455566677', 'izadoraaparecidasilvapereira@gmail.com', '$2y$10$wxyz5678abcd1234efgh90', '(67) 99456-7890', 'Gerente de TI', NULL, 1, '2026-06-20 08:22:00');
 -- ids gerados: 1 a 5
 
 -- ---------------------------------------------------------
@@ -88,9 +88,9 @@ INSERT INTO checklist_item (checklist_id, titulo, referencia, obrigatorio, habil
 -- ---------------------------------------------------------
 -- projeto
 -- ---------------------------------------------------------
-INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, horas_executadas, tipo, nivel_sigilo, escopo, alvo, contrato, restricao, habilitado) VALUES
-(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 76.50, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'portal.techpantanal.com.br, api.techpantanal.com.br', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 1),
-(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 64.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', '10.20.0.0/22', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 1);
+INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, modalidade, nivel_sigilo, escopo, contrato, restricao, status, habilitado) VALUES
+(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 'CONCLUIDO', 1),
+(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 'EM_ANDAMENTO', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------

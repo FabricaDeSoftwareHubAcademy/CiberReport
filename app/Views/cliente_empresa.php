@@ -1,4 +1,6 @@
 <?php
+use Controller\CadastroEmpresaController;
+
 require_once __DIR__ . "/../Controller/CadastroEmpresaController.php";
 
 $controller = new CadastroEmpresaController();
@@ -30,7 +32,7 @@ if (isset($_GET['id_empresa_visualizar'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empresa']) && $_POST['id_empresa'] !== ''){
     $controller->editarEmpresa();
-    header("Location: cliente_empresa.php");
+    header("Location: " . BASE_URL . "cliente-empresa");
     exit;
 }
 
@@ -38,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_fantasia'])){
     $resultado = $controller->cadastrarEmpresa();
 
     if ($resultado === true){
-        header("Location: cliente_empresa.php");
+        header("Location: " . BASE_URL . "cliente-empresa");
         exit;
     }else{
         $mensagem_erro = $resultado;
@@ -49,12 +51,12 @@ $dados = $controller->listarEmpresa();
 
 ?>
 
-<link rel="stylesheet" href="../assets/CSS/style.css">
-<link rel="stylesheet" href="../assets/CSS/Componentes/button.css">
-<link rel="stylesheet" href="../assets/CSS/Pages/clientes.css">
-<link rel="stylesheet" href="../assets/CSS/Componentes/tabela.css">
-<link rel="stylesheet" href="../assets/CSS/Componentes/componentes-modal.css">
-<link rel="stylesheet" href="../assets/CSS/Componentes/modal.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/button.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/clientes.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/tabela.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/componentes-modal.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/modal.css">
 
 
 <?php $tituloPagina = 'Clientes'; include 'Components/menu.php'; ?>
@@ -65,8 +67,8 @@ $dados = $controller->listarEmpresa();
 
 
         <div class="button-cadastro">
-            <button class="btn-novo-cadastro btn-modal-novo-cadastro" data-modal-target="modalClientes">
-                <i class="fa-solid fa-plus"></i><span class="texto">Novo Cadastro</span>
+            <button class="btn-novo-cadastro" data-modal-target="modalClientes">
+                <i class="fa-solid fa-plus"></i>Novo Cadastro
             </button>
         </div>
 
@@ -75,15 +77,13 @@ $dados = $controller->listarEmpresa();
 
                 <div class="modal__header">
                     <div class="modal__header-icone">
-                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
+                        <img src="<?= BASE_URL ?>app/assets/img/icone_empresa.svg" alt="Empresa" />
                     </div>
                     <div class="modal__header-texto">
                         <h2 class="modal__titulo">Cadastro de Empresa</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalClientes">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <form action="" method="post">
@@ -216,18 +216,16 @@ $dados = $controller->listarEmpresa();
 
                 <div class="modal__header">
                     <div class="modal__header-icone">
-                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
+                        <img src="<?= BASE_URL ?>app/assets/img/icone_empresa.svg" alt="Empresa" />
                     </div>
                     <div class="modal__header-texto">
                         <h2 class="modal__titulo">Edição de Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalEditar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
-                <form action="cliente_empresa.php" method="post">
+                <form action="<?= BASE_URL ?>cliente-empresa" method="post">
                     <input type="hidden" name="id_empresa" value="<?php echo $dados_empresa_editar['id'] ?? ''; ?>" />
                     <input type="hidden" name="id_endereco" value="<?php echo $dados_empresa_editar['endereco_id'] ?? ''; ?>" />
 
@@ -356,15 +354,13 @@ $dados = $controller->listarEmpresa();
 
                 <div class="modal__header">
                     <div class="modal__header-icone">
-                        <img src="../assets/img/icone_empresa.svg" alt="Empresa" />
+                        <img src="<?= BASE_URL ?>app/assets/img/icone_empresa.svg" alt="Empresa" />
                     </div>
                     <div class="modal__header-texto">
                         <h2 class="modal__titulo">Visualizar Cadastro</h2>
                         <p class="modal__subtitulo">Informações da empresa contratante e do responsável técnico</p>
                     </div>
-                    <button type="button" class="modal__fechar" data-modal-close="modalVisualizar">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button type="button" class="modal__fechar" data-modal-close>&times;</button>
                 </div>
 
                 <div class="modal__body">
@@ -527,10 +523,10 @@ $dados = $controller->listarEmpresa();
                             </td>
                             <td>
                                 <div class="acoes">
-                                    <a href="cliente_empresa.php?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
+                                    <a href="<?= BASE_URL ?>cliente-empresa?id_empresa=<?= $empresa['id'] ?>" class="tabela-btn-editar" title="Editar" aria-label="Editar">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="cliente_empresa.php?id_empresa_visualizar=<?= $empresa['id'] ?>" class="tabela-btn-visualizar" title="Visualizar" aria-label="Visualizar">
+                                    <a href="<?= BASE_URL ?>cliente-empresa?id_empresa_visualizar=<?= $empresa['id'] ?>" class="tabela-btn-visualizar" title="Visualizar" aria-label="Visualizar">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
                                 </div>
@@ -554,16 +550,18 @@ $dados = $controller->listarEmpresa();
         </div>
     </section>
 </main>
+<?php include 'Components/toast.php'; ?>
 <!-- Fecha .main-content e .menu abertos pelo menu.php. Necessário para que o <main>
      fique dentro do flex row da sidebar, permitindo o comportamento de "empurrar"
      o conteúdo quando o menu lateral abre/fecha. -->
 </div>
 </div>
-<script src="../assets/JS/barraDePesquisa.js"></script>
-<script src="../assets/JS/componentes/tabela.js"></script>
-<script src="../assets/JS/componentes/modal.js"></script>
-<script src="../assets/JS/Buscarcep.js"></script>
-<script src="../assets/JS/mascaras.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/Buscarcep.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/mascaras.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
 <script>
     function toggleHabilitado(checkbox) {
         const label = checkbox.closest('.clientes-status-cell').querySelector('.clientes-toggle-label');
@@ -576,14 +574,22 @@ $dados = $controller->listarEmpresa();
         body.append('id', checkbox.dataset.id);
         body.append('habilitado', checkbox.checked ? '1' : '0');
 
-        fetch('cliente_empresa.php', {
+        fetch('<?= BASE_URL ?>cliente-empresa', {
                 method: 'POST',
                 body
+            })
+            .then(() => {
+                window.exibirToast?.(
+                    checkbox.checked ? 'sucesso' : 'info',
+                    checkbox.checked ? 'A empresa foi ativada.' : 'A empresa foi desativada.'
+                );
             })
             .catch(() => {
                 checkbox.checked = !checkbox.checked;
                 label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
                 linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+                window.exibirToast?.('erro', 'Não foi possível alterar o status.');
             });
     }
     

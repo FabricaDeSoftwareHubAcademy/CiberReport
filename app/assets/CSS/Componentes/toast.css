@@ -1,0 +1,178 @@
+/* =============================================================================
+   TOAST DE NOTIFICAÇÃO
+   Empilha notificações no canto inferior direito da tela. Gerado
+   dinamicamente pelo toast.js — este arquivo cuida apenas da aparência.
+
+   HTML gerado pelo componente:
+   <div class="toast-container" id="toastContainer">
+       <div class="toast toast--sucesso">
+           <div class="toast__icone"><i class="fa-solid fa-check"></i></div>
+           <div class="toast__conteudo">
+               <strong class="toast__titulo">Sucesso!</strong>
+               <p class="toast__mensagem">Texto de apoio...</p>
+           </div>
+           <button class="toast__fechar"><i class="fa-solid fa-xmark"></i></button>
+       </div>
+   </div>
+   ============================================================================= */
+.toast-container {
+    position: fixed;
+    bottom: var(--espaco-lg);
+    right: var(--espaco-lg);
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-sm);
+    width: 380px;
+    max-width: calc(100vw - (var(--espaco-lg) * 2));
+    pointer-events: none;
+}
+
+.toast {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--espaco-sm);
+    background-color: var(--cor-fundo-branco);
+    border: 1px solid transparent;
+    border-radius: var(--raio-lg);
+    box-shadow: var(--sombra-lg);
+    padding: var(--espaco-md);
+    pointer-events: auto;
+    animation: toast-entrar var(--transicao-devagar) both;
+}
+
+.toast--saindo {
+    animation: toast-sair var(--transicao-devagar) both;
+}
+
+.toast__icone {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--raio-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--cor-fundo-branco);
+    transform: translateY(5px);
+}
+
+.toast__icone i {
+    line-height: 1;
+}
+
+.toast__conteudo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.toast__titulo {
+    font-size: var(--fonte-apoio);
+    font-weight: 700;
+    color: var(--cor-texto-titulo);
+}
+
+.toast__mensagem {
+    margin: 0;
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+    word-wrap: break-word;
+}
+
+.toast__mensagem:empty {
+    display: none;
+}
+
+.toast__mensagem a {
+    color: var(--cor-azul-destaques);
+}
+
+.toast__fechar {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--cor-texto-secundario);
+    font-size: 1.4rem;
+    padding: var(--espaco-xs);
+    line-height: 1;
+    transition: color var(--transicao-rapida);
+}
+
+.toast__fechar:hover {
+    color: var(--cor-texto-titulo);
+}
+
+/* --- Variantes --- */
+.toast--sucesso {
+    border-color: var(--cor-verde);
+    background-color: color-mix(in srgb, var(--cor-verde) 8%, var(--cor-fundo-branco));
+}
+
+.toast--sucesso .toast__icone {
+    background-color: var(--cor-verde);
+}
+
+.toast--info {
+    border-color: var(--cor-azul-destaques);
+    background-color: color-mix(in srgb, var(--cor-azul-destaques) 8%, var(--cor-fundo-branco));
+}
+
+.toast--info .toast__icone {
+    background-color: var(--cor-azul-destaques);
+}
+
+.toast--aviso {
+    border-color: var(--cor-amarelo);
+    background-color: color-mix(in srgb, var(--cor-amarelo) 8%, var(--cor-fundo-branco));
+}
+
+.toast--aviso .toast__icone {
+    background-color: var(--cor-amarelo);
+}
+
+.toast--erro {
+    border-color: var(--cor-vermelho-destaque);
+    background-color: color-mix(in srgb, var(--cor-vermelho-destaque) 8%, var(--cor-fundo-branco));
+}
+
+.toast--erro .toast__icone {
+    background-color: var(--cor-vermelho-destaque);
+}
+
+@keyframes toast-entrar {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toast-sair {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        left: var(--espaco-md);
+        right: var(--espaco-md);
+        width: auto;
+    }
+}

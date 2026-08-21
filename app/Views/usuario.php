@@ -1,12 +1,14 @@
 <?php
-require_once "../Controller/gerenciamento_usuario.php";
+use Controller\GerenciamentoUsuarioController;
+
+require_once __DIR__ . "/../Controller/GerenciamentoUsuarioController.php";
 
 $controller = new GerenciamentoUsuarioController();
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'cadastrar') {
     $controller->cadastrar();
-    header("Location: gerenciamento_usuario.php");
+    header("Location: " . BASE_URL . "usuario");
     exit;
 }
 
@@ -14,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $id  = (int) ($_POST['id'] ?? 0);
     $foto = $_FILES['foto'] ?? null;
     $controller->uploadFoto($id, $foto);
-    header("Location: gerenciamento_usuario.php");
+    header("Location: " . BASE_URL . "usuario");
     exit;
 }
 
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 if (isset($_GET['excluir'])) {
     $controller->excluir($_GET['excluir']);
-    header("Location: gerenciamento_usuario.php");
+    header("Location: " . BASE_URL . "usuario");
     exit;
 }
 
@@ -53,8 +55,8 @@ $usuarios = $controller->listar();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/CSS/style.css">
-    <link rel="stylesheet" href="../assets/CSS/Pages/gerenciar_usuario.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/gerenciar_usuario.css">
     <title>Gerenciamento de Usuário</title>
 </head>
 
@@ -123,7 +125,7 @@ $usuarios = $controller->listar();
                                         data-usuario='<?= htmlspecialchars(json_encode($usuario), ENT_QUOTES) ?>'>
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <a href="gerenciamento_usuario.php?excluir=<?= $usuario['id'] ?>" class="tabela-btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este usuário?')">
+                                    <a href="<?= BASE_URL ?>usuario?excluir=<?= $usuario['id'] ?>" class="tabela-btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este usuário?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -154,7 +156,7 @@ $usuarios = $controller->listar();
 
     <div class="modal-overlay" id="modalNovoUsuario">
         <div class="modal modal--md">
-            <form method="post" action="gerenciamento_usuario.php" autocomplete="off">
+            <form method="post" action="<?= BASE_URL ?>usuario" autocomplete="off">
                 <input type="hidden" name="action" value="cadastrar">
 
                 <div class="modal__header">
@@ -193,15 +195,11 @@ $usuarios = $controller->listar();
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio">Telefone</label>
-                            <input type="tel" name="telefone" class="campo__input" required>
+                            <input type="tel" name="telefone" class="campo__input" oninput="mascararTelefone(this)" required>
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio">CPF</label>
-                            <input type="text" name="cpf" class="campo__input" placeholder="xxx.xxx.xxx-xx" required>
-                        </div>
-                        <div class="campo">
-                            <label class="campo__label campo__label--obrigatorio">Senha</label>
-                            <input type="password" name="senha" class="campo__input" placeholder="Digite a senha" required minlength="6">
+                            <input type="text" name="cpf" class="campo__input" placeholder="xxx.xxx.xxx-xx"  required>
                         </div>
                         <div class="campo">
                             <label class="campo__label">Cargo</label>
@@ -274,7 +272,7 @@ $usuarios = $controller->listar();
                     </div>
                     <div class="campo">
                         <label class="campo__label">Telefone</label>
-                        <input type="tel" class="campo__input" data-campo="telefone" readonly>
+                        <input type="tel" class="campo__input" oninput="mascararTelefone(this)" data-campo="telefone" readonly>
                     </div>
                     <div class="campo">
                         <label class="campo__label">CPF</label>
@@ -316,7 +314,7 @@ $usuarios = $controller->listar();
 
     <div class="modal-overlay" id="modalEdicaoUsuario">
         <div class="modal modal--md">
-            <form method="post" action="gerenciamento_usuario.php" autocomplete="off">
+            <form method="post" action="<?= BASE_URL ?>usuario" autocomplete="off">
                 <input type="hidden" name="action" value="editar">
                 <input type="hidden" name="id" data-campo="id">
 
@@ -402,8 +400,42 @@ $usuarios = $controller->listar();
         </div>
     </div>
 
-    <script src="../assets/JS/componentes/tabela.js"></script>
-    <script src="../assets/JS/componentes/modal.js"></script>
+    <?php include 'Components/toast.php'; ?>
+
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
+    <script>
+        function toggleHabilitado(checkbox) {
+            const label = checkbox.closest('.ger-pentest-status-cell').querySelector('.ger-pentest-toggle-label');
+            const linha = checkbox.closest('tr');
+            label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+            linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+            const body = new FormData();
+            body.append('action', 'alterarHabilitado');
+            body.append('id', checkbox.dataset.id);
+            body.append('habilitado', checkbox.checked ? '1' : '0');
+
+            fetch('<?= BASE_URL ?>usuario', {
+                    method: 'POST',
+                    body
+                })
+                .then(() => {
+                    window.exibirToast?.(
+                        checkbox.checked ? 'sucesso' : 'info',
+                        checkbox.checked ? 'O usuário foi ativado.' : 'O usuário foi desativado.'
+                    );
+                })
+                .catch(() => {
+                    checkbox.checked = !checkbox.checked;
+                    label.textContent = checkbox.checked ? 'Ativo' : 'Inativo';
+                    linha?.classList.toggle('linha-inativa', !checkbox.checked);
+
+                    window.exibirToast?.('erro', 'Não foi possível alterar o status.');
+                });
+        }
+    </script>
 </body>
 
 </html>
