@@ -345,3 +345,4 @@
     document.querySelector('#grafico-alocacao').innerHTML = mensagemFallback;
   }
 })();
+// insano fabio

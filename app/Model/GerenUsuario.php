@@ -55,7 +55,7 @@ class GerenUsuario
 
         $sql->execute();
 
-        return $sql->featchAll(PDO::FETCH_ASSOC);
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function ListarCargoPorId($id)
@@ -68,7 +68,7 @@ class GerenUsuario
 
         $sql->execute();
 
-        return $sql->featch(PDO::FETCH_ASSOC);
+        return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
     
