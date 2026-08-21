@@ -24,6 +24,20 @@ class Router
                 continue;
             }
 
+            foreach ($route['middlewares'] as $middlewareClass) {
+                if (!is_subclass_of($middlewareClass, MiddlewareInterface::class)) {
+                    throw new \RuntimeException(
+                        "{$middlewareClass} deve implementar MiddlewareInterface."
+                    );
+                }
+
+                $middleware = new $middlewareClass();
+
+                if (!$middleware->handle()) {
+                    return;
+                }
+            }
+
             [$controllerName, $methodName] = explode('@', $route['action']);
             $controllerClass = "Controller\\{$controllerName}";
 
