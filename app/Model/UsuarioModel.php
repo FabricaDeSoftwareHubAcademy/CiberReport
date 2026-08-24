@@ -1,5 +1,8 @@
 <?php
 
+namespace Model;
+use PDO;
+
 class UsuarioModel {
     private PDO $conexao;
 
@@ -8,7 +11,7 @@ class UsuarioModel {
     }
 
     public function buscarPorEmail(string $email): array|false {
-        $stmt = $this->conexao->prepare("SELECT id, nome, senha FROM usuario WHERE email = ?");
+        $stmt = $this->conexao->prepare("SELECT id, nome, senha, perfil_id FROM usuario WHERE email = ? AND habilitado = 1 LIMIT 1");
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

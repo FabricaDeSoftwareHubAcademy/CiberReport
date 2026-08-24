@@ -121,10 +121,9 @@
     width: 100%;
     background-color: var(--cor-azul-primaria);
 }
-#logout a {
+#logout form {
     display: flex;
     width: 100%;
-    text-decoration: none;
     background-color: var(--cor-azul-primaria);
 }
 
@@ -334,7 +333,7 @@
         background-color: var(--cor-azul-primaria);
     }
 
-    #sideBar #logout a,
+    #sideBar #logout form,
     #sideBar #logout_btn {
         background-color: var(--cor-azul-primaria);
     }

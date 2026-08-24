@@ -111,10 +111,12 @@ require_once __DIR__ . '/sobre_perfil.php';
             </button>
         </div>
         <div id="logout">
-            <a id="logout_btn" href="<?= BASE_URL ?>login">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span class="item_description">Logout</span>
-            </a>
+            <form action="<?= BASE_URL ?>logout" method="post">
+                <button id="logout_btn" type="submit">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span class="item_description">Logout</span>
+                </button>
+            </form>
         </div>
     </nav>
     <div class="menuOverlay"></div>
