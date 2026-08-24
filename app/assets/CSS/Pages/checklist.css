@@ -1,7 +1,7 @@
 .checklist-cadastro-acoes {
     display: flex;
     justify-content: flex-end;
-    padding: var(--espaco-md);
+    margin-bottom: var(--espaco-md);
 }
 
 .checklist-tabela-descricao {

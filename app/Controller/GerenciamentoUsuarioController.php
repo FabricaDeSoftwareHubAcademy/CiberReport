@@ -1,15 +1,24 @@
 <?php 
-require_once __DIR__ . "/../Model/conexao.php";
-require_once __DIR__ . "/../Model/Database/gerenciamento_perfil.php";
 
-class GerenciamentoUsuarioController
+namespace Controller;
+
+use Core\Controller;
+use Model\GerenUsuario;
+
+class GerenciamentoUsuarioController extends Controller
 {
     private  $usuario;
 
     public function __construct()
     {
-        global $conexao;
+        $conexao = require __DIR__ . '/../Model/conexao.php';
+
         $this->usuario = new GerenUsuario($conexao);
+    }
+
+     public function index()
+    {
+        $this->view('usuario');
     }
 
     public function listar()
@@ -25,7 +34,7 @@ class GerenciamentoUsuarioController
         $cargo          = trim($_POST['cargo'] ?? '');
         $especialidade  = trim($_POST['especialidade'] ?? '');
         $email          = trim($_POST['email'] ?? '');
-        $senha          = $_POST['senha'] ?? '';
+        $senha          =  $this->gerarSenha();
         $perfil_id      = $_POST['perfil_id'] ?? '';
 
         // Campos obrigatórios (batendo com o NOT NULL do banco)
@@ -82,6 +91,19 @@ class GerenciamentoUsuarioController
     public function alterarStatus($id, $status)
     {
         $this->usuario->alterarStatusUsuario((int) $id, (int) $status);
+    }
+
+    public function gerarSenha(int $tamanho = 29): string
+    {
+        $caracteres = 'abcdefghijklmnopqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'0123456789'.'!@#$%&*_-+=';
+        $senha = '';
+        $maximo = strlen($caracteres) - 1;
+
+        for($i = 0; $i < $tamanho; $i++){
+           $senha .= $caracteres[random_int(0, $maximo)]; 
+        }
+
+        return $senha;
     }
 }
 

@@ -1,20 +1,31 @@
 <?php
-require_once __DIR__ . "/../Model/conexao.php";
+
+namespace Controller;
+
+use Core\Controller;
+use Empresa;
+use Endereco;
+
 require_once __DIR__ . "/../Model/EmpresaModel.php";
-require_once __DIR__ . "/../Model/EnderecoModel.php";
+require_once __DIR__ . "/../Model/Database/EnderecoModel.php";
 
 
 
-class CadastroEmpresaController
+class CadastroEmpresaController extends Controller
 {
-    private $empresa;
-    private $endereco;
+    private Empresa $empresa;
+    private Endereco $endereco;
 
     public function __construct()
     {
-        global $conexao;
+        $conexao = require __DIR__ . "/../Model/conexao.php";
         $this->empresa = new Empresa($conexao);
         $this->endereco = new Endereco($conexao);
+    }
+
+    public function index()
+    {
+        $this->view('cliente_empresa');
     }
 
     public function listarEmpresa()

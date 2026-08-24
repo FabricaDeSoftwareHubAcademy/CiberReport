@@ -24,7 +24,7 @@ main{
 }
 
 .logo-report{
-    padding-left: 10%;
+    padding-left: 18%;
 }
 
 .cyber-report{
@@ -140,6 +140,20 @@ main{
     color: #1c2745;
     text-align: right;
     margin-bottom: 20px;
+}
+
+.btn-redefinir-senha-login{
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #13264f;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-redefinir-senha-login:hover{
+    background: #1d3870;
 }
 
 .btn-entrar-login{

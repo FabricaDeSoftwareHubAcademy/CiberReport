@@ -1,6 +1,6 @@
 # Filtros de coluna em tabelas
 
-`assets/JS/componentes/tabela.js` é o componente de tabela compartilhado (paginação, ordenação e filtro). Ele é incluído por várias views (`Views/checklist.php`, `Views/cliente_empresa.php`, `Views/usuario.php`, `Views/gerenciamento_acesso.php`, `Views/gerenciamento_projeto.php`, `Views/vulnerabilidades.php`, `Views/gerenciar-tipo-pentest.php`), todas usando a mesma convenção `<th data-col="N">` no cabeçalho.
+`assets/JS/componentes/tabela.js` é o componente de tabela compartilhado (paginação, ordenação e filtro). Ele é incluído por várias views (`Views/checklist.php`, `Views/cliente_empresa.php`, `Views/usuario.php`, `Views/gerenciamento_acesso.php`, `Views/gerenciamento_projeto.php`, `Views/vulnerabilidades.php`, `Views/gerenciar_tipo_pentest.php`), todas usando a mesma convenção `<th data-col="N">` no cabeçalho.
 
 O comportamento de cada coluna ao clicar no cabeçalho é escolhido pelo atributo `data-filtro` no `<th>`. **Sem esse atributo**, a coluna mantém o comportamento legado: ordena por clique, auto-detectando texto vs. número (mais os casos especiais `data-tipo="data"` e `data-tipo="risco"`, usados só para colunas de data e de nível de risco). Isso é o que já existia antes deste sistema e continua funcionando sem nenhuma mudança de markup.
 
@@ -30,7 +30,7 @@ Cada `<td>` da coluna pode declarar `data-valores` com um array JSON contendo a 
 </td>
 ```
 
-Isso é necessário quando a célula trunca a exibição — sem `data-valores`, o filtro cai para o texto visível da célula inteira como um único valor. Ver `Views/gerenciar-tipo-pentest.php` (colunas Frameworks/Checklists) para o exemplo completo, incluindo o PHP que gera o JSON (`json_encode($valoresDaLinha, JSON_UNESCAPED_UNICODE)`).
+Isso é necessário quando a célula trunca a exibição — sem `data-valores`, o filtro cai para o texto visível da célula inteira como um único valor. Ver `Views/gerenciar_tipo_pentest.php` (colunas Frameworks/Checklists) para o exemplo completo, incluindo o PHP que gera o JSON (`json_encode($valoresDaLinha, JSON_UNESCAPED_UNICODE)`).
 
 ### `data-filtro="alfabetica"` — ordenar como texto
 

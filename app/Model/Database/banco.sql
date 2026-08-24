@@ -56,6 +56,9 @@ CREATE TABLE IF NOT EXISTS empresa (
   email_contato VARCHAR(150) NOT NULL,
   telefone VARCHAR(20) DEFAULT NULL,
   responsavel VARCHAR(150) NOT NULL,
+  email_responsavel VARCHAR(255) NOT NULL,
+  cpf_responsavel CHAR(11) NOT NULL,
+  telefone_responsavel VARCHAR(20) NOT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
   -- FOREIGN KEY (endereco_id) REFERENCES endereco(id),
@@ -64,7 +67,7 @@ CREATE TABLE IF NOT EXISTS empresa (
 CREATE TABLE IF NOT EXISTS checklist (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(80) NOT NULL,
-  descricao VARCHAR(255) DEFAULT NULL,
+  descricao VARCHAR(1000) DEFAULT NULL,
   categoria VARCHAR(150) DEFAULT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
@@ -87,14 +90,15 @@ CREATE TABLE IF NOT EXISTS projeto (
   data_fim_prevista DATE DEFAULT NULL,
   data_fim_real DATE DEFAULT NULL,
   horas_contratadas DECIMAL(8, 2) NOT NULL DEFAULT 0.00,
-  horas_executadas DECIMAL(8, 2) NOT NULL DEFAULT 0.00,
-  tipo ENUM ('BLACK BOX', 'GRAY BOX', 'WHITE BOX') NOT NULL,
+  modalidade ENUM ('BLACK BOX', 'GRAY BOX', 'WHITE BOX') NOT NULL,
   nivel_sigilo ENUM ('INTERNO', 'EXTERNO') NOT NULL,
   escopo TEXT NOT NULL,
-  alvo TEXT NOT NULL,
   contrato VARCHAR(255) DEFAULT NULL,
   restricao TEXT,
+  status ENUM('PLANEJADO','EM_ANDAMENTO', 'CONCLUIDO', 'PAUSADO', 'CANCELADO') NOT NULL DEFAULT 'PLANEJADO',
   habilitado TINYINT NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
   -- FOREIGN KEY (empresa_id) REFERENCES empresa(id)
 );
@@ -242,14 +246,13 @@ CREATE TABLE IF NOT EXISTS tipo_pentest_checklist (
   -- FOREIGN KEY (checklist_id) REFERENCES checklist(id)
 );
 
-ALTER TABLE  checklist
-MODIFY COLUMN descricao VARCHAR(1000) DEFAULT NULL;
-
 CREATE TABLE IF NOT EXISTS checklist_item_catalogo (
   id INT NOT NULL AUTO_INCREMENT,
   titulo VARCHAR(150) NOT NULL,
   referencia VARCHAR(255) DEFAULT NULL,
   obrigatorio TINYINT NOT NULL DEFAULT 1,
+  descricao_resumida TEXT DEFAULT NULL,
+  tempo_estimado_minutos INT NOT NULL DEFAULT 0,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
@@ -258,43 +261,15 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   id INT NOT NULL AUTO_INCREMENT,
   checklist_id INT NOT NULL,
   item_id INT NOT NULL,
+  ordem INT NOT NULL DEFAULT 0,
+  -- Vínculo item-checklist é inativado (não excluído) quando o item sai do
+  -- checklist, pra não quebrar log/auditoria que referencie esse id. Se o
+  -- item voltar pro checklist, a mesma linha é reativada.
+  habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 
-ALTER TABLE empresa
-ADD(
-  email_responsavel VARCHAR(255) NOT NULL,
-  cpf_responsavel CHAR(11) NOT NULL,
-  telefone_responsavel VARCHAR(20) NOT NULL
-);
-
-ALTER TABLE checklist_item_catalogo
-ADD (
-  descricao_resumida TEXT DEFAULT NULL,
-  tempo_estimado_minutos INT NOT NULL DEFAULT 0
-);
-
-ALTER TABLE checklist_item_vinculo
-ADD (
-  ordem INT NOT NULL DEFAULT 0
-);
-
--- Vínculo item-checklist é inativado (não excluído) quando o item sai do
--- checklist, pra não quebrar log/auditoria que referencie esse id. Se o
--- item voltar pro checklist, a mesma linha é reativada.
-ALTER TABLE checklist_item_vinculo
-ADD (
-  habilitado TINYINT NOT NULL DEFAULT 1
-);
-
-ALTER TABLE checklist_item_catalogo
-ADD COLUMN tempo_estimado_minutos INT NOT NULL DEFAULT 0 AFTER tempo_estimado_horas;
-
-UPDATE checklist_item_catalogo
-SET tempo_estimado_minutos = ROUND(tempo_estimado_horas * 60);
-
-ALTER TABLE checklist_item_catalogo
-DROP COLUMN tempo_estimado_horas;
-
-ALTER TABLE checklist_item_catalogo
-MODIFY COLUMN descricao_resumida TEXT DEFAULT NULL;
+ALTER TABLE usuario
+ADD COLUMN reset_token VARCHAR(64) NULL,
+ADD COLUMN reset_token_expira DATETIME NULL,
+ADD INDEX idx_reset_token (reset_token);
