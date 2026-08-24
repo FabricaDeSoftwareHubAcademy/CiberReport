@@ -41,4 +41,9 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/dashboard-gestor', 'DashboardGestorController@index');
     Route::POST('/dashboard-gestor', 'DashboardGestorController@index');
+    
+    Route::GET('/projetos-alocados','ProjetosAlocadosController@index');
+    Route::POST('/projetos-alocados','ProjetosAlocadosController@index');
 });
+
+

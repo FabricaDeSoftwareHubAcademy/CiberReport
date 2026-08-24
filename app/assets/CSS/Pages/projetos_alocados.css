@@ -1,0 +1,174 @@
+.projetos-alocados-container {
+    padding: 0 20px 20px;
+}
+
+.projetos-alocados-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.projetos-alocados-card {
+    background: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 260px;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.projetos-alocados-card-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2f2f2f;
+}
+
+.projetos-alocados-card-valor {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.projetos-alocados-valor-alocados {
+    color: #d4ac0d;
+}
+
+.projetos-alocados-valor-atrasados {
+    color: #e74c3c;
+}
+
+.projetos-alocados-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.projetos-alocados-badge-atrasado {
+    color: #e74c3c;
+    background: #fdecea;
+}
+
+.projetos-alocados-badge-concluido {
+    color: #27ae60;
+    background: #eafaf1;
+}
+
+.projetos-alocados-badge-aguardando {
+    color: #d4ac0d;
+    background: #fef9e7;
+}
+
+
+.projetos-alocados-aviso-mock {
+    font-size: 11px;
+    color: #b98900;
+    background: #fff8e1;
+    border: 1px dashed #e9c46a;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-top: 8px;
+}
+
+.projetos-alocados-aviso-mock i {
+    margin-right: 6px;
+}
+
+.projetos-alocados-descricao {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.projetos-alocados-alerta-header {
+    background-color: #c0392b;
+}
+
+.projetos-alocados-vulnerabilidade-card {
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+}
+
+.projetos-alocados-vulnerabilidade-topo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.projetos-alocados-vulnerabilidade-titulo {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1d1d1d;
+    flex: 1;
+}
+
+.projetos-alocados-vulnerabilidade-cvss {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+}
+
+.projetos-alocados-vulnerabilidade-texto {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.projetos-alocados-severidade-tag {
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.projetos-alocados-severidade-alta {
+    background: #e74c3c;
+}
+
+.projetos-alocados-severidade-media {
+    background: #d4ac0d;
+}
+
+.projetos-alocados-severidade-baixa {
+    background: #27ae60;
+}
+
+@media (max-width: 900px) {
+    .projetos-alocados-cards {
+        gap: 12px;
+    }
+
+    .projetos-alocados-card {
+        width: calc(50% - 6px);
+    }
+}
+
+@media (max-width: 600px) {
+    .projetos-alocados-cards {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .projetos-alocados-card {
+        width: 100%;
+    }
+
+    .projetos-alocados-container {
+        padding: 0 0 16px;
+    }
+}

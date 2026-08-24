@@ -3,7 +3,7 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    max-height: calc(100vh - var(--altura-menu-superior) - 12rem);
+    height: calc(100vh - var(--altura-menu-superior) - 12rem);
     overflow-y: auto;
     border-radius: var(--raio-md);
 }
@@ -245,6 +245,15 @@
 
 .tabela-wrapper tbody tr.linha-inativa {
     opacity: 0.5;
+}
+
+.tabela-wrapper tbody tr.tabela-linha-vazia {
+    pointer-events: none;
+    background-color: var(--cor-fundo-branco);
+}
+
+.tabela-wrapper tbody tr.tabela-linha-vazia td {
+    border-bottom: none;
 }
 
 .tabela-wrapper .status {
