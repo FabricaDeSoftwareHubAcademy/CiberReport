@@ -4,6 +4,9 @@
     margin-bottom: var(--espaco-md);
 }
 .main-gerenciamento-projeto{
+    height: calc(100vh - var(--altura-menu-superior));
+    display: flex;
+    flex-direction: column;
     overflow-y: hidden;
 }
 .group-card-tabela{
@@ -11,6 +14,13 @@
     gap: 10px;
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.tabela-wrapper.tabela-gerenciamento-projeto{
+    height: auto;
+    flex: 1;
+    min-height: 0;
 }
 .group-card-projeto{
     display: flex;

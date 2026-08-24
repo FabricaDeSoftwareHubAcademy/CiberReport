@@ -50,7 +50,7 @@
   }
 
   function todasLinhas() {
-    return Array.from(corpo.querySelectorAll('tr'));
+    return Array.from(corpo.querySelectorAll('tr:not(.tabela-linha-vazia)'));
   }
 
   function linhasFiltradas() {
@@ -76,7 +76,57 @@
     });
     paginaAtual = Math.min(pagina, totalPaginas());
     renderizarBotoes();
+    ajustarEspacamento();
   }
+
+  // --- espaçamento em branco ---
+  let linhaEspacadora = null;
+
+  function obterLinhaEspacadora() {
+    if (!linhaEspacadora) {
+      linhaEspacadora = document.createElement('tr');
+      linhaEspacadora.className = 'tabela-linha-vazia';
+      linhaEspacadora.setAttribute('aria-hidden', 'true');
+      const celula = document.createElement('td');
+      celula.innerHTML = '&nbsp;';
+      linhaEspacadora.appendChild(celula);
+    }
+    return linhaEspacadora;
+  }
+
+  function containerComScroll() {
+    if (['auto', 'scroll'].includes(window.getComputedStyle(corpo).overflowY)) {
+      return corpo;
+    }
+    return tabela.closest('.tabela-wrapper');
+  }
+
+  function alturaConteudoAtual(container) {
+    if (container === corpo) return corpo.scrollHeight;
+    return tabela.getBoundingClientRect().height;
+  }
+
+  function ajustarEspacamento() {
+    if (!tabela) return;
+    const container = containerComScroll();
+    if (!container) return;
+
+    const espacadora = obterLinhaEspacadora();
+    espacadora.remove();
+
+    const alturaContainer = container === corpo ? corpo.clientHeight : container.getBoundingClientRect().height;
+    const diferenca = Math.floor(alturaContainer - alturaConteudoAtual(container)) - 1;
+
+    espacadora.querySelector('td').colSpan = tabela.querySelectorAll('thead th').length || 1;
+    espacadora.style.height = diferenca > 0 ? `${diferenca}px` : '0px';
+    corpo.appendChild(espacadora);
+  }
+
+  let redimensionamentoTimeout = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(redimensionamentoTimeout);
+    redimensionamentoTimeout = setTimeout(ajustarEspacamento, 150);
+  });
 
   function renderizarSeletorItensPorPagina() {
     if (!containerItensPorPagina) return;

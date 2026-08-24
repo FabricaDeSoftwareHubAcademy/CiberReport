@@ -7,6 +7,7 @@
 @import url("Componentes/tabela.css");
 @import url("Componentes/modal.css");
 @import url("Componentes/componentes-modal.css");
+@import url("Componentes/modal-tipo-pentest.css");
 @import url("Componentes/popup-alerta.css");
 @import url("Componentes/button.css");
 @import url("Componentes/toast.css");
@@ -48,7 +49,7 @@ html {
     --cor-baikal-3: #26b1ba;
 
     /* --- Vermelho --- */
-    --cor-vermelho-destaque: #ff3347;
+    --cor-vermelho-destaque: #ff2c2c;
     --cor-vermelho-secundario: #fde9ed;
 
     /* --- Laranja --- */
@@ -164,7 +165,7 @@ h6 {
 .tabela-wrapper,
 .tabela-wrapper tbody,
 .modal__body,
-.lista-proximos-prazos {
+.lista-alocacao {
     scrollbar-width: thin;
     scrollbar-color: var(--cor-cinza-secundario) transparent;
 

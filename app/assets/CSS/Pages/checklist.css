@@ -1,3 +1,16 @@
+.checklist-pagina {
+    height: calc(100vh - var(--altura-menu-superior));
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.checklist-pagina .tabela-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+}
+
 .checklist-cadastro-acoes {
     display: flex;
     justify-content: flex-end;

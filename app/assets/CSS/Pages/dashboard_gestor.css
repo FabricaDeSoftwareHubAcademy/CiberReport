@@ -1,19 +1,20 @@
 .main-dashboard-gestor {
+    height: calc(100vh - var(--altura-menu-superior));
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+    gap: var(--espaco-sm);
+}
+
+.group-cards-gestor {
     display: flex;
     flex-direction: column;
     gap: var(--espaco-sm);
-}
-
-/* --- Cards de KPI --- */
-.group-cards-gestor {
-    display: flex;
-    gap: var(--espaco-sm);
-    flex-wrap: wrap;
+    min-width: 0;
 }
 
 .card-gestor {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 0;
     background-color: var(--cor-fundo-branco);
     border-radius: var(--raio-lg);
     box-shadow: var(--sombra-xs);
@@ -40,30 +41,31 @@
     color: var(--cor-texto-titulo);
 }
 
-.card-gestor--alerta .card-gestor__valor {
-    color: var(--cor-vermelho-destaque);
+.card-gestor--vulns-risco {
+    background-color: var(--cor-vermelho-destaque);
+    box-shadow: 0 0 0 1px var(--cor-vermelho-destaque), var(--sombra-xs);
+}
+
+.card-gestor--vulns-risco .card-gestor__titulo,
+.card-gestor--vulns-risco .card-gestor__valor {
+    color: var(--cor-fundo-branco);
+}
+
+.card-gestor--vulns-risco .card-gestor__info {
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .card-gestor--prazo .card-gestor__valor {
     color: var(--cor-laranja);
 }
 
-.card-gestor__config {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--espaco-xs);
-    font-size: var(--fonte-legenda);
-    color: var(--cor-texto-secundario);
+.card-gestor--clicavel {
+    cursor: pointer;
+    transition: box-shadow 0.15s ease;
 }
 
-.card-gestor__input-dias {
-    width: 4.5rem;
-    font-size: var(--fonte-apoio);
-    padding: 2px var(--espaco-xs);
-    border: 1px solid var(--cor-borda-padrao);
-    border-radius: var(--raio-sm);
-    text-align: center;
+.card-gestor--clicavel:hover {
+    box-shadow: var(--sombra-sm, var(--sombra-xs));
 }
 
 .card-gestor__info {
@@ -72,10 +74,9 @@
     cursor: help;
 }
 
-/* --- Gráficos --- */
 .group-graficos-gestor {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 60fr 20fr 20fr;
     gap: var(--espaco-sm);
     align-items: stretch;
 }
@@ -91,51 +92,107 @@
     min-width: 0;
 }
 
+.grafico-card--alocacao {
+    padding-right: var(--espaco-xs);
+}
+
 .grafico-card__titulo {
     font-size: var(--fonte-apoio);
     font-weight: 600;
     color: var(--cor-texto-titulo);
 }
 
-.grafico-card--pizza {
-    align-items: center;
-}
-
-.legenda-alocacao {
+.lista-alocacao {
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     gap: var(--espaco-sm);
     width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: var(--espaco-sm);
 }
 
-.legenda-alocacao li {
+.alocacao-item {
     display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px var(--espaco-sm);
-    border-radius: var(--raio-full);
-    color: var(--cor-fundo-branco);
-    font-size: 1.1rem;
-    font-weight: 600;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 6px;
+    border-radius: var(--raio-md);
     cursor: pointer;
-    border: none;
+    transition: background-color 0.15s ease;
 }
 
-.legenda-alocacao .legenda-ponto {
-    width: 8px;
+.alocacao-item:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+.alocacao-item__cabecalho {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espaco-xs);
+}
+
+.alocacao-item__nome {
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    color: var(--cor-texto-titulo);
+}
+
+.alocacao-item__contagem {
+    font-size: var(--fonte-legenda);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--cor-texto-secundario);
+}
+
+.alocacao-item__trilha {
     height: 8px;
-    border-radius: 50%;
-    background-color: var(--cor-fundo-branco);
+    border-radius: var(--raio-full);
+    background-color: var(--cor-cinza-terciario);
+    overflow: hidden;
 }
 
-/* --- Tabela + próximos prazos --- */
+.alocacao-item__barra {
+    height: 100%;
+    border-radius: var(--raio-full);
+    transition: width 0.2s ease;
+    background-color: var(--cor-verde);
+}
+
+.alocacao-item[data-nivel="atencao"] .alocacao-item__barra {
+    background-color: var(--cor-amarelo);
+}
+
+.alocacao-item[data-nivel="alerta"] .alocacao-item__barra {
+    background-color: var(--cor-laranja);
+}
+
+.alocacao-item[data-nivel="critico"] .alocacao-item__barra {
+    background-color: var(--cor-vermelho-destaque);
+}
+
+.alocacao-item[data-nivel="atencao"] .alocacao-item__contagem {
+    color: var(--cor-amarelo);
+}
+
+.alocacao-item[data-nivel="alerta"] .alocacao-item__contagem {
+    color: var(--cor-laranja);
+}
+
+.alocacao-item[data-nivel="critico"] .alocacao-item__contagem {
+    color: var(--cor-vermelho-destaque);
+}
+
 .group-tabela-prazos {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     gap: var(--espaco-sm);
-    align-items: start;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
 }
 
 .tabela-coluna {
@@ -143,6 +200,13 @@
     flex-direction: column;
     gap: var(--espaco-xs);
     min-width: 0;
+    min-height: 0;
+}
+
+.tabela-wrapper.tabela-dashboard-gestor {
+    height: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .tabela-dashboard-gestor tbody tr {
@@ -153,13 +217,99 @@
     background-color: var(--cor-cinza-hover);
 }
 
-.celula-vuln-grave {
+.celula-analistas {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.celula-prazo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.badge-prazo {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--fonte-legenda);
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: var(--raio-sm);
+}
+
+.badge-prazo--vencido {
     color: var(--cor-vermelho-destaque);
-    font-weight: 700;
+    background-color: var(--cor-vermelho-secundario);
+}
+
+.badge-prazo--risco {
+    color: var(--cor-laranja);
+    background-color: var(--cor-laranja-secundario);
+}
+
+.celula-dias-restantes {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.celula-dias-restantes--vencido {
+    color: var(--cor-vermelho-destaque);
+}
+
+.celula-dias-restantes--risco {
+    color: var(--cor-laranja);
+}
+
+.celula-vuln-critica {
+    text-align: center;
+}
+
+.checkbox-vuln-critica {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--cor-cinza-terciario);
+    border-radius: 4px;
+    background-color: var(--cor-fundo-branco);
+    cursor: default;
+    display: inline-grid;
+    place-content: center;
+}
+
+.checkbox-vuln-critica:checked {
+    background-color: var(--cor-vermelho-destaque);
+    border-color: var(--cor-vermelho-destaque);
+}
+
+.checkbox-vuln-critica:checked::before {
+    content: "";
+    width: 4px;
+    height: 8px;
+    border: solid var(--cor-fundo-branco);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+.oculto-visualmente {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .filtro-ativo-chip[hidden] {
-    display: none;
+    display: flex;
+    visibility: hidden;
 }
 
 .filtro-ativo-chip {
@@ -191,89 +341,8 @@
     line-height: 1;
 }
 
-.proximos-prazos-card {
-    background-color: var(--cor-azul-primaria);
-    border-radius: var(--raio-md);
-    box-shadow: var(--sombra-xs);
-    padding: var(--espaco-sm) var(--espaco-xs) var(--espaco-sm) var(--espaco-md);
-    max-height: 340px;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.proximos-prazos-card__titulo {
-    font-size: var(--fonte-apoio);
-    font-weight: 600;
-    color: var(--cor-branco-primario);
-    margin-bottom: var(--espaco-sm);
-    padding-right: var(--espaco-sm);
-    flex-shrink: 0;
-}
-
-.lista-proximos-prazos {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--espaco-xs);
-    overflow-y: auto;
-    min-height: 0;
-    padding-right: var(--espaco-xs);
-}
-
-.lista-proximos-prazos li {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    padding: var(--espaco-xs) var(--espaco-sm);
-    border-radius: var(--raio-md);
-    border: 1px solid var(--cor-borda-padrao);
-    cursor: pointer;
-    background-color: var(--cor-fundo-branco);
-}
-
-.lista-proximos-prazos li:hover {
-    border-color: var(--cor-borda-foco);
-}
-
-.prazo-item__nome {
-    font-size: var(--fonte-apoio);
-    font-weight: 600;
-    color: var(--cor-texto-titulo);
-}
-
-.prazo-item__cliente {
-    font-size: var(--fonte-legenda);
-    color: var(--cor-texto-secundario);
-}
-
-.prazo-item__data {
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-    align-self: flex-start;
-    padding: 1px var(--espaco-xs);
-    border-radius: var(--raio-sm);
-    margin-top: 2px;
-}
-
-.prazo-item__data--vencido {
-    color: var(--cor-vermelho-destaque);
-    background-color: var(--cor-vermelho-secundario);
-}
-
-.prazo-item__data--em-risco {
-    color: var(--cor-laranja);
-    background-color: var(--cor-laranja-secundario);
-}
-
-.prazo-item__vazio {
-    font-size: var(--fonte-apoio);
-    color: var(--cor-texto-secundario);
-}
-
 @media (max-width: 1100px) {
-    .group-graficos-gestor,
-    .group-tabela-prazos {
+    .group-graficos-gestor {
         grid-template-columns: 1fr;
     }
 }
