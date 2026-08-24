@@ -1,4 +1,17 @@
 /* ===== Componente de Foto do Usuário ===== */
+main {
+    height: calc(100vh - var(--altura-menu-superior));
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.tabela-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+}
+
 .ger-usuario{
     display: flex;
     justify-content: flex-end;
