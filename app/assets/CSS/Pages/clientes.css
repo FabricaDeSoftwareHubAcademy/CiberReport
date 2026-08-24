@@ -15,6 +15,13 @@ main {
     overflow-y: hidden;
 }
 
+.listar-clientes {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
 .tabela-wrapper {
     height: auto;
     flex: 1;
