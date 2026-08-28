@@ -1,184 +1,270 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: 1.2fr 0.95fr;
+    gap: 12px;
+
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+
+    font-family: Arial, sans-serif;
+    color: #f5f5f5;
 }
 
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #eef1f4;
-  color: #14213d;
+
+/* =========================
+   CARD DO PROJETO
+========================= */
+
+.project-card,
+.tasks-card {
+    background: #181818;
+    border: 1px solid #292929;
+    border-radius: 9px;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
-.conteudo {
-  padding: 28px 36px 40px;
+.project-card {
+    min-height: 255px;
 }
 
-.topo {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 22px;
+.project-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
 }
 
-.titulo {
-  font-size: 26px;
-  font-weight: 800;
-  color: #0d2a4d;
+.project-icon {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #063b70;
+    border-radius: 5px;
+
+    font-size: 16px;
 }
 
-.busca {
-  flex: 1;
-  max-width: 420px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border: 1px solid #e3e7ec;
-  border-radius: 10px;
-  padding: 10px 16px;
+.project-info {
+    flex: 1;
 }
 
-.busca img {
-  width: 18px;
-  height: 18px;
+.project-info h2 {
+    margin: 1px 0 3px;
+    font-size: 14px;
+    font-weight: 700;
 }
 
-.busca input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14px;
+.project-info p {
+    margin: 0;
+    color: #a5a5a5;
+    font-size: 10px;
 }
 
-.perfil {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-left: auto;
+.status {
+    background: #523400;
+    color: #e7a900;
+
+    padding: 5px 10px;
+    border-radius: 5px;
+
+    font-size: 9px;
+    white-space: nowrap;
 }
 
-.sino {
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
+
+/* INFORMAÇÕES */
+
+.project-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    margin-top: 20px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #292929;
 }
 
-.sino img {
-  width: 24px;
-  height: 24px;
+.project-details div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.foto-perfil-analista {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
+.project-details span {
+    color: #777;
+    font-size: 9px;
 }
 
-.perfil-texto {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+.project-details strong {
+    font-size: 11px;
 }
 
-.nome {
-  font-weight: 700;
-  font-size: 14px;
+.project-details .critical {
+    color: #ff5c5c;
 }
 
-.cargo {
-  font-size: 12px;
-  color: #6b7686;
+
+/* PROGRESSO */
+
+.progress-section {
+    margin-top: 13px;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
+.progress-title {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+    font-size: 10px;
 }
 
-.card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 20px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.progress-title strong {
+    font-size: 11px;
 }
 
-.card-label {
-  font-size: 14px;
-  color: #6b7686;
-  font-weight: 600;
+.progress-bar {
+    width: 100%;
+    height: 5px;
+
+    background: #292929;
+    border-radius: 10px;
+
+    overflow: hidden;
 }
 
-.card-valor {
-  font-size: 30px;
-  font-weight: 800;
-  color: #0d2a4d;
+.progress-value {
+    width: 62%;
+    height: 100%;
+    background: #1683e8;
 }
 
-.graficos {
-  display: grid;
-  grid-template-columns: 2.2fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
+
+/* LINK */
+
+.project-link,
+.tasks-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 70px;
+
+    color: #4da3ff;
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 600;
 }
 
-.grafico-box {
-  background: #fff;
-  border-radius: 14px;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.project-link span,
+.tasks-link span {
+    font-size: 14px;
 }
 
-.grafico-topo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 700;
-  font-size: 15px;
+
+/* =========================
+   CARD DE TAREFAS
+========================= */
+
+.tasks-card {
+    min-height: 255px;
 }
 
-.filtro {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  color: #6b7686;
-  font-size: 13px;
-  cursor: pointer;
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.grafico-vazio {
-  flex: 1;
-  min-height: 260px;
-  border: 1px dashed #e3e7ec;
-  border-radius: 10px;
+.tasks-header h2 {
+    margin: 0;
+    font-size: 14px;
 }
 
-.legenda {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+.tasks-header span {
+    color: #999;
+    font-size: 9px;
+    font-weight: 600;
 }
 
-.tag {
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 8px;
+
+/* LISTA */
+
+.task-list {
+    margin-top: 13px;
 }
 
-.tag-critica { background: #e0483f; }
-.tag-alta    { background: #f2a71b; }
-.tag-media   { background: #1b6fd8; }
-.tag-baixa   { background: #2fa84f; }
+.task {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #252525;
+}
+
+.task input {
+    appearance: none;
+
+    width: 10px;
+    height: 10px;
+
+    margin-top: 2px;
+
+    border: 1px solid #777;
+    border-radius: 2px;
+
+    cursor: pointer;
+}
+
+.task input:checked {
+    background: #1683e8;
+    border-color: #1683e8;
+}
+
+.task label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    cursor: pointer;
+}
+
+.task strong {
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.task small {
+    color: #888;
+    font-size: 8px;
+}
+
+.task small.today {
+    color: #ff5555;
+}
+
+
+/* LINK */
+
+.tasks-link {
+    margin-top: 14px;
+}
+  
+
+/* RESPONSIVO */
+
+@media (max-width: 700px) {
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+}
