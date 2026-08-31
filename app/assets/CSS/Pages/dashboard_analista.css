@@ -2,24 +2,17 @@
     display: grid;
     grid-template-columns: 1.2fr 0.95fr;
     gap: 12px;
-
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-
     font-family: Arial, sans-serif;
     color: #f5f5f5;
 }
 
-
-/* =========================
-   CARD DO PROJETO
-========================= */
-
 .project-card,
 .tasks-card {
-    background: #181818;
-    border: 1px solid #292929;
+    background: #f5f5f5;
+    border: 1px solid #f5f5f5;
     border-radius: 9px;
     padding: 16px;
     box-sizing: border-box;
@@ -38,14 +31,11 @@
 .project-icon {
     width: 32px;
     height: 32px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background: #063b70;
     border-radius: 5px;
-
     font-size: 16px;
 }
 
@@ -57,6 +47,7 @@
     margin: 1px 0 3px;
     font-size: 14px;
     font-weight: 700;
+    color: #292929;
 }
 
 .project-info p {
@@ -66,26 +57,19 @@
 }
 
 .status {
-    background: #523400;
-    color: #e7a900;
-
+    background: #1683e8;
+    color: #252525;
     padding: 5px 10px;
     border-radius: 5px;
-
     font-size: 9px;
     white-space: nowrap;
 }
 
-
-/* INFORMAÇÕES */
-
 .project-details {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-
     margin-top: 20px;
     padding-bottom: 12px;
-
     border-bottom: 1px solid #292929;
 }
 
@@ -102,14 +86,12 @@
 
 .project-details strong {
     font-size: 11px;
+    color: #292929;
 }
 
 .project-details .critical {
     color: #ff5c5c;
 }
-
-
-/* PROGRESSO */
 
 .progress-section {
     margin-top: 13px;
@@ -118,9 +100,7 @@
 .progress-title {
     display: flex;
     justify-content: space-between;
-
     margin-bottom: 10px;
-
     font-size: 10px;
 }
 
@@ -131,10 +111,8 @@
 .progress-bar {
     width: 100%;
     height: 5px;
-
-    background: #292929;
+    background: #a5a5a5;
     border-radius: 10px;
-
     overflow: hidden;
 }
 
@@ -144,33 +122,24 @@
     background: #1683e8;
 }
 
-
-/* LINK */
-
 .project-link,
 .tasks-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-
     margin-top: 70px;
-
-    color: #4da3ff;
+    color: #252525;
     text-decoration: none;
-
     font-size: 10px;
     font-weight: 600;
+    background-color: #1683e8;
+    border-radius: 6px;
 }
 
 .project-link span,
 .tasks-link span {
     font-size: 14px;
 }
-
-
-/* =========================
-   CARD DE TAREFAS
-========================= */
 
 .tasks-card {
     min-height: 255px;
@@ -185,16 +154,14 @@
 .tasks-header h2 {
     margin: 0;
     font-size: 14px;
+    color: #292929;
 }
 
 .tasks-header span {
-    color: #999;
+    color: #292929;
     font-size: 9px;
     font-weight: 600;
 }
-
-
-/* LISTA */
 
 .task-list {
     margin-top: 13px;
@@ -204,23 +171,17 @@
     display: flex;
     align-items: flex-start;
     gap: 7px;
-
     padding: 10px 0;
-
     border-bottom: 1px solid #252525;
 }
 
 .task input {
     appearance: none;
-
     width: 10px;
     height: 10px;
-
     margin-top: 2px;
-
-    border: 1px solid #777;
+    border: 1px solid #252525;
     border-radius: 2px;
-
     cursor: pointer;
 }
 
@@ -233,13 +194,13 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-
     cursor: pointer;
 }
 
 .task strong {
     font-size: 9px;
     font-weight: 600;
+    color: #252525;
 }
 
 .task small {
@@ -248,18 +209,12 @@
 }
 
 .task small.today {
-    color: #ff5555;
+    color: #292929;
 }
-
-
-/* LINK */
 
 .tasks-link {
     margin-top: 14px;
 }
-  
-
-/* RESPONSIVO */
 
 @media (max-width: 700px) {
 
