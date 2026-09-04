@@ -105,48 +105,32 @@
   }
 
   // --- filtros ---
-  // Filtra a tabela reaproveitando a busca global de `tabela.js`
-  function filtrarTabela(termoBusca, rotuloChip) {
+  // Reaproveita a busca global de `tabela.js` para filtrar a tabela.
+  function aplicarBuscaTabela(termo) {
     const campoBusca = document.querySelector('.input-pesquisaSuperior input[type="text"]');
     if (!campoBusca) return;
-    campoBusca.value = termoBusca;
+    campoBusca.value = termo;
     campoBusca.dispatchEvent(new Event('input', { bubbles: true }));
-    exibirChipFiltro(rotuloChip);
   }
 
-  function filtrarTabelaPorAnalista(nomeAnalista) {
-    filtrarTabela(nomeAnalista, nomeAnalista);
-  }
-
-  function filtrarTabelaPorProjeto(nomeProjeto) {
-    filtrarTabela(nomeProjeto, nomeProjeto);
-  }
-
-  function filtrarTabelaPorPrazoRisco() {
-    filtrarTabela('em risco', 'Prazos em risco/vencidos');
-  }
-
-  function filtrarTabelaPorVulnCritica() {
-    filtrarTabela('vulnerabilidade critica em aberto', 'Vulnerabilidades críticas em aberto');
-  }
-
-  function exibirChipFiltro(rotulo) {
+  // `rotulo` preenche e exibe o chip; valor falso o esconde.
+  function definirChipFiltro(rotulo) {
     const chip = document.getElementById('filtro-ativo-chip');
     const nomeSpan = document.getElementById('filtro-ativo-nome');
     if (!chip || !nomeSpan) return;
-    nomeSpan.textContent = rotulo;
-    chip.hidden = false;
+    if (rotulo) nomeSpan.textContent = rotulo;
+    chip.hidden = !rotulo;
   }
 
-  function limparFiltroAnalista() {
-    const campoBusca = document.querySelector('.input-pesquisaSuperior input[type="text"]');
-    const chip = document.getElementById('filtro-ativo-chip');
-    if (campoBusca) {
-      campoBusca.value = '';
-      campoBusca.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    if (chip) chip.hidden = true;
+  function filtrarTabela(termoBusca, rotuloChip) {
+    aplicarBuscaTabela(termoBusca);
+    definirChipFiltro(rotuloChip);
   }
+
+  const limparFiltro = () => filtrarTabela('', null);
+  const filtrarTabelaPorNome = (nome) => filtrarTabela(nome, nome);
+  const filtrarTabelaPorPrazoRisco = () => filtrarTabela('em risco', 'Prazos em risco/vencidos');
+  const filtrarTabelaPorVulnCritica = () => filtrarTabela('vulnerabilidade critica em aberto', 'Vulnerabilidades críticas em aberto');
 
   // --- renderização: cards ---
   function renderizarCards() {
@@ -182,7 +166,7 @@
       return;
     }
 
-    ativos.forEach((projeto) => {
+    ativos.forEach((projeto, indice) => {
       const linha = document.createElement('tr');
       linha.dataset.projetoId = String(projeto.id);
 
@@ -208,17 +192,75 @@
         </td>
       `;
       linha.addEventListener('click', () => irParaDashboardProjeto(projeto.id));
+      linha.addEventListener('mouseenter', () => destacarBarraProjeto(indice));
+      linha.addEventListener('mouseleave', limparDestaqueBarra);
       corpo.appendChild(linha);
     });
   }
 
   // --- renderização: gráficos ---
-  function obterCoresTokens() {
-    return ['#0a6bb5', '#00a9d1', '#00966f', '#4cc61e', '#c8e61e', '#ffd200', '#ff8c00', '#ff0000', '#ff1f6b', '#e6007e', '#7b2d8e', '#4b3f96'];
+  const CORES_GRAFICO = ['#0a6bb5', '#00a9d1', '#00966f', '#4cc61e', '#c8e61e', '#ffd200', '#ff8c00', '#ff0000', '#ff1f6b', '#e6007e', '#7b2d8e', '#4b3f96'];
+
+  const obterContainerGrafico = () => document.querySelector('#grafico-progresso');
+
+  // Percorre barras e rótulos do gráfico (elementos com atributo `j` = índice do ponto).
+  function paraCadaElementoGrafico(callback) {
+    const container = obterContainerGrafico();
+    if (!container) return;
+    container.querySelectorAll('.apexcharts-bar-area, .apexcharts-data-labels').forEach(callback);
+  }
+
+  let barraComEventoSimulado = null;
+
+  // Simula eventos de mouse sobre a barra para o ApexCharts abrir/fechar o tooltip dela.
+  function dispararEventoMouseNaBarra(barra, tipoEvento) {
+    if (!barra) return;
+    const area = barra.getBoundingClientRect();
+    barra.dispatchEvent(new MouseEvent(tipoEvento, {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      clientX: area.left + area.width / 2,
+      clientY: area.top + area.height / 2
+    }));
+  }
+
+  function esconderTooltipGrafico() {
+    const container = obterContainerGrafico();
+    if (!container) return;
+    if (barraComEventoSimulado) {
+      dispararEventoMouseNaBarra(barraComEventoSimulado, 'mouseout');
+      dispararEventoMouseNaBarra(barraComEventoSimulado, 'mouseleave');
+      barraComEventoSimulado = null;
+    }
+    // Fallback: força o fechamento removendo a classe que o ApexCharts usa para exibir o tooltip.
+    container.querySelectorAll('.apexcharts-tooltip.apexcharts-active').forEach((tooltip) => {
+      tooltip.classList.remove('apexcharts-active');
+    });
+  }
+
+  function destacarBarraProjeto(indiceProjeto) {
+    let barraAlvo = null;
+    paraCadaElementoGrafico((elemento) => {
+      if (!elemento.hasAttribute('j')) return;
+      const ehAlvo = Number(elemento.getAttribute('j')) === indiceProjeto;
+      elemento.style.transition = 'opacity 0.15s ease';
+      elemento.style.opacity = ehAlvo ? '1' : '0.2';
+      if (ehAlvo && elemento.classList.contains('apexcharts-bar-area')) barraAlvo = elemento;
+    });
+    if (barraAlvo) {
+      barraComEventoSimulado = barraAlvo;
+      dispararEventoMouseNaBarra(barraAlvo, 'mousemove');
+    }
+  }
+
+  function limparDestaqueBarra() {
+    paraCadaElementoGrafico((elemento) => { elemento.style.opacity = ''; });
+    esconderTooltipGrafico();
   }
 
   function inicializarGraficoProgresso() {
-    const container = document.querySelector('#grafico-progresso');
+    const container = obterContainerGrafico();
     if (!container) return;
 
     const ativos = projetosAtivos();
@@ -233,7 +275,7 @@
         events: {
           dataPointSelection: (evento, contextoGrafico, config) => {
             const projeto = ativos[config.dataPointIndex];
-            if (projeto) filtrarTabelaPorProjeto(projeto.nome);
+            if (projeto) filtrarTabelaPorNome(projeto.nome);
           }
         }
       },
@@ -244,7 +286,7 @@
         labels: { rotate: 0, trim: false, style: { fontSize: '11px' } }
       },
       yaxis: { max: 100, labels: { formatter: (valor) => `${valor}%` } },
-      colors: obterCoresTokens(),
+      colors: CORES_GRAFICO,
       dataLabels: {
         enabled: true,
         formatter: (valor) => `${valor}%`,
@@ -304,7 +346,7 @@
           <div class="alocacao-item__barra" style="width: ${larguraBarra}%"></div>
         </div>
       `;
-      item.addEventListener('click', () => filtrarTabelaPorAnalista(analista.nome));
+      item.addEventListener('click', () => filtrarTabelaPorNome(analista.nome));
       lista.appendChild(item);
     });
   }
@@ -313,25 +355,11 @@
   renderizarTabela();
   renderizarCards();
 
-  const botaoLimparFiltro = document.getElementById('btn-limpar-filtro');
-  if (botaoLimparFiltro) {
-    botaoLimparFiltro.addEventListener('click', limparFiltroAnalista);
-  }
-
-  const cardEmAndamento = document.getElementById('card-em-andamento');
-  if (cardEmAndamento) {
-    cardEmAndamento.addEventListener('click', limparFiltroAnalista);
-  }
-
-  const cardVulnsCriticas = document.getElementById('card-vulns-criticas');
-  if (cardVulnsCriticas) {
-    cardVulnsCriticas.addEventListener('click', filtrarTabelaPorVulnCritica);
-  }
-
-  const cardPrazosRisco = document.getElementById('card-prazos-risco');
-  if (cardPrazosRisco) {
-    cardPrazosRisco.addEventListener('click', filtrarTabelaPorPrazoRisco);
-  }
+  const vincularClique = (id, acao) => document.getElementById(id)?.addEventListener('click', acao);
+  vincularClique('btn-limpar-filtro', limparFiltro);
+  vincularClique('card-em-andamento', limparFiltro);
+  vincularClique('card-vulns-criticas', filtrarTabelaPorVulnCritica);
+  vincularClique('card-prazos-risco', filtrarTabelaPorPrazoRisco);
 
   renderizarAlocacaoAnalistas();
 
@@ -340,6 +368,6 @@
   } else {
     console.warn('ApexCharts não carregou (CDN indisponível?) — o gráfico de progresso não será exibido.');
     const mensagemFallback = '<p style="text-align:center;color:var(--cor-texto-secundario);padding:2rem 0;">Gráfico indisponível no momento.</p>';
-    document.querySelector('#grafico-progresso').innerHTML = mensagemFallback;
+    obterContainerGrafico().innerHTML = mensagemFallback;
   }
 })();
