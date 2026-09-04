@@ -125,7 +125,13 @@ $usuarios = $controller->listar();
                                         data-usuario='<?= htmlspecialchars(json_encode($usuario), ENT_QUOTES) ?>'>
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <a href="<?= BASE_URL ?>usuario?excluir=<?= $usuario['id'] ?>" class="tabela-btn-excluir" title="Excluir" aria-label="Excluir" onclick="return confirm('Excluir este usuário?')">
+                                    <a href="<?= BASE_URL ?>usuario?excluir=<?= $usuario['id'] ?>"
+                                        class="tabela-btn-excluir"
+                                        title="Excluir"
+                                        aria-label="Excluir"
+                                        data-modal-target="popupExcluir"
+                                        data-popup-href="<?= BASE_URL ?>usuario?excluir=<?= $usuario['id'] ?>"
+                                        onclick="return false;">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -400,10 +406,12 @@ $usuarios = $controller->listar();
         </div>
     </div>
 
+    <?php include 'Components/popup_excluir.php'; ?>
     <?php include 'Components/toast.php'; ?>
 
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>
     <script>
         function toggleHabilitado(checkbox) {

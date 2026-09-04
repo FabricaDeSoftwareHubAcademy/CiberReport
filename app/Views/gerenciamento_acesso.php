@@ -86,7 +86,9 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                                         class="tabela-btn-excluir"
                                         title="Excluir"
                                         aria-label="Excluir"
-                                        onclick="return confirm('Excluir este perfil?')">
+                                        data-modal-target="popupExcluir"
+                                        data-popup-href="<?= BASE_URL ?>gerenciamento-acesso?excluir=<?= $perfis['id'] ?>"
+                                        onclick="return false;">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -398,9 +400,11 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
                 </form>
             </div>
         </div>
+        <?php include 'Components/popup_excluir.php'; ?>
     </main>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js"></script>
 </body>
 
 </html>
