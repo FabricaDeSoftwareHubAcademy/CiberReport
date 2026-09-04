@@ -334,6 +334,7 @@
     </main>
  
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/Vulnerabilidades.js"></script>
 </body>

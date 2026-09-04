@@ -410,6 +410,7 @@ $usuarios = $controller->listar();
     <?php include 'Components/toast.php'; ?>
 
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js"></script>

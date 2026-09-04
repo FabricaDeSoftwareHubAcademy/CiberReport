@@ -403,6 +403,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
         <?php include 'Components/popup_excluir.php'; ?>
     </main>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js"></script>
 </body>
