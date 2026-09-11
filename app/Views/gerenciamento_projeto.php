@@ -22,6 +22,7 @@ $empresas = $controller->listarEmpresasAtivas();
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/gerenciamento-projeto.css">
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
 </head>
 

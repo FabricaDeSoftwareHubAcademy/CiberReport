@@ -109,6 +109,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
 </body>
 
 </html>
