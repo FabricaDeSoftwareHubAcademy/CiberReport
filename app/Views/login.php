@@ -21,28 +21,21 @@ $sucessoRedefinicao = $sucessoRedefinicao ?? false;
     <main>
         <div class="geral">
             <section class="lado-esq">
-                <div class="cyber-report">
-                    <img
-                        src="<?= BASE_URL ?>app/assets/img/Gemini_Generated_Image_rh5rtirh5rtirh5r-removebg-preview 1.png"
-                        alt=""
-                        class="logo-report"
+                <video
+                    class="video-login"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    aria-label="Apresentação visual do Cyber Report"
+                >
+                    <source
+                        src="<?= BASE_URL ?>app/assets/videos/video-login.mp4"
+                        type="video/mp4"
                     >
-                </div>
-
-                <div class="hackers">
-                    <img
-                        src="<?= BASE_URL ?>app/assets/img/img.png"
-                        class="sombra-esq"
-                    >
-                    <img
-                        src="<?= BASE_URL ?>app/assets/img/img.png"
-                        class="sombra-dir"
-                    >
-                </div>
-
-                <div class="principal">
-                    <img src="<?= BASE_URL ?>app/assets/img/img.png" alt="">
-                </div>
+                    Seu navegador não suporta a reprodução de vídeos.
+                </video>
             </section>
 
             <section class="lado-dir">
