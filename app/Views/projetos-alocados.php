@@ -266,6 +266,7 @@ if (isset($_GET['id_projeto_alocado_vulnerabilidades'])) {
 </div>
 <script src="<?= BASE_URL ?>app/assets/JS/barraDePesquisa.js"></script>
 <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+<script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
 <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
 <script>
     function limparParametrosDeModalDaUrl() {
