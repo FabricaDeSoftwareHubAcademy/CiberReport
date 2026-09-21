@@ -3,16 +3,6 @@
 namespace DAO;
 
 use PDO;
-
-/**
- * Classe-pai de todos os DAOs do projeto.
- *
- * Mantém uma única conexão PDO por request (padrão singleton estático,
- * igual ao Infotech), compartilhada entre todos os DAOs filhos. Diferente
- * do Infotech, aqui a classe NÃO estende PDO: lá o construtor do PDO nunca
- * é chamado, então o objeto DAO em si não é uma conexão válida. Aqui é
- * composição — os DAOs filhos usam self::conexao()->prepare(...).
- */
 abstract class DAO
 {
     protected static ?PDO $connection = null;
@@ -22,10 +12,7 @@ abstract class DAO
         self::conexao();
     }
 
-    /**
-     * Devolve a conexão PDO da request atual, criando-a na primeira
-     * chamada. Chamada estática (DAO::conexao()) ou via instância.
-     */
+
     public static function conexao(): PDO
     {
         if (self::$connection === null) {

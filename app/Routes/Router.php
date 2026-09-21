@@ -1,8 +1,8 @@
 <?php
 
-namespace Core;
+namespace Routes;
 
-use http\Route;
+use Core\MiddlewareInterface;
 
 class Router
 {

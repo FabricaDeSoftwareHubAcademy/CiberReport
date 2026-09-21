@@ -26,7 +26,7 @@ próprio `fetch(...)` direto, igual ao `categoria.js` do Infotech.
 | `DAO\DAO` | `app/DAO/DAO.php` | Conexão PDO única por request (`DAO::conexao()`). Todo DAO estende esta classe. |
 | `Core\Model` | `app/Core/Model.php` | Base das entidades. Só tem `public array $rows`. |
 | `Core\Controller` | `app/Core/Controller.php` | `view()`, `redirect()` (já existiam) + `isPost()`, `post()`, `query()`, `json()` (novos). |
-| `Core\Router` | `app/Core/Router.php` | Despacha as rotas de `app/routes/main.php`. Não muda seu jeito de usar. |
+| `Routes\Router` | `app/Routes/Router.php` | Despacha as rotas de `app/Routes/Routes.php`. Não muda seu jeito de usar. |
 
 ## O contrato de resposta da API
 
@@ -90,7 +90,7 @@ Usando `Cliente/Empresa` como exemplo (troque pelo nome do seu recurso):
    - `listar()`, `buscar()`, `cadastro()`, `exclusao()`, `status()`: cada
      um chama `$this->json([...])` no final. Veja
      `app/Controller/TipoPentestController.php`.
-4. **Rotas** — em `app/routes/main.php`, dentro do grupo `AuthMiddleware`,
+4. **Rotas** — em `app/Routes/Routes.php`, dentro do grupo `AuthMiddleware`,
    adicione as rotas `GET /recurso/listar`, `GET /recurso/buscar`,
    `POST /recurso/cadastro`, `POST /recurso/exclusao` (e `POST /recurso/status`
    se houver toggle de ativo/inativo). Mantenha a rota de página

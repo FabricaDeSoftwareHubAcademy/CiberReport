@@ -19,33 +19,24 @@ class Controller
     {
         $redirectUrl = (strpos($url, 'http') === 0) ? $url : BASE_URL . ltrim($url, '/');
         header("Location: ". $redirectUrl);
-        exit;  
+        exit;
     }
 
-    /** true quando a requisição atual é um POST. */
     protected function isPost(): bool
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
-    /** Leitura segura de um campo de $_POST, com valor padrão. */
     protected function post(string $chave, $padrao = null)
     {
         return $_POST[$chave] ?? $padrao;
     }
 
-    /** Leitura segura de um campo de $_GET, com valor padrão. */
     protected function query(string $chave, $padrao = null)
     {
         return $_GET[$chave] ?? $padrao;
     }
 
-    /**
-     * Resposta padrão da API — igual ao jsonResponse() do Infotech: define
-     * o Content-Type e encerra a requisição. O HTTP continua 200; quem
-     * decide sucesso/erro é o campo 'status' dentro do corpo, nunca o
-     * status HTTP real. Contrato do corpo: { status, data?, msg? }.
-     */
     protected function json(array $dados): void
     {
         header('Content-Type: application/json; charset=utf-8');
