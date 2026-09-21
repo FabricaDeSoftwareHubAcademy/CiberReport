@@ -14,6 +14,14 @@
     const selecionadosChecklist = new Map();
     const gerenciadosChecklist = new Map();
 
+    // Vira true depois que o usuário confirma o salvamento no popup, liberando o submit nativo do formulário
+    let confirmadoSalvarChecklist = false;
+
+    function confirmarSalvarChecklist() {
+        confirmadoSalvarChecklist = true;
+        elementoChecklist('checklist-formulario')?.requestSubmit();
+    }
+
     function elementoChecklist(id) {
         return document.getElementById(id);
     }
@@ -1282,7 +1290,24 @@
                 eventoChecklist.preventDefault();
                 atualizarValidacaoNomeChecklist();
                 notificarChecklist('Já existe um checklist com esse nome. Escolha outro nome ou edite o checklist existente.', 'aviso');
+                return;
             }
+
+            if (!confirmadoSalvarChecklist) {
+                eventoChecklist.preventDefault();
+
+                const popupSalvarChecklist = elementoChecklist('popupSalvar');
+                const botaoConfirmarChecklist = popupSalvarChecklist?.querySelector('[data-popup-confirmar]');
+
+                if (botaoConfirmarChecklist) {
+                    botaoConfirmarChecklist.dataset.popupCallback = 'confirmarSalvarChecklist';
+                }
+
+                popupSalvarChecklist?.classList.add('active');
+                return;
+            }
+
+            confirmadoSalvarChecklist = false;
         });
 
         document.addEventListener('click', eventoChecklist => {
@@ -1303,6 +1328,7 @@
     });
 
     window.confirmarChecklist = confirmarChecklist;
+    window.confirmarSalvarChecklist = confirmarSalvarChecklist;
     window.notificarChecklist = notificarChecklist;
     window.alternarStatusChecklist = alternarStatusChecklist;
     window.visualizarChecklist = visualizarChecklist;
