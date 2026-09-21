@@ -1,18 +1,23 @@
 # Padrão DAO + API (baseado no Infotech)
 
 Este documento explica o novo padrão de infraestrutura do projeto — camada
-DAO genérica + API JSON + JS genérico — e como migrar as telas que ainda
-não seguem esse padrão. O exemplo de referência completo é **Tipo de
-Pentest** (`gerenciar-pentest`): use os arquivos dele como modelo.
+DAO genérica + endpoints JSON, no mesmo espírito do projeto Infotech do
+professor — e como migrar as telas que ainda não seguem esse padrão. O
+exemplo de referência completo é **Tipo de Pentest** (`gerenciar-pentest`):
+use os arquivos dele como modelo.
 
 ## Por que mudou
 
 Antes, cada tela reescrevia SQL cru dentro do Model, tratava `$_POST`
 manualmente na própria *view* (com um `switch ($_POST['action'])` e uma
-função `responderJson*()` própria por tela) e o JavaScript duplicava o
-`fetch` em cada arquivo. O objetivo do padrão novo é reduzir essa
-repetição com classes-pai genéricas, iguais em espírito às do projeto
-Infotech do professor.
+função `responderJson*()` própria por tela). O objetivo do padrão novo é
+reduzir essa repetição com classes-pai genéricas — iguais em espírito às
+do Infotech: `DAO`, `Model` e `Controller` base, e endpoints JSON
+dedicados no lugar do `switch` embutido na view.
+
+O JavaScript **não** ganhou uma camada genérica — o Infotech também não
+tem uma (não existe `api.js`/`crud.js` lá). Cada tela continua fazendo seu
+próprio `fetch(...)` direto, igual ao `categoria.js` do Infotech.
 
 ## As classes-pai (não mexer sem necessidade)
 
@@ -26,25 +31,32 @@ Infotech do professor.
 ## O contrato de resposta da API
 
 Todo endpoint JSON responde com o método `$this->json([...])` do
-controller, sempre neste formato:
+controller, sempre neste formato — igual ao `jsonResponse()` do Infotech,
+inclusive no detalhe de que o **HTTP continua sempre 200**: quem diz se
+deu certo ou errado é o campo `status` dentro do corpo, nunca o status
+HTTP real.
 
 ```php
 // sucesso
 $this->json(['status' => 200, 'data' => $algumaCoisa]);
 $this->json(['status' => 200, 'msg' => 'Salvo com sucesso.', 'id' => 7]);
 
-// erro
+// erro (convenção do Infotech: 400 para validação, 500 para erro de banco)
 $this->json(['status' => 400, 'msg' => 'Preencha todos os campos obrigatórios!']);
-$this->json(['status' => 404, 'msg' => 'Não encontrado.']);
+$this->json(['status' => 500, 'msg' => 'Erro ao salvar.']);
 ```
 
-`json()` já define o HTTP status real (`http_response_code`) a partir do
-campo `status` e encerra a requisição (`exit`). No front, use sempre
-`Api.get()`/`Api.post()` (`app/assets/JS/api.js`) e decida sucesso/erro
-olhando `resultado.status`:
+No front, não existe cliente HTTP genérico — cada tela faz seu próprio
+`fetch(...)` e decide sucesso/erro olhando `resultado.status` (nunca o
+HTTP status da resposta), igual ao `categoria.js`:
 
 ```js
-const resultado = await Api.post('tipo-pentest/cadastro', dados);
+const response = await fetch(`${window.baseUrl}tipo-pentest/cadastro`, {
+    method: 'POST',
+    body: formulario // FormData, nunca JSON no corpo
+});
+const resultado = await response.json();
+
 if (resultado.status !== 200) {
     mostrarErro(resultado.msg);
     return;
@@ -59,6 +71,7 @@ if (resultado.status !== 200) {
 - **Controller nunca escreve SQL nem HTML.** Ele lê `$_POST`/`$_GET` (via `$this->post()`/`$this->query()`), valida, chama o Model e responde com `$this->view()` (página) ou `$this->json()` (API).
 - **View nunca trata POST.** Nada de `switch ($_POST['action'])` dentro de arquivo de `Views/`. Todo processamento fica no Controller, nas rotas certas.
 - **Uma requisição, uma conexão.** Nunca faça `require conexao.php` fora de um DAO — use `DAO::conexao()` (ou deixe o construtor do DAO cuidar disso).
+- **JS sem abstração.** Nada de cliente HTTP genérico reutilizável entre telas — cada função de cada tela faz seu próprio `fetch(...)`, igual ao Infotech.
 
 ## Receita para migrar uma tela (passo a passo)
 
@@ -85,11 +98,13 @@ Usando `Cliente/Empresa` como exemplo (troque pelo nome do seu recurso):
 5. **View** — remova o bloco `switch ($_POST['action'])` do topo do
    arquivo. O `foreach` que monta a tabela HTML continua igual, só passa a
    usar as variáveis que o controller já entrega via `$this->view('nome', [...])`.
-6. **JS** — troque qualquer `fetch(...)` manual por `Api.get()`/`Api.post()`
-   (inclua `app/assets/JS/api.js` antes do script da tela) e troque
-   `if (!resultado.ok)` por `if (resultado.status !== 200)`,
-   `resultado.mensagem` por `resultado.msg`, e o nome do payload (`tipo`,
-   `item`, `cliente`...) por `resultado.data`.
+6. **JS** — troque o `switch`/dispatcher de ações por uma função por
+   operação (ex.: `buscarEmpresa(id)`, `salvarEmpresa()`), cada uma com seu
+   próprio `fetch(...)` direto para a rota certa — sem passar por nenhum
+   cliente genérico. Troque `if (!resultado.ok)` por
+   `if (resultado.status !== 200)`, `resultado.mensagem` por
+   `resultado.msg`, e o nome do payload (`tipo`, `item`, `cliente`...) por
+   `resultado.data`. Veja `app/assets/JS/componentes/modal-tipo-pentest.js`.
 
 ## Antes × depois (Tipo de Pentest)
 
@@ -98,8 +113,8 @@ Usando `Cliente/Empresa` como exemplo (troque pelo nome do seu recurso):
 | Dados | SQL cru dentro de `Model\TipoPentest` (recebia `$pdo` no construtor) | `app/DAO/TipoPentestDAO.php` — SQL isolado, conexão compartilhada |
 | Entidade | Não existia (Model era um wrapper de PDO) | `Model\TipoPentest` com propriedades tipadas |
 | API | `switch ($_POST['action'])` dentro da própria view, com `exit` | Rotas `/tipo-pentest/listar`, `/buscar`, `/cadastro`, `/exclusao`, `/status` no controller |
-| Resposta | Contrato variável (`ok`, `tipo`, `mensagem`...) | `{status, data|msg}` sempre |
-| JS | `enviarAcaoTipoPentest()` duplicado por tela | `Api.get()`/`Api.post()` genérico (`app/assets/JS/api.js`) |
+| Resposta | Contrato variável (`ok`, `tipo`, `mensagem`...) | `{status, data|msg}` sempre, HTTP sempre 200 (igual Infotech) |
+| JS | `enviarAcaoTipoPentest(acao, dados)` — um dispatcher genérico por nome de ação | Uma função por operação (`buscarTipoPentest`, `salvarTipoPentest`...), cada uma com seu próprio `fetch(...)` — igual ao Infotech |
 | Conexões | Até 4 PDO por página (`require` sem `_once`) | 1 conexão por request (`DAO::conexao()`) |
 
 ## Ordem sugerida para migrar as telas restantes

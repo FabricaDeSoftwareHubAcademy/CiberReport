@@ -41,13 +41,13 @@ class Controller
     }
 
     /**
-     * Resposta padrão da API: define o Content-Type, o HTTP status real
-     * (a partir de $dados['status'], default 200) e encerra a requisição.
-     * Contrato do corpo: { status, data?, msg? }.
+     * Resposta padrão da API — igual ao jsonResponse() do Infotech: define
+     * o Content-Type e encerra a requisição. O HTTP continua 200; quem
+     * decide sucesso/erro é o campo 'status' dentro do corpo, nunca o
+     * status HTTP real. Contrato do corpo: { status, data?, msg? }.
      */
     protected function json(array $dados): void
     {
-        http_response_code($dados['status'] ?? 200);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($dados, JSON_UNESCAPED_UNICODE);
         exit;
