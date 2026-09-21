@@ -79,7 +79,8 @@ main{
 
 .geral{
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     position: relative;
 }
@@ -92,7 +93,8 @@ main{
 }
 
 .video-login{
-    display: block;
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
