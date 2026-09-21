@@ -20,7 +20,13 @@ class Router
         $uri = '/' . trim($uri, '/');
 
         foreach (Route::routes() as $route) {
-            if ($route['method'] !== $method || $route['path'] !== $uri) {
+            if ($route['method'] !== $method) {
+                continue;
+            }
+
+            $parametros = self::casar($route['path'], $uri);
+
+            if ($parametros === null) {
                 continue;
             }
 
@@ -45,7 +51,7 @@ class Router
                 $controller = new $controllerClass();
 
                 if (method_exists($controller, $methodName)) {
-                    $controller->$methodName();
+                    $controller->$methodName(...$parametros);
                     return;
                 }
             }
@@ -53,5 +59,28 @@ class Router
 
         http_response_code(404);
         echo '404 - Page Not Found';
+    }
+
+    /**
+     * Compara o path cadastrado (que pode ter {parametros}) com a URI da
+     * requisição. Devolve os valores capturados, na ordem em que aparecem
+     * no path, ou null quando não bate. Rotas sem "{" continuam comparando
+     * por igualdade exata de string, como sempre funcionou.
+     */
+    private static function casar(string $rotaPath, string $uri): ?array
+    {
+        if (!str_contains($rotaPath, '{')) {
+            return $rotaPath === $uri ? [] : null;
+        }
+
+        $regex = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $rotaPath);
+
+        if (!preg_match('#^' . $regex . '$#', $uri, $matches)) {
+            return null;
+        }
+
+        array_shift($matches);
+
+        return $matches;
     }
 }
