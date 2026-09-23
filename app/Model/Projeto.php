@@ -154,9 +154,57 @@ class Projeto
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function buscarContratoAtual(int $idProjeto): ?string
+    {
+        $sql = $this->pdo->prepare("SELECT contrato FROM projeto WHERE id = :id");
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        $contrato = $sql->fetchColumn();
+        return $contrato !== false ? $contrato : null;
+    }
+
+    public function buscarAlvos(int $idProjeto): array
+    {
+        $sql = $this->pdo->prepare("SELECT valor FROM projeto_alvo WHERE projeto_id = :id AND habilitado = 1 ORDER BY id");
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        return array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'valor');
+    }
+
+    public function buscarTiposPentestIds(int $idProjeto): array
+    {
+        $sql = $this->pdo->prepare("SELECT tipo_pentest_id FROM projeto_tipo_pentest WHERE projeto_id = :id AND habilitado = 1");
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        return array_map('intval', array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'tipo_pentest_id'));
+    }
+
+    public function buscarEquipe(int $idProjeto): array
+    {
+        $sql = $this->pdo->prepare("SELECT usuario_id, papel FROM projeto_usuario WHERE projeto_id = :id AND habilitado = 1");
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+
+        $liderId = null;
+        $especialistasIds = [];
+
+        foreach ($sql->fetchAll(PDO::FETCH_ASSOC) as $linha) {
+            if ($linha['papel'] === 'LIDER') {
+                $liderId = (int) $linha['usuario_id'];
+            } elseif ($linha['papel'] === 'ESPECIALISTA') {
+                $especialistasIds[] = (int) $linha['usuario_id'];
+            }
+        }
+
+        return ['lider_id' => $liderId, 'especialistas_ids' => $especialistasIds];
+    }
+
     public function editarProjeto(array $dados)
     {
         try {
+            $this->pdo->beginTransaction();
+
             $sql = $this->pdo->prepare("UPDATE projeto SET empresa_id = :empresa_id, nome = :nome, data_inicio = :data_inicio, data_fim_prevista = :data_fim_prevista, data_fim_real = :data_fim_real, horas_contratadas = :horas_contratadas, modalidade = :modalidade, nivel_sigilo = :nivel_sigilo, escopo = :escopo, contrato = :contrato, restricao = :restricao, status = :status WHERE id = :id");
             $sql->bindValue(":id", $dados['id'], PDO::PARAM_INT);
             $sql->bindValue(":empresa_id", $dados['empresa_id'], PDO::PARAM_INT);
@@ -188,8 +236,21 @@ class Projeto
             $sql->bindValue(":restricao", $dados['restricao']);
             $sql->bindValue(":status", $dados['status']);
             $sql->execute();
+
+            $idProjeto = (int) $dados['id'];
+
+            $this->pdo->prepare("DELETE FROM projeto_alvo WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
+            $this->pdo->prepare("DELETE FROM projeto_tipo_pentest WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
+            $this->pdo->prepare("DELETE FROM projeto_usuario WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
+
+            $this->salvarAlvos($idProjeto, $dados['alvos'] ?? []);
+            $this->salvarTiposPentest($idProjeto, $dados['tipos_pentest_ids'] ?? []);
+            $this->salvarEquipe($idProjeto, $dados['lider_tecnico_id'], $dados['analistas_ids'] ?? []);
+
+            $this->pdo->commit();
             return true;
         } catch (\PDOException $e) {
+            $this->pdo->rollBack();
             $this->msgErro = $e->getMessage();
             return false;
         }

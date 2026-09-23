@@ -35,6 +35,7 @@ class ProjetoController extends Controller
             'empresas' => htmlspecialchars(json_encode($this->listarEmpresasAtivas(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'tiposPentest' => htmlspecialchars(json_encode($this->listarTiposPentestAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'usuarios' => htmlspecialchars(json_encode($this->listarUsuariosAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'projetos' => htmlspecialchars(json_encode($this->listarCompletos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
         ];
 
         $this->view('gerenciamento_projeto', ['dadosModal' => $dadosModal]);
@@ -43,6 +44,23 @@ class ProjetoController extends Controller
     public function listar()
     {
         return $this->projeto->listarDados();
+    }
+
+    public function listarCompletos()
+    {
+        $projetos = $this->projeto->listarDados();
+
+        foreach ($projetos as &$projeto) {
+            $idProjeto = (int) $projeto['id'];
+            $equipe = $this->projeto->buscarEquipe($idProjeto);
+
+            $projeto['alvos'] = $this->projeto->buscarAlvos($idProjeto);
+            $projeto['tipos_pentest_ids'] = $this->projeto->buscarTiposPentestIds($idProjeto);
+            $projeto['lider_id'] = $equipe['lider_id'];
+            $projeto['especialistas_ids'] = $equipe['especialistas_ids'];
+        }
+
+        return $projetos;
     }
 
     public function listarEmpresasAtivas()
@@ -84,10 +102,13 @@ class ProjetoController extends Controller
     {
         try {
             $dadosLimpos = ProjetoValidator::processarEdicao($_POST);
-            
+
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
                 $dadosLimpos['contrato'] = $caminhoContrato;
+            } else {
+                // Sem upload novo, preserva o contrato já salvo em vez de apagar a referência.
+                $dadosLimpos['contrato'] = $this->projeto->buscarContratoAtual($dadosLimpos['id']) ?? '';
             }
 
             if ($this->projeto->editarProjeto($dadosLimpos)) {
