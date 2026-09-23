@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let passoAtual      = 0;
     const TOTAL_PASSOS  = 4;
     let modoEdicaoOuVisualizacao = false; // true quando o modal foi aberto via Editar/Visualizar
+    let somenteLeitura = false; // true só no modo Visualizar (Editar continua editável)
 
     // IDs selecionados
     let clienteSelecionado    = { id: null, nome: '' };
@@ -88,8 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
         btnVoltar.style.display = passoAtual === 0 ? 'none' : '';
         // Avançar: oculto no último passo
         btnAvancar.style.display = passoAtual === TOTAL_PASSOS - 1 ? 'none' : '';
-        // Salvar: visível só no último passo
-        btnSalvar.style.display = passoAtual === TOTAL_PASSOS - 1 ? '' : 'none';
+
+        if (somenteLeitura) {
+            btnSalvar.style.display = 'none';
+        } else if (modoEdicaoOuVisualizacao) {
+            // Editando um projeto já preenchido: não precisa navegar até o
+            // fim só pra salvar uma alteração feita no passo 1.
+            btnSalvar.style.display = '';
+        } else {
+            // Cadastro: só libera Salvar depois de passar pelos 4 passos.
+            btnSalvar.style.display = passoAtual === TOTAL_PASSOS - 1 ? '' : 'none';
+        }
     }
 
     btnAvancar.addEventListener('click', () => {
@@ -694,8 +704,8 @@ document.addEventListener('DOMContentLoaded', () => {
         form?.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
 
         // Volta ao modo de cadastro (pode ter sido aberto em modo editar/visualizar)
-        definirSomenteLeitura(false);
         modoEdicaoOuVisualizacao = false;
+        definirSomenteLeitura(false);
         const acaoInput = document.getElementById('cp-action');
         const projetoIdInput = document.getElementById('cp-projeto-id');
         if (acaoInput) acaoInput.value = 'cadastrar';
@@ -755,18 +765,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${pad(h)}:${pad(m)}:${pad(s)}`;
     }
 
-    function definirSomenteLeitura(somenteLeitura) {
-        overlay.classList.toggle('modal--somente-leitura', somenteLeitura);
+    function definirSomenteLeitura(valor) {
+        somenteLeitura = valor;
+        overlay.classList.toggle('modal--somente-leitura', valor);
 
         overlay.querySelectorAll('.modal__body input, .modal__body textarea, .modal__body select, .modal__body button').forEach(el => {
-            el.disabled = somenteLeitura;
+            el.disabled = valor;
         });
 
-        if (somenteLeitura) {
-            btnSalvar.style.display = 'none';
-        } else {
-            atualizarBotoes();
-        }
+        atualizarBotoes();
     }
 
     function preencherModal(projeto, modo) {
@@ -825,11 +832,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         renderizarChipsAnalistas();
 
+        // Precisa vir antes de definirSomenteLeitura/atualizarBotoes, senão o
+        // Salvar fica com a regra de "só no último passo" do cadastro.
+        modoEdicaoOuVisualizacao = true;
         definirSomenteLeitura(modo === 'visualizar');
 
         // Os 4 passos já têm dado válido desde a abertura — marca todos como
         // concluídos, exceto o que está sendo exibido agora (passo 0).
-        modoEdicaoOuVisualizacao = true;
         stepperItens.forEach((item, idx) => {
             if (idx !== passoAtual) item.classList.add('cad-projeto-stepper__item--concluido');
         });
