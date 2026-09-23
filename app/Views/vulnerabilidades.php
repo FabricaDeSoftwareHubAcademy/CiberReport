@@ -76,20 +76,7 @@
                 <tbody id="corpoTabelaVulnerabilidades">
                     <?php /*
                         Linhas removidas — dados mocados eram só placeholder de layout.
-                        Aqui entra o loop PHP puxando do banco (PDO), algo como:
- 
-                        <?php foreach ($vulnerabilidades as $v): ?>
-                            <tr>
-                                <td>...<?= htmlspecialchars($v['id']) ?>...</td>
-                                <td><?= htmlspecialchars($v['titulo']) ?></td>
-                                <td class="ativo-link"><?= htmlspecialchars($v['ativo']) ?></td>
-                                <td class="resumo-texto"><?= htmlspecialchars($v['resumo']) ?></td>
-                                <td><span class="badge badge-<?= $v['severidade'] ?>"><?= ucfirst($v['severidade']) ?></span></td>
-                                <td><span class="badge badge-<?= $v['criticidade'] ?>"><?= ucfirst($v['criticidade']) ?></span></td>
-                                <td class="cvss"><?= htmlspecialchars($v['cvss']) ?></td>
-                                <td>...botões de ação...</td>
-                            </tr>
-                        <?php endforeach; ?>
+                        Aqui entra o loop PHP puxando do banco (PDO)
                     */ ?>
                 </tbody>
                 <tfoot>
@@ -122,6 +109,16 @@
                         <strong>Dados da Vulnerabilidade</strong>
                     </div>
  
+                    <!--
+                        TODO: falta um campo para projeto_id.
+                        O Model exige projeto_id no INSERT (INTO vulnerabilidade (projeto_id, ...)),
+                        mas não existia nenhum input/select para isso no modal.
+                        Se o projeto já é conhecido pelo contexto da página (ex: veio via URL
+                        ?projeto_id=123), use um input hidden, exemplo:
+                        <input type="hidden" id="projetoId" name="projeto_id" value="<?= (int) ($_GET['projeto_id'] ?? 0) ?>">
+                        Caso contrário, adicione um <select> para o usuário escolher o projeto.
+                    -->
+ 
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="nomeVuln">Nome da Vulnerabilidade:</label>
@@ -133,7 +130,13 @@
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" title="formato: CVE-AAAA-NNNN" value="CVE-" />
+                            <!--
+                                CORRIGIDO: removido value="CVE-". Esse valor pré-preenchido
+                                fazia o campo (opcional) chegar como "CVE-" no back-end quando
+                                o usuário não mexia nele, o que falhava na validação de regex
+                                (^CVE-\d{4}-\d{4,}$) e bloqueava o cadastro/edição inteiro.
+                            -->
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" title="formato: CVE-AAAA-NNNN" />
                         </div>
                     </div>
  
@@ -161,12 +164,19 @@
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="severidade">Severidade:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    CORRIGIDO: os values agora batem exatamente (maiúsculas)
+                                    com Vulnerabilidades::SEVERIDADES_VALIDAS = ['ALTA','BAIXA','CRITICA','MEDIA'].
+                                    Antes eram minúsculos ("alta", "baixa"...) e o in_array()
+                                    do Model usa comparação estrita, então nunca batia —
+                                    isso derrubava qualquer tentativa de salvar com "Severidade inválida".
+                                -->
                                 <select class="campo__select" id="severidade" name="severidade" required>
                                     <option value="" disabled selected>Selecione a severidade</option>
-                                    <option value="alta">Alta</option>
-                                    <option value="baixa">Baixa</option>
-                                    <option value="critica">Crítica</option>
-                                    <option value="media">Média</option>
+                                    <option value="ALTA">Alta</option>
+                                    <option value="BAIXA">Baixa</option>
+                                    <option value="CRITICA">Crítica</option>
+                                    <option value="MEDIA">Média</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -177,13 +187,18 @@
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="categoria">Categoria:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    CORRIGIDO: mesmo problema da severidade. Values agora batem
+                                    com Vulnerabilidades::CATEGORIAS_VALIDAS =
+                                    ['API','Aplicação Web','Infraestrutura','Mobile','Rede'].
+                                -->
                                 <select class="campo__select" id="categoria" name="categoria" required>
                                     <option value="" disabled selected>Selecione a categoria</option>
-                                    <option value="api">API</option>
-                                    <option value="web">Aplicação Web</option>
-                                    <option value="infra">Infraestrutura</option>
-                                    <option value="mobile">Mobile</option>
-                                    <option value="rede">Rede</option>
+                                    <option value="API">API</option>
+                                    <option value="Aplicação Web">Aplicação Web</option>
+                                    <option value="Infraestrutura">Infraestrutura</option>
+                                    <option value="Mobile">Mobile</option>
+                                    <option value="Rede">Rede</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -191,6 +206,17 @@
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="status">Status:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    ATENÇÃO: este campo "status" (aberta/aceita/corrigida/em-analise/
+                                    falso-positivo) não existe em nenhum lugar do Model ou da tabela
+                                    "vulnerabilidade" que foi enviada. Só existe a coluna "habilitado"
+                                    (0/1), que é outra coisa (ativo/inativo).
+                                    Se esse campo for necessário, é preciso:
+                                    1) adicionar a coluna correspondente na tabela do banco, e
+                                    2) o Model/Controller precisam ler e gravar esse valor.
+                                    Do jeito que está, o valor selecionado aqui é descartado
+                                    e nunca chega a ser salvo.
+                                -->
                                 <select class="campo__select" id="status" name="status" required>
                                     <option value="" disabled selected>Selecione o status</option>
                                     <option value="aberta">Aberta</option>
