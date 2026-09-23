@@ -165,3 +165,101 @@ document.addEventListener("click", function (e) {
     }
  
 });
+
+const CAMPOS_MODAL_VULN = {
+    projeto_id: "projetoId",
+    nome: "nomeVuln",
+    cvss: "cvssScore",
+    cve: "cve",
+    descricao: "descricao",
+    descricao_tecnica: "descTecnica",
+    impacto_negocio: "impactos",
+    severidade_vulnerabilidade: "severidade",
+    categoria: "categoria",
+    responsavel: "responsavel",
+    status: "status"
+};
+
+function abrirModalVulnerabilidade(vuln) {
+    const modal = document.getElementById("modalVulnerabilidade");
+    if (!modal) return;
+
+    const editando = !!vuln;
+
+    document.getElementById("tituloModalVuln").textContent =
+        editando ? "Editar Vulnerabilidade" : "Nova Vulnerabilidade";
+    document.getElementById("vulnId").value = editando ? vuln.id : "";
+    document.getElementById("projetoId").disabled = editando;
+
+    for (const [coluna, idCampo] of Object.entries(CAMPOS_MODAL_VULN)) {
+        const campo = document.getElementById(idCampo);
+        if (campo) campo.value = editando ? (vuln[coluna] ?? "") : "";
+    }
+
+    modal.classList.add("active");
+}
+
+document.addEventListener("click", function (e) {
+
+    const btnEditar = e.target.closest(".tabela-btn-editar");
+    if (btnEditar) {
+        abrirModalVulnerabilidade(JSON.parse(btnEditar.dataset.vuln));
+        return;
+    }
+
+    if (e.target.closest(".btn-novo-cadastro")) {
+        abrirModalVulnerabilidade(null);
+    }
+
+});
+
+
+document.getElementById("btnSalvar").addEventListener("click", async function () {
+
+    const modal = document.getElementById("modalVulnerabilidade");
+    const campos = modal.querySelectorAll("input[required], select[required], textarea[required]");
+
+    for (const campo of campos) {
+        if (!campo.disabled && !campo.checkValidity()) {
+            campo.reportValidity();
+            return;
+        }
+    }
+
+    const valor = function (id) {
+        return document.getElementById(id).value.trim();
+    };
+
+    const cve = valor("cve");
+    const dados = new FormData();
+    dados.append("id", valor("vulnId"));
+    dados.append("projeto_id", valor("projetoId"));
+    dados.append("nome", valor("nomeVuln"));
+    dados.append("cvss", valor("cvssScore"));
+    dados.append("cve", cve === "CVE-" ? "" : cve);
+    dados.append("descricao", valor("descricao"));
+    dados.append("descricao_tecnica", valor("descTecnica"));
+    dados.append("impacto_negocio", valor("impactos"));
+    dados.append("severidade_vulnerabilidade", valor("severidade"));
+    dados.append("categoria", valor("categoria"));
+    dados.append("responsavel", valor("responsavel"));
+    dados.append("status", valor("status"));
+    dados.append("habilitado", "1");
+
+    try {
+        const resposta = await fetch(`${window.baseUrl}vulnerabilidades/salvar`, {
+            method: "POST",
+            body: dados
+        });
+        const resultado = await resposta.json();
+
+        if (resultado.status === 200) {
+            window.location.reload();
+        } else {
+            alert(resultado.msg);
+        }
+    } catch (erro) {
+        alert("Erro ao salvar a vulnerabilidade.");
+    }
+
+});

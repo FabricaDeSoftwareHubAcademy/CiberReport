@@ -13,7 +13,8 @@ class GerenciarAcessoController extends Controller
 
     public function __construct()
     {
-        $conexao = require __DIR__ . "/../Model/conexao.php";
+        require_once __DIR__ . '/../DAO/DAO.php';
+        $conexao = \DAO\DAO::conexao();
         $this->gerenciarAcesso = new GerenciarAcesso($conexao);
     }
 
