@@ -92,9 +92,17 @@ main {
     background: #fdecea;
     color: #e74c3c;
 }
+.folder-icon.alta-bg {
+    background: #fef5ec;
+    color: #e67e22;
+}
 .folder-icon.media-bg {
     background: #fef9e7;
     color: #d4ac0d;
+}
+.folder-icon.baixa-bg {
+    background: #eafaf1;
+    color: #27ae60;
 }
 
 .id-info {

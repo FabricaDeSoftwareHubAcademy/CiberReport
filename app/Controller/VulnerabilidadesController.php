@@ -5,7 +5,7 @@ namespace Controller;
 use Core\Controller;
 use Vulnerabilidades;
  
-require_once __DIR__ . "/../Model/Database/VulnerabilidadesModel.php";
+require_once __DIR__ . "/../Model/VulnerabilidadesModel.php";
  
 class VulnerabilidadesController extends Controller
 {
@@ -20,7 +20,29 @@ class VulnerabilidadesController extends Controller
  
     public function index()
     {
-        $this->view('vulnerabilidades');
+        $vulnerabilidades = $this->Vulnerabilidades->listarVulnerabilidade();
+        $projetos = $this->Vulnerabilidades->listarProjetos();
+        $this->view('vulnerabilidades', ['vulnerabilidades' => $vulnerabilidades, 'projetos' => $projetos]);
+    }
+
+    public function salvar()
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+
+        if ($id > 0) {
+            $ok = $this->atualizar($id);
+        } else {
+            if ((int) ($_POST['projeto_id'] ?? 0) <= 0) {
+                $this->json(['status' => 400, 'msg' => 'Selecione o projeto.']);
+            }
+            $ok = $this->cadastrarVulnerabilidade();
+        }
+
+        if ($ok) {
+            $this->json(['status' => 200, 'msg' => 'Vulnerabilidade salva com sucesso.']);
+        }
+
+        $this->json(['status' => 400, 'msg' => $this->Vulnerabilidades->msgErro ?: 'Preencha todos os campos obrigatórios.']);
     }
  
     public function listar()
@@ -46,6 +68,8 @@ class VulnerabilidadesController extends Controller
         $severidade_vulnerabilidade = trim($_POST['severidade_vulnerabilidade'] ?? '');
         $habilitado                 = (int) ($_POST['habilitado'] ?? 0);
         $impacto_negocio            = trim($_POST['impacto_negocio'] ?? '');
+        $responsavel                = trim($_POST['responsavel'] ?? '');
+        $status                     = trim($_POST['status'] ?? 'ABERTA');
  
         if (empty($nome) || empty($descricao) || empty($categoria) || empty($severidade_vulnerabilidade)) {
             return false;
@@ -54,7 +78,7 @@ class VulnerabilidadesController extends Controller
         $resultado = $this->Vulnerabilidades->cadastrarVulnerabilidade(
             $id, $projeto_id, $nome,
             $cvss, $cve, $descricao,
-            $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio
+            $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status
         );
  
         
@@ -72,6 +96,8 @@ class VulnerabilidadesController extends Controller
         $severidade_vulnerabilidade = trim($_POST['severidade_vulnerabilidade'] ?? '');
         $habilitado                 = (int) ($_POST['habilitado'] ?? 0);
         $impacto_negocio            = trim($_POST['impacto_negocio'] ?? '');
+        $responsavel                = trim($_POST['responsavel'] ?? '');
+        $status                     = trim($_POST['status'] ?? 'ABERTA');
  
         if (empty($nome) || empty($descricao) || empty($categoria) || empty($severidade_vulnerabilidade)) {
             return false;
@@ -79,7 +105,7 @@ class VulnerabilidadesController extends Controller
  
         return $this->Vulnerabilidades->atualizarDadosVulnerabilidades(
             (int) $id, $nome, $cvss, $cve, $descricao,
-            $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio
+            $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status
         );
     }
  

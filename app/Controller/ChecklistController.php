@@ -5,7 +5,7 @@ namespace Controller;
 use Core\Controller;
 use ChecklistModel;
 
-require_once __DIR__ . '/../Model/Database/ChecklistModel.php';
+require_once __DIR__ . '/../Model/ChecklistModel.php';
 
 class ChecklistController extends Controller
 {
