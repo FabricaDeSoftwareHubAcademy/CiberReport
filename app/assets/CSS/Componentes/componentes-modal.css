@@ -159,6 +159,101 @@
 }
 .campo__select-seta { position: absolute; right: var(--espaco-md); pointer-events: none; color: var(--cor-texto-secundario); font-size: 1.2rem; }
 
+/* Combobox com busca (autocomplete) */
+.campo__combobox {
+    position: relative;
+    width: 100%;
+}
+
+.campo__combobox-linha {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+}
+
+.campo__combobox-campo {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.campo__combobox-input {
+    padding-right: 4.4rem;
+}
+
+.campo__combobox-alternar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4.4rem;
+    height: 4.4rem;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--cor-borda-padrao);
+    border-radius: 0 var(--raio-md) var(--raio-md) 0;
+    background-color: transparent;
+    color: var(--cor-texto-secundario);
+    cursor: pointer;
+    transition: background-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.campo__combobox-alternar:hover,
+.campo__combobox-alternar:focus-visible {
+    background-color: var(--cor-cinza-hover);
+    color: var(--cor-azul-destaques);
+    outline: none;
+}
+
+.campo__combobox-lista {
+    position: absolute;
+    top: calc(100% + var(--espaco-xs));
+    right: 0;
+    left: 0;
+    z-index: 100;
+    max-height: 20rem;
+    overflow-y: auto;
+    padding: var(--espaco-xs);
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    background-color: var(--cor-fundo-branco);
+    box-shadow: var(--sombra-md);
+}
+
+.campo__combobox-lista[hidden] {
+    display: none;
+}
+
+.campo__combobox-opcao {
+    display: block;
+    width: 100%;
+    padding: var(--espaco-sm) var(--espaco-md);
+    border: 0;
+    border-radius: var(--raio-sm);
+    background-color: transparent;
+    color: var(--cor-texto-primario);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.campo__combobox-opcao:hover,
+.campo__combobox-opcao--ativa,
+.campo__combobox-opcao[aria-selected="true"] {
+    background-color: var(--cor-cinza-hover);
+    color: var(--cor-azul-destaques);
+}
+
+.campo__combobox-vazio {
+    padding: var(--espaco-md);
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+    text-align: center;
+}
+
+.campo__combobox-adicionar {
+    flex: 0 0 4.4rem;
+}
+
 /* =============================================================================
    03. COMPONENTES COMPLEXOS (Chips, Multi-tags, Dropzone, Toggle, Avatar)
    ============================================================================= */
