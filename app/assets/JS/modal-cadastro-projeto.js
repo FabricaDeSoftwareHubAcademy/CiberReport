@@ -97,14 +97,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (passoAtual > 0) irParaPasso(passoAtual - 1);
     });
 
-    // Clique direto no indicador do passo: pula pra lá sem validar o passo
-    // atual (Avançar/Voltar continuam validando, pra não deixar pular campo
-    // obrigatório no cadastro; clicar no stepper é navegação livre, útil
-    // sobretudo ao editar/visualizar um projeto já preenchido).
+    // Clique direto no indicador do passo. Em editar/visualizar é navegação
+    // livre (os 4 passos já têm dado válido). No cadastro continua exigindo
+    // validação de cada passo intermediário — senão dá pra pular direto pro
+    // último passo sem preencher nada.
     stepperItens.forEach((item, idx) => {
         item.style.cursor = 'pointer';
         item.addEventListener('click', () => {
-            if (idx !== passoAtual) irParaPasso(idx);
+            if (idx === passoAtual) return;
+
+            if (modoEdicaoOuVisualizacao) {
+                irParaPasso(idx);
+                return;
+            }
+
+            if (idx < passoAtual) {
+                irParaPasso(idx);
+                return;
+            }
+
+            for (let passo = passoAtual; passo < idx; passo++) {
+                if (!validarPasso(passo)) {
+                    irParaPasso(passo);
+                    return;
+                }
+            }
+            irParaPasso(idx);
         });
     });
 
