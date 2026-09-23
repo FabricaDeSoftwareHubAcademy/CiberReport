@@ -54,13 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
         passos[passoAtual].classList.remove('ativo');
         stepperItens[passoAtual].classList.remove('cad-projeto-stepper__item--ativo');
 
-        // Marca passo anterior como concluído se estamos avançando
-        if (novoPasso > passoAtual) {
+        if (modoEdicaoOuVisualizacao) {
+            // Os 4 passos já têm dado válido — o que estamos deixando fica
+            // concluído (check), e o novo atual perde o check (mostra o
+            // número), não importa se é avanço ou retrocesso.
             stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--concluido');
-        } else if (!modoEdicaoOuVisualizacao) {
-            // Ao voltar, desconclui o passo que estávamos — só faz sentido no
-            // cadastro (progresso real). Em editar/visualizar os 4 passos já
-            // estão com dados válidos desde o início, então ficam marcados.
+            stepperItens[novoPasso].classList.remove('cad-projeto-stepper__item--concluido');
+        } else if (novoPasso > passoAtual) {
+            // Cadastro, avançando: marca o passo que estamos deixando como concluído.
+            stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--concluido');
+        } else {
+            // Cadastro, voltando: desconclui o passo de destino (progresso real).
             stepperItens[novoPasso].classList.remove('cad-projeto-stepper__item--concluido');
         }
 
