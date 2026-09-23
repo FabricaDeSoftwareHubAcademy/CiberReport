@@ -8,6 +8,7 @@ require_once __DIR__ . "/../Model/EmpresaModel.php";
 use Core\Controller;
 use Empresa;
 use Exception;
+use Model\Andamento;
 use Model\Projeto;
 use Model\TipoPentest;
 use Model\UsuarioModel;
@@ -19,6 +20,7 @@ class ProjetoController extends Controller
     private $empresa;
     private $tipoPentest;
     private $usuario;
+    private $andamento;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class ProjetoController extends Controller
         $this->empresa = new Empresa($conexao);
         $this->tipoPentest = new TipoPentest($conexao);
         $this->usuario = new UsuarioModel($conexao);
+        $this->andamento = new Andamento($conexao);
     }
 
     public function index()
@@ -38,7 +41,68 @@ class ProjetoController extends Controller
             'projetos' => htmlspecialchars(json_encode($this->listarCompletos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
         ];
 
-        $this->view('gerenciamento_projeto', ['dadosModal' => $dadosModal]);
+        $dadosAndamento = htmlspecialchars(json_encode($this->listarAndamentoCompleto(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
+
+        $this->view('gerenciamento_projeto', ['dadosModal' => $dadosModal, 'dadosAndamento' => $dadosAndamento]);
+    }
+
+    public function listarAndamentoCompleto()
+    {
+        $dados = $this->projeto->listarDados();
+        $porProjeto = [];
+
+        foreach ($dados as $linha) {
+            $idProjeto = (int) $linha['id'];
+            $projeto = $this->andamento->buscarProjeto($idProjeto);
+
+            if ($projeto === null) {
+                continue;
+            }
+
+            $minutosConsumidos = $this->andamento->buscarHoras($idProjeto)['horas_consumidas_minutos'];
+            $horasContratadas = (float) $projeto['horas_contratadas'];
+            $minutosContratados = (int) round($horasContratadas * 60);
+            $minutosRestantes = max(0, $minutosContratados - $minutosConsumidos);
+
+            $vulnerabilidades = $this->andamento->buscarVulnerabilidades($idProjeto);
+            $porSeveridade = ['CRITICA' => 0, 'ALTA' => 0, 'MEDIA' => 0, 'BAIXA' => 0, 'INFO' => 0];
+            $porCategoria = [];
+            foreach ($vulnerabilidades as $vuln) {
+                $sev = $vuln['severidade_vulnerabilidade'];
+                if (isset($porSeveridade[$sev])) {
+                    $porSeveridade[$sev]++;
+                }
+                $cat = $vuln['categoria'] ?: 'Outros';
+                $porCategoria[$cat] = ($porCategoria[$cat] ?? 0) + 1;
+            }
+
+            $checklist = $this->andamento->buscarChecklist($idProjeto);
+            $checklistConcluidos = count(array_filter($checklist, fn($item) => (int) $item['concluido'] === 1));
+
+            $porProjeto[$idProjeto] = [
+                'id' => $idProjeto,
+                'nome' => $projeto['nome'],
+                'empresa' => $projeto['nome_fantasia'] ?: $projeto['razao_social'],
+                'tipos_pentest' => $this->andamento->buscarTiposPentest($idProjeto),
+                'nivel_sigilo' => $projeto['nivel_sigilo'],
+                'modalidade' => $projeto['modalidade'],
+                'data_inicio' => $projeto['data_inicio'],
+                'data_fim_prevista' => $projeto['data_fim_prevista'],
+                'horas_contratadas_minutos' => $minutosContratados,
+                'horas_consumidas_minutos' => $minutosConsumidos,
+                'horas_restantes_minutos' => $minutosRestantes,
+                'vulnerabilidades' => $vulnerabilidades,
+                'vulnerabilidades_por_severidade' => $porSeveridade,
+                'vulnerabilidades_por_categoria' => $porCategoria,
+                'equipe' => $this->andamento->buscarEquipe($idProjeto),
+                'checklist' => $checklist,
+                'checklist_concluidos' => $checklistConcluidos,
+                'checklist_total' => count($checklist),
+                'log' => $this->andamento->buscarLogAtividade($idProjeto),
+            ];
+        }
+
+        return $porProjeto;
     }
 
     public function listar()
@@ -88,7 +152,12 @@ class ProjetoController extends Controller
                 $dadosLimpos['contrato'] = $caminhoContrato;
             }
 
-            if ($this->projeto->cadastrarProjeto($dadosLimpos)) {
+            $idProjeto = $this->projeto->cadastrarProjeto($dadosLimpos);
+
+            if ($idProjeto !== false) {
+                $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['lider_tecnico_id']);
+                $this->andamento->registrarLog($idProjeto, $idUsuarioLogado, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.');
+
                 return "Projeto cadastrado com sucesso!";
             } else {
                 return "Erro ao cadastrar projeto: " . $this->projeto->msgErro;

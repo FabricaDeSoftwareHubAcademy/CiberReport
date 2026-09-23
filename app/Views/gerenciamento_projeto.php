@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $dados = $controller->listar();
+$dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompleto(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +34,7 @@ $dados = $controller->listar();
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/modal-cadastro-projeto.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/modal-andamento-projeto.js" defer></script>
 </head>
 
 <body class="corpo-ger-projetos">
@@ -111,9 +113,8 @@ $dados = $controller->listar();
                                 <td>
                                     <div class="acoes">
                                         <button title="Visualizar" aria-label="Visualizar"
-                                            data-modal-target="modal-cadastro-projeto"
-                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
-                                            data-modo="visualizar">
+                                            data-modal-target="modal-andamento-projeto"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
                                         <button class="btn-editar" title="Editar" aria-label="Editar"
@@ -156,6 +157,7 @@ $dados = $controller->listar();
     </form>
 
     <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
+    <?php include __DIR__ . '/Components/modal-andamento-projeto/index.php'; ?>
 </body>
 
 </html>
