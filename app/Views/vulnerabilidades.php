@@ -29,19 +29,19 @@
         <div class="cards-resumo">
             <div class="card-resumo">
                 <span class="card-label">Críticas</span>
-                <span class="card-valor critica">0.3</span>
+                <span class="card-valor critica" id="qtdCriticas">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Altas</span>
-                <span class="card-valor alta">0.0</span>
+                <span class="card-valor alta" id="qtdAltas">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Médias</span>
-                <span class="card-valor media">0.1</span>
+                <span class="card-valor media" id="qtdMedias">0</span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Baixas</span>
-                <span class="card-valor baixa">0.0</span>
+                <span class="card-valor baixa" id="qtdBaixas">0</span>
             </div>
         </div>
  
@@ -73,143 +73,11 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 001</span>
-                                    <span class="contrib">9 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=1" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=2" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=3" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Injeção de SQL baseado em tempo (SQL Injection)</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td class="cvss">9.8</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 002</span>
-                                    <span class="contrib">6 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=4" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=5" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=6" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Script entre sites armazenados (XSS)</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td><span class="badge badge-critica">Crítica</span></td>
-                        <td class="cvss">9.3</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon media-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 003</span>
-                                    <span class="contrib">4 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=7" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=8" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=9" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Possibilidade de falsificação.</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-media">Média</span></td>
-                        <td><span class="badge badge-media">Médio</span></td>
-                        <td class="cvss">7.2</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="id-cell">
-                                <div class="folder-icon critica-bg">
-                                    <i class="fa-solid fa-folder"></i>
-                                </div>
-                                <div class="id-info">
-                                    <span class="id-num">VulnID - 004</span>
-                                    <span class="contrib">3 Contribuições</span>
-                                    <div class="avatares">
-                                        <img src="https://i.pravatar.cc/20?img=10" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=11" alt="" />
-                                        <img src="https://i.pravatar.cc/20?img=12" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Fraqueza na proteção contra ataques de força bruta.</td>
-                        <td class="ativo-link">https://sistema.xpto.com.br</td>
-                        <td class="resumo-texto">O problema identificado na aplicação foi...</td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td><span class="badge badge-alta">Alta</span></td>
-                        <td class="cvss">7.9</td>
-                        <td>
-                            <div class="acoes">
-                                <button title="Visualizar" aria-label="Visualizar">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                                <button class="tabela-btn-editar" title="Editar" aria-label="Editar">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                <tbody id="corpoTabelaVulnerabilidades">
+                    <?php /*
+                        Linhas removidas — dados mocados eram só placeholder de layout.
+                        Aqui entra o loop PHP puxando do banco (PDO)
+                    */ ?>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -241,6 +109,16 @@
                         <strong>Dados da Vulnerabilidade</strong>
                     </div>
  
+                    <!--
+                        TODO: falta um campo para projeto_id.
+                        O Model exige projeto_id no INSERT (INTO vulnerabilidade (projeto_id, ...)),
+                        mas não existia nenhum input/select para isso no modal.
+                        Se o projeto já é conhecido pelo contexto da página (ex: veio via URL
+                        ?projeto_id=123), use um input hidden, exemplo:
+                        <input type="hidden" id="projetoId" name="projeto_id" value="<?= (int) ($_GET['projeto_id'] ?? 0) ?>">
+                        Caso contrário, adicione um <select> para o usuário escolher o projeto.
+                    -->
+ 
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="nomeVuln">Nome da Vulnerabilidade:</label>
@@ -252,40 +130,53 @@
                         </div>
                         <div class="campo">
                             <label class="campo__label" for="cve">CVE:</label>
-                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" oninput="mascararCVE(this)" title="formato: CVE-AAAA-NNNN" value="CVE-" />
+                            <!--
+                                CORRIGIDO: removido value="CVE-". Esse valor pré-preenchido
+                                fazia o campo (opcional) chegar como "CVE-" no back-end quando
+                                o usuário não mexia nele, o que falhava na validação de regex
+                                (^CVE-\d{4}-\d{4,}$) e bloqueava o cadastro/edição inteiro.
+                            -->
+                            <input class="campo__input" type="text" id="cve" name="cve" placeholder="Ex: CVE-2024-0001" maxlength="20" pattern="CVE-\d{4}-\d{4,}" inputmode="numeric" title="formato: CVE-AAAA-NNNN" />
                         </div>
                     </div>
  
                     <div class="campo">
                         <label class="campo__label campo__label--obrigatorio" for="descricao">Descrição:</label>
-                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="255" required />
+                        <input class="campo__input" type="text" id="descricao" name="descricao" placeholder="Descreva a Vulnerabilidade" maxlength="100" required />
                     </div>
  
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="descTecnica">Descrição Técnica:</label>
-                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="5000" required></textarea>
+                            <textarea class="campo__textarea" id="descTecnica" name="descTecnica" placeholder="Descreva a vulnerabilidade em detalhes" maxlength="150" required></textarea>
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="impactos">Impactos:</label>
-                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="3000" required></textarea>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="200" required></textarea>
                         </div>
                     </div>
  
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
-                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="100" />
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="20" />
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="severidade">Severidade:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    CORRIGIDO: os values agora batem exatamente (maiúsculas)
+                                    com Vulnerabilidades::SEVERIDADES_VALIDAS = ['ALTA','BAIXA','CRITICA','MEDIA'].
+                                    Antes eram minúsculos ("alta", "baixa"...) e o in_array()
+                                    do Model usa comparação estrita, então nunca batia —
+                                    isso derrubava qualquer tentativa de salvar com "Severidade inválida".
+                                -->
                                 <select class="campo__select" id="severidade" name="severidade" required>
                                     <option value="" disabled selected>Selecione a severidade</option>
-                                    <option value="alta">Alta</option>
-                                    <option value="baixa">Baixa</option>
-                                    <option value="critica">Crítica</option>
-                                    <option value="media">Média</option>
+                                    <option value="ALTA">Alta</option>
+                                    <option value="BAIXA">Baixa</option>
+                                    <option value="CRITICA">Crítica</option>
+                                    <option value="MEDIA">Média</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -296,13 +187,18 @@
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="categoria">Categoria:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    CORRIGIDO: mesmo problema da severidade. Values agora batem
+                                    com Vulnerabilidades::CATEGORIAS_VALIDAS =
+                                    ['API','Aplicação Web','Infraestrutura','Mobile','Rede'].
+                                -->
                                 <select class="campo__select" id="categoria" name="categoria" required>
                                     <option value="" disabled selected>Selecione a categoria</option>
-                                    <option value="api">API</option>
-                                    <option value="web">Aplicação Web</option>
-                                    <option value="infra">Infraestrutura</option>
-                                    <option value="mobile">Mobile</option>
-                                    <option value="rede">Rede</option>
+                                    <option value="API">API</option>
+                                    <option value="Aplicação Web">Aplicação Web</option>
+                                    <option value="Infraestrutura">Infraestrutura</option>
+                                    <option value="Mobile">Mobile</option>
+                                    <option value="Rede">Rede</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -310,6 +206,17 @@
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="status">Status:</label>
                             <div class="campo__select-wrapper">
+                                <!--
+                                    ATENÇÃO: este campo "status" (aberta/aceita/corrigida/em-analise/
+                                    falso-positivo) não existe em nenhum lugar do Model ou da tabela
+                                    "vulnerabilidade" que foi enviada. Só existe a coluna "habilitado"
+                                    (0/1), que é outra coisa (ativo/inativo).
+                                    Se esse campo for necessário, é preciso:
+                                    1) adicionar a coluna correspondente na tabela do banco, e
+                                    2) o Model/Controller precisam ler e gravar esse valor.
+                                    Do jeito que está, o valor selecionado aqui é descartado
+                                    e nunca chega a ser salvo.
+                                -->
                                 <select class="campo__select" id="status" name="status" required>
                                     <option value="" disabled selected>Selecione o status</option>
                                     <option value="aberta">Aberta</option>
