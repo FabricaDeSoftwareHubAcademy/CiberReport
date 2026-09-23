@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Estado do módulo
     let passoAtual      = 0;
     const TOTAL_PASSOS  = 4;
+    let modoEdicaoOuVisualizacao = false; // true quando o modal foi aberto via Editar/Visualizar
 
     // IDs selecionados
     let clienteSelecionado    = { id: null, nome: '' };
@@ -56,8 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Marca passo anterior como concluído se estamos avançando
         if (novoPasso > passoAtual) {
             stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--concluido');
-        } else {
-            // Ao voltar, desconclui o passo que estávamos
+        } else if (!modoEdicaoOuVisualizacao) {
+            // Ao voltar, desconclui o passo que estávamos — só faz sentido no
+            // cadastro (progresso real). Em editar/visualizar os 4 passos já
+            // estão com dados válidos desde o início, então ficam marcados.
             stepperItens[novoPasso].classList.remove('cad-projeto-stepper__item--concluido');
         }
 
@@ -670,6 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Volta ao modo de cadastro (pode ter sido aberto em modo editar/visualizar)
         definirSomenteLeitura(false);
+        modoEdicaoOuVisualizacao = false;
         const acaoInput = document.getElementById('cp-action');
         const projetoIdInput = document.getElementById('cp-projeto-id');
         if (acaoInput) acaoInput.value = 'cadastrar';
@@ -800,6 +804,13 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizarChipsAnalistas();
 
         definirSomenteLeitura(modo === 'visualizar');
+
+        // Os 4 passos já têm dado válido desde a abertura — marca todos como
+        // concluídos, exceto o que está sendo exibido agora (passo 0).
+        modoEdicaoOuVisualizacao = true;
+        stepperItens.forEach((item, idx) => {
+            if (idx !== passoAtual) item.classList.add('cad-projeto-stepper__item--concluido');
+        });
     }
 
     document.querySelectorAll('[data-projeto-id][data-modo]').forEach(botao => {
