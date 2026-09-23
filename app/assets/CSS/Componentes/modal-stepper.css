@@ -1,0 +1,179 @@
+/* =============================================================================
+   modal-stepper.css
+   Estilos reutilizáveis para:
+     - Stepper de passos (cad-projeto-stepper)
+     - Botões padrão do footer do modal (btn, btn--primario, btn--secundario)
+     - Seções de revisão (revisao-secao, revisao-campo)
+   Usado por: qualquer modal que implemente um fluxo de passos
+============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   STEPPER
+----------------------------------------------------------------------------- */
+.cad-projeto-stepper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.cad-projeto-stepper__item {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    cursor: default;
+}
+
+.cad-projeto-stepper__numero {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--cor-cinza-secundario);
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transicao-base), color var(--transicao-base);
+}
+
+.cad-projeto-stepper__label {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+    white-space: nowrap;
+    transition: color var(--transicao-base);
+}
+
+.cad-projeto-stepper__item--ativo .cad-projeto-stepper__numero {
+    background-color: var(--cor-azul-primaria);
+    color: #fff;
+}
+
+.cad-projeto-stepper__item--ativo .cad-projeto-stepper__label {
+    color: var(--cor-texto-primario);
+    font-weight: 600;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__numero {
+    background-color: var(--cor-verde);
+    color: #fff;
+    font-size: 0;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__numero::after {
+    content: "\2713";
+    font-size: var(--fonte-apoio);
+    font-weight: 700;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__label {
+    color: var(--cor-verde);
+}
+
+.cad-projeto-stepper__separador {
+    flex: 1;
+    height: 1px;
+    background-color: var(--cor-borda-padrao);
+    margin: 0 var(--espaco-sm);
+    min-width: 40px;
+}
+
+/* -----------------------------------------------------------------------------
+   BOTÕES DO FOOTER DO MODAL
+----------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    height: 44px;
+    padding: 0 var(--espaco-xl);
+    border-radius: var(--raio-md);
+    font-family: var(--fonte-familia-corpo);
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+        background-color var(--transicao-rapida),
+        border-color var(--transicao-rapida),
+        color var(--transicao-rapida);
+    text-decoration: none;
+}
+
+.btn--primario {
+    background-color: var(--cor-azul-primaria);
+    color: #fff;
+    border-color: var(--cor-azul-primaria);
+}
+
+.btn--primario:hover {
+    background-color: var(--cor-azul-destaques);
+    border-color: var(--cor-azul-destaques);
+}
+
+.btn--secundario {
+    background-color: transparent;
+    color: var(--cor-texto-primario);
+    border-color: var(--cor-borda-padrao);
+}
+
+.btn--secundario:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+/* -----------------------------------------------------------------------------
+   SEÇÕES DE REVISÃO (passo final dos modais com stepper)
+----------------------------------------------------------------------------- */
+.revisao-secao {
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    overflow: hidden;
+    margin-bottom: var(--espaco-md);
+}
+
+.revisao-secao__cabecalho {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+    padding: var(--espaco-sm) var(--espaco-md);
+    background-color: var(--cor-fundo-branco);
+    border-bottom: 1px solid var(--cor-borda-padrao);
+}
+
+.revisao-secao__titulo {
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    color: var(--cor-texto-primario);
+}
+
+.revisao-secao__corpo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espaco-sm) var(--espaco-md);
+    padding: var(--espaco-md);
+}
+
+.revisao-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.revisao-campo--full {
+    grid-column: 1 / -1;
+}
+
+.revisao-campo__rotulo {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+}
+
+.revisao-campo__valor {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-primario);
+    font-weight: 500;
+    word-break: break-word;
+}

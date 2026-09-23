@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cadas
 }
 
 $dados = $controller->listar();
-$empresas = $controller->listarEmpresasAtivas();
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +20,11 @@ $empresas = $controller->listarEmpresasAtivas();
     <title>Gerenciamento de Projetos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/gerenciamento-projeto.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/modal-stepper.css">
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/modal-cadastro-projeto.js" defer></script>
 </head>
 
 <body class="corpo-ger-projetos">
@@ -133,35 +134,7 @@ $empresas = $controller->listarEmpresasAtivas();
 
     </main>
 
-    <div class="modal-overlay" data-modal-target="modal-cadastro-projeto" id="modal-cadastro-projeto">
-        <div class="modal modal--xl">
-            <div class="modal__header">
-                <div class="modal__header-icone"><i class=""></i></div>
-                <div class="modal__header-texto">
-                    <h2 class="modal__titulo">Cadastro de Projeto</h2>
-                    <p class="modal__subtitulo">Informações da empresa contratante e do projeto</p>
-                </div>
-                <button type="button" class="modal__fechar" data-modal-close>&times;</button>
-            </div>
-            <div class="modal__body">
-                <form action="" method="post">
-                    <section class="modal__secao">
-                        <h3 class="modal__secao-titulo">Informações do Cliente</h3>
-                        <div class="modal__secao-conteudo">
-                            <div class="input-group">
-                                <label for="nome_cliente">Nome da Empresa</label>
-                                <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Digite o nome da empresa" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="nome_projeto">Nome do Projeto</label>
-                                <input type="text" name="nome_projeto" id="nome_projeto" placeholder="Digite o nome do projeto" required>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </div>
-        </div>
-    </div>
+    <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
 </body>
 
 </html>
