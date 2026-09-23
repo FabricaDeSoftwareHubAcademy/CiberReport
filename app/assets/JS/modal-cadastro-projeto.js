@@ -605,9 +605,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 11. SUBMIT — injeta campos dinâmicos antes de enviar
     // -------------------------------------------------------------------------
     const form = document.getElementById('form-cadastro-projeto');
-    form?.addEventListener('submit', (e) => {
-        if (!validarPasso(3)) { e.preventDefault(); return; }
 
+    function prepararCamposDinamicos() {
         // Remove inputs dinâmicos anteriores para não duplicar
         form.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
 
@@ -650,6 +649,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 horasEl.value = decimal.toFixed(2);
             }
         }
+    }
+
+    form?.addEventListener('submit', (e) => {
+        if (!validarPasso(3)) { e.preventDefault(); return; }
+
+        // Em modo editar, quem decide se o form realmente envia é a
+        // confirmação do popup — ver seção 17.
+        if (modoEdicaoOuVisualizacao) {
+            e.preventDefault();
+            prepararCamposDinamicos();
+            document.getElementById('popupSalvar')?.classList.add('active');
+            return;
+        }
+
+        prepararCamposDinamicos();
+    });
+
+    // -------------------------------------------------------------------------
+    // 17. CONFIRMAÇÃO ANTES DE SALVAR (só em modo editar)
+    // -------------------------------------------------------------------------
+    const popupSalvar = document.getElementById('popupSalvar');
+    popupSalvar?.querySelector('[data-popup-confirmar]')?.addEventListener('click', () => {
+        popupSalvar.classList.remove('active');
+        form?.submit();
     });
 
     // -------------------------------------------------------------------------

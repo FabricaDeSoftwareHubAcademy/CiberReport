@@ -155,6 +155,15 @@ class Projeto
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function buscarStatusAtual(int $idProjeto): ?string
+    {
+        $sql = $this->pdo->prepare("SELECT status FROM projeto WHERE id = :id");
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        $status = $sql->fetchColumn();
+        return $status !== false ? $status : null;
+    }
+
     public function buscarContratoAtual(int $idProjeto): ?string
     {
         $sql = $this->pdo->prepare("SELECT contrato FROM projeto WHERE id = :id");

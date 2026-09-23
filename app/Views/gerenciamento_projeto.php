@@ -35,6 +35,8 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/modal-cadastro-projeto.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/modal-andamento-projeto.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js" defer></script>
 </head>
 
 <body class="corpo-ger-projetos">
@@ -44,7 +46,12 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
     ?>
     <main class="main-gerenciamento-projeto">
         <?php if ($resultadoCadastro !== null): ?>
-            <p role="status"><?= htmlspecialchars((string) $resultadoCadastro) ?></p>
+            <?php $tipoToast = str_starts_with($resultadoCadastro, 'Erro') ? 'erro' : 'sucesso'; ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    exibirToast('<?= $tipoToast ?>', '<?= addslashes($resultadoCadastro) ?>');
+                });
+            </script>
         <?php endif; ?>
 
 
@@ -158,6 +165,8 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
 
     <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
     <?php include __DIR__ . '/Components/modal-andamento-projeto/index.php'; ?>
+    <?php include 'Components/popup_salvar.php'; ?>
+    <?php include 'Components/toast.php'; ?>
 </body>
 
 </html>

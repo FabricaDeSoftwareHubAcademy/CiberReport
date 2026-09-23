@@ -180,6 +180,13 @@ class ProjetoController extends Controller
                 $dadosLimpos['contrato'] = $this->projeto->buscarContratoAtual($dadosLimpos['id']) ?? '';
             }
 
+            if (!isset($_POST['status'])) {
+                // O formulário de edição não tem campo de status; sem isso, o
+                // validador assume 'PLANEJADO' e sobrescreve status como
+                // CONCLUIDO/EM_ANDAMENTO toda vez que o projeto é editado.
+                $dadosLimpos['status'] = $this->projeto->buscarStatusAtual($dadosLimpos['id']) ?? $dadosLimpos['status'];
+            }
+
             if ($this->projeto->editarProjeto($dadosLimpos)) {
                 return "Projeto atualizado com sucesso!";
             } else {
