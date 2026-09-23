@@ -656,6 +656,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Limpa inputs dinâmicos que foram injetados no submit
         form?.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
+
+        // Volta ao modo de cadastro (pode ter sido aberto em modo editar/visualizar)
+        definirSomenteLeitura(false);
+        const acaoInput = document.getElementById('cp-action');
+        const projetoIdInput = document.getElementById('cp-projeto-id');
+        if (acaoInput) acaoInput.value = 'cadastrar';
+        if (projetoIdInput) projetoIdInput.value = '';
+
+        const tituloEl = document.getElementById('cadastro-projeto-titulo');
+        const subtituloEl = document.getElementById('cadastro-projeto-subtitulo');
+        if (tituloEl) tituloEl.textContent = 'Cadastro de Projeto';
+        if (subtituloEl) subtituloEl.textContent = 'Informações da empresa contratante e do projeto';
     }
 
     // -------------------------------------------------------------------------
@@ -690,6 +702,116 @@ document.addEventListener('DOMContentLoaded', () => {
             v = v.slice(0, 2) + ':' + v.slice(2);
         }
         e.target.value = v;
+    });
+
+    // -------------------------------------------------------------------------
+    // 15. ABRIR EM MODO EDITAR/VISUALIZAR (a partir dos botões da tabela)
+    // -------------------------------------------------------------------------
+    const projetos = JSON.parse(overlay.dataset.projetos || '[]');
+
+    function horasDecimalParaTexto(decimal) {
+        const totalSegundos = Math.round(parseFloat(decimal) * 3600) || 0;
+        const h = Math.floor(totalSegundos / 3600);
+        const m = Math.floor((totalSegundos % 3600) / 60);
+        const s = totalSegundos % 60;
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    function definirSomenteLeitura(somenteLeitura) {
+        overlay.classList.toggle('modal--somente-leitura', somenteLeitura);
+
+        overlay.querySelectorAll('.modal__body input, .modal__body textarea, .modal__body select, .modal__body button').forEach(el => {
+            el.disabled = somenteLeitura;
+        });
+
+        if (somenteLeitura) {
+            btnSalvar.style.display = 'none';
+        } else {
+            atualizarBotoes();
+        }
+    }
+
+    function preencherModal(projeto, modo) {
+        resetModal();
+
+        document.getElementById('cp-action').value = 'editar';
+        document.getElementById('cp-projeto-id').value = projeto.id;
+
+        const tituloEl = document.getElementById('cadastro-projeto-titulo');
+        if (tituloEl) tituloEl.textContent = modo === 'visualizar' ? 'Detalhes do Projeto' : 'Editar Projeto';
+
+        // Passo 1 — Cadastro
+        const empresa = empresas.find(e => String(e.id) === String(projeto.empresa_id));
+        clienteSelecionado = { id: projeto.empresa_id, nome: empresa ? (empresa.nome_fantasia || empresa.razao_social) : '' };
+        if (clienteInput) clienteInput.value = clienteSelecionado.nome;
+        document.getElementById('cp-empresa-id').value = projeto.empresa_id ?? '';
+
+        document.getElementById('cp-nome-projeto').value = projeto.nome ?? '';
+
+        (projeto.tipos_pentest_ids || []).forEach(idTipo => {
+            const tipo = tiposPentest.find(t => String(t.id) === String(idTipo));
+            if (tipo && !tiposSelecionados.find(t => t.id === tipo.id)) {
+                tiposSelecionados.push({ id: tipo.id, label: tipo.nome, horas_execucao: tipo.horas_execucao ?? null });
+            }
+        });
+        renderizarChipsTipo();
+
+        document.getElementById('cp-modalidade').value = projeto.modalidade ?? '';
+        document.getElementById('cp-sigilo').value = projeto.nivel_sigilo ?? '';
+        document.getElementById('cp-data-inicio').value = projeto.data_inicio ?? '';
+        document.getElementById('cp-data-fim').value = projeto.data_fim_prevista ?? '';
+        document.getElementById('cp-horas-contratadas').value = projeto.horas_contratadas
+            ? horasDecimalParaTexto(projeto.horas_contratadas)
+            : '';
+
+        // Passo 2 — Dados do Projeto
+        document.getElementById('cp-escopo').value = projeto.escopo ?? '';
+        (projeto.alvos || []).forEach(valor => alvos.push(valor));
+        renderizarChipsAlvos();
+        document.getElementById('cp-restricao').value = projeto.restricao ?? '';
+
+        // Passo 3 — Alocar Equipe
+        if (projeto.lider_id) {
+            const lider = usuarios.find(u => String(u.id) === String(projeto.lider_id));
+            if (lider) {
+                liderSelecionado = { id: lider.id, nome: lider.nome };
+                if (liderInput) liderInput.value = lider.nome;
+                document.getElementById('cp-lider-id').value = lider.id;
+            }
+        }
+        (projeto.especialistas_ids || []).forEach(idUsuario => {
+            const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
+            if (usuario && !analistasSelecionados.find(a => a.id === usuario.id)) {
+                analistasSelecionados.push({ id: usuario.id, nome: usuario.nome });
+            }
+        });
+        renderizarChipsAnalistas();
+
+        definirSomenteLeitura(modo === 'visualizar');
+    }
+
+    document.querySelectorAll('[data-projeto-id][data-modo]').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const projeto = projetos.find(p => String(p.id) === String(botao.dataset.projetoId));
+            if (!projeto) return;
+            preencherModal(projeto, botao.dataset.modo);
+        });
+    });
+
+    // -------------------------------------------------------------------------
+    // 16. EXCLUIR PROJETO (soft delete, com confirmação)
+    // -------------------------------------------------------------------------
+    const formExcluir = document.getElementById('form-excluir-projeto');
+    document.querySelectorAll('.btn-excluir[data-projeto-id]').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const nome = botao.dataset.projetoNome || 'este projeto';
+            if (!confirm(`Tem certeza que deseja excluir "${nome}"? Essa ação pode ser desfeita apenas por um administrador.`)) {
+                return;
+            }
+            document.getElementById('excluir-projeto-id').value = botao.dataset.projetoId;
+            formExcluir.submit();
+        });
     });
 
     // Inicialização: garante que os botões estejam corretos ao carregar

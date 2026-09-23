@@ -13,7 +13,8 @@
 <div class="modal-overlay" id="modal-cadastro-projeto"
     data-empresas="<?= $dadosModal['empresas'] ?>"
     data-tipos-pentest="<?= $dadosModal['tiposPentest'] ?>"
-    data-usuarios="<?= $dadosModal['usuarios'] ?>">
+    data-usuarios="<?= $dadosModal['usuarios'] ?>"
+    data-projetos="<?= $dadosModal['projetos'] ?>">
     <div class="modal modal--xl modal--com-stepper">
 
         <div class="modal__header">
@@ -56,7 +57,8 @@
             method="post"
             enctype="multipart/form-data"
             novalidate>
-            <input type="hidden" name="action"          value="cadastrar">
+            <input type="hidden" name="action"          id="cp-action" value="cadastrar">
+            <input type="hidden" name="id"               id="cp-projeto-id">
             <input type="hidden" name="empresa_id"      id="cp-empresa-id">
             <input type="hidden" name="lider_tecnico_id" id="cp-lider-id">
 

@@ -177,3 +177,25 @@
     font-weight: 500;
     word-break: break-word;
 }
+
+/* -----------------------------------------------------------------------------
+   MODO SOMENTE LEITURA (botão "Visualizar" da tabela)
+----------------------------------------------------------------------------- */
+.modal--somente-leitura .modal__body input:disabled,
+.modal--somente-leitura .modal__body textarea:disabled,
+.modal--somente-leitura .modal__body select:disabled {
+    background-color: var(--cor-cinza-secundario);
+    color: var(--cor-texto-primario);
+    opacity: 1;
+    cursor: default;
+}
+
+.modal--somente-leitura .modal__body button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.modal--somente-leitura .campo__dropzone {
+    pointer-events: none;
+    opacity: 0.6;
+}

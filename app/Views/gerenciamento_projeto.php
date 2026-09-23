@@ -4,8 +4,16 @@ use Controller\ProjetoController;
 $controller = new ProjetoController();
 $resultadoCadastro = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cadastrar') {
-    $resultadoCadastro = $controller->cadastrar();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['action'] ?? '';
+
+    if ($acao === 'cadastrar') {
+        $resultadoCadastro = $controller->cadastrar();
+    } elseif ($acao === 'editar') {
+        $resultadoCadastro = $controller->editar();
+    } elseif ($acao === 'excluir') {
+        $resultadoCadastro = $controller->excluir((int) ($_POST['id'] ?? 0));
+    }
 }
 
 $dados = $controller->listar();
@@ -102,13 +110,21 @@ $dados = $controller->listar();
                                 <td><?= htmlspecialchars($projeto['status']) ?></td>
                                 <td>
                                     <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
+                                        <button title="Visualizar" aria-label="Visualizar"
+                                            data-modal-target="modal-cadastro-projeto"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
+                                            data-modo="visualizar">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
+                                        <button class="btn-editar" title="Editar" aria-label="Editar"
+                                            data-modal-target="modal-cadastro-projeto"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
+                                            data-modo="editar">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
+                                            data-projeto-nome="<?= htmlspecialchars($projeto['nome']) ?>">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
@@ -133,6 +149,11 @@ $dados = $controller->listar();
         </div>
 
     </main>
+
+    <form id="form-excluir-projeto" method="post" style="display:none">
+        <input type="hidden" name="action" value="excluir">
+        <input type="hidden" name="id" id="excluir-projeto-id">
+    </form>
 
     <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
 </body>
