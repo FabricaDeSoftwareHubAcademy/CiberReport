@@ -60,9 +60,9 @@ INSERT INTO endereco (cep, rua, numero, complemento, bairro, cidade, estado, pai
 -- ---------------------------------------------------------
 -- empresa
 -- ---------------------------------------------------------
-INSERT INTO empresa (endereco_id, responsavel_id, nome_fantasia, razao_social, cnpj, email_contato, telefone, responsavel, habilitado) VALUES
-(1, 5, 'TechPantanal Soluções', 'TechPantanal Soluções em Tecnologia LTDA', '12.345.678/0001-90', 'contato@techpantanal.com.br', '(67) 3321-4455', 'Carlos Mendes', 1),
-(3, 5, 'Finasul Bank', 'Finasul Instituição Financeira S.A.', '98.765.432/0001-10', 'seguranca@finasul.com.br', '(11) 3987-6655', 'Carlos Mendes', 1);
+INSERT INTO empresa (endereco_id, responsavel_id, nome_fantasia, razao_social, cnpj, email_contato, telefone, responsavel, email_responsavel, cpf_responsavel, telefone_responsavel, habilitado) VALUES
+(1, 5, 'TechPantanal Soluções', 'TechPantanal Soluções em Tecnologia LTDA', '12.345.678/0001-90', 'contato@techpantanal.com.br', '(67) 3321-4455', 'Izadora', 'izadoraaparecidasilvapereira@gmail.com', '44455566677', '(67) 99456-7890', 1),
+(3, 5, 'Finasul Bank', 'Finasul Instituição Financeira S.A.', '98.765.432/0001-10', 'seguranca@finasul.com.br', '(11) 3987-6655', 'Izadora', 'izadoraaparecidasilvapereira@gmail.com', '44455566677', '(67) 99456-7890', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
@@ -103,6 +103,15 @@ INSERT INTO projeto_usuario (projeto_id, usuario_id, papel, habilitado) VALUES
 (2, 3, 'LIDER', 1),
 (2, 2, 'ESPECIALISTA', 1),
 (2, 1, 'GESTOR', 1);
+
+-- ---------------------------------------------------------
+-- projeto_alvo
+-- ---------------------------------------------------------
+INSERT INTO projeto_alvo (projeto_id, tipo, valor, descricao) VALUES
+(1, 'URL', 'https://portal.techpantanal.com.br', 'Portal institucional'),
+(1, 'URL', 'https://api.techpantanal.com.br/auth', 'API de autenticação'),
+(2, 'IP', '10.20.1.5', 'Servidor de arquivos'),
+(2, 'IP', '10.20.0.1', 'Switch core');
 
 -- ---------------------------------------------------------
 -- cronometro_registro
