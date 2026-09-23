@@ -22,6 +22,8 @@ class Projeto
     public function cadastrarProjeto(array $dados)
     {
         try {
+            $this->pdo->beginTransaction();
+
             $sql = $this->pdo->prepare("INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, modalidade, nivel_sigilo, escopo, contrato, restricao, status) VALUES (:empresa_id, :nome, :data_inicio, :data_fim_prevista, :data_fim_real, :horas_contratadas, :modalidade, :nivel_sigilo, :escopo, :contrato, :restricao, :status)");
             $sql->bindValue(":empresa_id", $dados['empresa_id'], PDO::PARAM_INT);
             $sql->bindValue(":nome", $dados['nome']);
@@ -52,10 +54,98 @@ class Projeto
             $sql->bindValue(":restricao", $dados['restricao']);
             $sql->bindValue(":status", $dados['status']);
             $sql->execute();
-            return (int) $this->pdo->lastInsertId();
+
+            $idProjeto = (int) $this->pdo->lastInsertId();
+
+            $this->salvarAlvos($idProjeto, $dados['alvos'] ?? []);
+            $this->salvarTiposPentest($idProjeto, $dados['tipos_pentest_ids'] ?? []);
+            $this->salvarEquipe($idProjeto, $dados['lider_tecnico_id'], $dados['analistas_ids'] ?? []);
+
+            $this->pdo->commit();
+            return $idProjeto;
         } catch (\PDOException $e) {
+            $this->pdo->rollBack();
             $this->msgErro = $e->getMessage();
             return false;
+        }
+    }
+
+    private function salvarAlvos(int $idProjeto, array $alvos): void
+    {
+        if (empty($alvos)) {
+            return;
+        }
+
+        $sql = $this->pdo->prepare(
+            "INSERT INTO projeto_alvo (projeto_id, tipo, valor) VALUES (:projeto_id, :tipo, :valor)"
+        );
+
+        foreach ($alvos as $valor) {
+            $sql->execute([
+                ':projeto_id' => $idProjeto,
+                ':tipo' => $this->classificarAlvo($valor),
+                ':valor' => $valor,
+            ]);
+        }
+    }
+
+    private function classificarAlvo(string $valor): string
+    {
+        if (preg_match('/^\d{1,3}(\.\d{1,3}){3}$/', $valor)) {
+            return 'IP';
+        }
+
+        if (preg_match('/^https?:\/\//i', $valor)) {
+            return 'URL';
+        }
+
+        if (preg_match('/^[a-z0-9.-]+\.[a-z]{2,}$/i', $valor)) {
+            return 'DOMINIO';
+        }
+
+        return 'OUTRO';
+    }
+
+    private function salvarTiposPentest(int $idProjeto, array $tiposPentestIds): void
+    {
+        if (empty($tiposPentestIds)) {
+            return;
+        }
+
+        $sql = $this->pdo->prepare(
+            "INSERT INTO projeto_tipo_pentest (projeto_id, tipo_pentest_id) VALUES (:projeto_id, :tipo_pentest_id)"
+        );
+
+        foreach ($tiposPentestIds as $idTipoPentest) {
+            $sql->execute([
+                ':projeto_id' => $idProjeto,
+                ':tipo_pentest_id' => $idTipoPentest,
+            ]);
+        }
+    }
+
+    private function salvarEquipe(int $idProjeto, int $idLiderTecnico, array $analistasIds): void
+    {
+        $sql = $this->pdo->prepare(
+            "INSERT INTO projeto_usuario (projeto_id, usuario_id, papel) VALUES (:projeto_id, :usuario_id, :papel)"
+        );
+
+        $sql->execute([
+            ':projeto_id' => $idProjeto,
+            ':usuario_id' => $idLiderTecnico,
+            ':papel' => 'LIDER',
+        ]);
+
+        foreach ($analistasIds as $idAnalista) {
+            if ($idAnalista === $idLiderTecnico) {
+                continue;
+            }
+
+            $sql->execute([
+                ':projeto_id' => $idProjeto,
+                ':usuario_id' => $idAnalista,
+                ':papel' => 'ESPECIALISTA',
+            ]);
         }
     }
     public function listarDados()

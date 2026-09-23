@@ -9,23 +9,35 @@ use Core\Controller;
 use Empresa;
 use Exception;
 use Model\Projeto;
+use Model\TipoPentest;
+use Model\UsuarioModel;
 use ProjetoValidator;
 
 class ProjetoController extends Controller
 {
     private $projeto;
     private $empresa;
+    private $tipoPentest;
+    private $usuario;
 
     public function __construct()
     {
         $conexao = require __DIR__ . '/../Model/conexao.php';
         $this->projeto = new Projeto($conexao);
         $this->empresa = new Empresa($conexao);
+        $this->tipoPentest = new TipoPentest($conexao);
+        $this->usuario = new UsuarioModel($conexao);
     }
 
     public function index()
     {
-        $this->view('gerenciamento_projeto');
+        $dadosModal = [
+            'empresas' => htmlspecialchars(json_encode($this->listarEmpresasAtivas(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'tiposPentest' => htmlspecialchars(json_encode($this->listarTiposPentestAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'usuarios' => htmlspecialchars(json_encode($this->listarUsuariosAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+        ];
+
+        $this->view('gerenciamento_projeto', ['dadosModal' => $dadosModal]);
     }
 
     public function listar()
@@ -36,6 +48,16 @@ class ProjetoController extends Controller
     public function listarEmpresasAtivas()
     {
         return $this->empresa->listarEmpresasAtivasParaSelecao();
+    }
+
+    public function listarTiposPentestAtivos()
+    {
+        return $this->tipoPentest->listarAtivosParaSelecao();
+    }
+
+    public function listarUsuariosAtivos()
+    {
+        return $this->usuario->listarAtivosParaSelecao();
     }
 
     public function cadastrar()

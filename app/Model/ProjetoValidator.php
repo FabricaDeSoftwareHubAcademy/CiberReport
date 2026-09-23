@@ -46,7 +46,35 @@ class ProjetoValidator
             'contrato' => trim((string) ($dados['contrato'] ?? '')),
             'restricao' => trim((string) ($dados['restricao'] ?? '')),
             'status' => trim((string) ($dados['status'] ?? 'PLANEJADO')),
+            'lider_tecnico_id' => filter_var($dados['lider_tecnico_id'] ?? null, FILTER_VALIDATE_INT),
+            'alvos' => self::sanitizarAlvos($dados['alvos'] ?? []),
+            'tipos_pentest_ids' => self::sanitizarIds($dados['tipos_pentest_ids'] ?? []),
+            'analistas_ids' => self::sanitizarIds($dados['analistas_ids'] ?? []),
         ];
+    }
+
+    private static function sanitizarAlvos($alvos): array
+    {
+        if (!is_array($alvos)) {
+            return [];
+        }
+
+        $alvos = array_map(fn($alvo) => trim((string) $alvo), $alvos);
+        $alvos = array_filter($alvos, fn($alvo) => $alvo !== '');
+
+        return array_values(array_unique($alvos));
+    }
+
+    private static function sanitizarIds($ids): array
+    {
+        if (!is_array($ids)) {
+            return [];
+        }
+
+        $ids = array_map(fn($id) => filter_var($id, FILTER_VALIDATE_INT), $ids);
+        $ids = array_filter($ids, fn($id) => $id !== false && $id > 0);
+
+        return array_values(array_unique($ids));
     }
 
     private static function normalizarData(mixed $valor, string $campo): ?string
@@ -95,6 +123,14 @@ class ProjetoValidator
 
         if ($dadosLimpos['escopo'] === '') {
             $erros[] = 'O escopo é obrigatório.';
+        }
+
+        if ($dadosLimpos['lider_tecnico_id'] === false || (int) $dadosLimpos['lider_tecnico_id'] <= 0) {
+            $erros[] = 'O líder técnico é obrigatório.';
+        }
+
+        if (empty($dadosLimpos['tipos_pentest_ids'])) {
+            $erros[] = 'Selecione ao menos um tipo de pentest.';
         }
 
         $modalidadesPermitidas = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
