@@ -279,3 +279,29 @@ SELECT
   checklist_id,
   id
 FROM checklist_item;
+
+-- ---------------------------------------------------------
+-- projeto_checklist_item
+-- Itens aplicáveis derivados de projeto_tipo_pentest -> tipo_pentest_checklist:
+-- projeto 1 (tipos 1,7) -> checklist 1 -> itens 1-4; projeto 2 (tipo 6) -> checklist 2 -> itens 5-6.
+-- ---------------------------------------------------------
+INSERT INTO projeto_checklist_item (projeto_id, item_id, concluido, concluido_em) VALUES
+(1, 1, 1, '2026-05-06 10:00:00'),
+(1, 2, 1, '2026-05-07 14:30:00'),
+(1, 3, 1, '2026-05-09 09:15:00'),
+(1, 4, 0, NULL),
+(2, 5, 1, '2026-06-03 11:00:00'),
+(2, 6, 0, NULL);
+
+-- ---------------------------------------------------------
+-- log_atividade
+-- ---------------------------------------------------------
+INSERT INTO log_atividade (projeto_id, usuario_id, tipo_evento, descricao, criado_em) VALUES
+(1, 2, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.', '2026-05-04 08:00:00'),
+(1, 2, 'ANALISTA_ALOCADO', 'Fabio alocado(a) ao projeto.', '2026-05-04 08:30:00'),
+(1, 2, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Injeção SQL no formulário de login (Crítica - CVSS 9.1).', '2026-05-05 09:14:00'),
+(1, 2, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Cross-Site Scripting (XSS) Refletido (Média - CVSS 6.1).', '2026-05-06 09:00:00'),
+(2, 3, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.', '2026-06-01 08:00:00'),
+(2, 3, 'ANALISTA_ALOCADO', 'Caio alocado(a) ao projeto.', '2026-06-01 08:30:00'),
+(2, 3, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Compartilhamento SMB sem autenticação (Alta - CVSS 7.5).', '2026-06-02 08:50:00'),
+(2, 3, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Credenciais padrão em switch de rede (Média - CVSS 5.3).', '2026-06-02 09:00:00');

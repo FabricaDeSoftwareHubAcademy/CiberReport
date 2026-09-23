@@ -288,3 +288,34 @@ ALTER TABLE usuario
 ADD COLUMN reset_token VARCHAR(64) NULL,
 ADD COLUMN reset_token_expira DATETIME NULL,
 ADD INDEX idx_reset_token (reset_token);
+
+-- Status de conclusão de checklist por projeto. Os itens aplicáveis a um
+-- projeto vêm de projeto_tipo_pentest -> tipo_pentest_checklist ->
+-- checklist_item_vinculo -> checklist_item_catalogo; esta tabela só guarda
+-- se cada item já foi concluído para aquele projeto específico.
+CREATE TABLE IF NOT EXISTS projeto_checklist_item (
+  id INT NOT NULL AUTO_INCREMENT,
+  projeto_id INT NOT NULL,
+  item_id INT NOT NULL,
+  concluido TINYINT NOT NULL DEFAULT 0,
+  concluido_em DATETIME DEFAULT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_projeto_checklist_item (projeto_id, item_id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (item_id) REFERENCES checklist_item_catalogo(id)
+);
+
+-- Log de atividades do projeto (auditoria simples), exibido na aba
+-- "Log de Atividades" do Andamento do Projeto.
+CREATE TABLE IF NOT EXISTS log_atividade (
+  id INT NOT NULL AUTO_INCREMENT,
+  projeto_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  tipo_evento VARCHAR(50) NOT NULL,
+  descricao VARCHAR(255) NOT NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
