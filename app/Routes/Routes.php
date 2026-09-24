@@ -20,7 +20,6 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/gerenciar-pentest', 'TipoPentestController@index');
 
-    Route::GET('/tipo-pentest/listar', 'TipoPentestController@listar');
     Route::GET('/tipo-pentest/buscar', 'TipoPentestController@buscar');
     Route::POST('/tipo-pentest/cadastro', 'TipoPentestController@cadastro');
     Route::POST('/tipo-pentest/exclusao', 'TipoPentestController@exclusao');
