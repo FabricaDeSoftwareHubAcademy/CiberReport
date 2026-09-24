@@ -140,13 +140,27 @@ class ProjetoController extends Controller
 
     public function listarUsuariosAtivos()
     {
-        return $this->usuario->listarAtivosParaSelecao();
+        return $this->usuario->listarPentestersAtivosParaSelecao();
+    }
+
+    /** O filtro da tela não basta (dá pra forjar o POST): a equipe também é checada no servidor. */
+    private function validarEquipeElegivel(array $dadosLimpos): void
+    {
+        $idsPermitidos = array_map('intval', array_column($this->listarUsuariosAtivos(), 'id'));
+        $idsInformados = array_merge([(int) $dadosLimpos['lider_tecnico_id']], $dadosLimpos['analistas_ids']);
+
+        foreach ($idsInformados as $id) {
+            if (!in_array((int) $id, $idsPermitidos, true)) {
+                throw new Exception('A equipe só pode ter usuários ativos com perfil Pentester.');
+            }
+        }
     }
 
     public function cadastrar()
     {
         try {
             $dadosLimpos = ProjetoValidator::processarCadastro($_POST);
+            $this->validarEquipeElegivel($dadosLimpos);
             
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
@@ -172,6 +186,7 @@ class ProjetoController extends Controller
     {
         try {
             $dadosLimpos = ProjetoValidator::processarEdicao($_POST);
+            $this->validarEquipeElegivel($dadosLimpos);
 
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
