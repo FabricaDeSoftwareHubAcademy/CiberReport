@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Core\Controller;
+use Core\DAO;
 use Empresa;
 use Endereco;
 
@@ -18,8 +19,7 @@ class EmpresaController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->empresa = new Empresa($conexao);
         $this->endereco = new Endereco($conexao);
     }

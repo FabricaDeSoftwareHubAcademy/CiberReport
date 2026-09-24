@@ -2,13 +2,13 @@
 
 namespace Routes;
 
-use Core\MiddlewareInterface;
+use Middleware\MiddlewareInterface;
 
 class Router
 {
     public static function dispatch(): void
     {
-        $config     = require __DIR__ . '/../../config/app.php';
+        $config     = require __DIR__ . '/../../Config/app.php';
         $uri        = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
         $baseFolder = '/' . trim($config['base_folder'], '/');
         $method     = $_SERVER['REQUEST_METHOD'];

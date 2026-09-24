@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace Controller;
 
 use Core\Controller;
+use Core\DAO;
 use Model\GerenciamentoUsuarioModel;
 
 class GerenciamentoUsuarioController extends Controller
@@ -11,8 +12,7 @@ class GerenciamentoUsuarioController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
 
         $this->usuario = new GerenciamentoUsuarioModel($conexao);
     }
@@ -83,7 +83,7 @@ class GerenciamentoUsuarioController extends Controller
 
         return false;
     }
-    
+
     public function excluir($id)
     {
         $this->usuario->excluirUsuario((int) $id);
@@ -101,7 +101,7 @@ class GerenciamentoUsuarioController extends Controller
         $maximo = strlen($caracteres) - 1;
 
         for($i = 0; $i < $tamanho; $i++){
-           $senha .= $caracteres[random_int(0, $maximo)]; 
+           $senha .= $caracteres[random_int(0, $maximo)];
         }
 
         return $senha;

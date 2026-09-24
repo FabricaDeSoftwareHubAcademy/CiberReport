@@ -1,23 +1,23 @@
 <?php
- 
+
 namespace Controller;
- 
+
 use Core\Controller;
+use Core\DAO;
 use Vulnerabilidades;
- 
+
 require_once __DIR__ . "/../Model/VulnerabilidadesModel.php";
- 
+
 class VulnerabilidadesController extends Controller
 {
     private $Vulnerabilidades;
- 
+
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->Vulnerabilidades = new Vulnerabilidades($conexao);
     }
- 
+
     public function index()
     {
         $vulnerabilidades = $this->Vulnerabilidades->listarVulnerabilidade();
@@ -44,17 +44,17 @@ class VulnerabilidadesController extends Controller
 
         $this->json(['status' => 400, 'msg' => $this->Vulnerabilidades->msgErro ?: 'Preencha todos os campos obrigatórios.']);
     }
- 
+
     public function listar()
     {
         return $this->Vulnerabilidades->listarVulnerabilidade();
     }
     public function buscar($id)
     {
-        
+
         return $this->Vulnerabilidades->buscarDadosVulnerabilidades((int) $id);
     }
- 
+
     public function cadastrarVulnerabilidade()
     {
         $id                         = trim($_POST['id'] ?? '');
@@ -70,21 +70,21 @@ class VulnerabilidadesController extends Controller
         $impacto_negocio            = trim($_POST['impacto_negocio'] ?? '');
         $responsavel                = trim($_POST['responsavel'] ?? '');
         $status                     = trim($_POST['status'] ?? 'ABERTA');
- 
+
         if (empty($nome) || empty($descricao) || empty($categoria) || empty($severidade_vulnerabilidade)) {
             return false;
         }
- 
+
         $resultado = $this->Vulnerabilidades->cadastrarVulnerabilidade(
             $id, $projeto_id, $nome,
             $cvss, $cve, $descricao,
             $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status
         );
- 
-        
+
+
         return $resultado;
     }
- 
+
     public function atualizar($id)
     {
         $nome                       = trim($_POST['nome'] ?? '');
@@ -98,22 +98,22 @@ class VulnerabilidadesController extends Controller
         $impacto_negocio            = trim($_POST['impacto_negocio'] ?? '');
         $responsavel                = trim($_POST['responsavel'] ?? '');
         $status                     = trim($_POST['status'] ?? 'ABERTA');
- 
+
         if (empty($nome) || empty($descricao) || empty($categoria) || empty($severidade_vulnerabilidade)) {
             return false;
         }
- 
+
         return $this->Vulnerabilidades->atualizarDadosVulnerabilidades(
             (int) $id, $nome, $cvss, $cve, $descricao,
             $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status
         );
     }
- 
+
     public function excluir($id)
     {
         return $this->Vulnerabilidades->excluirVulnerabilidades((int) $id);
     }
- 
+
     public function alterarStatus($id, $status)
     {
         return $this->Vulnerabilidades->alterarStatus((int) $id, (int) $status);

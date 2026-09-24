@@ -6,9 +6,10 @@ require_once __DIR__ . "/../Model/ProjetoValidator.php";
 require_once __DIR__ . "/../Model/EmpresaModel.php";
 
 use Core\Controller;
+use Core\DAO;
 use Empresa;
 use Exception;
-use Model\Projeto;
+use Model\ProjetoModel;
 use ProjetoValidator;
 
 class ProjetoController extends Controller
@@ -18,8 +19,7 @@ class ProjetoController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->projeto = new ProjetoModel($conexao);
         $this->empresa = new Empresa($conexao);
     }
@@ -43,7 +43,7 @@ class ProjetoController extends Controller
     {
         try {
             $dadosLimpos = ProjetoValidator::processarCadastro($_POST);
-            
+
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
                 $dadosLimpos['contrato'] = $caminhoContrato;
@@ -63,7 +63,7 @@ class ProjetoController extends Controller
     {
         try {
             $dadosLimpos = ProjetoValidator::processarEdicao($_POST);
-            
+
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
                 $dadosLimpos['contrato'] = $caminhoContrato;
@@ -110,7 +110,7 @@ class ProjetoController extends Controller
         $novoNome = hash('sha256', uniqid(rand(), true)) . '.' . $extensao;
 
         $diretorioDestino = __DIR__ . '/../uploads/contratos/';
-        
+
         if (!is_dir($diretorioDestino)) {
             mkdir($diretorioDestino, 0755, true);
         }

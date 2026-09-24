@@ -2,7 +2,6 @@
 
 namespace Middleware;
 
-use Core\MiddlewareInterface;
 use Override;
 
 class AuthMiddleware implements MiddlewareInterface

@@ -41,7 +41,7 @@ $clientes = method_exists($controller, 'listarClientes') ? $controller->listarCl
 
 <body>
     <?php
-    $tituloPagina = 'Gerenciamento perfil';
+    $tituloPagina = 'Gerenciamento de Perfil';
     include_once 'Components/menu.php';
     ?>
 

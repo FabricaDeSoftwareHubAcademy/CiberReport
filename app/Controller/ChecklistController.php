@@ -2,8 +2,9 @@
 
 namespace Controller;
 
-use Core\Controller;
 use ChecklistModel;
+use Core\Controller;
+use Core\DAO;
 
 require_once __DIR__ . '/../Model/ChecklistModel.php';
 
@@ -13,8 +14,7 @@ class ChecklistController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->checklistModel = new ChecklistModel($conexao);
     }
 
