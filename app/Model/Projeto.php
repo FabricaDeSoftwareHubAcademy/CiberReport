@@ -250,7 +250,9 @@ class Projeto
 
             $this->pdo->prepare("DELETE FROM projeto_alvo WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
             $this->pdo->prepare("DELETE FROM projeto_tipo_pentest WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
-            $this->pdo->prepare("DELETE FROM projeto_usuario WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
+            // O formulário só gerencia líder e especialistas; o GESTOR não aparece nele e
+            // não pode ser apagado por uma edição.
+            $this->pdo->prepare("DELETE FROM projeto_usuario WHERE projeto_id = :id AND papel IN ('LIDER', 'ESPECIALISTA')")->execute([':id' => $idProjeto]);
 
             $this->salvarAlvos($idProjeto, $dados['alvos'] ?? []);
             $this->salvarTiposPentest($idProjeto, $dados['tipos_pentest_ids'] ?? []);
