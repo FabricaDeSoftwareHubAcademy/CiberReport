@@ -63,9 +63,9 @@ CREATE TABLE IF NOT EXISTS empresa (
   cpf_responsavel CHAR(11) NOT NULL,
   telefone_responsavel VARCHAR(20) NOT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (id)
-  -- FOREIGN KEY (endereco_id) REFERENCES endereco(id),
-  -- FOREIGN KEY (responsavel_id) REFERENCES usuario(id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (endereco_id) REFERENCES endereco(id),
+  FOREIGN KEY (responsavel_id) REFERENCES usuario(id)
 );
 CREATE TABLE IF NOT EXISTS checklist (
   id INT NOT NULL AUTO_INCREMENT,
@@ -102,28 +102,31 @@ CREATE TABLE IF NOT EXISTS projeto (
   habilitado TINYINT NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
-  -- FOREIGN KEY (empresa_id) REFERENCES empresa(id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (empresa_id) REFERENCES empresa(id)
 );
 
--- Liga um projeto a um ou mais tipos de pentest (N:N).
--- Matheus Kill: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
-CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
+CREATE TABLE IF NOT EXISTS projeto_alvo (
+  id INT NOT NULL AUTO_INCREMENT,
   projeto_id INT NOT NULL,
-  tipo_pentest_id INT NOT NULL,
+  tipo ENUM('IP', 'DOMINIO', 'URL', 'APLICACAO', 'OUTRO') NOT NULL,
+  valor VARCHAR(255) NOT NULL,
+  descricao VARCHAR(255) DEFAULT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (projeto_id, tipo_pentest_id)
-  -- FOREIGN KEY (projeto_id) REFERENCES projeto(id),
-  -- FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id)
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_projeto_alvo (projeto_id, tipo, valor),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id)
 );
 CREATE TABLE IF NOT EXISTS projeto_usuario (
   projeto_id INT NOT NULL,
   usuario_id INT NOT NULL,
   papel ENUM('GESTOR', 'LIDER', 'ESPECIALISTA') NOT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (projeto_id, usuario_id, papel)
-  -- FOREIGN KEY (projeto_id) REFERENCES projeto(id),
-  -- FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+  PRIMARY KEY (projeto_id, usuario_id, papel),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 CREATE TABLE IF NOT EXISTS cronometro_registro (
   id INT NOT NULL AUTO_INCREMENT,
@@ -233,9 +236,21 @@ CREATE TABLE IF NOT EXISTS tipo_pentest (
   nivel_profundidade ENUM('BASIC', 'INTERMEDIATE', 'ADVANCED', 'RED_TEAM') NOT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id),
-  UNIQUE KEY uq_tipo_pentest_nome (nome)
-  -- FOREIGN KEY (categoria_id) REFERENCES categoria_pentest(id)
+  UNIQUE KEY uq_tipo_pentest_nome (nome),
+  FOREIGN KEY (categoria_id) REFERENCES categoria_pentest(id)
 );
+
+-- Liga um projeto a um ou mais tipos de pentest (N:N).
+-- Matheus Kill: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
+CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
+  projeto_id INT NOT NULL,
+  tipo_pentest_id INT NOT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (projeto_id, tipo_pentest_id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id)
+);
+
 CREATE TABLE IF NOT EXISTS tipo_pentest_framework (
   tipo_pentest_id INT NOT NULL,
   framework_id INT NOT NULL,
@@ -272,4 +287,36 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   -- item voltar pro checklist, a mesma linha é reativada.
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
+);
+
+
+-- Status de conclusão de checklist por projeto. Os itens aplicáveis a um
+-- projeto vêm de projeto_tipo_pentest -> tipo_pentest_checklist ->
+-- checklist_item_vinculo -> checklist_item_catalogo; esta tabela só guarda
+-- se cada item já foi concluído para aquele projeto específico.
+CREATE TABLE IF NOT EXISTS projeto_checklist_item (
+  id INT NOT NULL AUTO_INCREMENT,
+  projeto_id INT NOT NULL,
+  item_id INT NOT NULL,
+  concluido TINYINT NOT NULL DEFAULT 0,
+  concluido_em DATETIME DEFAULT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_projeto_checklist_item (projeto_id, item_id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (item_id) REFERENCES checklist_item_catalogo(id)
+);
+
+-- Log de atividades do projeto (auditoria simples), exibido na aba
+-- "Log de Atividades" do Andamento do Projeto.
+CREATE TABLE IF NOT EXISTS log_atividade (
+  id INT NOT NULL AUTO_INCREMENT,
+  projeto_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  tipo_evento VARCHAR(50) NOT NULL,
+  descricao VARCHAR(255) NOT NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
