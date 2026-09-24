@@ -4,12 +4,20 @@ use Controller\ProjetoController;
 $controller = new ProjetoController();
 $resultadoCadastro = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cadastrar') {
-    $resultadoCadastro = $controller->cadastrar();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['action'] ?? '';
+
+    if ($acao === 'cadastrar') {
+        $resultadoCadastro = $controller->cadastrar();
+    } elseif ($acao === 'editar') {
+        $resultadoCadastro = $controller->editar();
+    } elseif ($acao === 'excluir') {
+        $resultadoCadastro = $controller->excluir((int) ($_POST['id'] ?? 0));
+    }
 }
 
 $dados = $controller->listar();
-$empresas = $controller->listarEmpresasAtivas();
+$dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompleto(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +29,14 @@ $empresas = $controller->listarEmpresasAtivas();
     <title>Gerenciamento de Projetos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/gerenciamento-projeto.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/modal-stepper.css">
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/modal-cadastro-projeto.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/modal-andamento-projeto.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js" defer></script>
 </head>
 
 <body class="corpo-ger-projetos">
@@ -33,7 +46,12 @@ $empresas = $controller->listarEmpresasAtivas();
     ?>
     <main class="main-gerenciamento-projeto">
         <?php if ($resultadoCadastro !== null): ?>
-            <p role="status"><?= htmlspecialchars((string) $resultadoCadastro) ?></p>
+            <?php $tipoToast = str_starts_with($resultadoCadastro, 'Erro') ? 'erro' : 'sucesso'; ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    exibirToast('<?= $tipoToast ?>', '<?= addslashes($resultadoCadastro) ?>');
+                });
+            </script>
         <?php endif; ?>
 
 
@@ -101,13 +119,20 @@ $empresas = $controller->listarEmpresasAtivas();
                                 <td><?= htmlspecialchars($projeto['status']) ?></td>
                                 <td>
                                     <div class="acoes">
-                                        <button title="Visualizar" aria-label="Visualizar">
+                                        <button title="Visualizar" aria-label="Visualizar"
+                                            data-modal-target="modal-andamento-projeto"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
-                                        <button class="btn-editar" title="Editar" aria-label="Editar">
+                                        <button class="btn-editar" title="Editar" aria-label="Editar"
+                                            data-modal-target="modal-cadastro-projeto"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
+                                            data-modo="editar">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
-                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir">
+                                        <button class="btn-excluir" title="Excluir" aria-label="Excluir"
+                                            data-projeto-id="<?= (int) $projeto['id'] ?>"
+                                            data-projeto-nome="<?= htmlspecialchars($projeto['nome']) ?>">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
@@ -133,35 +158,15 @@ $empresas = $controller->listarEmpresasAtivas();
 
     </main>
 
-    <div class="modal-overlay" data-modal-target="modal-cadastro-projeto" id="modal-cadastro-projeto">
-        <div class="modal modal--xl">
-            <div class="modal__header">
-                <div class="modal__header-icone"><i class=""></i></div>
-                <div class="modal__header-texto">
-                    <h2 class="modal__titulo">Cadastro de Projeto</h2>
-                    <p class="modal__subtitulo">Informações da empresa contratante e do projeto</p>
-                </div>
-                <button type="button" class="modal__fechar" data-modal-close>&times;</button>
-            </div>
-            <div class="modal__body">
-                <form action="" method="post">
-                    <section class="modal__secao">
-                        <h3 class="modal__secao-titulo">Informações do Cliente</h3>
-                        <div class="modal__secao-conteudo">
-                            <div class="input-group">
-                                <label for="nome_cliente">Nome da Empresa</label>
-                                <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Digite o nome da empresa" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="nome_projeto">Nome do Projeto</label>
-                                <input type="text" name="nome_projeto" id="nome_projeto" placeholder="Digite o nome do projeto" required>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </div>
-        </div>
-    </div>
+    <form id="form-excluir-projeto" method="post" style="display:none">
+        <input type="hidden" name="action" value="excluir">
+        <input type="hidden" name="id" id="excluir-projeto-id">
+    </form>
+
+    <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
+    <?php include __DIR__ . '/Components/modal-andamento-projeto/index.php'; ?>
+    <?php include 'Components/popup_salvar.php'; ?>
+    <?php include 'Components/toast.php'; ?>
 </body>
 
 </html>

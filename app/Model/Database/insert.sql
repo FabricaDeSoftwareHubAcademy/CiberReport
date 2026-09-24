@@ -41,7 +41,7 @@ INSERT INTO perfil_permissao (perfil_id, permissao_id) VALUES
 -- usuario
 -- ---------------------------------------------------------
 INSERT INTO usuario (perfil_id, nome, cpf, email, senha, telefone, cargo, especialidade, habilitado, ultimo_login) VALUES
-(1, 'Admin', '00011122233', 'fabrica544adm@gmail.com', '$2y$10$vDX.v5EW3upM8nMTTcEVjOFma827joiocXJoSHO4GALXKuQXKSg62', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
+(1, 'Admin', '00011122233', 'fabrica544adm@gmail.com', '$2y$10$DZjm9gAQedyv/jJdoLyRD.L4f0RV9mzf8Tp9L5gcHbPqRCAgN.ltS', '(67) 99876-5432', 'Administrador de Sistema', NULL, 1, '2026-06-25 09:14:00'),
 (2, 'Caio', '11122233344', 'caiovv1@outlook.com', '$2y$10$abcd1234efgh5678ijklmn', '(67) 99123-4567', 'Pentester Sênior', 'Aplicações Web', 1, '2026-06-24 17:32:00'),
 (2, 'Rafael Rotela', '22233344455', 'rjvrafael22@gmail.com', '$2y$10$opqr9876stuv5432wxyz12', '(67) 99234-5678', 'Pentester Pleno', 'Infraestrutura de Redes', 1, '2026-06-23 14:05:00'),
 (2, 'Fabio', '33344455566', 'fabioelie@hotmail.com', '$2y$10$lmno3456pqrs7890tuvw34', '(67) 99345-6789', 'Pentester Júnior', 'Mobile', 1, '2026-06-22 10:48:00'),
@@ -61,8 +61,8 @@ INSERT INTO endereco (cep, rua, numero, complemento, bairro, cidade, estado, pai
 -- empresa
 -- ---------------------------------------------------------
 INSERT INTO empresa (endereco_id, responsavel_id, nome_fantasia, razao_social, cnpj, email_contato, telefone, responsavel, email_responsavel, cpf_responsavel, telefone_responsavel, habilitado) VALUES
-(1, 5, 'TechPantanal Soluções', 'TechPantanal Soluções em Tecnologia LTDA', '12.345.678/0001-90', 'contato@techpantanal.com.br', '(67) 3321-4455', 'Carlos Mendes', 'carlos.mendes@techpantanal.com.br', '44455566677', '(67) 99456-7890', 1),
-(3, 5, 'Finasul Bank', 'Finasul Instituição Financeira S.A.', '98.765.432/0001-10', 'seguranca@finasul.com.br', '(11) 3987-6655', 'Carlos Mendes', 'carlos.mendes@finasul.com.br', '44455566677', '(67) 99456-7890', 1);
+(1, 5, 'TechPantanal Soluções', 'TechPantanal Soluções em Tecnologia LTDA', '12.345.678/0001-90', 'contato@techpantanal.com.br', '(67) 3321-4455', 'Izadora', 'izadoraaparecidasilvapereira@gmail.com', '44455566677', '(67) 99456-7890', 1),
+(3, 5, 'Finasul Bank', 'Finasul Instituição Financeira S.A.', '98.765.432/0001-10', 'seguranca@finasul.com.br', '(11) 3987-6655', 'Izadora', 'izadoraaparecidasilvapereira@gmail.com', '44455566677', '(67) 99456-7890', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
@@ -103,6 +103,15 @@ INSERT INTO projeto_usuario (projeto_id, usuario_id, papel, habilitado) VALUES
 (2, 3, 'LIDER', 1),
 (2, 2, 'ESPECIALISTA', 1),
 (2, 1, 'GESTOR', 1);
+
+-- ---------------------------------------------------------
+-- projeto_alvo
+-- ---------------------------------------------------------
+INSERT INTO projeto_alvo (projeto_id, tipo, valor, descricao) VALUES
+(1, 'URL', 'https://portal.techpantanal.com.br', 'Portal institucional'),
+(1, 'URL', 'https://api.techpantanal.com.br/auth', 'API de autenticação'),
+(2, 'IP', '10.20.1.5', 'Servidor de arquivos'),
+(2, 'IP', '10.20.0.1', 'Switch core');
 
 -- ---------------------------------------------------------
 -- cronometro_registro
@@ -270,3 +279,29 @@ SELECT
   checklist_id,
   id
 FROM checklist_item;
+
+-- ---------------------------------------------------------
+-- projeto_checklist_item
+-- Itens aplicáveis derivados de projeto_tipo_pentest -> tipo_pentest_checklist:
+-- projeto 1 (tipos 1,7) -> checklist 1 -> itens 1-4; projeto 2 (tipo 6) -> checklist 2 -> itens 5-6.
+-- ---------------------------------------------------------
+INSERT INTO projeto_checklist_item (projeto_id, item_id, concluido, concluido_em) VALUES
+(1, 1, 1, '2026-05-06 10:00:00'),
+(1, 2, 1, '2026-05-07 14:30:00'),
+(1, 3, 1, '2026-05-09 09:15:00'),
+(1, 4, 0, NULL),
+(2, 5, 1, '2026-06-03 11:00:00'),
+(2, 6, 0, NULL);
+
+-- ---------------------------------------------------------
+-- log_atividade
+-- ---------------------------------------------------------
+INSERT INTO log_atividade (projeto_id, usuario_id, tipo_evento, descricao, criado_em) VALUES
+(1, 2, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.', '2026-05-04 08:00:00'),
+(1, 2, 'ANALISTA_ALOCADO', 'Fabio alocado(a) ao projeto.', '2026-05-04 08:30:00'),
+(1, 2, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Injeção SQL no formulário de login (Crítica - CVSS 9.1).', '2026-05-05 09:14:00'),
+(1, 2, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Cross-Site Scripting (XSS) Refletido (Média - CVSS 6.1).', '2026-05-06 09:00:00'),
+(2, 3, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.', '2026-06-01 08:00:00'),
+(2, 3, 'ANALISTA_ALOCADO', 'Caio alocado(a) ao projeto.', '2026-06-01 08:30:00'),
+(2, 3, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Compartilhamento SMB sem autenticação (Alta - CVSS 7.5).', '2026-06-02 08:50:00'),
+(2, 3, 'VULNERABILIDADE_CRIADA', 'Nova vulnerabilidade: Credenciais padrão em switch de rede (Média - CVSS 5.3).', '2026-06-02 09:00:00');

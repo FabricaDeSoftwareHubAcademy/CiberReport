@@ -1,0 +1,218 @@
+/* =============================================================================
+   modal-stepper.css
+   Estilos reutilizáveis para:
+     - Stepper de passos (cad-projeto-stepper)
+     - Botões padrão do footer do modal (btn, btn--primario, btn--secundario)
+     - Seções de revisão (revisao-secao, revisao-campo)
+   Usado por: qualquer modal que implemente um fluxo de passos
+============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   STEPPER
+----------------------------------------------------------------------------- */
+.cad-projeto-stepper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.cad-projeto-stepper__item {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    cursor: default;
+}
+
+.cad-projeto-stepper__numero {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--cor-cinza-secundario);
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-apoio);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transicao-base), color var(--transicao-base);
+}
+
+.cad-projeto-stepper__label {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+    white-space: nowrap;
+    transition: color var(--transicao-base);
+}
+
+.cad-projeto-stepper__item--ativo .cad-projeto-stepper__numero {
+    background-color: var(--cor-azul-primaria);
+    color: #fff;
+}
+
+.cad-projeto-stepper__item--ativo .cad-projeto-stepper__label {
+    color: var(--cor-texto-primario);
+    font-weight: 600;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__numero {
+    background-color: var(--cor-verde);
+    color: #fff;
+    font-size: 0;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__numero::after {
+    content: "\2713";
+    font-size: var(--fonte-apoio);
+    font-weight: 700;
+}
+
+.cad-projeto-stepper__item--concluido .cad-projeto-stepper__label {
+    color: var(--cor-verde);
+}
+
+.cad-projeto-stepper__separador {
+    flex: 1;
+    height: 1px;
+    background-color: var(--cor-borda-padrao);
+    margin: 0 var(--espaco-sm);
+    min-width: 40px;
+}
+
+/* -----------------------------------------------------------------------------
+   BOTÕES DO FOOTER DO MODAL
+----------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    height: 44px;
+    padding: 0 var(--espaco-xl);
+    border-radius: var(--raio-md);
+    font-family: var(--fonte-familia-corpo);
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+        background-color var(--transicao-rapida),
+        border-color var(--transicao-rapida),
+        color var(--transicao-rapida);
+    text-decoration: none;
+}
+
+.btn--primario {
+    background-color: var(--cor-azul-primaria);
+    color: #fff;
+    border-color: var(--cor-azul-primaria);
+}
+
+.btn--primario:hover {
+    background-color: var(--cor-azul-destaques);
+    border-color: var(--cor-azul-destaques);
+}
+
+.btn--secundario {
+    background-color: transparent;
+    color: var(--cor-texto-primario);
+    border-color: var(--cor-borda-padrao);
+}
+
+.btn--secundario:hover {
+    background-color: var(--cor-cinza-hover);
+}
+
+/* -----------------------------------------------------------------------------
+   SEÇÕES DE REVISÃO (passo final dos modais com stepper)
+----------------------------------------------------------------------------- */
+/* Escopado a #modal-cadastro-projeto: .revisao-* já existe em
+   componentes-modal.css com outro visual (caixa tipo input, usado pelo
+   modal de tipo de pentest) e essas regras concorrem propriedade por
+   propriedade, não regra inteira — sem o escopo, sobra borda/fundo/padding
+   do outro componente aqui. O prefixo por id garante prioridade sem
+   depender de ordem de carregamento dos <link>. */
+#modal-cadastro-projeto .revisao-secao {
+    /* O passo (.modal__body.stepper-conteudo) é flex-column; sem isso, o
+       flexbox encolhe cada seção abaixo da altura que o conteúdo precisa
+       quando os 5 blocos juntos não cabem na área visível, e como a seção
+       tem overflow:hidden, a sobra corta em vez de rolar — a última linha
+       da última seção (Alocar Equipe > Analista) sumia por causa disso. */
+    flex-shrink: 0;
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: var(--raio-md);
+    overflow: hidden;
+    margin-bottom: var(--espaco-md);
+}
+
+#modal-cadastro-projeto .revisao-secao__cabecalho {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-sm);
+    padding: var(--espaco-sm) var(--espaco-md);
+    background-color: var(--cor-fundo-branco);
+    border-bottom: 1px solid var(--cor-borda-padrao);
+}
+
+#modal-cadastro-projeto .revisao-secao__titulo {
+    font-size: var(--fonte-apoio);
+    font-weight: 600;
+    color: var(--cor-texto-primario);
+}
+
+#modal-cadastro-projeto .revisao-secao__corpo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espaco-sm) var(--espaco-md);
+    padding: var(--espaco-md);
+}
+
+#modal-cadastro-projeto .revisao-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#modal-cadastro-projeto .revisao-campo--full {
+    grid-column: 1 / -1;
+}
+
+#modal-cadastro-projeto .revisao-campo__rotulo {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-secundario);
+}
+
+#modal-cadastro-projeto .revisao-campo__valor {
+    font-size: var(--fonte-apoio);
+    color: var(--cor-texto-primario);
+    font-weight: 500;
+    word-break: break-word;
+    background: none;
+    border: none;
+    padding: 0;
+    min-height: 0;
+    display: block;
+}
+
+/* -----------------------------------------------------------------------------
+   MODO SOMENTE LEITURA (botão "Visualizar" da tabela)
+----------------------------------------------------------------------------- */
+.modal--somente-leitura .modal__body input:disabled,
+.modal--somente-leitura .modal__body textarea:disabled,
+.modal--somente-leitura .modal__body select:disabled {
+    background-color: var(--cor-cinza-secundario);
+    color: var(--cor-texto-primario);
+    opacity: 1;
+    cursor: default;
+}
+
+.modal--somente-leitura .modal__body button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.modal--somente-leitura .campo__dropzone {
+    pointer-events: none;
+    opacity: 0.6;
+}

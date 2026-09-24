@@ -2,6 +2,13 @@
 
 use Routes\Router;
 
+// Servidor embutido do PHP (php -S) com router script: sem isso, toda
+// requisição (inclusive CSS/JS/imagens) cai no Router::dispatch() e recebe
+// 404, já que nenhuma rota bate com esses caminhos.
+if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
+    return false;
+}
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config/mailer.php';
 

@@ -37,4 +37,10 @@ class UsuarioModel {
             "UPDATE usuario SET senha = ?, reset_token = NULL, reset_token_expira = NULL WHERE id = ?"
         )->execute([$hash, $id]);
     }
+
+    public function listarAtivosParaSelecao(): array {
+        $stmt = $this->conexao->prepare("SELECT id, nome FROM usuario WHERE habilitado = 1 ORDER BY nome");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
