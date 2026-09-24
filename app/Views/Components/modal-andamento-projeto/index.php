@@ -48,7 +48,7 @@
                 <span class="modal__footer-info" id="and-vulns-extra"></span>
             </div>
             <div class="modal-meta-celula">
-                <span class="modal-meta-celula__rotulo">Horas Restantes</span>
+                <span class="modal-meta-celula__rotulo" id="and-horas-restantes-rotulo">Horas Restantes</span>
                 <span class="modal-meta-celula__valor" id="and-horas-restantes">—</span>
             </div>
             <div class="modal-meta-celula">

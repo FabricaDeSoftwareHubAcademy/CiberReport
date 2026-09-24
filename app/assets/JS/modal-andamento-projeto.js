@@ -38,9 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function minutosParaTexto(minutos) {
-        const h = Math.floor(minutos / 60);
-        const m = minutos % 60;
-        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        const absoluto = Math.abs(minutos);
+        const h = Math.floor(absoluto / 60);
+        const m = absoluto % 60;
+        return `${minutos < 0 ? '-' : ''}${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
     }
 
     function paraTituloCase(texto) {
@@ -98,7 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('and-vulns-total', String(totalVulns));
         setText('and-vulns-extra', `${criticas} críticas · ${altas} altas`);
 
-        setText('and-horas-restantes', minutosParaTexto(projeto.horas_restantes_minutos));
+        // Passou do contratado: mostra o excedente em vez de "0:00 restantes".
+        const estourou = projeto.horas_restantes_minutos < 0;
+        setText('and-horas-restantes-rotulo', estourou ? 'Horas Excedidas' : 'Horas Restantes');
+        setText('and-horas-restantes', estourou
+            ? '+' + minutosParaTexto(-projeto.horas_restantes_minutos)
+            : minutosParaTexto(projeto.horas_restantes_minutos));
 
         const checklistPendentes = projeto.checklist_total - projeto.checklist_concluidos;
         setText('and-checklist-pendentes', String(checklistPendentes));
@@ -120,7 +126,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const barra = document.getElementById('and-horas-barra');
         if (barra) barra.style.width = Math.min(100, percentual) + '%';
         setText('and-horas-consumidas-legenda', minutosParaTexto(projeto.horas_consumidas_minutos));
-        setText('and-horas-restantes-legenda', minutosParaTexto(projeto.horas_restantes_minutos));
+        setText('and-horas-restantes-legenda', estourou
+            ? '+' + minutosParaTexto(-projeto.horas_restantes_minutos)
+            : minutosParaTexto(projeto.horas_restantes_minutos));
+        setText('and-horas-restantes-legenda-rotulo', estourou ? 'excedidas' : 'restantes');
+
+        const aviso = document.getElementById('and-horas-aviso');
+        if (aviso) {
+            aviso.style.display = estourou ? 'inline-flex' : 'none';
+            aviso.textContent = estourou
+                ? `Atenção: o projeto ultrapassou em ${minutosParaTexto(-projeto.horas_restantes_minutos)} as horas contratadas.`
+                : '';
+        }
 
         // ---- Aba Vulnerabilidade ----
         const severidadeEntradas = Object.entries(projeto.vulnerabilidades_por_severidade)

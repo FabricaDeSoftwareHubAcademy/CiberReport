@@ -61,7 +61,9 @@ class ProjetoController extends Controller
             $minutosConsumidos = $this->andamento->buscarHoras($idProjeto)['horas_consumidas_minutos'];
             $horasContratadas = (float) $projeto['horas_contratadas'];
             $minutosContratados = (int) round($horasContratadas * 60);
-            $minutosRestantes = max(0, $minutosContratados - $minutosConsumidos);
+            // Pode ficar negativo de propósito: o projeto é contratado por horas,
+            // e passar do contratado deve ser informado (não proibido nem escondido).
+            $minutosRestantes = $minutosContratados - $minutosConsumidos;
 
             $vulnerabilidades = $this->andamento->buscarVulnerabilidades($idProjeto);
             $porSeveridade = ['CRITICA' => 0, 'ALTA' => 0, 'MEDIA' => 0, 'BAIXA' => 0, 'INFO' => 0];
