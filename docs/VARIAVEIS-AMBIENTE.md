@@ -89,7 +89,7 @@ $conexao = new mysqli($host, $user, $pass, $banco);
 ```
 
 
-### Exemplo prático com o `conexao.php`
+### Exemplo prático com o `DAO::conexao()`
 
 Antes (credenciais fixas no código — ruim):
 ```php

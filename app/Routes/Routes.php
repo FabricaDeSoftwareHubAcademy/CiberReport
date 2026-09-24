@@ -1,6 +1,6 @@
 <?php
 
-use http\Route;
+use Routes\Route;
 use Middleware\AuthMiddleware;
 
 // Públicas
@@ -19,7 +19,12 @@ Route::middleware([AuthMiddleware::class], function (): void {
     Route::POST('/logout', 'AuthController@logout');
 
     Route::GET('/gerenciar-pentest', 'TipoPentestController@index');
-    Route::POST('/gerenciar-pentest', 'TipoPentestController@index');
+
+    Route::GET('/tipo-pentest/listar', 'TipoPentestController@listar');
+    Route::GET('/tipo-pentest/buscar', 'TipoPentestController@buscar');
+    Route::POST('/tipo-pentest/cadastro', 'TipoPentestController@cadastro');
+    Route::POST('/tipo-pentest/exclusao', 'TipoPentestController@exclusao');
+    Route::POST('/tipo-pentest/status', 'TipoPentestController@status');
 
     Route::GET('/usuario', 'GerenciamentoUsuarioController@index');
     Route::POST('/usuario', 'GerenciamentoUsuarioController@index');
@@ -29,6 +34,7 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/vulnerabilidades', 'VulnerabilidadesController@index');
     Route::POST('/vulnerabilidades', 'VulnerabilidadesController@index');
+    Route::POST('/vulnerabilidades/salvar', 'VulnerabilidadesController@salvar');
 
     Route::GET('/cliente-empresa', 'CadastroEmpresaController@index');
     Route::POST('/cliente-empresa', 'CadastroEmpresaController@index');
@@ -41,9 +47,7 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/dashboard-gestor', 'DashboardGestorController@index');
     Route::POST('/dashboard-gestor', 'DashboardGestorController@index');
-    
+
     Route::GET('/projetos-alocados','ProjetosAlocadosController@index');
     Route::POST('/projetos-alocados','ProjetosAlocadosController@index');
 });
-
-

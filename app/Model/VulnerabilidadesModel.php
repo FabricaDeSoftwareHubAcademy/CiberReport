@@ -11,9 +11,11 @@
         const MAX_DESCRICAO = 100;
         const MAX_DESCRICAO_TECNICA = 150;
         const MAX_IMPACTO = 100;
+        const MAX_RESPONSAVEL = 100;
  
         const CATEGORIAS_VALIDAS = ['API', 'Aplicação Web', 'Infraestrutura', 'Mobile', 'Rede'];
         const SEVERIDADES_VALIDAS = ['ALTA', 'BAIXA', 'CRITICA', 'MEDIA'];
+        const STATUS_VALIDOS = ['ABERTA', 'ACEITA', 'CORRIGIDA', 'EM_ANALISE', 'FALSO_POSITIVO'];
  
         public function __construct($pdo)
         {
@@ -21,7 +23,7 @@
         }
  
  
-        private function validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)
+        private function validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio, $responsavel, $status)
         {
  
             $nome = trim($nome);
@@ -73,13 +75,25 @@
                 $this->msgErro = "Severidade inválida.";
                 return false;
             }
+
+
+            if (mb_strlen($responsavel, 'UTF-8') > self::MAX_RESPONSAVEL) {
+                $this->msgErro = "Responsável muito longo (máx. " . self::MAX_RESPONSAVEL . " caracteres).";
+                return false;
+            }
+
+
+            if (!in_array($status, self::STATUS_VALIDOS, true)) {
+                $this->msgErro = "Status inválido.";
+                return false;
+            }
  
             return true;
         }
  
-       public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
+       public function cadastrarVulnerabilidade($id, $projeto_id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status)
         {
-            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)) {
+            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio, $responsavel, $status)) {
                 return false;
             }
  
@@ -94,9 +108,9 @@
             }
  
             $sql = $this->pdo->prepare("INSERT INTO vulnerabilidade
-                (projeto_id, nome, cvss, cve, descricao, descricao_tecnica, categoria, severidade_vulnerabilidade, habilitado, impacto_negocio)
+                (projeto_id, nome, cvss, cve, descricao, descricao_tecnica, categoria, severidade_vulnerabilidade, habilitado, impacto_negocio, responsavel, status)
                 VALUES
-                (:projeto_id, :nome, :cvss, :cve, :descricao, :descricao_tecnica, :categoria, :severidade_vulnerabilidade, :habilitado, :impacto_negocio)");
+                (:projeto_id, :nome, :cvss, :cve, :descricao, :descricao_tecnica, :categoria, :severidade_vulnerabilidade, :habilitado, :impacto_negocio, :responsavel, :status)");
  
             $sql->bindValue(":projeto_id", $projeto_id);
             $sql->bindValue(":nome", $nome);
@@ -108,6 +122,8 @@
             $sql->bindValue(":severidade_vulnerabilidade", $severidade_vulnerabilidade);
             $sql->bindValue(":habilitado", $habilitado);
             $sql->bindValue(":impacto_negocio", $impacto_negocio);
+            $sql->bindValue(":responsavel", $responsavel !== '' ? $responsavel : null);
+            $sql->bindValue(":status", $status);
             $sql->execute();
  
             return true;
@@ -115,12 +131,23 @@
  
         public function listarVulnerabilidade()
         {
-            $sql = $this->pdo->prepare("SELECT * FROM vulnerabilidade ORDER BY nome");
+            $sql = $this->pdo->prepare("SELECT v.*, p.nome AS projeto_nome
+                FROM vulnerabilidade v
+                LEFT JOIN projeto p ON p.id = v.projeto_id
+                ORDER BY v.id");
             $sql->execute();
  
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
  
+        public function listarProjetos()
+        {
+            $sql = $this->pdo->prepare("SELECT id, nome FROM projeto WHERE habilitado = 1 ORDER BY nome");
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function excluirVulnerabilidades($id)
         {
             $sql = $this->pdo->prepare("DELETE FROM vulnerabilidade WHERE id = :id");
@@ -139,9 +166,9 @@
             return $sql->fetch(PDO::FETCH_ASSOC);
         }
  
-        public function atualizarDadosVulnerabilidades($id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio)
+        public function atualizarDadosVulnerabilidades($id, $nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $habilitado, $impacto_negocio, $responsavel, $status)
         {
-            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio)) {
+            if (!$this->validarDados($nome, $cvss, $cve, $descricao, $descricao_tecnica, $categoria, $severidade_vulnerabilidade, $impacto_negocio, $responsavel, $status)) {
                 return false;
             }
  
@@ -154,7 +181,9 @@
                 categoria = :categoria,
                 severidade_vulnerabilidade = :severidade_vulnerabilidade,
                 habilitado = :habilitado,
-                impacto_negocio = :impacto_negocio
+                impacto_negocio = :impacto_negocio,
+                responsavel = :responsavel,
+                status = :status
                 WHERE id = :id");
  
             $sql->bindValue(":nome", $nome);
@@ -166,12 +195,14 @@
             $sql->bindValue(":severidade_vulnerabilidade", $severidade_vulnerabilidade);
             $sql->bindValue(":habilitado", $habilitado);
             $sql->bindValue(":impacto_negocio", $impacto_negocio);
+            $sql->bindValue(":responsavel", $responsavel !== '' ? $responsavel : null);
+            $sql->bindValue(":status", $status);
             $sql->bindValue(":id", $id);
             $sql->execute();
- 
-            return $sql->rowCount() > 0;
+
+            return true;
         }
- 
+
         public function alterarStatus($id, $habilitado)
         {
             $sql = $this->pdo->prepare("UPDATE vulnerabilidade SET habilitado = :habilitado WHERE id = :id");

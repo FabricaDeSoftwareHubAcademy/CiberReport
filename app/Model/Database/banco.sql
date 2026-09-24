@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS usuario (
   especialidade VARCHAR(80) DEFAULT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   ultimo_login DATETIME DEFAULT NULL,
-  PRIMARY KEY (id)
+  reset_token VARCHAR(64) NULL,
+  reset_token_expira DATETIME NULL,
+  PRIMARY KEY (id),
+  INDEX idx_reset_token (reset_token)
   -- FOREIGN KEY (perfil_id) REFERENCES perfil_acesso(id)
 );
 CREATE TABLE IF NOT EXISTS endereco (
@@ -165,6 +168,8 @@ CREATE TABLE IF NOT EXISTS vulnerabilidade (
   severidade_vulnerabilidade ENUM('BAIXA', 'MEDIA', 'ALTA', 'CRITICA') NOT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   impacto_negocio TEXT,
+  responsavel VARCHAR(100) DEFAULT NULL,
+  status ENUM('ABERTA', 'ACEITA', 'CORRIGIDA', 'EM_ANALISE', 'FALSO_POSITIVO') NOT NULL DEFAULT 'ABERTA',
   PRIMARY KEY (id)
   -- FOREIGN KEY (projeto_id) REFERENCES projeto(id)
 );
@@ -284,10 +289,6 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE usuario
-ADD COLUMN reset_token VARCHAR(64) NULL,
-ADD COLUMN reset_token_expira DATETIME NULL,
-ADD INDEX idx_reset_token (reset_token);
 
 -- Status de conclusão de checklist por projeto. Os itens aplicáveis a um
 -- projeto vêm de projeto_tipo_pentest -> tipo_pentest_checklist ->

@@ -18,16 +18,15 @@ class ProjetoController extends Controller
 {
     private $projeto;
     private $empresa;
-    private $tipoPentest;
     private $usuario;
     private $andamento;
 
     public function __construct()
     {
-        $conexao = require __DIR__ . '/../Model/conexao.php';
+        require_once __DIR__ . '/../DAO/DAO.php';
+        $conexao = \DAO\DAO::conexao();
         $this->projeto = new Projeto($conexao);
         $this->empresa = new Empresa($conexao);
-        $this->tipoPentest = new TipoPentest($conexao);
         $this->usuario = new UsuarioModel($conexao);
         $this->andamento = new Andamento($conexao);
     }
@@ -134,7 +133,7 @@ class ProjetoController extends Controller
 
     public function listarTiposPentestAtivos()
     {
-        return $this->tipoPentest->listarAtivosParaSelecao();
+        return TipoPentest::listarAtivosParaSelecao();
     }
 
     public function listarUsuariosAtivos()

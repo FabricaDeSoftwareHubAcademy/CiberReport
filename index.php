@@ -1,6 +1,6 @@
 <?php
 
-use Core\Router;
+use Routes\Router;
 
 // Servidor embutido do PHP (php -S) com router script: sem isso, toda
 // requisição (inclusive CSS/JS/imagens) cai no Router::dispatch() e recebe
@@ -29,5 +29,5 @@ $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https
 $dominio   = $_SERVER['HTTP_HOST'];
 define("BASE_URL", $protocolo . $dominio . $config['base_folder']);
 
-require_once __DIR__ . "/app/routes/main.php";
+require_once __DIR__ . "/app/Routes/Routes.php";
 Router::dispatch();
