@@ -18,6 +18,7 @@
  
 <body>
     <?php $tituloPagina = 'Vulnerabilidades';
+    $contagem = array_count_values(array_column($vulnerabilidades ?? [], 'severidade_vulnerabilidade'));
     include_once 'Components/menu.php'; ?>
     <main>
         <div class="barra-acoes">
@@ -29,19 +30,19 @@
         <div class="cards-resumo">
             <div class="card-resumo">
                 <span class="card-label">Críticas</span>
-                <span class="card-valor critica" id="qtdCriticas">0</span>
+                <span class="card-valor critica" id="qtdCriticas"><?= $contagem['CRITICA'] ?? 0 ?></span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Altas</span>
-                <span class="card-valor alta" id="qtdAltas">0</span>
+                <span class="card-valor alta" id="qtdAltas"><?= $contagem['ALTA'] ?? 0 ?></span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Médias</span>
-                <span class="card-valor media" id="qtdMedias">0</span>
+                <span class="card-valor media" id="qtdMedias"><?= $contagem['MEDIA'] ?? 0 ?></span>
             </div>
             <div class="card-resumo">
                 <span class="card-label">Baixas</span>
-                <span class="card-valor baixa" id="qtdBaixas">0</span>
+                <span class="card-valor baixa" id="qtdBaixas"><?= $contagem['BAIXA'] ?? 0 ?></span>
             </div>
         </div>
  
@@ -74,10 +75,42 @@
                     </tr>
                 </thead>
                 <tbody id="corpoTabelaVulnerabilidades">
-                    <?php /*
-                        Linhas removidas — dados mocados eram só placeholder de layout.
-                        Aqui entra o loop PHP puxando do banco (PDO)
-                    */ ?>
+                    <?php foreach ($vulnerabilidades as $v):
+                        $sev = strtolower($v['severidade_vulnerabilidade']);
+                        $cvss = (float) $v['cvss'];
+                        $crit = $cvss >= 9 ? 'critica' : ($cvss >= 7 ? 'alta' : ($cvss >= 4 ? 'media' : 'baixa'));
+                        $rotulos = ['critica' => 'Crítica', 'alta' => 'Alta', 'media' => 'Média', 'baixa' => 'Baixa'];
+                    ?>
+                        <tr>
+                            <td>
+                                <div class="id-cell">
+                                    <div class="id-info">
+                                        <span class="id-num">VulnID - <?= str_pad((int) $v['id'], 3, '0', STR_PAD_LEFT) ?></span>
+                                        <?php if (!empty($v['cve'])): ?>
+                                            <span class="contrib"><?= htmlspecialchars($v['cve']) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($v['nome']) ?></td>
+                            <td class="ativo-link"><?= htmlspecialchars($v['projeto_nome'] ?? '-') ?></td>
+                            <td class="resumo-texto"><?= htmlspecialchars($v['descricao'] ?? '') ?></td>
+                            <td><span class="badge badge-<?= $sev ?>"><?= $rotulos[$sev] ?? htmlspecialchars($v['severidade_vulnerabilidade']) ?></span></td>
+                            <td><span class="badge badge-<?= $crit ?>"><?= $rotulos[$crit] ?></span></td>
+                            <td class="cvss"><?= number_format($cvss, 1) ?></td>
+                            <td>
+                                <div class="acoes">
+                                    <button title="Visualizar" aria-label="Visualizar" data-id="<?= (int) $v['id'] ?>">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                    <button class="tabela-btn-editar" title="Editar" aria-label="Editar" data-id="<?= (int) $v['id'] ?>"
+                                        data-vuln="<?= htmlspecialchars(json_encode($v, JSON_UNESCAPED_UNICODE), ENT_QUOTES) ?>">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -97,7 +130,7 @@
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <div class="modal__header-texto">
-                        <h2 class="modal__titulo">Nova Vulnerabilidade</h2>
+                        <h2 class="modal__titulo" id="tituloModalVuln">Nova Vulnerabilidade</h2>
                         <p class="modal__subtitulo">Informação da vulnerabilidade encontrada.</p>
                     </div>
                     <button type="button" class="modal__fechar" data-modal-close>&times;</button>
@@ -119,10 +152,25 @@
                         Caso contrário, adicione um <select> para o usuário escolher o projeto.
                     -->
  
+                    <input type="hidden" id="vulnId" name="id" value="" />
+
+                    <div class="campo">
+                        <label class="campo__label campo__label--obrigatorio" for="projetoId">Projeto:</label>
+                        <div class="campo__select-wrapper">
+                            <select class="campo__select" id="projetoId" name="projeto_id" required>
+                                <option value="" disabled selected>Selecione o projeto</option>
+                                <?php foreach ($projetos as $p): ?>
+                                    <option value="<?= (int) $p['id'] ?>"><?= htmlspecialchars($p['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+
                     <div class="modal-grade modal-grade--3">
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="nomeVuln">Nome da Vulnerabilidade:</label>
-                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" maxlength="150" required />
+                            <input class="campo__input" type="text" id="nomeVuln" name="nomeVuln" placeholder="Ex: SQL Injection" maxlength="80" required />
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="cvssScore">CVSS Score:</label>
@@ -152,14 +200,14 @@
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="impactos">Impactos:</label>
-                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="200" required></textarea>
+                            <textarea class="campo__textarea" id="impactos" name="impactos" placeholder="Descreva o impacto potencial" maxlength="100" required></textarea>
                         </div>
                     </div>
  
                     <div class="modal-grade">
                         <div class="campo">
                             <label class="campo__label" for="responsavel">Responsável:</label>
-                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="20" />
+                            <input class="campo__input" type="text" id="responsavel" name="responsavel" placeholder="Nome do Responsável" maxlength="100" />
                         </div>
                         <div class="campo">
                             <label class="campo__label campo__label--obrigatorio" for="severidade">Severidade:</label>
@@ -219,11 +267,11 @@
                                 -->
                                 <select class="campo__select" id="status" name="status" required>
                                     <option value="" disabled selected>Selecione o status</option>
-                                    <option value="aberta">Aberta</option>
-                                    <option value="aceita">Aceita</option>
-                                    <option value="corrigida">Corrigida</option>
-                                    <option value="em-analise">Em Análise</option>
-                                    <option value="falso-positivo">Falso Positivo</option>
+                                    <option value="ABERTA">Aberta</option>
+                                    <option value="ACEITA">Aceita</option>
+                                    <option value="CORRIGIDA">Corrigida</option>
+                                    <option value="EM_ANALISE">Em Análise</option>
+                                    <option value="FALSO_POSITIVO">Falso Positivo</option>
                                 </select>
                                 <span class="campo__select-seta"><i class="fa-solid fa-chevron-down"></i></span>
                             </div>
@@ -240,6 +288,9 @@
         </div>
     </main>
  
+    <script>
+        window.baseUrl = <?= json_encode(BASE_URL) ?>;
+    </script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js"></script>
