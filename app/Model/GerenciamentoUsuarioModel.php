@@ -2,7 +2,7 @@
 namespace Model;
 use PDO;
 
-class GerenUsuario
+class GerenciamentoUsuarioModel
 {
     private $pdo;
     public $msgErro = '';

@@ -11,7 +11,7 @@ require_once __DIR__ . "/../Model/EnderecoModel.php";
 
 
 
-class CadastroEmpresaController extends Controller
+class EmpresaController extends Controller
 {
     private Empresa $empresa;
     private Endereco $endereco;

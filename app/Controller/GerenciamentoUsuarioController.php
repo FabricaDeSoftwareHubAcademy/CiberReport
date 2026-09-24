@@ -3,7 +3,7 @@
 namespace Controller;
 
 use Core\Controller;
-use Model\GerenUsuario;
+use Model\GerenciamentoUsuarioModel;
 
 class GerenciamentoUsuarioController extends Controller
 {
@@ -14,7 +14,7 @@ class GerenciamentoUsuarioController extends Controller
         require_once __DIR__ . '/../DAO/DAO.php';
         $conexao = \DAO\DAO::conexao();
 
-        $this->usuario = new GerenUsuario($conexao);
+        $this->usuario = new GerenciamentoUsuarioModel($conexao);
     }
 
      public function index()

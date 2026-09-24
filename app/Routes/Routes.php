@@ -36,8 +36,8 @@ Route::middleware([AuthMiddleware::class], function (): void {
     Route::POST('/vulnerabilidades', 'VulnerabilidadesController@index');
     Route::POST('/vulnerabilidades/salvar', 'VulnerabilidadesController@salvar');
 
-    Route::GET('/cliente-empresa', 'CadastroEmpresaController@index');
-    Route::POST('/cliente-empresa', 'CadastroEmpresaController@index');
+    Route::GET('/cliente-empresa', 'EmpresaController@index');
+    Route::POST('/cliente-empresa', 'EmpresaController@index');
 
     Route::GET('/gerenciamento-acesso', 'GerenciarAcessoController@index');
     Route::POST('/gerenciamento-acesso', 'GerenciarAcessoController@index');

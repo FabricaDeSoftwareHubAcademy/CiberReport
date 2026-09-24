@@ -20,7 +20,7 @@ class ProjetoController extends Controller
     {
         require_once __DIR__ . '/../DAO/DAO.php';
         $conexao = \DAO\DAO::conexao();
-        $this->projeto = new Projeto($conexao);
+        $this->projeto = new ProjetoModel($conexao);
         $this->empresa = new Empresa($conexao);
     }
 

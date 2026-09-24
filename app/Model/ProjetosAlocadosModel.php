@@ -2,7 +2,7 @@
 
 namespace Model;
 
-require_once __DIR__ . "/Projeto.php";
+require_once __DIR__ . "/ProjetoModel.php";
 
 use PDO;
 
@@ -14,7 +14,7 @@ class ProjetosAlocadosModel
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
-        $this->projeto = new Projeto($pdo);
+        $this->projeto = new ProjetoModel($pdo);
     }
 
     public function listarProjetosAlocados()

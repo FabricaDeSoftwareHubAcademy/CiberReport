@@ -3,9 +3,9 @@
 namespace Controller;
 
 use Core\Controller;
-use GerenciarAcesso;
+use GerenciarAcessoModel;
 
-require_once __DIR__ . "/../Model/GerenciarAcesso.php";
+require_once __DIR__ . "/../Model/GerenciarAcessoModel.php";
 
 class GerenciarAcessoController extends Controller
 {
@@ -15,7 +15,7 @@ class GerenciarAcessoController extends Controller
     {
         require_once __DIR__ . '/../DAO/DAO.php';
         $conexao = \DAO\DAO::conexao();
-        $this->gerenciarAcesso = new GerenciarAcesso($conexao);
+        $this->gerenciarAcesso = new GerenciarAcessoModel($conexao);
     }
 
     public function index()
