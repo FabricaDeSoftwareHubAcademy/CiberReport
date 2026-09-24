@@ -6,6 +6,7 @@
   <title>Dashboard Analista</title>
   <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/style.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/dashboard_analista.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Pages/dashboard_gestor.css">
 </head>
 
 <body class="corpo-dasboard-analista">
@@ -78,8 +79,60 @@
         <a href="#task-list" class="tasks-link">Ver todas as tarefas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </article>
     </section>
-    <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+
+    <section class="group-tabela-prazos">
+            <div class="tabela-coluna">
+                <div class="filtro-ativo-chip" id="filtro-ativo-chip" hidden>
+                    <i class="fa-solid fa-filter"></i>
+                    Filtrado por <strong id="filtro-ativo-nome"></strong>
+                    <button type="button" id="btn-limpar-filtro" aria-label="Limpar filtro">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="tabela-wrapper tabela-dashboard-gestor" tabindex="0" aria-label="Tabela de projetos. Deslize horizontalmente para ver todas as colunas.">
+                    <table id="table">
+                        <thead>
+                            <tr>
+                                <th data-col="0">
+                                    <span class="th-label">Projeto <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="1" data-filtro="lista">
+                                    <span class="th-label">Cliente <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por cliente"></i></span>
+                                </th>
+                                <th data-col="2" data-filtro="lista">
+                                    <span class="th-label">Resp. Técnico <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por responsável técnico"></i></span>
+                                </th>
+                                <th data-col="3" data-filtro="lista">
+                                    <span class="th-label">Analistas Alocados <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por analista alocado"></i></span>
+                                </th>
+                                <th data-col="4" data-filtro="data">
+                                    <span class="th-label">Data Fim Prevista <i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por data fim prevista"></i></span>
+                                </th>
+                                <th data-col="5" data-filtro="numero">
+                                    <span class="th-label">Dias Restantes <i class="fa-solid fa-sort sort-icon"></i></span>
+                                </th>
+                                <th data-col="6" data-filtro="lista">
+                                    <span class="th-label">Crítica<i class="fa-solid fa-sort sort-icon"></i> <i class="fa-solid fa-filter filtro-icon" role="button" aria-label="Filtrar por vulnerabilidade crítica em aberto"></i></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="rodape-tabela">
+                                    <div class="paginacao"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
   </main>
+  
+  <script src="<?= BASE_URL ?>app/assets/JS/dashboardGestor.js"></script>
+  <script src="<?= BASE_URL ?>app/assets/JS/componentes/tabela.js"></script>
+  <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js"></script>
 
 </body>
 </html>

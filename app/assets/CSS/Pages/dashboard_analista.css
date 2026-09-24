@@ -1,12 +1,17 @@
 .main-content > .dashboard-analista-main {
-    min-height: calc(100vh - var(--altura-menu-superior));
+    height: calc(100vh - var(--altura-menu-superior));
     padding: var(--espaco-xl);
     padding-top: var(--espaco-lg);
-    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-sm);
+    overflow: hidden;
 }
 
 .dashboard-analista-intro,
-.dashboard-cards {
+.dashboard-cards,
+.group-tabela-prazos {
     width: 100%;
     max-width: 112rem;
     margin-right: auto;
@@ -14,6 +19,7 @@
 }
 
 .dashboard-analista-intro {
+    flex: 0 0 auto;
     margin-bottom: var(--espaco-lg);
 }
 
@@ -43,6 +49,28 @@
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(32rem, 0.95fr);
     gap: var(--espaco-md);
+    flex: 0 0 auto;
+}
+
+.group-tabela-prazos {
+    margin-top: var(--espaco-md);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    flex: 1 1 auto;
+    min-height: 20rem;
+}
+
+.dashboard-analista-main .tabela-coluna {
+    min-height: 0;
+}
+
+.dashboard-analista-main .tabela-wrapper {
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
 }
 
 .project-card,
@@ -277,14 +305,41 @@
 }
 
 @media (max-width: 850px) {
+    .main-content > .dashboard-analista-main {
+        height: auto;
+        min-height: calc(100vh - var(--altura-menu-superior));
+        padding: var(--espaco-lg);
+        overflow-y: auto;
+    }
+
     .dashboard-cards {
         grid-template-columns: 1fr;
+    }
+
+    .project-card,
+    .tasks-card {
+        min-height: auto;
+    }
+
+    .dashboard-analista-main .tabela-wrapper {
+        flex: 0 0 auto;
+        height: auto;
+        max-height: none;
     }
 }
 
 @media (max-width: 600px) {
     .main-content > .dashboard-analista-main {
         padding: var(--espaco-md);
+        padding-bottom: calc(var(--espaco-md) + env(safe-area-inset-bottom));
+    }
+
+    .dashboard-analista-intro {
+        margin-bottom: var(--espaco-md);
+    }
+
+    .dashboard-analista-intro > p:last-child {
+        font-size: var(--fonte-legenda);
     }
 
     .project-card,
@@ -294,11 +349,14 @@
     }
 
     .project-header {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 4rem minmax(0, 1fr);
     }
 
     .status {
-        margin-left: 4.8rem;
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin: 0;
     }
 
     .project-details {
@@ -314,5 +372,47 @@
 
     .project-details dd {
         margin-top: 0;
+    }
+
+    .tasks-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .project-link,
+    .tasks-link {
+        align-self: stretch;
+        justify-content: center;
+        margin-top: var(--espaco-md);
+    }
+
+    .group-tabela-prazos {
+        margin-top: var(--espaco-md);
+    }
+
+    .dashboard-analista-main .tabela-wrapper table {
+        min-width: 76rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .main-content > .dashboard-analista-main {
+        padding-right: var(--espaco-sm);
+        padding-left: var(--espaco-sm);
+    }
+
+    .project-icon {
+        flex-basis: 3.6rem;
+        width: 3.6rem;
+        height: 3.6rem;
+    }
+
+    .project-header {
+        grid-template-columns: 3.6rem minmax(0, 1fr);
+    }
+
+    .project-info h2,
+    .tasks-header h2 {
+        font-size: var(--fonte-legenda);
     }
 }
