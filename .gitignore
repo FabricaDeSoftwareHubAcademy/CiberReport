@@ -5,3 +5,6 @@ docker-compose.yml
 banco_dev.sql
 ./config/app.php
 mailconfig.php
+glossario-dominio.md
+perguntas-regras-negocio.md
+clean*

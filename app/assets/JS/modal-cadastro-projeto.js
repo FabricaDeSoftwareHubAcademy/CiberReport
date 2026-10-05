@@ -2,17 +2,17 @@
  * modal-cadastro-projeto.js
  *
  * Responsabilidades:
- *  1. Stepper: avançar/voltar entre os 4 passos, atualizar marcadores visuais.
+ *  1. Stepper: avançar/voltar entre os 2 passos, atualizar marcadores visuais.
  *  2. Validação por passo: só avança se os campos obrigatórios estiverem preenchidos.
  *  3. Combobox de Cliente: filtra a lista de empresas embutida via data-attribute.
- *  4. Combobox de Tipo de Pentest (multi-select): cada seleção vira um chip;
- *     ao selecionar o primeiro tipo, preenche "Horas de execução".
- *  5. Chips de Alvos: input livre + botão adicionar, remover chip.
- *  6. Combobox de Líder Técnico: seleção única entre usuários.
- *  7. Chips de Analistas: busca na lista de usuários + botão adicionar, remover chip.
- *  8. Dropzone: drag & drop + click, exibe nome do arquivo selecionado.
- *  9. Revisão: ao entrar no passo 4, preenche todos os campos de revisão.
- * 10. Reset: ao fechar o modal, limpa todo o estado.
+ *  4. Chips de Alvos: input livre + botão adicionar, remover chip.
+ *  5. Dropzone: drag & drop + click, exibe nome do arquivo selecionado.
+ *  6. Passo 2: N blocos repetíveis de Pentest (Adicionar/Remover), cada um com
+ *     seu próprio tipo de pentest, modalidade (derivada), abordagem,
+ *     metodologia (frameworks), escopo, ambiente, equipe (líder + analistas)
+ *     e referência.
+ *  7. Submit: injeta campos dinâmicos (alvos[], pentests[idx][...]) antes de enviar.
+ *  8. Reset: ao fechar o modal, limpa todo o estado.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,22 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!overlay) return; // Modal não existe nesta página
 
     // Dados do backend (serializados no data-attribute pelo PHP)
-    const empresas      = JSON.parse(overlay.dataset.empresas      || '[]');
-    const tiposPentest  = JSON.parse(overlay.dataset.tiposPentest  || '[]');
-    const usuarios      = JSON.parse(overlay.dataset.usuarios       || '[]');
+    const empresas     = JSON.parse(overlay.dataset.empresas     || '[]');
+    const tiposPentest = JSON.parse(overlay.dataset.tiposPentest || '[]');
+    const frameworks   = JSON.parse(overlay.dataset.frameworks   || '[]');
+    const usuarios     = JSON.parse(overlay.dataset.usuarios     || '[]');
 
     // Estado do módulo
-    let passoAtual      = 0;
-    const TOTAL_PASSOS  = 4;
+    let passoAtual     = 0;
+    const TOTAL_PASSOS = 3;
     let modoEdicaoOuVisualizacao = false; // true quando o modal foi aberto via Editar/Visualizar
     let somenteLeitura = false; // true só no modo Visualizar (Editar continua editável)
 
-    // IDs selecionados
-    let clienteSelecionado    = { id: null, nome: '' };
-    let liderSelecionado      = { id: null, nome: '' };
-    const tiposSelecionados   = []; // [{ id, nome, horas_execucao }]
-    const alvos               = []; // strings
-    const analistasSelecionados = []; // [{ id, nome }]
+    // IDs selecionados (passo 1)
+    let clienteSelecionado = { id: null, nome: '' };
+    const alvos            = []; // strings
+
+    // Blocos de Pentest (passo 2) — cada item é o estado de um bloco.
+    const blocosPentest = [];
+    let proximoUidBloco = 0;
 
     // Referências de elementos do stepper
     const stepperItens = overlay.querySelectorAll('.cad-projeto-stepper__item');
@@ -51,53 +53,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. STEPPER — navegar entre passos
     // -------------------------------------------------------------------------
     function irParaPasso(novoPasso) {
-        // Esconde passo atual
         passos[passoAtual].classList.remove('ativo');
         stepperItens[passoAtual].classList.remove('cad-projeto-stepper__item--ativo');
 
         if (modoEdicaoOuVisualizacao) {
-            // Os 4 passos já têm dado válido — o que estamos deixando fica
-            // concluído (check), e o novo atual perde o check (mostra o
-            // número), não importa se é avanço ou retrocesso.
             stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--concluido');
             stepperItens[novoPasso].classList.remove('cad-projeto-stepper__item--concluido');
         } else if (novoPasso > passoAtual) {
-            // Cadastro, avançando: marca o passo que estamos deixando como concluído.
             stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--concluido');
         } else {
-            // Cadastro, voltando: desconclui o passo de destino (progresso real).
             stepperItens[novoPasso].classList.remove('cad-projeto-stepper__item--concluido');
         }
 
         passoAtual = novoPasso;
 
-        // Ativa novo passo
         passos[passoAtual].classList.add('ativo');
         stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--ativo');
 
-        // Preenche revisão ao chegar no último passo
-        if (passoAtual === 3) preencherRevisao();
+        if (passoAtual === 2) preencherRevisao();
 
         atualizarBotoes();
-
-        // Scroll para o topo do body do modal ao mudar de passo
         passos[passoAtual].scrollTop = 0;
     }
 
     function atualizarBotoes() {
-        // Voltar: oculto no passo 0
         btnVoltar.style.display = passoAtual === 0 ? 'none' : '';
-        // Avançar: oculto no último passo
         btnAvancar.style.display = passoAtual === TOTAL_PASSOS - 1 ? 'none' : '';
 
         if (somenteLeitura) {
             btnSalvar.style.display = 'none';
         } else if (modoEdicaoOuVisualizacao) {
-            // Editando um projeto já preenchido: não precisa navegar até o
-            // fim só pra salvar uma alteração feita no passo 1.
             btnSalvar.style.display = '';
         } else {
-            // Cadastro: só libera Salvar depois de passar pelos 4 passos.
             btnSalvar.style.display = passoAtual === TOTAL_PASSOS - 1 ? '' : 'none';
         }
     }
@@ -111,10 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (passoAtual > 0) irParaPasso(passoAtual - 1);
     });
 
-    // Clique direto no indicador do passo. Em editar/visualizar é navegação
-    // livre (os 4 passos já têm dado válido). No cadastro continua exigindo
-    // validação de cada passo intermediário — senão dá pra pular direto pro
-    // último passo sem preencher nada.
     stepperItens.forEach((item, idx) => {
         item.style.cursor = 'pointer';
         item.addEventListener('click', () => {
@@ -143,25 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 2. VALIDAÇÃO POR PASSO
     // -------------------------------------------------------------------------
-    function marcarErro(campoId, erroId, condicaoErro) {
+    function marcarErroCampo(campoId, condicaoErro) {
         const campo = document.getElementById(campoId)?.closest('.campo');
-        const erro  = document.getElementById(erroId);
-        if (!campo || !erro) return false;
-
-        if (condicaoErro) {
-            campo.classList.add('campo--erro');
-            return true;
-        } else {
-            campo.classList.remove('campo--erro');
-            return false;
-        }
+        if (!campo) return;
+        campo.classList.toggle('campo--erro', !!condicaoErro);
     }
 
     function validarPasso(passo) {
         let temErro = false;
 
         if (passo === 0) {
-            // Passo 1: Cliente, Nome do Projeto, ao menos um tipo de pentest, modalidade, sigilo, horas
             if (!clienteSelecionado.id) {
                 document.getElementById('campo-cliente')?.classList.add('campo--erro');
                 temErro = true;
@@ -170,78 +144,77 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const nomeProj = document.getElementById('cp-nome-projeto');
-            if (!nomeProj.value.trim()) {
-                nomeProj.closest('.campo').classList.add('campo--erro');
-                temErro = true;
-            } else {
-                nomeProj.closest('.campo').classList.remove('campo--erro');
-            }
-
-            const campoTipo = document.getElementById('campo-tipo-pentest');
-            if (tiposSelecionados.length === 0) {
-                campoTipo?.classList.add('campo--erro');
-                temErro = true;
-            } else {
-                campoTipo?.classList.remove('campo--erro');
-            }
-
-            const modalidade = document.getElementById('cp-modalidade');
-            if (!modalidade.value) {
-                modalidade.closest('.campo').classList.add('campo--erro');
-                temErro = true;
-            } else {
-                modalidade.closest('.campo').classList.remove('campo--erro');
-            }
+            const nomeInvalido = !nomeProj.value.trim();
+            marcarErroCampo('cp-nome-projeto', nomeInvalido);
+            temErro = temErro || nomeInvalido;
 
             const sigilo = document.getElementById('cp-sigilo');
-            if (!sigilo.value) {
-                sigilo.closest('.campo').classList.add('campo--erro');
-                temErro = true;
-            } else {
-                sigilo.closest('.campo').classList.remove('campo--erro');
-            }
+            const sigiloInvalido = !sigilo.value;
+            marcarErroCampo('cp-sigilo', sigiloInvalido);
+            temErro = temErro || sigiloInvalido;
+
+            const escopo = document.getElementById('cp-escopo');
+            const escopoInvalido = !escopo.value.trim();
+            marcarErroCampo('cp-escopo', escopoInvalido);
+            temErro = temErro || escopoInvalido;
 
             const horas = document.getElementById('cp-horas-contratadas');
-            if (!horas.value.trim() || !/^\d{1,3}:\d{2}:\d{2}$/.test(horas.value.trim())) {
-                horas.closest('.campo').classList.add('campo--erro');
-                temErro = true;
-            } else {
-                horas.closest('.campo').classList.remove('campo--erro');
-            }
+            const horasInvalidas = !horas.value.trim() || !/^\d{1,3}:\d{2}:\d{2}$/.test(horas.value.trim());
+            marcarErroCampo('cp-horas-contratadas', horasInvalidas);
+            temErro = temErro || horasInvalidas;
         }
 
         if (passo === 1) {
-            // Passo 2: Escopo obrigatório
-            const escopo = document.getElementById('cp-escopo');
-            if (!escopo.value.trim()) {
-                escopo.closest('.campo').classList.add('campo--erro');
-                temErro = true;
-            } else {
-                escopo.closest('.campo').classList.remove('campo--erro');
-            }
-        }
+            const semBlocos = blocosPentest.length === 0;
+            document.getElementById('campo-pentests')?.classList.toggle('campo--erro', semBlocos);
+            temErro = temErro || semBlocos;
 
-        if (passo === 2) {
-            // Passo 3: Líder técnico obrigatório
-            if (!liderSelecionado.id) {
-                document.getElementById('campo-lider')?.classList.add('campo--erro');
-                temErro = true;
-            } else {
-                document.getElementById('campo-lider')?.classList.remove('campo--erro');
-            }
+            blocosPentest.forEach(bloco => temErro = !validarBlocoPentest(bloco) || temErro);
         }
 
         return !temErro;
     }
 
+    function validarBlocoPentest(bloco) {
+        let ok = true;
+
+        const tipoInvalido = !bloco.tipoPentestId;
+        bloco.raiz.querySelector('[data-campo="tipo"]').classList.toggle('campo--erro', tipoInvalido);
+        ok = ok && !tipoInvalido;
+
+        const horasEl = bloco.raiz.querySelector('[data-campo="horas"] input');
+        const horasInvalidas = !horasEl.value || parseFloat(horasEl.value) <= 0;
+        bloco.raiz.querySelector('[data-campo="horas"]').classList.toggle('campo--erro', horasInvalidas);
+        ok = ok && !horasInvalidas;
+
+        const abordagemEl = bloco.raiz.querySelector('[data-campo="abordagem"] select');
+        const abordagemInvalida = !abordagemEl.value;
+        bloco.raiz.querySelector('[data-campo="abordagem"]').classList.toggle('campo--erro', abordagemInvalida);
+        ok = ok && !abordagemInvalida;
+
+        const ambienteEl = bloco.raiz.querySelector('[data-campo="ambiente"] select');
+        const ambienteInvalido = !ambienteEl.value;
+        bloco.raiz.querySelector('[data-campo="ambiente"]').classList.toggle('campo--erro', ambienteInvalido);
+        ok = ok && !ambienteInvalido;
+
+        const escopoEl = bloco.raiz.querySelector('[data-campo="escopo"] textarea');
+        const escopoInvalido = !escopoEl.value.trim();
+        bloco.raiz.querySelector('[data-campo="escopo"]').classList.toggle('campo--erro', escopoInvalido);
+        ok = ok && !escopoInvalido;
+
+        const metodologiaInvalida = bloco.frameworksSelecionados.length === 0;
+        bloco.raiz.querySelector('[data-campo="metodologia"]').classList.toggle('campo--erro', metodologiaInvalida);
+        ok = ok && !metodologiaInvalida;
+
+        const semLider = !bloco.equipe.some(m => m.lider);
+        bloco.raiz.querySelector('[data-campo="analistas"]').classList.toggle('campo--erro', semLider);
+        ok = ok && !semLider;
+
+        return ok;
+    }
+
     // -------------------------------------------------------------------------
-    // 3. COMBOBOX GENÉRICO — fábrica reutilizada pelos 3 comboboxes
-    //    Parâmetros:
-    //      inputEl    — input de busca visível
-    //      listaEl    — div da lista dropdown
-    //      btnToggle  — botão seta (alternar)
-    //      itens      — array de objetos { id, label, extra? }
-    //      onSelect   — callback(item) chamado ao selecionar
+    // 3. COMBOBOX GENÉRICO — fábrica reutilizada por todos os comboboxes
     // -------------------------------------------------------------------------
     function criarCombobox(inputEl, listaEl, btnToggle, itens, onSelect) {
         let itemFocado = -1;
@@ -253,16 +226,14 @@ document.addEventListener('DOMContentLoaded', () => {
             itemFocado = -1;
 
             const filtroLower = filtro.toLowerCase();
-            const resultados = itens.filter(i =>
-                i.label.toLowerCase().includes(filtroLower)
-            );
+            const resultados = itens.filter(i => i.label.toLowerCase().includes(filtroLower));
 
             if (resultados.length === 0) {
                 listaEl.innerHTML = '<p class="campo__combobox-vazio">Nenhum resultado.</p>';
                 return;
             }
 
-            resultados.forEach((item, idx) => {
+            resultados.forEach((item) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'campo__combobox-opcao';
@@ -292,14 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fechar();
         }
 
-        // Eventos
-        inputEl.addEventListener('input', () => {
-            abrir();
-        });
-
-        inputEl.addEventListener('focus', () => {
-            abrir();
-        });
+        inputEl.addEventListener('input', () => abrir());
+        inputEl.addEventListener('focus', () => abrir());
 
         btnToggle.addEventListener('click', () => {
             if (listaEl.hasAttribute('hidden')) {
@@ -310,10 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Teclado: setas + Enter + Escape
         inputEl.addEventListener('keydown', (e) => {
             if (listaEl.hasAttribute('hidden')) return;
-
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 itemFocado = Math.min(itemFocado + 1, opcoes.length - 1);
@@ -339,11 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Fecha ao clicar fora
         document.addEventListener('click', (e) => {
-            if (!inputEl.closest('.campo__combobox-campo').contains(e.target)) {
-                fechar();
-            }
+            if (!inputEl.closest('.campo__combobox-campo').contains(e.target)) fechar();
         });
 
         return { abrir, fechar, renderizar };
@@ -371,59 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
-    // 5. COMBOBOX DE TIPO DE PENTEST (multi-select com chips)
+    // 5. CHIPS DE ALVOS
     // -------------------------------------------------------------------------
-    const tipoInput  = document.getElementById('cp-tipo-busca');
-    const tipoLista  = document.getElementById('cp-tipo-lista');
-    const tipoToggle = tipoInput?.nextElementSibling;
-    const tiposChips = document.getElementById('cp-tipos-chips');
-    const horasExec  = document.getElementById('cp-horas-execucao');
-
-    if (tipoInput && tipoLista && tipoToggle) {
-        const itensTipo = tiposPentest.map(t => ({
-            id:            t.id,
-            label:         t.nome,
-            horas_execucao: t.horas_execucao ?? null,
-        }));
-
-        criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, (item) => {
-            // Evita duplicata
-            if (tiposSelecionados.find(t => t.id === item.id)) {
-                tipoInput.value = '';
-                return;
-            }
-
-            tiposSelecionados.push(item);
-            tipoInput.value = '';
-            renderizarChipsTipo();
-
-            // Preenche horas de execução com o primeiro tipo selecionado
-            if (tiposSelecionados.length === 1 && item.horas_execucao) {
-                horasExec.value = item.horas_execucao + ' Horas';
-            }
-
-            document.getElementById('campo-tipo-pentest')?.classList.remove('campo--erro');
-        });
-    }
-
-    function renderizarChipsTipo() {
-        if (!tiposChips) return;
-        tiposChips.innerHTML = '';
-        tiposSelecionados.forEach((item, idx) => {
-            tiposChips.appendChild(criarChip(item.label, () => {
-                tiposSelecionados.splice(idx, 1);
-                renderizarChipsTipo();
-                // Limpa horas se o primeiro tipo foi removido
-                if (tiposSelecionados.length === 0) horasExec.value = '';
-            }));
-        });
-    }
-
-    // -------------------------------------------------------------------------
-    // 6. CHIPS DE ALVOS
-    // -------------------------------------------------------------------------
-    const alvoInput = document.getElementById('cp-alvo-input');
-    const alvoAdd   = document.getElementById('cp-alvo-add');
+    const alvoInput  = document.getElementById('cp-alvo-input');
+    const alvoAdd    = document.getElementById('cp-alvo-add');
     const alvosChips = document.getElementById('cp-alvos-chips');
 
     function adicionarAlvo() {
@@ -454,71 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
-    // 7. COMBOBOX DE LÍDER TÉCNICO
+    // 6. DROPZONE
     // -------------------------------------------------------------------------
-    const liderInput  = document.getElementById('cp-lider-busca');
-    const liderLista  = document.getElementById('cp-lider-lista');
-    const liderToggle = liderInput?.nextElementSibling;
-
-    if (liderInput && liderLista && liderToggle) {
-        const itensLider = usuarios.map(u => ({
-            id:    u.id,
-            label: u.nome,
-        }));
-
-        criarCombobox(liderInput, liderLista, liderToggle, itensLider, (item) => {
-            liderSelecionado = { id: item.id, nome: item.label };
-            liderInput.value = item.label;
-            document.getElementById('cp-lider-id').value = item.id;
-            document.getElementById('campo-lider')?.classList.remove('campo--erro');
-        });
-    }
-
-    // -------------------------------------------------------------------------
-    // 8. CHIPS DE ANALISTAS (busca na lista de usuários)
-    // -------------------------------------------------------------------------
-    const analistaBusca  = document.getElementById('cp-analista-busca');
-    const analistaAdd    = document.getElementById('cp-analista-add');
-    const analistasChips = document.getElementById('cp-analistas-chips');
-
-    function adicionarAnalista() {
-        const query = analistaBusca?.value.trim().toLowerCase();
-        if (!query) return;
-
-        const encontrado = usuarios.find(u =>
-            u.nome.toLowerCase().includes(query) &&
-            !analistasSelecionados.find(a => a.id === u.id)
-        );
-
-        if (!encontrado) return;
-
-        analistasSelecionados.push({ id: encontrado.id, nome: encontrado.nome });
-        analistaBusca.value = '';
-        renderizarChipsAnalistas();
-    }
-
-    analistaAdd?.addEventListener('click', adicionarAnalista);
-    analistaBusca?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); adicionarAnalista(); }
-    });
-
-    function renderizarChipsAnalistas() {
-        if (!analistasChips) return;
-        analistasChips.innerHTML = '';
-        analistasSelecionados.forEach((analista, idx) => {
-            analistasChips.appendChild(criarChip(analista.nome, () => {
-                analistasSelecionados.splice(idx, 1);
-                renderizarChipsAnalistas();
-            }));
-        });
-    }
-
-    // -------------------------------------------------------------------------
-    // 9. DROPZONE
-    // -------------------------------------------------------------------------
-    const dropzone     = document.getElementById('cp-dropzone');
+    const dropzone      = document.getElementById('cp-dropzone');
     const contratoInput = document.getElementById('cp-contrato-input');
-    const dropzoneTxt   = document.getElementById('cp-dropzone-texto');
+    const dropzoneTxt    = document.getElementById('cp-dropzone-texto');
 
     function atualizarDropzone(arquivo) {
         if (!arquivo) return;
@@ -536,25 +387,20 @@ document.addEventListener('DOMContentLoaded', () => {
         dropzone?.classList.add('campo__dropzone--selecionado');
     }
 
-    contratoInput?.addEventListener('change', () => {
-        atualizarDropzone(contratoInput.files[0]);
-    });
+    contratoInput?.addEventListener('change', () => atualizarDropzone(contratoInput.files[0]));
 
     dropzone?.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropzone.style.borderColor = 'var(--cor-azul-destaques)';
     });
 
-    dropzone?.addEventListener('dragleave', () => {
-        dropzone.style.borderColor = '';
-    });
+    dropzone?.addEventListener('dragleave', () => { dropzone.style.borderColor = ''; });
 
     dropzone?.addEventListener('drop', (e) => {
         e.preventDefault();
         dropzone.style.borderColor = '';
         const arquivo = e.dataTransfer.files[0];
         if (arquivo) {
-            // Atribui o arquivo ao input via DataTransfer
             const dt = new DataTransfer();
             dt.items.add(arquivo);
             contratoInput.files = dt.files;
@@ -563,81 +409,449 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // 10. PREENCHER REVISÃO (passo 4)
+    // 7. BLOCOS DE PENTEST (passo 2)
     // -------------------------------------------------------------------------
-    function preencherRevisao() {
-        setText('rev-cliente',      clienteSelecionado.nome || '—');
-        setText('rev-nome-projeto', document.getElementById('cp-nome-projeto')?.value || '—');
-        setText('rev-sigilo',       document.getElementById('cp-sigilo')?.selectedOptions[0]?.text || '—');
-        setText('rev-tipos',        tiposSelecionados.map(t => t.label).join(', ') || '—');
+    const listaPentests = document.getElementById('cp-pentests-lista');
+    const btnAdicionarPentest = document.getElementById('cp-btn-adicionar-pentest');
 
-        const modalidadeEl = document.getElementById('cp-modalidade');
-        setText('rev-modalidade', modalidadeEl?.selectedOptions[0]?.text || '—');
+    const ABORDAGENS = [
+        { value: 'BLACK BOX', label: 'Black Box' },
+        { value: 'GRAY BOX',  label: 'Gray Box' },
+        { value: 'WHITE BOX', label: 'White Box' },
+    ];
 
-        setText('rev-escopo',   document.getElementById('cp-escopo')?.value || '—');
-        setText('rev-alvos',    alvos.length ? alvos.join(', ') : '—');
-        setText('rev-restricoes', document.getElementById('cp-restricao')?.value || '—');
+    const AMBIENTES = [
+        { value: 'DESENVOLVIMENTO', label: 'Desenvolvimento' },
+        { value: 'HOMOLOGACAO',     label: 'Homologação' },
+        { value: 'PRODUCAO',        label: 'Produção' },
+    ];
 
-        // Datas: formatar para pt-BR
-        const dataInicio = document.getElementById('cp-data-inicio')?.value;
-        const dataFim    = document.getElementById('cp-data-fim')?.value;
-        setText('rev-data-inicio', dataInicio ? formatarData(dataInicio) : '—');
-        setText('rev-data-fim',    dataFim    ? formatarData(dataFim)    : '—');
-        setText('rev-horas',  document.getElementById('cp-horas-contratadas')?.value || '—');
+    function montarOpcoesSelect(select, opcoes, placeholder) {
+        select.innerHTML = '';
+        const optPlaceholder = document.createElement('option');
+        optPlaceholder.value = '';
+        optPlaceholder.disabled = true;
+        optPlaceholder.selected = true;
+        optPlaceholder.textContent = placeholder;
+        select.appendChild(optPlaceholder);
 
-        setText('rev-lider',     liderSelecionado.nome || '—');
-        setText('rev-analistas', analistasSelecionados.map(a => a.nome).join(', ') || '—');
+        opcoes.forEach(op => {
+            const opt = document.createElement('option');
+            opt.value = op.value;
+            opt.textContent = op.label;
+            select.appendChild(opt);
+        });
     }
 
+    function criarBlocoPentest() {
+        const uid = proximoUidBloco++;
+
+        const raiz = document.createElement('div');
+        raiz.className = 'bloco-pentest';
+        raiz.dataset.uid = String(uid);
+        raiz.innerHTML = `
+            <div class="bloco-pentest__cabecalho">
+                <h3 class="bloco-pentest__titulo">
+                    <i class="fa-solid fa-shield-halved bloco-pentest__titulo-icone"></i>
+                    <span data-papel="numero">Pentest</span>
+                </h3>
+                <button type="button" class="bloco-pentest__remover" aria-label="Remover pentest">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+            <div class="modal-grade">
+                <div class="campo" data-campo="tipo">
+                    <label class="campo__label campo__label--obrigatorio">Tipo de Pentest</label>
+                    <div class="campo__combobox">
+                        <div class="campo__combobox-linha">
+                            <div class="campo__combobox-campo">
+                                <input type="text" class="campo__input campo__combobox-input"
+                                    placeholder="Selecione o tipo de pentest" role="combobox"
+                                    aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+                                <button type="button" class="campo__combobox-alternar" aria-label="Mostrar tipos de pentest">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
+                                <div class="campo__combobox-lista" role="listbox" hidden></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="campo__mensagem-erro">Selecione o tipo de pentest.</span>
+                </div>
+                <div class="campo" data-campo="horas">
+                    <label class="campo__label campo__label--obrigatorio">Horas de Pentest contratadas</label>
+                    <input type="number" class="campo__input" min="0" step="0.5" placeholder="Ex: 40">
+                    <span class="campo__mensagem-erro">Informe as horas contratadas para este pentest.</span>
+                </div>
+                <div class="campo">
+                    <label class="campo__label">Modalidade</label>
+                    <input type="text" class="campo__input campo__input--readonly" readonly placeholder="Derivada do tipo de pentest">
+                </div>
+                <div class="campo" data-campo="abordagem">
+                    <label class="campo__label campo__label--obrigatorio">Abordagem</label>
+                    <div class="campo__select-wrapper">
+                        <select class="campo__select"></select>
+                        <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                    </div>
+                    <span class="campo__mensagem-erro">Selecione a abordagem.</span>
+                </div>
+                <div class="campo" data-campo="ambiente">
+                    <label class="campo__label campo__label--obrigatorio">Ambiente</label>
+                    <div class="campo__select-wrapper">
+                        <select class="campo__select"></select>
+                        <i class="fa-solid fa-chevron-down campo__select-seta"></i>
+                    </div>
+                    <span class="campo__mensagem-erro">Selecione o ambiente.</span>
+                </div>
+                <div class="campo" data-campo="referencia">
+                    <label class="campo__label">Referência</label>
+                    <input type="text" class="campo__input" placeholder="Ex: CVE-2024-1234, CWE-79...">
+                </div>
+            </div>
+            <div class="campo" data-campo="metodologia">
+                <label class="campo__label campo__label--obrigatorio">Metodologia</label>
+                <div class="campo__multi">
+                    <div class="campo__multi-busca">
+                        <div class="campo__combobox" style="flex:1">
+                            <div class="campo__combobox-linha">
+                                <div class="campo__combobox-campo">
+                                    <input type="text" class="campo__input campo__combobox-input"
+                                        placeholder="Pesquise e adicione uma metodologia..." role="combobox"
+                                        aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+                                    <button type="button" class="campo__combobox-alternar" aria-label="Mostrar metodologias">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
+                                    <div class="campo__combobox-lista" role="listbox" hidden></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="campo__multi-chips" aria-label="Metodologias selecionadas"></div>
+                </div>
+                <span class="campo__mensagem-erro">Selecione ao menos uma metodologia.</span>
+            </div>
+            <div class="campo" data-campo="escopo">
+                <label class="campo__label campo__label--obrigatorio">Escopo</label>
+                <textarea class="campo__textarea" rows="4" placeholder="Descreva o escopo deste pentest..."></textarea>
+                <span class="campo__mensagem-erro">O escopo deste pentest é obrigatório.</span>
+            </div>
+            <div class="campo" data-campo="analistas">
+                <label class="campo__label campo__label--obrigatorio">Analista(s)</label>
+                <div class="campo__multi">
+                    <div class="campo__multi-busca">
+                        <input type="text" class="campo__multi-input" placeholder="Pesquise e adicione um analista...">
+                        <button type="button" class="campo__botao-adicionar" aria-label="Adicionar analista">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="campo__multi-chips" aria-label="Equipe deste pentest"></div>
+                </div>
+                <span class="campo__mensagem-erro">Marque um analista como líder deste pentest clicando na estrela do chip.</span>
+                <p class="campo__ajuda">Clique na <i class="fa-solid fa-star"></i> de um chip para marcá-lo como líder técnico deste pentest.</p>
+            </div>
+            <div class="campo">
+                <label class="campo__label">Checklist</label>
+                <p class="campo__ajuda">Vinculado automaticamente a partir do tipo de pentest selecionado.</p>
+            </div>
+        `;
+
+        const bloco = {
+            uid,
+            raiz,
+            tipoPentestId: null,
+            frameworksSelecionados: [], // [{id, nome}]
+            equipe: [], // [{id, nome, lider}]
+        };
+
+        // Tipo de pentest (combobox único)
+        const tipoCampo    = raiz.querySelector('[data-campo="tipo"]');
+        const tipoInput    = tipoCampo.querySelector('.campo__combobox-input');
+        const tipoLista    = tipoCampo.querySelector('.campo__combobox-lista');
+        const tipoToggle   = tipoCampo.querySelector('.campo__combobox-alternar');
+        const modalidadeEl = raiz.querySelectorAll('.campo__input--readonly')[0];
+
+        const itensTipo = tiposPentest.map(t => ({ id: t.id, label: t.nome, categoria_nome: t.categoria_nome }));
+        criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, (item) => {
+            bloco.tipoPentestId = item.id;
+            tipoInput.value = item.label;
+            modalidadeEl.value = item.categoria_nome || '';
+            tipoCampo.classList.remove('campo--erro');
+        });
+
+        // Abordagem / Ambiente
+        const abordagemSelect = raiz.querySelector('[data-campo="abordagem"] select');
+        montarOpcoesSelect(abordagemSelect, ABORDAGENS, 'Selecione a abordagem...');
+        abordagemSelect.addEventListener('change', () => {
+            raiz.querySelector('[data-campo="abordagem"]').classList.remove('campo--erro');
+        });
+
+        const ambienteSelect = raiz.querySelector('[data-campo="ambiente"] select');
+        montarOpcoesSelect(ambienteSelect, AMBIENTES, 'Selecione o ambiente...');
+        ambienteSelect.addEventListener('change', () => {
+            raiz.querySelector('[data-campo="ambiente"]').classList.remove('campo--erro');
+        });
+
+        // Horas / Escopo: só tira o erro quando o usuário mexe
+        raiz.querySelector('[data-campo="horas"] input').addEventListener('input', () => {
+            raiz.querySelector('[data-campo="horas"]').classList.remove('campo--erro');
+        });
+        raiz.querySelector('[data-campo="escopo"] textarea').addEventListener('input', () => {
+            raiz.querySelector('[data-campo="escopo"]').classList.remove('campo--erro');
+        });
+
+        // Metodologia (multi-select de frameworks com chips)
+        const metodologiaCampo  = raiz.querySelector('[data-campo="metodologia"]');
+        const metodologiaInput  = metodologiaCampo.querySelector('.campo__combobox-input');
+        const metodologiaLista  = metodologiaCampo.querySelector('.campo__combobox-lista');
+        const metodologiaToggle = metodologiaCampo.querySelector('.campo__combobox-alternar');
+        const metodologiaChips  = metodologiaCampo.querySelector('.campo__multi-chips');
+
+        function renderizarChipsMetodologia() {
+            metodologiaChips.innerHTML = '';
+            bloco.frameworksSelecionados.forEach((item, idx) => {
+                metodologiaChips.appendChild(criarChip(item.nome, () => {
+                    bloco.frameworksSelecionados.splice(idx, 1);
+                    renderizarChipsMetodologia();
+                }));
+            });
+        }
+
+        const itensFramework = frameworks.map(f => ({ id: f.id, label: f.nome }));
+        criarCombobox(metodologiaInput, metodologiaLista, metodologiaToggle, itensFramework, (item) => {
+            if (bloco.frameworksSelecionados.find(f => f.id === item.id)) {
+                metodologiaInput.value = '';
+                return;
+            }
+            bloco.frameworksSelecionados.push({ id: item.id, nome: item.label });
+            metodologiaInput.value = '';
+            renderizarChipsMetodologia();
+            metodologiaCampo.classList.remove('campo--erro');
+        });
+
+        // Analistas (multi-select com marcação de líder)
+        const analistasCampo = raiz.querySelector('[data-campo="analistas"]');
+        const analistaBusca  = analistasCampo.querySelector('.campo__multi-input');
+        const analistaAdd    = analistasCampo.querySelector('.campo__botao-adicionar');
+        const analistasChips = analistasCampo.querySelector('.campo__multi-chips');
+
+        function renderizarChipsAnalistas() {
+            analistasChips.innerHTML = '';
+            bloco.equipe.forEach((membro, idx) => {
+                const chip = criarChip(membro.nome, () => {
+                    bloco.equipe.splice(idx, 1);
+                    renderizarChipsAnalistas();
+                });
+                chip.classList.toggle('chip--lider-ativo', membro.lider);
+
+                const btnLider = document.createElement('button');
+                btnLider.type = 'button';
+                btnLider.className = 'chip__lider-marcar';
+                btnLider.innerHTML = '<i class="fa-solid fa-star"></i>';
+                btnLider.setAttribute('aria-label', `Marcar ${membro.nome} como líder técnico`);
+                btnLider.addEventListener('click', () => {
+                    bloco.equipe.forEach(m => m.lider = false);
+                    membro.lider = true;
+                    renderizarChipsAnalistas();
+                    analistasCampo.classList.remove('campo--erro');
+                });
+                chip.insertBefore(btnLider, chip.firstChild);
+
+                analistasChips.appendChild(chip);
+            });
+        }
+
+        function adicionarAnalista() {
+            const query = analistaBusca.value.trim().toLowerCase();
+            if (!query) return;
+
+            const encontrado = usuarios.find(u =>
+                u.nome.toLowerCase().includes(query) &&
+                !bloco.equipe.find(m => m.id === u.id)
+            );
+            if (!encontrado) return;
+
+            bloco.equipe.push({ id: encontrado.id, nome: encontrado.nome, lider: bloco.equipe.length === 0 });
+            analistaBusca.value = '';
+            renderizarChipsAnalistas();
+            analistasCampo.classList.remove('campo--erro');
+        }
+
+        analistaAdd.addEventListener('click', adicionarAnalista);
+        analistaBusca.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); adicionarAnalista(); }
+        });
+
+        // Remover bloco
+        raiz.querySelector('.bloco-pentest__remover').addEventListener('click', () => {
+            const idx = blocosPentest.findIndex(b => b.uid === uid);
+            if (idx === -1) return;
+            blocosPentest.splice(idx, 1);
+            raiz.remove();
+            atualizarNumerosDosBlocos();
+        });
+
+        bloco.renderizarChipsMetodologia = renderizarChipsMetodologia;
+        bloco.renderizarChipsAnalistas   = renderizarChipsAnalistas;
+        bloco.abordagemSelect = abordagemSelect;
+        bloco.ambienteSelect  = ambienteSelect;
+        bloco.tipoInput       = tipoInput;
+        bloco.modalidadeEl    = modalidadeEl;
+
+        return bloco;
+    }
+
+    function atualizarNumerosDosBlocos() {
+        blocosPentest.forEach((bloco, idx) => {
+            bloco.raiz.querySelector('[data-papel="numero"]').textContent = `Pentest ${idx + 1}`;
+            const btnRemover = bloco.raiz.querySelector('.bloco-pentest__remover');
+            btnRemover.style.display = blocosPentest.length > 1 ? '' : 'none';
+        });
+    }
+
+    function adicionarBlocoPentest() {
+        const bloco = criarBlocoPentest();
+        blocosPentest.push(bloco);
+        listaPentests.appendChild(bloco.raiz);
+        atualizarNumerosDosBlocos();
+        document.getElementById('campo-pentests')?.classList.remove('campo--erro');
+        return bloco;
+    }
+
+    btnAdicionarPentest?.addEventListener('click', () => adicionarBlocoPentest());
+
+    // -------------------------------------------------------------------------
+    // 7b. PREENCHER REVISÃO (passo 3)
+    // -------------------------------------------------------------------------
     function setText(id, texto) {
         const el = document.getElementById(id);
         if (el) el.textContent = texto;
     }
 
     function formatarData(isoStr) {
-        // Converte "YYYY-MM-DD" para "DD/MM/YYYY"
         if (!isoStr) return '—';
         const [y, m, d] = isoStr.split('-');
         return `${d}/${m}/${y}`;
     }
 
+    const revPentestsLista = document.getElementById('rev-pentests-lista');
+
+    function escapeHtml(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto ?? '';
+        return div.innerHTML;
+    }
+
+    function rotuloAbordagem(valor) {
+        return ABORDAGENS.find(a => a.value === valor)?.label || '—';
+    }
+
+    function rotuloAmbiente(valor) {
+        return AMBIENTES.find(a => a.value === valor)?.label || '—';
+    }
+
+    function preencherRevisao() {
+        setText('rev-cliente',      clienteSelecionado.nome || '—');
+        setText('rev-nome-projeto', document.getElementById('cp-nome-projeto')?.value || '—');
+        setText('rev-sigilo',       document.getElementById('cp-sigilo')?.selectedOptions[0]?.text || '—');
+
+        setText('rev-escopo',     document.getElementById('cp-escopo')?.value || '—');
+        setText('rev-alvos',      alvos.length ? alvos.join(', ') : '—');
+        setText('rev-restricoes', document.getElementById('cp-restricao')?.value || '—');
+
+        const dataInicio = document.getElementById('cp-data-inicio')?.value;
+        const dataFim    = document.getElementById('cp-data-fim')?.value;
+        setText('rev-data-inicio', dataInicio ? formatarData(dataInicio) : '—');
+        setText('rev-data-fim',    dataFim    ? formatarData(dataFim)    : '—');
+        setText('rev-horas',       document.getElementById('cp-horas-contratadas')?.value || '—');
+
+        if (!revPentestsLista) return;
+        revPentestsLista.innerHTML = '';
+
+        blocosPentest.forEach((bloco, idx) => {
+            const lider     = bloco.equipe.find(m => m.lider);
+            const analistas = bloco.equipe.filter(m => !m.lider).map(m => m.nome);
+
+            const secao = document.createElement('div');
+            secao.className = 'revisao-secao';
+            secao.innerHTML = `
+                <div class="revisao-secao__cabecalho">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--cor-azul-primaria)"></i>
+                    <span class="revisao-secao__titulo">Pentest ${idx + 1} — ${escapeHtml(bloco.tipoInput.value) || '—'}</span>
+                </div>
+                <div class="revisao-secao__corpo">
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Modalidade</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.modalidadeEl.value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Horas contratadas</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="horas"] input').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Abordagem</span>
+                        <span class="revisao-campo__valor">${escapeHtml(rotuloAbordagem(bloco.abordagemSelect.value))}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Ambiente</span>
+                        <span class="revisao-campo__valor">${escapeHtml(rotuloAmbiente(bloco.ambienteSelect.value))}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Metodologia</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.frameworksSelecionados.map(f => f.nome).join(', ')) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Referência</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="referencia"] input').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo revisao-campo--full">
+                        <span class="revisao-campo__rotulo">Escopo</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="escopo"] textarea').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Líder Técnico</span>
+                        <span class="revisao-campo__valor">${escapeHtml(lider ? lider.nome : '') || '—'}</span>
+                    </div>
+                    <div class="revisao-campo revisao-campo--full">
+                        <span class="revisao-campo__rotulo">Analista(s)</span>
+                        <span class="revisao-campo__valor">${escapeHtml(analistas.join(', ')) || '—'}</span>
+                    </div>
+                </div>
+            `;
+            revPentestsLista.appendChild(secao);
+        });
+    }
+
     // -------------------------------------------------------------------------
-    // 11. SUBMIT — injeta campos dinâmicos antes de enviar
+    // 8. SUBMIT — injeta campos dinâmicos antes de enviar
     // -------------------------------------------------------------------------
     const form = document.getElementById('form-cadastro-projeto');
 
     function prepararCamposDinamicos() {
-        // Remove inputs dinâmicos anteriores para não duplicar
         form.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
 
-        // Alvos como array
-        alvos.forEach(alvo => {
+        function adicionarHidden(nome, valor) {
             const inp = document.createElement('input');
             inp.type = 'hidden';
-            inp.name = 'alvos[]';
-            inp.value = alvo;
+            inp.name = nome;
+            inp.value = valor;
             inp.dataset.dinamico = '1';
             form.appendChild(inp);
-        });
+        }
 
-        // Tipos de pentest como array
-        tiposSelecionados.forEach(tipo => {
-            const inp = document.createElement('input');
-            inp.type = 'hidden';
-            inp.name = 'tipos_pentest_ids[]';
-            inp.value = tipo.id;
-            inp.dataset.dinamico = '1';
-            form.appendChild(inp);
-        });
+        alvos.forEach(alvo => adicionarHidden('alvos[]', alvo));
 
-        // Analistas como array
-        analistasSelecionados.forEach(analista => {
-            const inp = document.createElement('input');
-            inp.type = 'hidden';
-            inp.name = 'analistas_ids[]';
-            inp.value = analista.id;
-            inp.dataset.dinamico = '1';
-            form.appendChild(inp);
+        blocosPentest.forEach((bloco, idx) => {
+            adicionarHidden(`pentests[${idx}][tipo_pentest_id]`, bloco.tipoPentestId ?? '');
+            adicionarHidden(`pentests[${idx}][horas_contratadas]`, bloco.raiz.querySelector('[data-campo="horas"] input').value);
+            adicionarHidden(`pentests[${idx}][abordagem]`, bloco.abordagemSelect.value);
+            adicionarHidden(`pentests[${idx}][ambiente]`, bloco.ambienteSelect.value);
+            adicionarHidden(`pentests[${idx}][escopo]`, bloco.raiz.querySelector('[data-campo="escopo"] textarea').value);
+            adicionarHidden(`pentests[${idx}][referencia]`, bloco.raiz.querySelector('[data-campo="referencia"] input').value);
+
+            bloco.frameworksSelecionados.forEach(fw => adicionarHidden(`pentests[${idx}][frameworks_ids][]`, fw.id));
+
+            const lider = bloco.equipe.find(m => m.lider);
+            adicionarHidden(`pentests[${idx}][lider_id]`, lider ? lider.id : '');
+            bloco.equipe.filter(m => !m.lider).forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
         });
 
         // Converte horas_contratadas de hh:mm:ss para decimal (80:00:00 → 80.00)
@@ -652,10 +866,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     form?.addEventListener('submit', (e) => {
-        if (!validarPasso(3)) { e.preventDefault(); return; }
+        if (!validarPasso(1)) { e.preventDefault(); return; }
 
-        // Em modo editar, quem decide se o form realmente envia é a
-        // confirmação do popup — ver seção 17.
         if (modoEdicaoOuVisualizacao) {
             e.preventDefault();
             prepararCamposDinamicos();
@@ -667,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // 17. CONFIRMAÇÃO ANTES DE SALVAR (só em modo editar)
+    // 9. CONFIRMAÇÃO ANTES DE SALVAR (só em modo editar)
     // -------------------------------------------------------------------------
     const popupSalvar = document.getElementById('popupSalvar');
     popupSalvar?.querySelector('[data-popup-confirmar]')?.addEventListener('click', () => {
@@ -676,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // 12. RESET AO FECHAR O MODAL
+    // 10. RESET AO FECHAR O MODAL
     // -------------------------------------------------------------------------
     overlay.querySelectorAll('[data-modal-close]').forEach(btn => {
         btn.addEventListener('click', resetModal);
@@ -687,46 +899,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function resetModal() {
-        // Volta ao passo 0
         passos.forEach(p => p.classList.remove('ativo'));
         stepperItens.forEach(item => {
-            item.classList.remove(
-                'cad-projeto-stepper__item--ativo',
-                'cad-projeto-stepper__item--concluido'
-            );
+            item.classList.remove('cad-projeto-stepper__item--ativo', 'cad-projeto-stepper__item--concluido');
         });
         passoAtual = 0;
         passos[0].classList.add('ativo');
         stepperItens[0].classList.add('cad-projeto-stepper__item--ativo');
         atualizarBotoes();
 
-        // Limpa estado
-        clienteSelecionado   = { id: null, nome: '' };
-        liderSelecionado     = { id: null, nome: '' };
-        tiposSelecionados.length = 0;
+        clienteSelecionado = { id: null, nome: '' };
         alvos.length = 0;
-        analistasSelecionados.length = 0;
 
-        // Limpa chips renderizados
-        if (tiposChips)    tiposChips.innerHTML    = '';
-        if (alvosChips)    alvosChips.innerHTML    = '';
-        if (analistasChips) analistasChips.innerHTML = '';
+        blocosPentest.length = 0;
+        if (listaPentests) listaPentests.innerHTML = '';
 
-        // Limpa inputs
+        if (alvosChips) alvosChips.innerHTML = '';
+
         form?.reset();
-        if (clienteInput)  clienteInput.value  = '';
-        if (tipoInput)     tipoInput.value     = '';
-        if (horasExec)     horasExec.value     = '';
-        if (liderInput)    liderInput.value    = '';
-        if (dropzoneTxt)   dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
+        if (clienteInput) clienteInput.value = '';
+        if (dropzoneTxt)  dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
 
-        // Limpa erros
         overlay.querySelectorAll('.campo--erro').forEach(el => el.classList.remove('campo--erro'));
-
-        // Limpa inputs dinâmicos que foram injetados no submit
         form?.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
 
-        // Volta ao modo de cadastro (pode ter sido aberto em modo editar/visualizar)
         modoEdicaoOuVisualizacao = false;
         definirSomenteLeitura(false);
         const acaoInput = document.getElementById('cp-action');
@@ -738,15 +934,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const subtituloEl = document.getElementById('cadastro-projeto-subtitulo');
         if (tituloEl) tituloEl.textContent = 'Cadastro de Projeto';
         if (subtituloEl) subtituloEl.textContent = 'Informações da empresa contratante e do projeto';
+
+        adicionarBlocoPentest();
     }
 
     // -------------------------------------------------------------------------
-    // 13. UTILITÁRIO — criar chip reutilizável
+    // 11. UTILITÁRIO — criar chip reutilizável
     // -------------------------------------------------------------------------
     function criarChip(texto, onRemover) {
         const chip = document.createElement('span');
         chip.className = 'chip';
-        chip.textContent = texto;
+        chip.append(document.createTextNode(texto));
 
         const btnRemover = document.createElement('button');
         btnRemover.type = 'button';
@@ -760,7 +958,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
-    // 14. MÁSCARA SIMPLES PARA CAMPO hh:mm:ss
+    // 12. MÁSCARA SIMPLES PARA CAMPO hh:mm:ss (horas totais do projeto)
     // -------------------------------------------------------------------------
     const horasContratadas = document.getElementById('cp-horas-contratadas');
     horasContratadas?.addEventListener('input', (e) => {
@@ -775,7 +973,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // 15. ABRIR EM MODO EDITAR/VISUALIZAR (a partir dos botões da tabela)
+    // 13. ABRIR EM MODO EDITAR/VISUALIZAR (a partir dos botões da tabela)
     // -------------------------------------------------------------------------
     const projetos = JSON.parse(overlay.dataset.projetos || '[]');
 
@@ -801,6 +999,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function preencherModal(projeto, modo) {
         resetModal();
+        blocosPentest.length = 0;
+        if (listaPentests) listaPentests.innerHTML = '';
 
         document.getElementById('cp-action').value = 'editar';
         document.getElementById('cp-projeto-id').value = projeto.id;
@@ -808,60 +1008,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const tituloEl = document.getElementById('cadastro-projeto-titulo');
         if (tituloEl) tituloEl.textContent = modo === 'visualizar' ? 'Detalhes do Projeto' : 'Editar Projeto';
 
-        // Passo 1 — Cadastro
+        // Passo 1 — Informações do Cliente
         const empresa = empresas.find(e => String(e.id) === String(projeto.empresa_id));
         clienteSelecionado = { id: projeto.empresa_id, nome: empresa ? (empresa.nome_fantasia || empresa.razao_social) : '' };
         if (clienteInput) clienteInput.value = clienteSelecionado.nome;
         document.getElementById('cp-empresa-id').value = projeto.empresa_id ?? '';
 
         document.getElementById('cp-nome-projeto').value = projeto.nome ?? '';
-
-        (projeto.tipos_pentest_ids || []).forEach(idTipo => {
-            const tipo = tiposPentest.find(t => String(t.id) === String(idTipo));
-            if (tipo && !tiposSelecionados.find(t => t.id === tipo.id)) {
-                tiposSelecionados.push({ id: tipo.id, label: tipo.nome, horas_execucao: tipo.horas_execucao ?? null });
-            }
-        });
-        renderizarChipsTipo();
-
-        document.getElementById('cp-modalidade').value = projeto.modalidade ?? '';
         document.getElementById('cp-sigilo').value = projeto.nivel_sigilo ?? '';
         document.getElementById('cp-data-inicio').value = projeto.data_inicio ?? '';
         document.getElementById('cp-data-fim').value = projeto.data_fim_prevista ?? '';
         document.getElementById('cp-horas-contratadas').value = projeto.horas_contratadas
             ? horasDecimalParaTexto(projeto.horas_contratadas)
             : '';
-
-        // Passo 2 — Dados do Projeto
         document.getElementById('cp-escopo').value = projeto.escopo ?? '';
-        (projeto.alvos || []).forEach(valor => alvos.push(valor));
-        renderizarChipsAlvos();
         document.getElementById('cp-restricao').value = projeto.restricao ?? '';
 
-        // Passo 3 — Alocar Equipe
-        if (projeto.lider_id) {
-            const lider = usuarios.find(u => String(u.id) === String(projeto.lider_id));
-            if (lider) {
-                liderSelecionado = { id: lider.id, nome: lider.nome };
-                if (liderInput) liderInput.value = lider.nome;
-                document.getElementById('cp-lider-id').value = lider.id;
-            }
-        }
-        (projeto.especialistas_ids || []).forEach(idUsuario => {
-            const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
-            if (usuario && !analistasSelecionados.find(a => a.id === usuario.id)) {
-                analistasSelecionados.push({ id: usuario.id, nome: usuario.nome });
-            }
-        });
-        renderizarChipsAnalistas();
+        (projeto.alvos || []).forEach(valor => alvos.push(valor));
+        renderizarChipsAlvos();
 
-        // Precisa vir antes de definirSomenteLeitura/atualizarBotoes, senão o
-        // Salvar fica com a regra de "só no último passo" do cadastro.
+        // Passo 2 — Informações do Pentest (N blocos)
+        const pentestsProjeto = projeto.pentests || [];
+        pentestsProjeto.forEach(p => {
+            const bloco = adicionarBlocoPentest();
+
+            bloco.tipoPentestId = p.tipo_pentest_id ? Number(p.tipo_pentest_id) : null;
+            bloco.tipoInput.value = p.tipo_pentest_nome ?? '';
+            bloco.modalidadeEl.value = p.modalidade ?? '';
+
+            bloco.raiz.querySelector('[data-campo="horas"] input').value = p.horas_contratadas ?? '';
+            bloco.abordagemSelect.value = p.abordagem ?? '';
+            bloco.ambienteSelect.value = p.ambiente ?? '';
+            bloco.raiz.querySelector('[data-campo="escopo"] textarea').value = p.escopo ?? '';
+            bloco.raiz.querySelector('[data-campo="referencia"] input').value = p.referencia ?? '';
+
+            (p.frameworks_ids || []).forEach(idFw => {
+                const fw = frameworks.find(f => String(f.id) === String(idFw));
+                if (fw && !bloco.frameworksSelecionados.find(f => f.id === fw.id)) {
+                    bloco.frameworksSelecionados.push({ id: fw.id, nome: fw.nome });
+                }
+            });
+            bloco.renderizarChipsMetodologia();
+
+            if (p.lider_id) {
+                const lider = usuarios.find(u => String(u.id) === String(p.lider_id));
+                if (lider) bloco.equipe.push({ id: lider.id, nome: lider.nome, lider: true });
+            }
+            (p.analistas_ids || []).forEach(idUsuario => {
+                const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
+                if (usuario && !bloco.equipe.find(m => m.id === usuario.id)) {
+                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome, lider: false });
+                }
+            });
+            bloco.renderizarChipsAnalistas();
+        });
+
+        if (pentestsProjeto.length === 0) adicionarBlocoPentest();
+
         modoEdicaoOuVisualizacao = true;
         definirSomenteLeitura(modo === 'visualizar');
 
-        // Os 4 passos já têm dado válido desde a abertura — marca todos como
-        // concluídos, exceto o que está sendo exibido agora (passo 0).
         stepperItens.forEach((item, idx) => {
             if (idx !== passoAtual) item.classList.add('cad-projeto-stepper__item--concluido');
         });
@@ -876,7 +1082,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // 16. EXCLUIR PROJETO (soft delete, com confirmação)
+    // 14. EXCLUIR PROJETO (soft delete, com confirmação)
     // -------------------------------------------------------------------------
     const formExcluir = document.getElementById('form-excluir-projeto');
     document.querySelectorAll('.btn-excluir[data-projeto-id]').forEach(botao => {
@@ -890,6 +1096,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Inicialização: garante que os botões estejam corretos ao carregar
+    // Inicialização: primeiro bloco de pentest já visível no cadastro, e
+    // garante que os botões estejam corretos ao carregar.
+    adicionarBlocoPentest();
     atualizarBotoes();
 });

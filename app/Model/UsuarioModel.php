@@ -38,8 +38,15 @@ class UsuarioModel {
         )->execute([$hash, $id]);
     }
 
-    public function listarAtivosParaSelecao(): array {
-        $stmt = $this->conexao->prepare("SELECT id, nome FROM usuario WHERE habilitado = 1 ORDER BY nome");
+    /** Usuários ativos com perfil Pentester: os únicos que podem compor a equipe de um projeto. */
+    public function listarPentestersAtivosParaSelecao(): array {
+        $stmt = $this->conexao->prepare(
+            "SELECT usuario.id, usuario.nome
+             FROM usuario
+             INNER JOIN perfil_acesso ON perfil_acesso.id = usuario.perfil_id
+             WHERE usuario.habilitado = 1 AND perfil_acesso.habilitado = 1 AND perfil_acesso.nome = 'Pentester'
+             ORDER BY usuario.nome"
+        );
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

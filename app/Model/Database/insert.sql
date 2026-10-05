@@ -88,9 +88,9 @@ INSERT INTO checklist_item (checklist_id, titulo, referencia, obrigatorio, habil
 -- ---------------------------------------------------------
 -- projeto
 -- ---------------------------------------------------------
-INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, modalidade, nivel_sigilo, escopo, contrato, restricao, status, habilitado) VALUES
-(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 'GRAY BOX', 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 'CONCLUIDO', 1),
-(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 'BLACK BOX', 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 'EM_ANDAMENTO', 1);
+INSERT INTO projeto (empresa_id, nome, data_inicio, data_fim_prevista, data_fim_real, horas_contratadas, nivel_sigilo, escopo, contrato, restricao, status, habilitado) VALUES
+(1, 'Pentest Portal Institucional TechPantanal', '2026-05-04', '2026-05-18', '2026-05-17', 80.00, 'EXTERNO', 'Avaliação de segurança do portal institucional e API de autenticação.', 'CONTR-2026-0041', 'Não realizar testes de negação de serviço (DoS).', 'CONCLUIDO', 1),
+(2, 'Pentest Rede Interna Finasul - Agência São Paulo', '2026-06-01', '2026-06-20', NULL, 120.00, 'INTERNO', 'Avaliação de segurança da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', 'CONTR-2026-0058', 'Testes restritos ao horário comercial, das 08h às 18h.', 'EM_ANDAMENTO', 1);
 -- ids gerados: 1 a 2
 
 -- ---------------------------------------------------------
@@ -253,6 +253,29 @@ INSERT INTO projeto_tipo_pentest (projeto_id, tipo_pentest_id, habilitado) VALUE
 (1, 1, 1),
 (1, 7, 1),
 (2, 6, 1);
+
+-- ---------------------------------------------------------
+-- projeto_pentest (substitui projeto_tipo_pentest/projeto_usuario no fluxo
+-- novo: cada pentest de um projeto tem seus próprios campos e sua própria
+-- equipe, inclusive líder técnico próprio).
+-- ---------------------------------------------------------
+INSERT INTO projeto_pentest (id, projeto_id, tipo_pentest_id, horas_contratadas, abordagem, ambiente, escopo, referencia) VALUES
+(1, 1, 1, 50.00, 'GRAY BOX', 'PRODUCAO', 'Avaliação de segurança do portal institucional, incluindo autenticação e áreas restritas.', 'CWE-79, CWE-89'),
+(2, 1, 7, 30.00, 'GRAY BOX', 'PRODUCAO', 'Avaliação da API de autenticação exposta pelo portal.', 'CWE-287'),
+(3, 2, 6, 120.00, 'BLACK BOX', 'PRODUCAO', 'Avaliação da infraestrutura de rede interna, incluindo servidores e estações de trabalho.', 'CWE-287, CWE-798');
+-- ids gerados: 1 a 3
+
+INSERT INTO projeto_pentest_framework (projeto_pentest_id, framework_id) VALUES
+(1, 1),
+(2, 12),
+(3, 8), (3, 9);
+
+INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel) VALUES
+(1, 2, 'LIDER'),
+(1, 4, 'ESPECIALISTA'),
+(2, 4, 'LIDER'),
+(3, 3, 'LIDER'),
+(3, 2, 'ESPECIALISTA');
 
 -- insert 03/07/2026
 

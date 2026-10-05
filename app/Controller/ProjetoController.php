@@ -9,6 +9,7 @@ use Core\Controller;
 use Empresa;
 use Exception;
 use Model\Andamento;
+use Model\Framework;
 use Model\Projeto;
 use Model\TipoPentest;
 use Model\UsuarioModel;
@@ -36,6 +37,7 @@ class ProjetoController extends Controller
         $dadosModal = [
             'empresas' => htmlspecialchars(json_encode($this->listarEmpresasAtivas(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'tiposPentest' => htmlspecialchars(json_encode($this->listarTiposPentestAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'frameworks' => htmlspecialchars(json_encode((new Framework())->getAllRows(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'usuarios' => htmlspecialchars(json_encode($this->listarUsuariosAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'projetos' => htmlspecialchars(json_encode($this->listarCompletos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
         ];
@@ -86,7 +88,7 @@ class ProjetoController extends Controller
                 'empresa' => $projeto['nome_fantasia'] ?: $projeto['razao_social'],
                 'tipos_pentest' => $this->andamento->buscarTiposPentest($idProjeto),
                 'nivel_sigilo' => $projeto['nivel_sigilo'],
-                'modalidade' => $projeto['modalidade'],
+                'modalidade' => implode(', ', $this->andamento->buscarModalidades($idProjeto)),
                 'data_inicio' => $projeto['data_inicio'],
                 'data_fim_prevista' => $projeto['data_fim_prevista'],
                 'horas_contratadas_minutos' => $minutosContratados,
@@ -108,7 +110,13 @@ class ProjetoController extends Controller
 
     public function listar()
     {
-        return $this->projeto->listarDados();
+        $projetos = $this->projeto->listarDados();
+
+        foreach ($projetos as &$projeto) {
+            $projeto['modalidade'] = implode(', ', $this->andamento->buscarModalidades((int) $projeto['id']));
+        }
+
+        return $projetos;
     }
 
     public function listarCompletos()
@@ -117,12 +125,9 @@ class ProjetoController extends Controller
 
         foreach ($projetos as &$projeto) {
             $idProjeto = (int) $projeto['id'];
-            $equipe = $this->projeto->buscarEquipe($idProjeto);
 
             $projeto['alvos'] = $this->projeto->buscarAlvos($idProjeto);
-            $projeto['tipos_pentest_ids'] = $this->projeto->buscarTiposPentestIds($idProjeto);
-            $projeto['lider_id'] = $equipe['lider_id'];
-            $projeto['especialistas_ids'] = $equipe['especialistas_ids'];
+            $projeto['pentests'] = $this->projeto->buscarPentests($idProjeto);
         }
 
         return $projetos;
@@ -140,13 +145,30 @@ class ProjetoController extends Controller
 
     public function listarUsuariosAtivos()
     {
-        return $this->usuario->listarAtivosParaSelecao();
+        return $this->usuario->listarPentestersAtivosParaSelecao();
+    }
+
+    /** O filtro da tela não basta (dá pra forjar o POST): a equipe de cada pentest também é checada no servidor. */
+    private function validarEquipeElegivel(array $dadosLimpos): void
+    {
+        $idsPermitidos = array_map('intval', array_column($this->listarUsuariosAtivos(), 'id'));
+
+        foreach ($dadosLimpos['pentests'] as $pentest) {
+            $idsInformados = array_merge([(int) $pentest['lider_id']], $pentest['analistas_ids']);
+
+            foreach ($idsInformados as $id) {
+                if (!in_array((int) $id, $idsPermitidos, true)) {
+                    throw new Exception('A equipe só pode ter usuários ativos com perfil Pentester.');
+                }
+            }
+        }
     }
 
     public function cadastrar()
     {
         try {
             $dadosLimpos = ProjetoValidator::processarCadastro($_POST);
+            $this->validarEquipeElegivel($dadosLimpos);
             
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {
@@ -156,7 +178,7 @@ class ProjetoController extends Controller
             $idProjeto = $this->projeto->cadastrarProjeto($dadosLimpos);
 
             if ($idProjeto !== false) {
-                $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['lider_tecnico_id']);
+                $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['pentests'][0]['lider_id']);
                 $this->andamento->registrarLog($idProjeto, $idUsuarioLogado, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.');
 
                 return "Projeto cadastrado com sucesso!";
@@ -172,6 +194,7 @@ class ProjetoController extends Controller
     {
         try {
             $dadosLimpos = ProjetoValidator::processarEdicao($_POST);
+            $this->validarEquipeElegivel($dadosLimpos);
 
             $caminhoContrato = $this->processarUploadContrato();
             if ($caminhoContrato !== false) {

@@ -2,17 +2,22 @@
 /**
  * Components/modal-cadastro-projeto/index.php
  *
- * Modal de cadastro de projeto com stepper de 4 passos.
+ * Modal de cadastro de projeto com stepper de 3 passos: Informações do
+ * Cliente (dados do projeto), Informações do Pentest (N blocos
+ * repetíveis, um por pentest contratado, cada um com sua própria equipe)
+ * e Revisão (resumo de tudo antes de salvar).
  *
  * Variáveis esperadas (injetadas pela view pai antes do include):
  *   $dadosModal['empresas']     — JSON string com empresas ativas
- *   $dadosModal['tiposPentest'] — JSON string com tipos de pentest ativos
+ *   $dadosModal['tiposPentest'] — JSON string com tipos de pentest ativos (id, nome, categoria_id, categoria_nome)
+ *   $dadosModal['frameworks']   — JSON string com frameworks/metodologias ativos
  *   $dadosModal['usuarios']     — JSON string com usuários ativos
  */
 ?>
 <div class="modal-overlay" id="modal-cadastro-projeto"
     data-empresas="<?= $dadosModal['empresas'] ?>"
     data-tipos-pentest="<?= $dadosModal['tiposPentest'] ?>"
+    data-frameworks="<?= $dadosModal['frameworks'] ?>"
     data-usuarios="<?= $dadosModal['usuarios'] ?>"
     data-projetos="<?= $dadosModal['projetos'] ?>">
     <div class="modal modal--xl modal--com-stepper">
@@ -32,21 +37,16 @@
             <ol class="cad-projeto-stepper" id="cad-projeto-stepper" aria-label="Etapas do cadastro">
                 <li class="cad-projeto-stepper__item cad-projeto-stepper__item--ativo" data-passo="0">
                     <span class="cad-projeto-stepper__numero">1</span>
-                    <span class="cad-projeto-stepper__label">Cadastro</span>
+                    <span class="cad-projeto-stepper__label">Informações do Cliente</span>
                 </li>
                 <li class="cad-projeto-stepper__separador" aria-hidden="true"></li>
                 <li class="cad-projeto-stepper__item" data-passo="1">
                     <span class="cad-projeto-stepper__numero">2</span>
-                    <span class="cad-projeto-stepper__label">Dados do Projeto</span>
+                    <span class="cad-projeto-stepper__label">Informações do Pentest</span>
                 </li>
                 <li class="cad-projeto-stepper__separador" aria-hidden="true"></li>
                 <li class="cad-projeto-stepper__item" data-passo="2">
                     <span class="cad-projeto-stepper__numero">3</span>
-                    <span class="cad-projeto-stepper__label">Alocar Equipe</span>
-                </li>
-                <li class="cad-projeto-stepper__separador" aria-hidden="true"></li>
-                <li class="cad-projeto-stepper__item" data-passo="3">
-                    <span class="cad-projeto-stepper__numero">4</span>
                     <span class="cad-projeto-stepper__label">Revisão</span>
                 </li>
             </ol>
@@ -57,15 +57,13 @@
             method="post"
             enctype="multipart/form-data"
             novalidate>
-            <input type="hidden" name="action"          id="cp-action" value="cadastrar">
-            <input type="hidden" name="id"               id="cp-projeto-id">
-            <input type="hidden" name="empresa_id"      id="cp-empresa-id">
-            <input type="hidden" name="lider_tecnico_id" id="cp-lider-id">
+            <input type="hidden" name="action"     id="cp-action" value="cadastrar">
+            <input type="hidden" name="id"          id="cp-projeto-id">
+            <input type="hidden" name="empresa_id" id="cp-empresa-id">
 
-            <?php include __DIR__ . '/_passo-1-cadastro.php'; ?>
-            <?php include __DIR__ . '/_passo-2-dados.php'; ?>
-            <?php include __DIR__ . '/_passo-3-equipe.php'; ?>
-            <?php include __DIR__ . '/_passo-4-revisao.php'; ?>
+            <?php include __DIR__ . '/_passo-1-cliente.php'; ?>
+            <?php include __DIR__ . '/_passo-2-pentest.php'; ?>
+            <?php include __DIR__ . '/_passo-3-revisao.php'; ?>
 
             <footer class="modal__footer" id="cp-footer">
                 <button type="button" id="cp-btn-voltar" class="btn btn--secundario" style="display:none">
