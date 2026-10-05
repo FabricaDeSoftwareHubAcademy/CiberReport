@@ -2,9 +2,10 @@
 /**
  * Components/modal-cadastro-projeto/index.php
  *
- * Modal de cadastro de projeto com stepper de 2 passos: Informações do
- * Cliente (dados do projeto) e Informações do Pentest (N blocos
- * repetíveis, um por pentest contratado, cada um com sua própria equipe).
+ * Modal de cadastro de projeto com stepper de 3 passos: Informações do
+ * Cliente (dados do projeto), Informações do Pentest (N blocos
+ * repetíveis, um por pentest contratado, cada um com sua própria equipe)
+ * e Revisão (resumo de tudo antes de salvar).
  *
  * Variáveis esperadas (injetadas pela view pai antes do include):
  *   $dadosModal['empresas']     — JSON string com empresas ativas
@@ -43,6 +44,11 @@
                     <span class="cad-projeto-stepper__numero">2</span>
                     <span class="cad-projeto-stepper__label">Informações do Pentest</span>
                 </li>
+                <li class="cad-projeto-stepper__separador" aria-hidden="true"></li>
+                <li class="cad-projeto-stepper__item" data-passo="2">
+                    <span class="cad-projeto-stepper__numero">3</span>
+                    <span class="cad-projeto-stepper__label">Revisão</span>
+                </li>
             </ol>
         </div>
 
@@ -57,6 +63,7 @@
 
             <?php include __DIR__ . '/_passo-1-cliente.php'; ?>
             <?php include __DIR__ . '/_passo-2-pentest.php'; ?>
+            <?php include __DIR__ . '/_passo-3-revisao.php'; ?>
 
             <footer class="modal__footer" id="cp-footer">
                 <button type="button" id="cp-btn-voltar" class="btn btn--secundario" style="display:none">

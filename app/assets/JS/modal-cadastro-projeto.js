@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Estado do módulo
     let passoAtual     = 0;
-    const TOTAL_PASSOS = 2;
+    const TOTAL_PASSOS = 3;
     let modoEdicaoOuVisualizacao = false; // true quando o modal foi aberto via Editar/Visualizar
     let somenteLeitura = false; // true só no modo Visualizar (Editar continua editável)
 
@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         passos[passoAtual].classList.add('ativo');
         stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--ativo');
+
+        if (passoAtual === 2) preencherRevisao();
 
         atualizarBotoes();
         passos[passoAtual].scrollTop = 0;
@@ -715,6 +717,108 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnAdicionarPentest?.addEventListener('click', () => adicionarBlocoPentest());
+
+    // -------------------------------------------------------------------------
+    // 7b. PREENCHER REVISÃO (passo 3)
+    // -------------------------------------------------------------------------
+    function setText(id, texto) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = texto;
+    }
+
+    function formatarData(isoStr) {
+        if (!isoStr) return '—';
+        const [y, m, d] = isoStr.split('-');
+        return `${d}/${m}/${y}`;
+    }
+
+    const revPentestsLista = document.getElementById('rev-pentests-lista');
+
+    function escapeHtml(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto ?? '';
+        return div.innerHTML;
+    }
+
+    function rotuloAbordagem(valor) {
+        return ABORDAGENS.find(a => a.value === valor)?.label || '—';
+    }
+
+    function rotuloAmbiente(valor) {
+        return AMBIENTES.find(a => a.value === valor)?.label || '—';
+    }
+
+    function preencherRevisao() {
+        setText('rev-cliente',      clienteSelecionado.nome || '—');
+        setText('rev-nome-projeto', document.getElementById('cp-nome-projeto')?.value || '—');
+        setText('rev-sigilo',       document.getElementById('cp-sigilo')?.selectedOptions[0]?.text || '—');
+
+        setText('rev-escopo',     document.getElementById('cp-escopo')?.value || '—');
+        setText('rev-alvos',      alvos.length ? alvos.join(', ') : '—');
+        setText('rev-restricoes', document.getElementById('cp-restricao')?.value || '—');
+
+        const dataInicio = document.getElementById('cp-data-inicio')?.value;
+        const dataFim    = document.getElementById('cp-data-fim')?.value;
+        setText('rev-data-inicio', dataInicio ? formatarData(dataInicio) : '—');
+        setText('rev-data-fim',    dataFim    ? formatarData(dataFim)    : '—');
+        setText('rev-horas',       document.getElementById('cp-horas-contratadas')?.value || '—');
+
+        if (!revPentestsLista) return;
+        revPentestsLista.innerHTML = '';
+
+        blocosPentest.forEach((bloco, idx) => {
+            const lider     = bloco.equipe.find(m => m.lider);
+            const analistas = bloco.equipe.filter(m => !m.lider).map(m => m.nome);
+
+            const secao = document.createElement('div');
+            secao.className = 'revisao-secao';
+            secao.innerHTML = `
+                <div class="revisao-secao__cabecalho">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--cor-azul-primaria)"></i>
+                    <span class="revisao-secao__titulo">Pentest ${idx + 1} — ${escapeHtml(bloco.tipoInput.value) || '—'}</span>
+                </div>
+                <div class="revisao-secao__corpo">
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Modalidade</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.modalidadeEl.value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Horas contratadas</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="horas"] input').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Abordagem</span>
+                        <span class="revisao-campo__valor">${escapeHtml(rotuloAbordagem(bloco.abordagemSelect.value))}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Ambiente</span>
+                        <span class="revisao-campo__valor">${escapeHtml(rotuloAmbiente(bloco.ambienteSelect.value))}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Metodologia</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.frameworksSelecionados.map(f => f.nome).join(', ')) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Referência</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="referencia"] input').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo revisao-campo--full">
+                        <span class="revisao-campo__rotulo">Escopo</span>
+                        <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="escopo"] textarea').value) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo">
+                        <span class="revisao-campo__rotulo">Líder Técnico</span>
+                        <span class="revisao-campo__valor">${escapeHtml(lider ? lider.nome : '') || '—'}</span>
+                    </div>
+                    <div class="revisao-campo revisao-campo--full">
+                        <span class="revisao-campo__rotulo">Analista(s)</span>
+                        <span class="revisao-campo__valor">${escapeHtml(analistas.join(', ')) || '—'}</span>
+                    </div>
+                </div>
+            `;
+            revPentestsLista.appendChild(secao);
+        });
+    }
 
     // -------------------------------------------------------------------------
     // 8. SUBMIT — injeta campos dinâmicos antes de enviar
