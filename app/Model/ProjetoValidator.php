@@ -40,16 +40,13 @@ class ProjetoValidator
                 $dados['horas_contratadas'] ?? null,
                 FILTER_VALIDATE_FLOAT
             ),
-            'modalidade' => trim((string) ($dados['modalidade'] ?? '')),
             'nivel_sigilo' => trim((string) ($dados['nivel_sigilo'] ?? '')),
             'escopo' => trim((string) ($dados['escopo'] ?? '')),
             'contrato' => trim((string) ($dados['contrato'] ?? '')),
             'restricao' => trim((string) ($dados['restricao'] ?? '')),
             'status' => trim((string) ($dados['status'] ?? 'PLANEJADO')),
-            'lider_tecnico_id' => filter_var($dados['lider_tecnico_id'] ?? null, FILTER_VALIDATE_INT),
             'alvos' => self::sanitizarAlvos($dados['alvos'] ?? []),
-            'tipos_pentest_ids' => self::sanitizarIds($dados['tipos_pentest_ids'] ?? []),
-            'analistas_ids' => self::sanitizarIds($dados['analistas_ids'] ?? []),
+            'pentests' => self::sanitizarPentests($dados['pentests'] ?? []),
         ];
     }
 
@@ -63,6 +60,29 @@ class ProjetoValidator
         $alvos = array_filter($alvos, fn($alvo) => $alvo !== '');
 
         return array_values(array_unique($alvos));
+    }
+
+    private static function sanitizarPentests($pentests): array
+    {
+        if (!is_array($pentests)) {
+            return [];
+        }
+
+        return array_map(function ($pentest) {
+            $pentest = is_array($pentest) ? $pentest : [];
+
+            return [
+                'tipo_pentest_id' => filter_var($pentest['tipo_pentest_id'] ?? null, FILTER_VALIDATE_INT),
+                'horas_contratadas' => filter_var($pentest['horas_contratadas'] ?? null, FILTER_VALIDATE_FLOAT),
+                'abordagem' => trim((string) ($pentest['abordagem'] ?? '')),
+                'ambiente' => trim((string) ($pentest['ambiente'] ?? '')),
+                'escopo' => trim((string) ($pentest['escopo'] ?? '')),
+                'referencia' => trim((string) ($pentest['referencia'] ?? '')) ?: null,
+                'frameworks_ids' => self::sanitizarIds($pentest['frameworks_ids'] ?? []),
+                'lider_id' => filter_var($pentest['lider_id'] ?? null, FILTER_VALIDATE_INT),
+                'analistas_ids' => self::sanitizarIds($pentest['analistas_ids'] ?? []),
+            ];
+        }, array_values($pentests));
     }
 
     private static function sanitizarIds($ids): array
@@ -113,33 +133,20 @@ class ProjetoValidator
             $erros[] = 'As horas contratadas devem ser maiores que zero.';
         }
 
-        if ($dadosLimpos['modalidade'] === '') {
-            $erros[] = 'A modalidade do projeto é obrigatória.';
-        }
-
         if ($dadosLimpos['nivel_sigilo'] === '') {
             $erros[] = 'O nível de sigilo é obrigatório.';
         }
 
         if ($dadosLimpos['escopo'] === '') {
-            $erros[] = 'O escopo é obrigatório.';
+            $erros[] = 'O resumo do projeto contratado é obrigatório.';
         }
 
-        if ($dadosLimpos['lider_tecnico_id'] === false || (int) $dadosLimpos['lider_tecnico_id'] <= 0) {
-            $erros[] = 'O líder técnico é obrigatório.';
+        if (empty($dadosLimpos['pentests'])) {
+            $erros[] = 'Adicione ao menos um pentest ao projeto.';
         }
 
-        if (empty($dadosLimpos['tipos_pentest_ids'])) {
-            $erros[] = 'Selecione ao menos um tipo de pentest.';
-        }
-
-        $modalidadesPermitidas = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
         $sigilosPermitidos = ['INTERNO', 'EXTERNO'];
         $statusPermitidos = ['PLANEJADO', 'EM_ANDAMENTO', 'PAUSADO', 'CONCLUIDO', 'CANCELADO'];
-
-        if (!in_array($dadosLimpos['modalidade'], $modalidadesPermitidas, true)) {
-            $erros[] = 'A modalidade do projeto é inválida.';
-        }
 
         if (!in_array($dadosLimpos['nivel_sigilo'], $sigilosPermitidos, true)) {
             $erros[] = 'O nível de sigilo é inválido.';
@@ -165,8 +172,48 @@ class ProjetoValidator
             $erros[] = 'A data de fim real não pode ser anterior à data de início.';
         }
 
+        self::validarPentests($dadosLimpos['pentests'], $erros);
+
         if (count($erros) > 0) {
             throw new Exception(implode('<br>', $erros));
+        }
+    }
+
+    private static function validarPentests(array $pentests, array &$erros): void
+    {
+        $abordagensPermitidas = ['BLACK BOX', 'GRAY BOX', 'WHITE BOX'];
+        $ambientesPermitidos = ['DESENVOLVIMENTO', 'HOMOLOGACAO', 'PRODUCAO'];
+
+        foreach ($pentests as $indice => $pentest) {
+            $numero = $indice + 1;
+
+            if ($pentest['tipo_pentest_id'] === false || $pentest['tipo_pentest_id'] <= 0) {
+                $erros[] = "Pentest {$numero}: selecione o tipo de pentest.";
+            }
+
+            if ($pentest['horas_contratadas'] === false || $pentest['horas_contratadas'] <= 0) {
+                $erros[] = "Pentest {$numero}: as horas contratadas devem ser maiores que zero.";
+            }
+
+            if (!in_array($pentest['abordagem'], $abordagensPermitidas, true)) {
+                $erros[] = "Pentest {$numero}: a abordagem é inválida.";
+            }
+
+            if (!in_array($pentest['ambiente'], $ambientesPermitidos, true)) {
+                $erros[] = "Pentest {$numero}: o ambiente é inválido.";
+            }
+
+            if ($pentest['escopo'] === '') {
+                $erros[] = "Pentest {$numero}: o escopo é obrigatório.";
+            }
+
+            if (empty($pentest['frameworks_ids'])) {
+                $erros[] = "Pentest {$numero}: selecione ao menos uma metodologia.";
+            }
+
+            if ($pentest['lider_id'] === false || (int) $pentest['lider_id'] <= 0) {
+                $erros[] = "Pentest {$numero}: o líder técnico é obrigatório.";
+            }
         }
     }
 }

@@ -29,10 +29,25 @@ class Andamento
     public function buscarTiposPentest(int $idProjeto): array
     {
         $sql = $this->pdo->prepare(
-            "SELECT tipo_pentest.nome
-             FROM projeto_tipo_pentest
-             INNER JOIN tipo_pentest ON tipo_pentest.id = projeto_tipo_pentest.tipo_pentest_id
-             WHERE projeto_tipo_pentest.projeto_id = :id AND projeto_tipo_pentest.habilitado = 1"
+            "SELECT DISTINCT tipo_pentest.nome
+             FROM projeto_pentest
+             INNER JOIN tipo_pentest ON tipo_pentest.id = projeto_pentest.tipo_pentest_id
+             WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1"
+        );
+        $sql->bindValue(':id', $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        return array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'nome');
+    }
+
+    /** Modalidades (categorias) distintas entre todos os pentests do projeto — um projeto pode ter mais de uma. */
+    public function buscarModalidades(int $idProjeto): array
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT DISTINCT categoria_pentest.nome
+             FROM projeto_pentest
+             INNER JOIN tipo_pentest ON tipo_pentest.id = projeto_pentest.tipo_pentest_id
+             INNER JOIN categoria_pentest ON categoria_pentest.id = tipo_pentest.categoria_id
+             WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1"
         );
         $sql->bindValue(':id', $idProjeto, PDO::PARAM_INT);
         $sql->execute();
@@ -68,14 +83,24 @@ class Andamento
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Equipe agregada de todos os blocos de pentest do projeto. Um mesmo
+     * usuário pode ser líder em um pentest e especialista em outro — nesse
+     * caso ele aparece uma única vez, priorizando o papel de LIDER.
+     */
     public function buscarEquipe(int $idProjeto): array
     {
         $sql = $this->pdo->prepare(
-            "SELECT usuario.id, usuario.nome, projeto_usuario.papel
-             FROM projeto_usuario
-             INNER JOIN usuario ON usuario.id = projeto_usuario.usuario_id
-             WHERE projeto_usuario.projeto_id = :id AND projeto_usuario.habilitado = 1
-             ORDER BY FIELD(projeto_usuario.papel, 'LIDER', 'GESTOR', 'ESPECIALISTA'), usuario.nome"
+            "SELECT usuario.id, usuario.nome,
+                    CASE WHEN MIN(CASE WHEN projeto_pentest_usuario.papel = 'LIDER' THEN 0 ELSE 1 END) = 0
+                         THEN 'LIDER' ELSE 'ESPECIALISTA' END AS papel
+             FROM projeto_pentest
+             INNER JOIN projeto_pentest_usuario ON projeto_pentest_usuario.projeto_pentest_id = projeto_pentest.id
+                 AND projeto_pentest_usuario.habilitado = 1
+             INNER JOIN usuario ON usuario.id = projeto_pentest_usuario.usuario_id
+             WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1
+             GROUP BY usuario.id, usuario.nome
+             ORDER BY FIELD(papel, 'LIDER', 'ESPECIALISTA'), usuario.nome"
         );
         $sql->bindValue(':id', $idProjeto, PDO::PARAM_INT);
         $sql->execute();
