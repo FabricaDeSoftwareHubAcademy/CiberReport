@@ -181,7 +181,7 @@ Da mais simples para a mais trabalhosa:
 4. `vulnerabilidades`
 5. `gerenciamento-projeto`
 6. `projetos-alocados`
-7. `checklist` (a maior — `ChecklistModel.php` tem 865 linhas — deixe por último)
+7. `checklist` (migrado para `ChecklistDAO`)
 
 Ao migrar `checklist`, dá para remover a "ponte temporária"
 `TipoPentestController::listarChecklistsAtivos()` e criar um `ChecklistDAO`

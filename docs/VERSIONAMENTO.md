@@ -35,7 +35,7 @@ no SQL), então nada impede tecnicamente a solução proposta.
 Tabelas relevantes (nomes e colunas reais, resumidos):
 
 ```sql
-checklist (id, nome, descricao, categoria, habilitado)
+checklist (id, nome, descricao, habilitado)
 checklist_item_catalogo (id, titulo, referencia, obrigatorio, habilitado)
 checklist_item_vinculo (id, checklist_id, item_id)
 
@@ -56,7 +56,7 @@ projeto_tipo_pentest (projeto_id, tipo_pentest_id, habilitado)
 
 Models/Controllers envolvidos:
 
-- `app/Model/Database/ChecklistModel.php` — CRUD de `checklist` +
+- `app/DAO/ChecklistDAO.php` — CRUD de `checklist` +
   `checklist_item_catalogo`/`checklist_item_vinculo`. `atualizar()` faz `UPDATE`
   direto na linha da checklist.
 - `app/Model/TipoPentest.php` — `atualizar()` faz `UPDATE` na linha de `tipo_pentest`
@@ -114,7 +114,7 @@ precisamos. A mudança é parar de sobrescrever o que aquele `id` significa.
 ### Fluxo de edição (novo)
 
 Em vez de `UPDATE checklist SET nome=?, descricao=? WHERE id=?`, o
-`ChecklistModel::atualizar()` passa a:
+`ChecklistDAO::atualizarChecklist()` passa a:
 
 1. Buscar a linha atual (`atual=1` do grupo) + seus `checklist_item_vinculo`.
 2. `INSERT` uma linha nova em `checklist` com o conteúdo editado, `grupo_id` =
