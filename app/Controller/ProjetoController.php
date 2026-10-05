@@ -9,6 +9,7 @@ use Core\Controller;
 use Empresa;
 use Exception;
 use Model\Andamento;
+use Model\Framework;
 use Model\Projeto;
 use Model\TipoPentest;
 use Model\UsuarioModel;
@@ -36,6 +37,7 @@ class ProjetoController extends Controller
         $dadosModal = [
             'empresas' => htmlspecialchars(json_encode($this->listarEmpresasAtivas(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'tiposPentest' => htmlspecialchars(json_encode($this->listarTiposPentestAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'frameworks' => htmlspecialchars(json_encode((new Framework())->getAllRows(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'usuarios' => htmlspecialchars(json_encode($this->listarUsuariosAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'projetos' => htmlspecialchars(json_encode($this->listarCompletos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
         ];
@@ -108,7 +110,13 @@ class ProjetoController extends Controller
 
     public function listar()
     {
-        return $this->projeto->listarDados();
+        $projetos = $this->projeto->listarDados();
+
+        foreach ($projetos as &$projeto) {
+            $projeto['modalidade'] = implode(', ', $this->andamento->buscarModalidades((int) $projeto['id']));
+        }
+
+        return $projetos;
     }
 
     public function listarCompletos()

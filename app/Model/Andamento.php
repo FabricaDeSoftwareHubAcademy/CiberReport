@@ -91,16 +91,19 @@ class Andamento
     public function buscarEquipe(int $idProjeto): array
     {
         $sql = $this->pdo->prepare(
-            "SELECT usuario.id, usuario.nome,
-                    CASE WHEN MIN(CASE WHEN projeto_pentest_usuario.papel = 'LIDER' THEN 0 ELSE 1 END) = 0
-                         THEN 'LIDER' ELSE 'ESPECIALISTA' END AS papel
-             FROM projeto_pentest
-             INNER JOIN projeto_pentest_usuario ON projeto_pentest_usuario.projeto_pentest_id = projeto_pentest.id
-                 AND projeto_pentest_usuario.habilitado = 1
-             INNER JOIN usuario ON usuario.id = projeto_pentest_usuario.usuario_id
-             WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1
-             GROUP BY usuario.id, usuario.nome
-             ORDER BY FIELD(papel, 'LIDER', 'ESPECIALISTA'), usuario.nome"
+            "SELECT equipe.id, equipe.nome, equipe.papel
+             FROM (
+                 SELECT usuario.id, usuario.nome,
+                        CASE WHEN MIN(CASE WHEN projeto_pentest_usuario.papel = 'LIDER' THEN 0 ELSE 1 END) = 0
+                             THEN 'LIDER' ELSE 'ESPECIALISTA' END AS papel
+                 FROM projeto_pentest
+                 INNER JOIN projeto_pentest_usuario ON projeto_pentest_usuario.projeto_pentest_id = projeto_pentest.id
+                     AND projeto_pentest_usuario.habilitado = 1
+                 INNER JOIN usuario ON usuario.id = projeto_pentest_usuario.usuario_id
+                 WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1
+                 GROUP BY usuario.id, usuario.nome
+             ) AS equipe
+             ORDER BY FIELD(equipe.papel, 'LIDER', 'ESPECIALISTA'), equipe.nome"
         );
         $sql->bindValue(':id', $idProjeto, PDO::PARAM_INT);
         $sql->execute();

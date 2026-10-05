@@ -41,67 +41,6 @@
                     maxlength="80">
                 <span class="campo__mensagem-erro" id="erro-nome-projeto">Informe o nome do projeto.</span>
             </div>
-        </div>
-    </div>
-    <!-- Seção: Informações do Pentest -->
-    <div class="modal-secao">
-        <h3 class="modal-secao__titulo">
-            <i class="fa-solid fa-shield-halved modal-secao__titulo-icone"></i>
-            Informações do Pentest
-        </h3>
-        <div class="modal-grade">
-            <!-- Tipo de Pentest (combobox multi-seleção) -->
-            <div class="campo" id="campo-tipo-pentest">
-                <label class="campo__label campo__label--obrigatorio" for="cp-tipo-busca">Nome do Pentest</label>
-                <div class="campo__multi">
-                    <div class="campo__multi-busca">
-                        <div class="campo__combobox" style="flex:1">
-                            <div class="campo__combobox-linha">
-                                <div class="campo__combobox-campo">
-                                    <input type="text"
-                                        id="cp-tipo-busca"
-                                        class="campo__input campo__combobox-input"
-                                        placeholder="Mobile Application"
-                                        role="combobox"
-                                        aria-autocomplete="list"
-                                        aria-controls="cp-tipo-lista"
-                                        aria-expanded="false"
-                                        autocomplete="off">
-                                    <button type="button" class="campo__combobox-alternar" aria-label="Mostrar tipos de pentest">
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </button>
-                                    <div id="cp-tipo-lista" class="campo__combobox-lista" role="listbox" hidden></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="campo__multi-chips" id="cp-tipos-chips" aria-label="Tipos de pentest selecionados"></div>
-                </div>
-                <span class="campo__mensagem-erro" id="erro-tipo-pentest">Selecione ao menos um tipo de pentest.</span>
-            </div>
-            <!-- Horas de execução (readonly) -->
-            <div class="campo">
-                <label class="campo__label" for="cp-horas-execucao">Horas de execução de Pentest</label>
-                <input type="text"
-                    id="cp-horas-execucao"
-                    class="campo__input campo__input--readonly"
-                    placeholder="80 Horas"
-                    readonly>
-            </div>
-            <!-- Modalidade -->
-            <div class="campo" id="campo-modalidade">
-                <label class="campo__label campo__label--obrigatorio" for="cp-modalidade">Tipo de Pentest</label>
-                <div class="campo__select-wrapper">
-                    <select id="cp-modalidade" name="modalidade" class="campo__select">
-                        <option value="" disabled selected>Selecione a modalidade...</option>
-                        <option value="BLACK BOX">Black Box</option>
-                        <option value="GRAY BOX">Gray Box</option>
-                        <option value="WHITE BOX">White Box</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down campo__select-seta"></i>
-                </div>
-                <span class="campo__mensagem-erro" id="erro-modalidade">Selecione a modalidade.</span>
-            </div>
             <!-- Nível de Sigilo -->
             <div class="campo" id="campo-sigilo">
                 <label class="campo__label campo__label--obrigatorio" for="cp-sigilo">Nível de Sigilo (Confidencialidade)</label>
@@ -148,9 +87,9 @@
                     </button>
                 </div>
             </div>
-            <!-- Horas Contratadas -->
+            <!-- Horas totais contratadas -->
             <div class="campo" id="campo-horas-contratadas">
-                <label class="campo__label campo__label--obrigatorio" for="cp-horas-contratadas">Horas Contratadas</label>
+                <label class="campo__label campo__label--obrigatorio" for="cp-horas-contratadas">Horas totais contratadas</label>
                 <div class="campo__input-wrapper">
                     <input type="text"
                         id="cp-horas-contratadas"
@@ -164,6 +103,62 @@
                     </button>
                 </div>
                 <span class="campo__mensagem-erro" id="erro-horas">Informe as horas contratadas (ex: 80:00:00).</span>
+            </div>
+        </div>
+    </div>
+    <!-- Seção: Escopo e Contrato -->
+    <div class="modal-secao">
+        <h3 class="modal-secao__titulo">
+            <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
+            Escopo e Contrato
+        </h3>
+        <div class="modal-grade">
+            <!-- Resumo do projeto contratado (esquerda) -->
+            <div class="campo" id="campo-escopo">
+                <label class="campo__label campo__label--obrigatorio" for="cp-escopo">Resumo do projeto contratado</label>
+                <textarea id="cp-escopo"
+                    name="escopo"
+                    class="campo__textarea"
+                    rows="6"
+                    placeholder="Descreva o objetivo e detalhe do projeto..."></textarea>
+                <span class="campo__mensagem-erro" id="erro-escopo">O resumo do projeto contratado é obrigatório.</span>
+                <!-- Alvos/IPs/URL/Domínio -->
+                <div class="campo" style="margin-top: var(--espaco-md)">
+                    <label class="campo__label" for="cp-alvo-input">Ativos/Alvos/IPs/URL/Domínio</label>
+                    <div class="campo__multi">
+                        <div class="campo__multi-busca">
+                            <input type="text"
+                                id="cp-alvo-input"
+                                class="campo__multi-input"
+                                placeholder="Escreva um ativo e adicione...">
+                            <button type="button" id="cp-alvo-add" class="campo__botao-adicionar" aria-label="Adicionar ativo">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="campo__multi-chips" id="cp-alvos-chips" aria-label="Alvos adicionados"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Contrato + Restrições (direita) -->
+            <div class="campo">
+                <label class="campo__label" style="display:block; margin-bottom: var(--espaco-xs)">Anexo do contrato</label>
+                <!-- Dropzone -->
+                <div class="campo__dropzone" id="cp-dropzone" role="button" tabindex="0" aria-label="Arraste ou selecione o contrato PDF">
+                    <i class="fa-solid fa-cloud-arrow-down campo__dropzone-icone"></i>
+                    <p class="campo__dropzone-titulo" id="cp-dropzone-texto">Arraste e solte seu arquivo aqui</p>
+                    <span class="campo__dropzone-ou">ou</span>
+                    <label class="campo__dropzone-botao" for="cp-contrato-input" style="cursor:pointer">Selecionar Arquivo</label>
+                    <input type="file" id="cp-contrato-input" name="contrato" class="campo__dropzone-input" accept="application/pdf">
+                </div>
+                <!-- Restrições -->
+                <div class="campo" style="margin-top: var(--espaco-md)">
+                    <label class="campo__label" for="cp-restricao">Restrições</label>
+                    <textarea id="cp-restricao"
+                        name="restricao"
+                        class="campo__textarea"
+                        rows="5"
+                        placeholder="Descreva as restrições..."></textarea>
+                </div>
             </div>
         </div>
     </div>
