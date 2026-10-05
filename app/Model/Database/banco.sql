@@ -93,7 +93,9 @@ CREATE TABLE IF NOT EXISTS projeto (
   data_fim_prevista DATE DEFAULT NULL,
   data_fim_real DATE DEFAULT NULL,
   horas_contratadas DECIMAL(8, 2) NOT NULL DEFAULT 0.00,
-  modalidade ENUM ('BLACK BOX', 'GRAY BOX', 'WHITE BOX') NOT NULL,
+  -- "Modalidade" (Black/Gray/White Box) saiu daqui: agora é "abordagem",
+  -- por pentest, em projeto_pentest — um mesmo projeto pode ter pentests
+  -- com abordagens diferentes.
   nivel_sigilo ENUM ('INTERNO', 'EXTERNO') NOT NULL,
   escopo TEXT NOT NULL,
   contrato VARCHAR(255) DEFAULT NULL,
@@ -242,6 +244,9 @@ CREATE TABLE IF NOT EXISTS tipo_pentest (
 
 -- Liga um projeto a um ou mais tipos de pentest (N:N).
 -- Matheus Kill: usar esta tabela para gravar/ler os tipos escolhidos no cadastro de projeto.
+-- Obsoleta desde que o cadastro passou a ter N blocos de "Pentest" por
+-- projeto (ver projeto_pentest, abaixo) — mantida só para não quebrar quem
+-- ainda lê dado antigo; o cadastro novo não grava mais aqui.
 CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
   projeto_id INT NOT NULL,
   tipo_pentest_id INT NOT NULL,
@@ -249,6 +254,52 @@ CREATE TABLE IF NOT EXISTS projeto_tipo_pentest (
   PRIMARY KEY (projeto_id, tipo_pentest_id),
   FOREIGN KEY (projeto_id) REFERENCES projeto(id),
   FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id)
+);
+
+-- Cada projeto pode ter N pentests, e cada um tem seus próprios campos e
+-- sua própria equipe — é o que antes era "projeto_tipo_pentest" (só o
+-- vínculo) virando uma entidade completa.
+CREATE TABLE IF NOT EXISTS projeto_pentest (
+  id INT NOT NULL AUTO_INCREMENT,
+  projeto_id INT NOT NULL,
+  tipo_pentest_id INT NOT NULL,
+  horas_contratadas DECIMAL(8, 2) NOT NULL DEFAULT 0.00,
+  -- "Modalidade" (Web/Mobile/API/Infra...) não é coluna própria: é a
+  -- categoria do tipo_pentest escolhido (categoria_pentest, via
+  -- tipo_pentest.categoria_id), lida automaticamente na consulta.
+  abordagem ENUM('BLACK BOX', 'GRAY BOX', 'WHITE BOX') NOT NULL,
+  ambiente ENUM('DESENVOLVIMENTO', 'HOMOLOGACAO', 'PRODUCAO') NOT NULL,
+  escopo TEXT NOT NULL,
+  referencia VARCHAR(255) DEFAULT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (projeto_id) REFERENCES projeto(id),
+  FOREIGN KEY (tipo_pentest_id) REFERENCES tipo_pentest(id)
+);
+
+-- "Metodologia" do bloco de pentest: frameworks escolhidos manualmente
+-- aqui, independente dos frameworks padrão do tipo_pentest no catálogo
+-- (tipo_pentest_framework) — o analista pode divergir do padrão.
+CREATE TABLE IF NOT EXISTS projeto_pentest_framework (
+  projeto_pentest_id INT NOT NULL,
+  framework_id INT NOT NULL,
+  PRIMARY KEY (projeto_pentest_id, framework_id),
+  FOREIGN KEY (projeto_pentest_id) REFERENCES projeto_pentest(id),
+  FOREIGN KEY (framework_id) REFERENCES framework(id)
+);
+
+-- Equipe por pentest (não mais por projeto): cada bloco de pentest tem
+-- seu próprio líder técnico e especialistas.
+CREATE TABLE IF NOT EXISTS projeto_pentest_usuario (
+  projeto_pentest_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  papel ENUM('LIDER', 'ESPECIALISTA') NOT NULL,
+  habilitado TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (projeto_pentest_id, usuario_id, papel),
+  FOREIGN KEY (projeto_pentest_id) REFERENCES projeto_pentest(id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 CREATE TABLE IF NOT EXISTS tipo_pentest_framework (
