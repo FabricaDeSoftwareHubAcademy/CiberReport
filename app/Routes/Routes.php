@@ -50,4 +50,7 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/projetos-alocados','ProjetosAlocadosController@index');
     Route::POST('/projetos-alocados','ProjetosAlocadosController@index');
+   
+    Route::GET('/dashboard-analista','DashboardAnalistaController@index');
+    Route::POST('/dashboard-analista','DashboardAnalistaController@index');
 });
