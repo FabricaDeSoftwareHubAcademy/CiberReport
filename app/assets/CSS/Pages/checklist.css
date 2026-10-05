@@ -24,7 +24,6 @@
     white-space: nowrap;
 }
 
-.checklist-categoria-badge,
 .checklist-visualizacao-status,
 .checklist-visualizacao-total,
 .checklist-visualizacao-tipo,
@@ -34,16 +33,6 @@
     align-items: center;
     justify-content: center;
     white-space: nowrap;
-}
-
-.checklist-categoria-badge {
-    padding: var(--espaco-xs) var(--espaco-sm);
-    border-radius: var(--raio-sm);
-    background: var(--cor-azul-primaria);
-    color: var(--cor-fundo-branco);
-    font-size: var(--fonte-legenda);
-    font-weight: 600;
-    letter-spacing: 0.04em;
 }
 
 .checklist-status {
@@ -61,6 +50,29 @@
 
 .checklist-tabela-vazia {
     text-align: center;
+}
+
+/* O ID continua disponível no DOM para as ações, mas não ocupa espaço visual. */
+#table th:first-child,
+#table td:first-child {
+    display: none;
+}
+
+#table th,
+#table td {
+    padding: var(--espaco-sm) var(--espaco-md);
+}
+
+.checklist-formulario .checklist-dados-grid,
+#checklist-modal-item .checklist-dados-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-sm);
+}
+
+.checklist-formulario .modal-secao,
+#checklist-modal-item .modal__body {
+    padding-top: var(--espaco-md);
+    padding-bottom: var(--espaco-md);
 }
 
 #checklist-modal-formulario .modal,
@@ -84,6 +96,24 @@
 #checklist-modal-gerenciar-itens .modal__footer,
 #checklist-modal-item .modal__footer {
     flex-shrink: 0;
+}
+
+#checklist-modal-formulario .modal {
+    width: min(900px, calc(100vw - 2rem));
+}
+
+#checklist-modal-item .modal {
+    width: min(720px, calc(100vw - 2rem));
+}
+
+#checklist-modal-gerenciar-itens .modal,
+#checklist-modal-visualizar .modal {
+    width: min(1040px, calc(100vw - 2rem));
+}
+
+#checklist-modal-item textarea {
+    min-height: 5.5rem;
+    max-height: 5.5rem;
 }
 
 .checklist-formulario {
@@ -124,58 +154,12 @@
     font-size: var(--fonte-legenda);
 }
 
-.checklist-categoria-cabecalho {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--espaco-sm);
-}
-
-.campo__ajuda {
-    display: block;
-    margin-top: var(--espaco-xs);
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-legenda);
-}
-
-.checklist-categoria-cabecalho .campo__ajuda {
-    margin-top: 0;
-    text-align: right;
-}
-
-.checklist-categoria-combobox,
 .checklist-nome-combobox,
 .checklist-gerenciar-campo-pesquisa {
     position: relative;
 }
 
-.checklist-categoria-input {
-    width: 100%;
-    padding-right: 4.5rem;
-}
-
-.checklist-categoria-botao {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 4rem;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    border-left: 1px solid var(--cor-borda-padrao);
-    border-radius: 0 var(--raio-md) var(--raio-md) 0;
-    background: transparent;
-    color: var(--cor-texto-secundario);
-    cursor: pointer;
-}
-
-.checklist-categoria-botao:hover,
-.checklist-categoria-opcao:hover {
-    background: var(--cor-cinza-hover);
-    color: var(--cor-azul-destaques);
-}
-
-.checklist-categoria-lista {
+.checklist-nome-lista {
     position: absolute;
     top: calc(100% + var(--espaco-xs));
     right: 0;
@@ -190,7 +174,12 @@
     box-shadow: var(--sombra-md);
 }
 
-.checklist-categoria-opcao {
+.checklist-nome-opcao:hover {
+    background: var(--cor-cinza-hover);
+    color: var(--cor-azul-destaques);
+}
+
+.checklist-nome-opcao {
     display: block;
     width: 100%;
     padding: var(--espaco-sm) var(--espaco-md);
@@ -201,13 +190,6 @@
     font: inherit;
     text-align: left;
     cursor: pointer;
-}
-
-.checklist-categoria-vazio {
-    padding: var(--espaco-md);
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-apoio);
-    text-align: center;
 }
 
 .checklist-itens-cabecalho {
@@ -235,6 +217,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--espaco-sm);
+}
+
+.checklist-lista-selecionados,
+.checklist-visualizacao-lista,
+.checklist-gerenciar-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .checklist-itens-vazio,
@@ -435,11 +424,11 @@
 }
 
 .checklist-gerenciar-card:hover,
-.checklist-card--selecionado {
+.checklist-gerenciar-card--selecionado {
     border-color: var(--cor-azul-destaques);
 }
 
-.checklist-card--selecionado {
+.checklist-gerenciar-card--selecionado {
     background: var(--cor-cinza-hover);
 }
 
@@ -546,6 +535,15 @@
 
 .checklist-visualizacao-campo--largo {
     grid-column: 1 / -1;
+}
+
+#checklist-modal-visualizar .checklist-visualizacao-dados {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#checklist-modal-visualizar .checklist-visualizacao-campo:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1;
 }
 
 .checklist-visualizacao-label {
@@ -691,15 +689,10 @@
         grid-template-columns: 1fr;
     }
 
-    .checklist-categoria-cabecalho,
     .checklist-itens-cabecalho,
     .checklist-gerenciar-topo {
         align-items: stretch;
         flex-direction: column;
-    }
-
-    .checklist-categoria-cabecalho .campo__ajuda {
-        text-align: left;
     }
 
     .checklist-btn-gerenciar,

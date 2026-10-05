@@ -3,19 +3,21 @@
 namespace Controller;
 
 use Core\Controller;
-use ChecklistModel;
+use DAO\ChecklistDAO;
+use Model\ChecklistModel;
 
+require_once __DIR__ . '/../DAO/DAO.php';
+require_once __DIR__ . '/../DAO/ChecklistDAO.php';
+require_once __DIR__ . '/../Core/Model.php';
 require_once __DIR__ . '/../Model/ChecklistModel.php';
 
 class ChecklistController extends Controller
 {
-    private ChecklistModel $checklistModel;
+    private ChecklistDAO $checklistDAO;
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
-        $this->checklistModel = new ChecklistModel($conexao);
+        $this->checklistDAO = new ChecklistDAO();
     }
 
     public function index()
@@ -25,12 +27,12 @@ class ChecklistController extends Controller
 
     public function listarChecklist(): array
     {
-        return $this->checklistModel->listarChecklist();
+        return $this->checklistDAO->listarChecklist();
     }
 
     public function listarChecklistAtivos(): array
     {
-        return $this->checklistModel->listarChecklistAtivos();
+        return $this->checklistDAO->listarChecklistAtivos();
     }
 
     public function cadastrarChecklist(): int|false
@@ -41,11 +43,10 @@ class ChecklistController extends Controller
             return false;
         }
 
-        return $this->checklistModel->cadastrarChecklist(
-            $dadosChecklist['nome'],
-            $dadosChecklist['descricao'],
-            $dadosChecklist['categoria'],
-            $dadosChecklist['itens_ids']
+        return $this->checklistDAO->cadastrarChecklist(
+            $dadosChecklist->nome,
+            $dadosChecklist->descricao,
+            $dadosChecklist->itens_ids
         );
     }
 
@@ -58,39 +59,35 @@ class ChecklistController extends Controller
             return false;
         }
 
-        return $this->checklistModel->atualizarChecklist(
+        return $this->checklistDAO->atualizarChecklist(
             $idChecklist,
-            $dadosChecklist['nome'],
-            $dadosChecklist['descricao'],
-            $dadosChecklist['categoria'],
-            $dadosChecklist['itens_ids']
+            $dadosChecklist->nome,
+            $dadosChecklist->descricao,
+            $dadosChecklist->itens_ids
         );
     }
 
-    private function obterDadosChecklist(): array|false
+    private function obterDadosChecklist(): ChecklistModel|false
     {
         $nomeChecklist = trim($_POST['nome'] ?? '');
         $descricaoChecklist = trim($_POST['descricao'] ?? '');
-        $categoriaChecklist = trim($_POST['categoria'] ?? '');
-
         $itensIdsChecklist = $this->normalizarIdsChecklist(
             $_POST['itens_ids'] ?? []
         );
 
         if (
             $nomeChecklist === ''
-            || $categoriaChecklist === ''
             || empty($itensIdsChecklist)
         ) {
             return false;
         }
 
-        return [
-            'nome' => $nomeChecklist,
-            'descricao' => $descricaoChecklist,
-            'categoria' => $categoriaChecklist,
-            'itens_ids' => $itensIdsChecklist
-        ];
+        $checklist = new ChecklistModel();
+        $checklist->nome = $nomeChecklist;
+        $checklist->descricao = $descricaoChecklist;
+        $checklist->itens_ids = $itensIdsChecklist;
+
+        return $checklist;
     }
 
     private function normalizarIdsChecklist(mixed $idsChecklist): array
@@ -115,7 +112,7 @@ class ChecklistController extends Controller
             return false;
         }
 
-        return $this->checklistModel->excluirChecklist(
+        return $this->checklistDAO->excluirChecklist(
             $idChecklist
         );
     }
@@ -130,7 +127,7 @@ class ChecklistController extends Controller
 
         $statusChecklist = $statusChecklist === 1 ? 1 : 0;
 
-        return $this->checklistModel->alterarStatusChecklist(
+        return $this->checklistDAO->alterarStatusChecklist(
             $idChecklist,
             $statusChecklist
         );
@@ -143,143 +140,9 @@ class ChecklistController extends Controller
             return false;
         }
 
-        return $this->checklistModel->buscarComItensChecklist(
+        return $this->checklistDAO->buscarComItensChecklist(
             $idChecklist
         );
     }
 
-    public function listarCategoriasChecklist(): array
-    {
-        return $this->checklistModel->listarCategoriasChecklist();
-    }
-
-    public function listarItensCatalogoChecklist(): array
-    {
-        return $this->checklistModel->listarItensCatalogoChecklist();
-    }
-
-    public function buscarItemCatalogoChecklist(): array|false
-    {
-        $idItemChecklist = (int) ($_POST['id'] ?? 0);
-
-        if ($idItemChecklist <= 0) {
-            return false;
-        }
-
-        return $this->checklistModel->buscarItemCatalogoChecklist(
-            $idItemChecklist
-        );
-    }
-
-    public function cadastrarItemCatalogoChecklist(): array|false
-    {
-        $dadosItemChecklist =
-            $this->obterDadosItemCatalogoChecklist();
-
-        if ($dadosItemChecklist === false) {
-            return false;
-        }
-
-        return $this->checklistModel
-            ->cadastrarItemCatalogoChecklist(
-                $dadosItemChecklist['titulo'],
-                $dadosItemChecklist['referencia'],
-                $dadosItemChecklist['obrigatorio'],
-                $dadosItemChecklist['descricao_resumida'],
-                $dadosItemChecklist['tempo_estimado_minutos']
-            );
-    }
-
-    public function atualizarItemCatalogoChecklist(): array|false
-    {
-        $idItemChecklist = (int) ($_POST['id'] ?? 0);
-
-        $dadosItemChecklist =
-            $this->obterDadosItemCatalogoChecklist();
-
-        if (
-            $idItemChecklist <= 0
-            || $dadosItemChecklist === false
-        ) {
-            return false;
-        }
-
-        return $this->checklistModel
-            ->atualizarItemCatalogoChecklist(
-                $idItemChecklist,
-                $dadosItemChecklist['titulo'],
-                $dadosItemChecklist['referencia'],
-                $dadosItemChecklist['obrigatorio'],
-                $dadosItemChecklist['descricao_resumida'],
-                $dadosItemChecklist['tempo_estimado_minutos']
-            );
-    }
-
-    private function obterDadosItemCatalogoChecklist(): array|false
-    {
-        $tituloItemChecklist = trim($_POST['titulo'] ?? '');
-
-        $referenciaItemChecklist = trim(
-            $_POST['referencia'] ?? ''
-        );
-
-        $obrigatorioItemChecklist = (int) (
-            $_POST['obrigatorio'] ?? 1
-        );
-
-        $descricaoResumidaItemChecklist = trim(
-            $_POST['descricao_resumida'] ?? ''
-        );
-
-        $tempoEstimadoItemChecklist = (int) (
-            $_POST['tempo_estimado_minutos'] ?? 0
-        );
-
-        if ($tempoEstimadoItemChecklist < 0) {
-            $tempoEstimadoItemChecklist = 0;
-        }
-
-        if ($tituloItemChecklist === '') {
-            return false;
-        }
-
-        return [
-            'titulo' => $tituloItemChecklist,
-            'referencia' => $referenciaItemChecklist,
-            'obrigatorio' =>
-            $obrigatorioItemChecklist === 1 ? 1 : 0,
-            'descricao_resumida' => $descricaoResumidaItemChecklist,
-            'tempo_estimado_minutos' => $tempoEstimadoItemChecklist
-        ];
-    }
-
-    public function removerItemCatalogoChecklist(): array|false
-    {
-        $idItemChecklist = (int) ($_POST['id'] ?? 0);
-
-        if ($idItemChecklist <= 0) {
-            return false;
-        }
-
-        return $this->checklistModel
-            ->removerItemCatalogoChecklist(
-                $idItemChecklist
-            );
-    }
-
-    public function alterarStatusItemCatalogoChecklist(
-        int $idItemChecklist,
-        int $statusItemChecklist
-    ): bool {
-        if ($idItemChecklist <= 0) {
-            return false;
-        }
-
-        $statusItemChecklist = $statusItemChecklist === 1 ? 1 : 0;
-
-        return $this->checklistModel->alterarStatusItemCatalogoChecklist(
-            $idItemChecklist,
-            $statusItemChecklist
-        );
-    }
 }

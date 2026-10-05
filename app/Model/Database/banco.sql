@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS checklist (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(80) NOT NULL,
   descricao VARCHAR(1000) DEFAULT NULL,
-  categoria VARCHAR(150) DEFAULT NULL,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
@@ -323,7 +322,6 @@ CREATE TABLE IF NOT EXISTS checklist_item_catalogo (
   referencia VARCHAR(255) DEFAULT NULL,
   obrigatorio TINYINT NOT NULL DEFAULT 1,
   descricao_resumida TEXT DEFAULT NULL,
-  tempo_estimado_minutos INT NOT NULL DEFAULT 0,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
@@ -339,8 +337,6 @@ CREATE TABLE IF NOT EXISTS checklist_item_vinculo (
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
-
-
 -- Status de conclusão de checklist por projeto. Os itens aplicáveis a um
 -- projeto vêm de projeto_tipo_pentest -> tipo_pentest_checklist ->
 -- checklist_item_vinculo -> checklist_item_catalogo; esta tabela só guarda
