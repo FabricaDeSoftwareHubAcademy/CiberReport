@@ -45,6 +45,9 @@ Route::middleware([AuthMiddleware::class], function (): void {
     Route::GET('/gerenciamento-projeto', 'ProjetoController@index');
     Route::POST('/gerenciamento-projeto', 'ProjetoController@index');
 
+    Route::GET('/execucao-projeto', 'ExecucaoProjetoController@index');
+    Route::GET('/execucao-projeto/vulnerabilidade', 'ExecucaoProjetoController@vulnerabilidade');
+
     Route::GET('/dashboard-gestor', 'DashboardGestorController@index');
     Route::POST('/dashboard-gestor', 'DashboardGestorController@index');
 
