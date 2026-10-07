@@ -29,6 +29,10 @@
                             </button>
                             <div id="cp-cliente-lista" class="campo__combobox-lista" role="listbox" hidden></div>
                         </div>
+                        <button type="button" id="cp-cliente-cadastrar" class="campo__botao-adicionar"
+                            aria-label="Cadastrar novo cliente" title="Cadastrar novo cliente (ainda não disponível nesta tela)">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
                     </div>
                 </div>
                 <span class="campo__mensagem-erro" id="erro-cliente">Selecione um cliente.</span>

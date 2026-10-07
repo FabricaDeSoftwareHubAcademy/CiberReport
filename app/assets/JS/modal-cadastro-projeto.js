@@ -354,6 +354,19 @@ document.addEventListener('DOMContentLoaded', () => {
         clienteInput?.closest('.campo__combobox-campo')?.classList.toggle('campo__combobox-campo--com-limpar', temSelecao);
     }
 
+    // PENDENTE: o "+" deve abrir o modal de cadastro de empresa aqui mesmo.
+    // Hoje não dá: o modal está escrito dentro de Views/cliente_empresa.php (não
+    // é um componente que se inclua em outra tela) e o salvamento dele recarrega
+    // a página, o que faria o usuário perder o projeto em preenchimento. As
+    // máscaras e a busca de CEP já são arquivos separados (mascaras.js e
+    // Buscarcep.js); falta o módulo de Clientes expor o modal como componente
+    // e um salvamento que responda em JSON.
+    document.getElementById('cp-cliente-cadastrar')?.addEventListener('click', () => {
+        if (typeof exibirToast === 'function') {
+            exibirToast('info', 'O cadastro de cliente por aqui ainda não está disponível. Use a tela de Clientes.', undefined, 4000);
+        }
+    });
+
     clienteLimpar?.addEventListener('click', () => {
         clienteSelecionado = { id: null, nome: '' };
         clienteInput.value = '';
