@@ -141,6 +141,11 @@ class ProjetoValidator
             $erros[] = 'O resumo do projeto contratado é obrigatório.';
         }
 
+        // O navegador conta quebra de linha como 1 caractere no maxlength, mas envia "\r\n".
+        if (mb_strlen(str_replace("\r\n", "\n", $dadosLimpos['escopo'])) > 2000) {
+            $erros[] = 'O resumo do projeto contratado deve ter no máximo 2000 caracteres.';
+        }
+
         if (empty($dadosLimpos['pentests'])) {
             $erros[] = 'Adicione ao menos um pentest ao projeto.';
         }

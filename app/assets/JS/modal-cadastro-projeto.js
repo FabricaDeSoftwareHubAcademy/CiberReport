@@ -374,12 +374,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!alvosChips) return;
         alvosChips.innerHTML = '';
         alvos.forEach((alvo, idx) => {
-            alvosChips.appendChild(criarChip(alvo, () => {
+            const chip = criarChip(alvo, () => {
                 alvos.splice(idx, 1);
                 renderizarChipsAlvos();
-            }));
+            });
+            // URLs longas estouravam a caixa: o chip mostra só o começo e
+            // abre o valor completo (quebrando linha dentro da caixa) ao clicar.
+            chip.classList.add('chip--truncado');
+            const textoChip = chip.querySelector('.chip__texto');
+            textoChip.title = 'Clique para ver o valor completo';
+            textoChip.tabIndex = 0;
+            const alternarChip = () => chip.classList.toggle('chip--expandido');
+            textoChip.addEventListener('click', alternarChip);
+            textoChip.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternarChip(); }
+            });
+            alvosChips.appendChild(chip);
         });
     }
+
+    // Contador de caracteres do resumo do projeto contratado
+    const escopoEl       = document.getElementById('cp-escopo');
+    const escopoContador = document.getElementById('cp-escopo-contador');
+
+    function atualizarContadorEscopo() {
+        if (!escopoEl || !escopoContador) return;
+        escopoContador.textContent = `${escopoEl.value.length} / ${escopoEl.maxLength}`;
+    }
+
+    escopoEl?.addEventListener('input', atualizarContadorEscopo);
 
     // -------------------------------------------------------------------------
     // 6. DROPZONE
@@ -942,6 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form?.reset();
         if (clienteInput) clienteInput.value = '';
         atualizarLimparCliente();
+        atualizarContadorEscopo();
         if (dropzoneTxt)  dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
 
         overlay.querySelectorAll('.campo--erro').forEach(el => el.classList.remove('campo--erro'));
@@ -966,7 +990,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function criarChip(texto, onRemover) {
         const chip = document.createElement('span');
         chip.className = 'chip';
-        chip.append(document.createTextNode(texto));
+        const textoEl = document.createElement('span');
+        textoEl.className = 'chip__texto';
+        textoEl.textContent = texto;
+        chip.appendChild(textoEl);
 
         const btnRemover = document.createElement('button');
         btnRemover.type = 'button';
@@ -1045,6 +1072,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? horasDecimalParaTexto(projeto.horas_contratadas)
             : '';
         document.getElementById('cp-escopo').value = projeto.escopo ?? '';
+        atualizarContadorEscopo();
         document.getElementById('cp-restricao').value = projeto.restricao ?? '';
 
         (projeto.alvos || []).forEach(valor => alvos.push(valor));
