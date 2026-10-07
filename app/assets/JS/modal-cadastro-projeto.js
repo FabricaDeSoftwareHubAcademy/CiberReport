@@ -132,6 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
         campo.classList.toggle('campo--erro', !!condicaoErro);
     }
 
+    // A mensagem de erro só era reavaliada no "Avançar": some assim que o
+    // usuário mexe no campo, e volta na próxima validação se ainda faltar algo.
+    ['cp-nome-projeto', 'cp-escopo', 'cp-horas-contratadas', 'cp-sigilo'].forEach(id => {
+        const el = document.getElementById(id);
+        el?.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => marcarErroCampo(id, false));
+    });
+
     function validarPasso(passo) {
         let temErro = false;
 
