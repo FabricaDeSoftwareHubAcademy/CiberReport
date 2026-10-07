@@ -162,7 +162,9 @@
                         name="restricao"
                         class="campo__textarea"
                         rows="5"
+                        maxlength="2000"
                         placeholder="Descreva as restrições..."></textarea>
+                    <span class="campo__contador" id="cp-restricao-contador">0 / 2000</span>
                 </div>
             </div>
         </div>
