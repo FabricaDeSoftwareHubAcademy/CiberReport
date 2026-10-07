@@ -2,8 +2,8 @@
     <!-- Cadastro -->
     <div class="revisao-secao">
         <div class="revisao-secao__cabecalho">
-            <i class="fa-solid fa-building" style="color: var(--cor-azul-primaria)"></i>
-            <span class="revisao-secao__titulo">Cliente</span>
+            <i class="fa-solid fa-clipboard-list" style="color: var(--cor-azul-primaria)"></i>
+            <span class="revisao-secao__titulo">Identificação do Projeto</span>
         </div>
         <div class="revisao-secao__corpo">
             <div class="revisao-campo">
@@ -17,6 +17,10 @@
             <div class="revisao-campo">
                 <span class="revisao-campo__rotulo">Nível de Sigilo</span>
                 <span class="revisao-campo__valor" id="rev-sigilo">—</span>
+            </div>
+            <div class="revisao-campo">
+                <span class="revisao-campo__rotulo">Líder Técnico</span>
+                <span class="revisao-campo__valor" id="rev-lider">—</span>
             </div>
         </div>
     </div>

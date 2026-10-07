@@ -45,6 +45,7 @@ class ProjetoValidator
             'contrato' => trim((string) ($dados['contrato'] ?? '')),
             'restricao' => trim((string) ($dados['restricao'] ?? '')),
             'status' => trim((string) ($dados['status'] ?? 'PLANEJADO')),
+            'lider_id' => filter_var($dados['lider_id'] ?? null, FILTER_VALIDATE_INT),
             'alvos' => self::sanitizarAlvos($dados['alvos'] ?? []),
             'pentests' => self::sanitizarPentests($dados['pentests'] ?? []),
         ];
@@ -79,7 +80,6 @@ class ProjetoValidator
                 'escopo' => trim((string) ($pentest['escopo'] ?? '')),
                 'referencia' => trim((string) ($pentest['referencia'] ?? '')) ?: null,
                 'frameworks_ids' => self::sanitizarIds($pentest['frameworks_ids'] ?? []),
-                'lider_id' => filter_var($pentest['lider_id'] ?? null, FILTER_VALIDATE_INT),
                 'analistas_ids' => self::sanitizarIds($pentest['analistas_ids'] ?? []),
             ];
         }, array_values($pentests));
@@ -135,6 +135,10 @@ class ProjetoValidator
 
         if ($dadosLimpos['nivel_sigilo'] === '') {
             $erros[] = 'O nível de sigilo é obrigatório.';
+        }
+
+        if ($dadosLimpos['lider_id'] === false || $dadosLimpos['lider_id'] <= 0) {
+            $erros[] = 'O líder técnico do projeto é obrigatório.';
         }
 
         if ($dadosLimpos['escopo'] === '') {
@@ -242,8 +246,8 @@ class ProjetoValidator
                 $erros[] = "Pentest {$numero}: selecione ao menos uma metodologia.";
             }
 
-            if ($pentest['lider_id'] === false || (int) $pentest['lider_id'] <= 0) {
-                $erros[] = "Pentest {$numero}: o líder técnico é obrigatório.";
+            if (empty($pentest['analistas_ids'])) {
+                $erros[] = "Pentest {$numero}: adicione ao menos um analista.";
             }
         }
     }

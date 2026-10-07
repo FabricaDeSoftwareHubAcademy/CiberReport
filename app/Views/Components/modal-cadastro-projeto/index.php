@@ -37,7 +37,7 @@
             <ol class="cad-projeto-stepper" id="cad-projeto-stepper" aria-label="Etapas do cadastro">
                 <li class="cad-projeto-stepper__item cad-projeto-stepper__item--ativo" data-passo="0">
                     <span class="cad-projeto-stepper__numero">1</span>
-                    <span class="cad-projeto-stepper__label">Informações do Cliente</span>
+                    <span class="cad-projeto-stepper__label">Informações do Projeto</span>
                 </li>
                 <li class="cad-projeto-stepper__separador" aria-hidden="true"></li>
                 <li class="cad-projeto-stepper__item" data-passo="1">
@@ -60,6 +60,7 @@
             <input type="hidden" name="action"     id="cp-action" value="cadastrar">
             <input type="hidden" name="id"          id="cp-projeto-id">
             <input type="hidden" name="empresa_id" id="cp-empresa-id">
+            <input type="hidden" name="lider_id"   id="cp-lider-id">
 
             <?php include __DIR__ . '/_passo-1-cliente.php'; ?>
             <?php include __DIR__ . '/_passo-2-pentest.php'; ?>

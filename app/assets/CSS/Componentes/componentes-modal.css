@@ -376,10 +376,6 @@
 .btn-adicionar-pentest { display: inline-flex; align-items: center; gap: var(--espaco-xs); background: none; border: 1px dashed var(--cor-azul-primaria); color: var(--cor-azul-primaria); border-radius: var(--raio-md); padding: var(--espaco-sm) var(--espaco-lg); font-size: var(--fonte-apoio); font-weight: 600; cursor: pointer; transition: background-color var(--transicao-rapida); }
 .btn-adicionar-pentest:hover { background-color: var(--cor-cinza-hover); }
 
-/* Chip do responsável líder dentro de um bloco de pentest (analistas) */
-.chip__lider-marcar { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.65); padding: 0; }
-.chip__lider-marcar:hover { color: #fff; }
-.chip--lider-ativo .chip__lider-marcar { color: var(--cor-amarelo); }
 
 /* =============================================================================
    04. METRICAS, DASHBOARDS E GRAFICOS (FLEXBOX PURO)
