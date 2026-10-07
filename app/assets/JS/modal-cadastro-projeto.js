@@ -891,11 +891,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 10. RESET AO FECHAR O MODAL
     // -------------------------------------------------------------------------
     overlay.querySelectorAll('[data-modal-close]').forEach(btn => {
-        btn.addEventListener('click', resetModal);
+        btn.addEventListener('click', () => {
+            resetModal();
+            adicionarBlocoPentest();
+        });
     });
 
     overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) resetModal();
+        if (e.target === overlay) {
+            resetModal();
+            adicionarBlocoPentest();
+        }
     });
 
     function resetModal() {
@@ -934,8 +940,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const subtituloEl = document.getElementById('cadastro-projeto-subtitulo');
         if (tituloEl) tituloEl.textContent = 'Cadastro de Projeto';
         if (subtituloEl) subtituloEl.textContent = 'Informações da empresa contratante e do projeto';
-
-        adicionarBlocoPentest();
     }
 
     // -------------------------------------------------------------------------
