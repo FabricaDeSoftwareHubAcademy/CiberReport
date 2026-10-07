@@ -84,28 +84,37 @@ class Andamento
     }
 
     /**
-     * Equipe agregada de todos os blocos de pentest do projeto. Um mesmo
-     * usuário pode ser líder em um pentest e especialista em outro — nesse
-     * caso ele aparece uma única vez, priorizando o papel de LIDER.
+     * Equipe do projeto: o líder técnico (um por projeto, em projeto_usuario)
+     * mais os analistas de todos os pentests. Quem é líder e também analista
+     * de algum pentest aparece uma única vez, como LIDER.
      */
     public function buscarEquipe(int $idProjeto): array
     {
         $sql = $this->pdo->prepare(
             "SELECT equipe.id, equipe.nome, equipe.papel
              FROM (
-                 SELECT usuario.id, usuario.nome,
-                        CASE WHEN MIN(CASE WHEN projeto_pentest_usuario.papel = 'LIDER' THEN 0 ELSE 1 END) = 0
-                             THEN 'LIDER' ELSE 'ESPECIALISTA' END AS papel
-                 FROM projeto_pentest
-                 INNER JOIN projeto_pentest_usuario ON projeto_pentest_usuario.projeto_pentest_id = projeto_pentest.id
-                     AND projeto_pentest_usuario.habilitado = 1
-                 INNER JOIN usuario ON usuario.id = projeto_pentest_usuario.usuario_id
-                 WHERE projeto_pentest.projeto_id = :id AND projeto_pentest.habilitado = 1
-                 GROUP BY usuario.id, usuario.nome
+                 SELECT membros.id, membros.nome,
+                        CASE WHEN MIN(membros.ordem) = 0 THEN 'LIDER' ELSE 'ESPECIALISTA' END AS papel
+                 FROM (
+                     SELECT usuario.id, usuario.nome, 0 AS ordem
+                     FROM projeto_usuario
+                     INNER JOIN usuario ON usuario.id = projeto_usuario.usuario_id
+                     WHERE projeto_usuario.projeto_id = :id_lider AND projeto_usuario.papel = 'LIDER'
+                         AND projeto_usuario.habilitado = 1
+                     UNION ALL
+                     SELECT usuario.id, usuario.nome, 1 AS ordem
+                     FROM projeto_pentest
+                     INNER JOIN projeto_pentest_usuario ON projeto_pentest_usuario.projeto_pentest_id = projeto_pentest.id
+                         AND projeto_pentest_usuario.habilitado = 1
+                     INNER JOIN usuario ON usuario.id = projeto_pentest_usuario.usuario_id
+                     WHERE projeto_pentest.projeto_id = :id_pentest AND projeto_pentest.habilitado = 1
+                 ) AS membros
+                 GROUP BY membros.id, membros.nome
              ) AS equipe
              ORDER BY FIELD(equipe.papel, 'LIDER', 'ESPECIALISTA'), equipe.nome"
         );
-        $sql->bindValue(':id', $idProjeto, PDO::PARAM_INT);
+        $sql->bindValue(':id_lider', $idProjeto, PDO::PARAM_INT);
+        $sql->bindValue(':id_pentest', $idProjeto, PDO::PARAM_INT);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }

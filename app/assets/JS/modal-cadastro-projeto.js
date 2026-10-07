@@ -9,7 +9,7 @@
  *  5. Dropzone: drag & drop + click, exibe nome do arquivo selecionado.
  *  6. Passo 2: N blocos repetíveis de Pentest (Adicionar/Remover), cada um com
  *     seu próprio tipo de pentest, modalidade (derivada), abordagem,
- *     metodologia (frameworks), escopo, ambiente, equipe (líder + analistas)
+ *     metodologia (frameworks), escopo, ambiente, analistas
  *     e referência.
  *  7. Submit: injeta campos dinâmicos (alvos[], pentests[idx][...]) antes de enviar.
  *  8. Reset: ao fechar o modal, limpa todo o estado.
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // IDs selecionados (passo 1)
     let clienteSelecionado = { id: null, nome: '' };
+    let liderSelecionado   = { id: null, nome: '' }; // líder técnico é um só por projeto
     const alvos            = []; // strings
 
     // Blocos de Pentest (passo 2) — cada item é o estado de um bloco.
@@ -150,6 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('campo-cliente')?.classList.remove('campo--erro');
             }
 
+            const semLider = !liderSelecionado.id;
+            document.getElementById('campo-lider')?.classList.toggle('campo--erro', semLider);
+            temErro = temErro || semLider;
+
             const nomeProj = document.getElementById('cp-nome-projeto');
             const nomeInvalido = !nomeProj.value.trim();
             marcarErroCampo('cp-nome-projeto', nomeInvalido);
@@ -231,9 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
         bloco.raiz.querySelector('[data-campo="metodologia"]').classList.toggle('campo--erro', metodologiaInvalida);
         ok = ok && !metodologiaInvalida;
 
-        const semLider = !bloco.equipe.some(m => m.lider);
-        bloco.raiz.querySelector('[data-campo="analistas"]').classList.toggle('campo--erro', semLider);
-        ok = ok && !semLider;
+        const semAnalista = bloco.equipe.length === 0;
+        bloco.raiz.querySelector('[data-campo="analistas"]').classList.toggle('campo--erro', semAnalista);
+        ok = ok && !semAnalista;
 
         return ok;
     }
@@ -369,6 +374,28 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('cp-empresa-id').value = item.id;
             document.getElementById('campo-cliente')?.classList.remove('campo--erro');
             atualizarLimparCliente();
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 4b. COMBOBOX DE LÍDER TÉCNICO (um por projeto)
+    // -------------------------------------------------------------------------
+    const liderInput  = document.getElementById('cp-lider-busca');
+    const liderLista  = document.getElementById('cp-lider-lista');
+    const liderToggle = liderInput?.nextElementSibling;
+
+    function definirLider(id, nome) {
+        liderSelecionado = { id, nome };
+        if (liderInput) liderInput.value = nome;
+        document.getElementById('cp-lider-id').value = id ?? '';
+    }
+
+    if (liderInput && liderLista && liderToggle) {
+        const itensLider = usuarios.map(u => ({ id: u.id, label: u.nome }));
+
+        criarCombobox(liderInput, liderLista, liderToggle, itensLider, (item) => {
+            definirLider(item.id, item.label);
+            document.getElementById('campo-lider')?.classList.remove('campo--erro');
         });
     }
 
@@ -616,8 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="campo__multi-chips" aria-label="Equipe deste pentest"></div>
                 </div>
-                <span class="campo__mensagem-erro">Marque um analista como líder deste pentest clicando na estrela do chip.</span>
-                <p class="campo__ajuda">Clique na <i class="fa-solid fa-star"></i> de um chip para marcá-lo como líder técnico deste pentest.</p>
+                <span class="campo__mensagem-erro">Adicione ao menos um analista a este pentest.</span>
             </div>
             <div class="campo">
                 <label class="campo__label">Checklist</label>
@@ -630,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
             raiz,
             tipoPentestId: null,
             frameworksSelecionados: [], // [{id, nome}]
-            equipe: [], // [{id, nome, lider}]
+            equipe: [], // analistas do pentest: [{id, nome}]
         };
 
         // Tipo de pentest (combobox único)
@@ -713,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
             metodologiaCampo.classList.remove('campo--erro');
         });
 
-        // Analistas (multi-select com marcação de líder)
+        // Analistas (multi-select)
         const analistasCampo = raiz.querySelector('[data-campo="analistas"]');
         const analistaBusca  = analistasCampo.querySelector('.campo__multi-input');
         const analistaAdd    = analistasCampo.querySelector('.campo__botao-adicionar');
@@ -722,26 +748,10 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderizarChipsAnalistas() {
             analistasChips.innerHTML = '';
             bloco.equipe.forEach((membro, idx) => {
-                const chip = criarChip(membro.nome, () => {
+                analistasChips.appendChild(criarChip(membro.nome, () => {
                     bloco.equipe.splice(idx, 1);
                     renderizarChipsAnalistas();
-                });
-                chip.classList.toggle('chip--lider-ativo', membro.lider);
-
-                const btnLider = document.createElement('button');
-                btnLider.type = 'button';
-                btnLider.className = 'chip__lider-marcar';
-                btnLider.innerHTML = '<i class="fa-solid fa-star"></i>';
-                btnLider.setAttribute('aria-label', `Marcar ${membro.nome} como líder técnico`);
-                btnLider.addEventListener('click', () => {
-                    bloco.equipe.forEach(m => m.lider = false);
-                    membro.lider = true;
-                    renderizarChipsAnalistas();
-                    analistasCampo.classList.remove('campo--erro');
-                });
-                chip.insertBefore(btnLider, chip.firstChild);
-
-                analistasChips.appendChild(chip);
+                }));
             });
         }
 
@@ -755,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             if (!encontrado) return;
 
-            bloco.equipe.push({ id: encontrado.id, nome: encontrado.nome, lider: bloco.equipe.length === 0 });
+            bloco.equipe.push({ id: encontrado.id, nome: encontrado.nome });
             analistaBusca.value = '';
             renderizarChipsAnalistas();
             analistasCampo.classList.remove('campo--erro');
@@ -838,6 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('rev-cliente',      clienteSelecionado.nome || '—');
         setText('rev-nome-projeto', document.getElementById('cp-nome-projeto')?.value || '—');
         setText('rev-sigilo',       document.getElementById('cp-sigilo')?.selectedOptions[0]?.text || '—');
+        setText('rev-lider',        liderSelecionado.nome || '—');
 
         setText('rev-escopo',     document.getElementById('cp-escopo')?.value || '—');
         setText('rev-alvos',      alvos.length ? alvos.join(', ') : '—');
@@ -853,8 +864,7 @@ document.addEventListener('DOMContentLoaded', () => {
         revPentestsLista.innerHTML = '';
 
         blocosPentest.forEach((bloco, idx) => {
-            const lider     = bloco.equipe.find(m => m.lider);
-            const analistas = bloco.equipe.filter(m => !m.lider).map(m => m.nome);
+            const analistas = bloco.equipe.map(m => m.nome);
 
             const secao = document.createElement('div');
             secao.className = 'revisao-secao';
@@ -891,10 +901,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="revisao-campo revisao-campo--full">
                         <span class="revisao-campo__rotulo">Escopo</span>
                         <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="escopo"] textarea').value) || '—'}</span>
-                    </div>
-                    <div class="revisao-campo">
-                        <span class="revisao-campo__rotulo">Líder Técnico</span>
-                        <span class="revisao-campo__valor">${escapeHtml(lider ? lider.nome : '') || '—'}</span>
                     </div>
                     <div class="revisao-campo revisao-campo--full">
                         <span class="revisao-campo__rotulo">Analista(s)</span>
@@ -935,9 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             bloco.frameworksSelecionados.forEach(fw => adicionarHidden(`pentests[${idx}][frameworks_ids][]`, fw.id));
 
-            const lider = bloco.equipe.find(m => m.lider);
-            adicionarHidden(`pentests[${idx}][lider_id]`, lider ? lider.id : '');
-            bloco.equipe.filter(m => !m.lider).forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
+            bloco.equipe.forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
         });
 
         // Converte horas_contratadas de hh:mm:ss para decimal (80:00:00 → 80.00)
@@ -999,6 +1003,7 @@ document.addEventListener('DOMContentLoaded', () => {
         atualizarBotoes();
 
         clienteSelecionado = { id: null, nome: '' };
+        definirLider(null, '');
         alvos.length = 0;
 
         blocosPentest.length = 0;
@@ -1114,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tituloEl = document.getElementById('cadastro-projeto-titulo');
         if (tituloEl) tituloEl.textContent = modo === 'visualizar' ? 'Detalhes do Projeto' : 'Editar Projeto';
 
-        // Passo 1 — Informações do Cliente
+        // Passo 1 — Informações do Projeto
         const empresa = empresas.find(e => String(e.id) === String(projeto.empresa_id));
         clienteSelecionado = { id: projeto.empresa_id, nome: empresa ? (empresa.nome_fantasia || empresa.razao_social) : '' };
         if (clienteInput) clienteInput.value = clienteSelecionado.nome;
@@ -1122,6 +1127,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('cp-empresa-id').value = projeto.empresa_id ?? '';
 
         document.getElementById('cp-nome-projeto').value = projeto.nome ?? '';
+
+        const lider = usuarios.find(u => String(u.id) === String(projeto.lider_id));
+        if (lider) definirLider(lider.id, lider.nome);
         document.getElementById('cp-sigilo').value = projeto.nivel_sigilo ?? '';
         document.getElementById('cp-data-inicio').value = projeto.data_inicio ?? '';
         document.getElementById('cp-data-fim').value = projeto.data_fim_prevista ?? '';
@@ -1160,14 +1168,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             bloco.renderizarChipsMetodologia();
 
-            if (p.lider_id) {
-                const lider = usuarios.find(u => String(u.id) === String(p.lider_id));
-                if (lider) bloco.equipe.push({ id: lider.id, nome: lider.nome, lider: true });
-            }
             (p.analistas_ids || []).forEach(idUsuario => {
                 const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
                 if (usuario && !bloco.equipe.find(m => m.id === usuario.id)) {
-                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome, lider: false });
+                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome });
                 }
             });
             bloco.renderizarChipsAnalistas();

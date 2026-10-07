@@ -126,6 +126,7 @@ class ProjetoController extends Controller
         foreach ($projetos as &$projeto) {
             $idProjeto = (int) $projeto['id'];
 
+            $projeto['lider_id'] = $this->projeto->buscarLiderId($idProjeto);
             $projeto['alvos'] = $this->projeto->buscarAlvos($idProjeto);
             $projeto['pentests'] = $this->projeto->buscarPentests($idProjeto);
         }
@@ -155,18 +156,19 @@ class ProjetoController extends Controller
         return $this->usuario->listarPentestersAtivosParaSelecao();
     }
 
-    /** O filtro da tela não basta (dá pra forjar o POST): a equipe de cada pentest também é checada no servidor. */
+    /** O filtro da tela não basta (dá pra forjar o POST): o líder e os analistas de cada pentest também são checados no servidor. */
     private function validarEquipeElegivel(array $dadosLimpos): void
     {
         $idsPermitidos = array_map('intval', array_column($this->listarUsuariosAtivos(), 'id'));
+        $idsInformados = [(int) $dadosLimpos['lider_id']];
 
         foreach ($dadosLimpos['pentests'] as $pentest) {
-            $idsInformados = array_merge([(int) $pentest['lider_id']], $pentest['analistas_ids']);
+            $idsInformados = array_merge($idsInformados, $pentest['analistas_ids']);
+        }
 
-            foreach ($idsInformados as $id) {
-                if (!in_array((int) $id, $idsPermitidos, true)) {
-                    throw new Exception('A equipe só pode ter usuários ativos com perfil Pentester.');
-                }
+        foreach ($idsInformados as $id) {
+            if (!in_array((int) $id, $idsPermitidos, true)) {
+                throw new Exception('A equipe só pode ter usuários ativos com perfil Pentester.');
             }
         }
     }
@@ -185,7 +187,7 @@ class ProjetoController extends Controller
             $idProjeto = $this->projeto->cadastrarProjeto($dadosLimpos);
 
             if ($idProjeto !== false) {
-                $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['pentests'][0]['lider_id']);
+                $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['lider_id']);
                 $this->andamento->registrarLog($idProjeto, $idUsuarioLogado, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.');
 
                 return "Projeto cadastrado com sucesso!";

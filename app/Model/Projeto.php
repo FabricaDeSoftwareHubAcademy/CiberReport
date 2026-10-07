@@ -56,6 +56,7 @@ class Projeto
 
             $idProjeto = (int) $this->pdo->lastInsertId();
 
+            $this->salvarLider($idProjeto, (int) $dados['lider_id']);
             $this->salvarAlvos($idProjeto, $dados['alvos'] ?? []);
             $this->salvarPentests($idProjeto, $dados['pentests'] ?? []);
 
@@ -131,7 +132,7 @@ class Projeto
             $idPentest = (int) $this->pdo->lastInsertId();
 
             $this->salvarPentestFrameworks($idPentest, $pentest['frameworks_ids'] ?? []);
-            $this->salvarPentestEquipe($idPentest, $pentest['lider_id'], $pentest['analistas_ids'] ?? []);
+            $this->salvarPentestAnalistas($idPentest, $pentest['analistas_ids'] ?? []);
         }
     }
 
@@ -150,21 +151,41 @@ class Projeto
         }
     }
 
-    private function salvarPentestEquipe(int $idPentest, int $idLider, array $analistasIds): void
+    private function salvarPentestAnalistas(int $idPentest, array $analistasIds): void
     {
         $sql = $this->pdo->prepare(
-            "INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel) VALUES (:id, :usuario_id, :papel)"
+            "INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel) VALUES (:id, :usuario_id, 'ESPECIALISTA')"
         );
 
-        $sql->execute([':id' => $idPentest, ':usuario_id' => $idLider, ':papel' => 'LIDER']);
-
         foreach ($analistasIds as $idAnalista) {
-            if ($idAnalista === $idLider) {
-                continue;
-            }
-
-            $sql->execute([':id' => $idPentest, ':usuario_id' => $idAnalista, ':papel' => 'ESPECIALISTA']);
+            $sql->execute([':id' => $idPentest, ':usuario_id' => $idAnalista]);
         }
+    }
+
+    /**
+     * O líder técnico é um só por projeto e fica em projeto_usuario. Troca
+     * apenas a linha de LIDER: outros papéis do projeto (ex.: GESTOR) não
+     * são deste formulário e precisam sobreviver à edição.
+     */
+    private function salvarLider(int $idProjeto, int $idLider): void
+    {
+        $this->pdo->prepare("DELETE FROM projeto_usuario WHERE projeto_id = :id AND papel = 'LIDER'")
+            ->execute([':id' => $idProjeto]);
+
+        $this->pdo->prepare("INSERT INTO projeto_usuario (projeto_id, usuario_id, papel) VALUES (:id, :usuario_id, 'LIDER')")
+            ->execute([':id' => $idProjeto, ':usuario_id' => $idLider]);
+    }
+
+    public function buscarLiderId(int $idProjeto): ?int
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT usuario_id FROM projeto_usuario WHERE projeto_id = :id AND papel = 'LIDER' AND habilitado = 1 LIMIT 1"
+        );
+        $sql->bindValue(":id", $idProjeto, PDO::PARAM_INT);
+        $sql->execute();
+        $idLider = $sql->fetchColumn();
+
+        return $idLider !== false ? (int) $idLider : null;
     }
 
     public function listarDados()
@@ -223,9 +244,7 @@ class Projeto
         foreach ($pentests as &$pentest) {
             $idPentest = (int) $pentest['id'];
             $pentest['frameworks_ids'] = $this->buscarPentestFrameworksIds($idPentest);
-            $equipe = $this->buscarPentestEquipe($idPentest);
-            $pentest['lider_id'] = $equipe['lider_id'];
-            $pentest['analistas_ids'] = $equipe['analistas_ids'];
+            $pentest['analistas_ids'] = $this->buscarPentestAnalistasIds($idPentest);
         }
 
         return $pentests;
@@ -239,24 +258,17 @@ class Projeto
         return array_map('intval', array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'framework_id'));
     }
 
-    private function buscarPentestEquipe(int $idPentest): array
+    /**
+     * Qualquer papel conta como analista do pentest: projetos gravados
+     * quando o líder era por pentest ainda têm linhas com papel LIDER aqui.
+     */
+    private function buscarPentestAnalistasIds(int $idPentest): array
     {
-        $sql = $this->pdo->prepare("SELECT usuario_id, papel FROM projeto_pentest_usuario WHERE projeto_pentest_id = :id AND habilitado = 1");
+        $sql = $this->pdo->prepare("SELECT DISTINCT usuario_id FROM projeto_pentest_usuario WHERE projeto_pentest_id = :id AND habilitado = 1");
         $sql->bindValue(":id", $idPentest, PDO::PARAM_INT);
         $sql->execute();
 
-        $liderId = null;
-        $analistasIds = [];
-
-        foreach ($sql->fetchAll(PDO::FETCH_ASSOC) as $linha) {
-            if ($linha['papel'] === 'LIDER') {
-                $liderId = (int) $linha['usuario_id'];
-            } else {
-                $analistasIds[] = (int) $linha['usuario_id'];
-            }
-        }
-
-        return ['lider_id' => $liderId, 'analistas_ids' => $analistasIds];
+        return array_map('intval', array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'usuario_id'));
     }
 
     /** Frameworks vinculados a cada tipo de pentest ([tipo_id => [framework_id, ...]]), para o modal sugerir a metodologia. */
@@ -314,6 +326,7 @@ class Projeto
             $this->pdo->prepare("DELETE FROM projeto_alvo WHERE projeto_id = :id")->execute([':id' => $idProjeto]);
             $this->excluirPentests($idProjeto);
 
+            $this->salvarLider($idProjeto, (int) $dados['lider_id']);
             $this->salvarAlvos($idProjeto, $dados['alvos'] ?? []);
             $this->salvarPentests($idProjeto, $dados['pentests'] ?? []);
 
