@@ -80,3 +80,26 @@
         </form>
     </div>
 </div>
+
+<!-- Confirmação ao fechar o modal com dados preenchidos (fica fora do overlay do modal de propósito) -->
+<div class="modal-overlay popup-alerta-overlay" id="popupCancelarProjeto">
+    <div class="popup-alerta">
+        <div class="popup-alerta__icone popup-alerta__icone--perigo">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h2 class="popup-alerta__titulo">Cancelar preenchimento?</h2>
+        <p class="popup-alerta__texto">
+            Os dados informados neste formulário serão perdidos.
+        </p>
+
+        <div class="popup-alerta__acoes">
+            <button type="button" class="btn-cancelar" data-modal-close>
+                Não, continuar
+            </button>
+            <button type="button" class="btn-vermelho" id="cp-confirmar-cancelamento">
+                Sim, cancelar
+            </button>
+        </div>
+    </div>
+</div>

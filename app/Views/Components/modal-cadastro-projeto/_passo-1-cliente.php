@@ -127,7 +127,6 @@
                 <div class="campo__input-wrapper">
                     <input type="text"
                         id="cp-horas-contratadas"
-                        name="horas_contratadas"
                         class="campo__input campo__input--hora"
                         placeholder="hh:mm:ss"
                         maxlength="9"
@@ -136,7 +135,7 @@
                         <i class="fa-solid fa-clock"></i>
                     </button>
                 </div>
-                <span class="campo__mensagem-erro" id="erro-horas">Informe as horas contratadas (ex: 80:00:00).</span>
+                <span class="campo__mensagem-erro" id="erro-horas">Informe as horas contratadas no formato hh:mm:ss (ex: 80:00:00), com minutos e segundos até 59.</span>
             </div>
         </div>
     </div>

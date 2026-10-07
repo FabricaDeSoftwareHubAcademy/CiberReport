@@ -158,6 +158,30 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
 
     </main>
 
+    <!-- Confirmação de exclusão de projeto (usa o popup do sistema, não o confirm() do navegador) -->
+    <div class="modal-overlay popup-alerta-overlay" id="popupExcluirProjeto">
+        <div class="popup-alerta">
+            <div class="popup-alerta__icone popup-alerta__icone--perigo">
+                <i class="fa-solid fa-trash"></i>
+            </div>
+
+            <h2 class="popup-alerta__titulo">Confirmar Exclusão</h2>
+            <p class="popup-alerta__texto">
+                Deseja excluir o projeto <strong id="excluir-projeto-nome"></strong>?
+                Ele sai da listagem e só um administrador pode restaurá-lo.
+            </p>
+
+            <div class="popup-alerta__acoes">
+                <button type="button" class="btn-cancelar" data-modal-close>
+                    Não, voltar
+                </button>
+                <button type="button" class="btn-vermelho" id="confirmar-exclusao-projeto">
+                    Sim, Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
     <form id="form-excluir-projeto" method="post" style="display:none">
         <input type="hidden" name="action" value="excluir">
         <input type="hidden" name="id" id="excluir-projeto-id">
