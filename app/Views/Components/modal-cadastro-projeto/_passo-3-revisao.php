@@ -1,5 +1,5 @@
 <div class="modal__body stepper-conteudo" id="cp-passo-2">
-    <!-- Cadastro -->
+    <!-- Identificação do Projeto: mesma ordem das seções do passo 1 -->
     <div class="revisao-secao">
         <div class="revisao-secao__cabecalho">
             <i class="fa-solid fa-clipboard-list" style="color: var(--cor-azul-primaria)"></i>
@@ -21,27 +21,6 @@
             <div class="revisao-campo">
                 <span class="revisao-campo__rotulo">Líder Técnico</span>
                 <span class="revisao-campo__valor" id="rev-lider">—</span>
-            </div>
-        </div>
-    </div>
-    <!-- Escopo do Projeto -->
-    <div class="revisao-secao">
-        <div class="revisao-secao__cabecalho">
-            <i class="fa-solid fa-file-lines" style="color: var(--cor-azul-primaria)"></i>
-            <span class="revisao-secao__titulo">Escopo do Projeto</span>
-        </div>
-        <div class="revisao-secao__corpo">
-            <div class="revisao-campo revisao-campo--full">
-                <span class="revisao-campo__rotulo">Resumo do projeto contratado</span>
-                <span class="revisao-campo__valor" id="rev-escopo">—</span>
-            </div>
-            <div class="revisao-campo revisao-campo--full">
-                <span class="revisao-campo__rotulo">Alvos/IPs/Domínios</span>
-                <span class="revisao-campo__valor" id="rev-alvos">—</span>
-            </div>
-            <div class="revisao-campo revisao-campo--full">
-                <span class="revisao-campo__rotulo">Restrições</span>
-                <span class="revisao-campo__valor" id="rev-restricoes">—</span>
             </div>
         </div>
     </div>
@@ -67,6 +46,31 @@
         </div>
     </div>
 
+    <!-- Escopo e Contrato -->
+    <div class="revisao-secao">
+        <div class="revisao-secao__cabecalho">
+            <i class="fa-solid fa-file-lines" style="color: var(--cor-azul-primaria)"></i>
+            <span class="revisao-secao__titulo">Escopo e Contrato</span>
+        </div>
+        <div class="revisao-secao__corpo">
+            <div class="revisao-campo revisao-campo--full">
+                <span class="revisao-campo__rotulo">Resumo do projeto contratado</span>
+                <span class="revisao-campo__valor" id="rev-escopo">—</span>
+            </div>
+            <div class="revisao-campo revisao-campo--full">
+                <span class="revisao-campo__rotulo">Ativos/Alvos/IPs/URL/Domínio</span>
+                <div class="revisao-campo__valor revisao-campo__lista" id="rev-alvos">—</div>
+            </div>
+            <div class="revisao-campo revisao-campo--full">
+                <span class="revisao-campo__rotulo">Restrições</span>
+                <span class="revisao-campo__valor" id="rev-restricoes">—</span>
+            </div>
+            <div class="revisao-campo revisao-campo--full">
+                <span class="revisao-campo__rotulo">Anexo do contrato</span>
+                <span class="revisao-campo__valor" id="rev-contrato">—</span>
+            </div>
+        </div>
+    </div>
     <!-- Um bloco de revisão por pentest, montado dinamicamente pelo JS -->
     <div id="rev-pentests-lista"></div>
 </div>

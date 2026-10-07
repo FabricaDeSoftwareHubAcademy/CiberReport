@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let passoAtual     = 0;
     const TOTAL_PASSOS = 3;
     let modoEdicaoOuVisualizacao = false; // true quando o modal foi aberto via Editar/Visualizar
+    let projetoTemContrato = false; // no Editar/Visualizar: já existe contrato salvo no servidor
+    const posicoesScroll = {}; // passo → scrollTop, para voltar a um passo na altura em que ele foi deixado
     let somenteLeitura = false; // true só no modo Visualizar (Editar continua editável)
 
     // IDs selecionados (passo 1)
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. STEPPER — navegar entre passos
     // -------------------------------------------------------------------------
     function irParaPasso(novoPasso) {
+        posicoesScroll[passoAtual] = passos[passoAtual].scrollTop;
         passos[passoAtual].classList.remove('ativo');
         stepperItens[passoAtual].classList.remove('cad-projeto-stepper__item--ativo');
 
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (passoAtual === 2) preencherRevisao();
 
         atualizarBotoes();
-        passos[passoAtual].scrollTop = 0;
+        passos[passoAtual].scrollTop = posicoesScroll[passoAtual] || 0;
     }
 
     function atualizarBotoes() {
@@ -960,7 +963,20 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('rev-lider',        liderSelecionado.nome || '—');
 
         setText('rev-escopo',     document.getElementById('cp-escopo')?.value || '—');
-        setText('rev-alvos',      alvos.length ? alvos.join(', ') : '—');
+        const revAlvos = document.getElementById('rev-alvos');
+        if (revAlvos) {
+            revAlvos.textContent = alvos.length ? '' : '—';
+            alvos.forEach(alvo => {
+                const linha = document.createElement('span');
+                linha.textContent = alvo;
+                revAlvos.appendChild(linha);
+            });
+        }
+
+        const arquivoContrato = contratoInput?.files?.[0];
+        setText('rev-contrato', arquivoContrato
+            ? arquivoContrato.name
+            : (projetoTemContrato ? 'Contrato já anexado (mantido)' : 'Nenhum arquivo anexado'));
         setText('rev-restricoes', document.getElementById('cp-restricao')?.value || '—');
 
         const dataInicio = document.getElementById('cp-data-inicio')?.value;
@@ -974,6 +990,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         blocosPentest.forEach((bloco, idx) => {
             const analistas = bloco.equipe.map(m => m.nome);
+            const tipoDoBloco = tiposPentest.find(t => String(t.id) === String(bloco.tipoPentestId));
+            const checklists = (tipoDoBloco?.checklists || []).map(c => c.nome);
 
             const secao = document.createElement('div');
             secao.className = 'revisao-secao';
@@ -1014,6 +1032,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="revisao-campo revisao-campo--full">
                         <span class="revisao-campo__rotulo">Analista(s)</span>
                         <span class="revisao-campo__valor">${escapeHtml(analistas.join(', ')) || '—'}</span>
+                    </div>
+                    <div class="revisao-campo revisao-campo--full">
+                        <span class="revisao-campo__rotulo">Checklist</span>
+                        <span class="revisao-campo__valor">${escapeHtml(checklists.join(', ')) || '—'}</span>
                     </div>
                 </div>
             `;
@@ -1125,6 +1147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         atualizarLimparCliente();
         atualizarContadores();
         if (dropzoneTxt)  dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
+        projetoTemContrato = false;
+        Object.keys(posicoesScroll).forEach(passo => delete posicoesScroll[passo]);
+        passos.forEach(p => { p.scrollTop = 0; });
 
         overlay.querySelectorAll('.campo--erro').forEach(el => el.classList.remove('campo--erro'));
         form?.querySelectorAll('[data-dinamico]').forEach(el => el.remove());
@@ -1251,6 +1276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             : '';
         document.getElementById('cp-escopo').value = projeto.escopo ?? '';
         document.getElementById('cp-restricao').value = projeto.restricao ?? '';
+        projetoTemContrato = !!projeto.contrato;
         atualizarContadores();
 
         (projeto.alvos || []).forEach(valor => alvos.push(valor));
