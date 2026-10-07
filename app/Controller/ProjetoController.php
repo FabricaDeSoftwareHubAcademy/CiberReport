@@ -140,7 +140,14 @@ class ProjetoController extends Controller
 
     public function listarTiposPentestAtivos()
     {
-        return TipoPentest::listarAtivosParaSelecao();
+        $tipos = TipoPentest::listarAtivosParaSelecao();
+        $frameworksPorTipo = $this->projeto->buscarFrameworksPorTipoPentest();
+
+        foreach ($tipos as &$tipo) {
+            $tipo['frameworks_ids'] = $frameworksPorTipo[(int) $tipo['id']] ?? [];
+        }
+
+        return $tipos;
     }
 
     public function listarUsuariosAtivos()
