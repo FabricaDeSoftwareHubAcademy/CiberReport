@@ -143,9 +143,11 @@ class ProjetoController extends Controller
     {
         $tipos = TipoPentest::listarAtivosParaSelecao();
         $frameworksPorTipo = $this->projeto->buscarFrameworksPorTipoPentest();
+        $checklistsPorTipo = $this->projeto->buscarChecklistsPorTipoPentest();
 
         foreach ($tipos as &$tipo) {
             $tipo['frameworks_ids'] = $frameworksPorTipo[(int) $tipo['id']] ?? [];
+            $tipo['checklists'] = $checklistsPorTipo[(int) $tipo['id']] ?? [];
         }
 
         return $tipos;

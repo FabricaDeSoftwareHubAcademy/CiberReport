@@ -285,6 +285,40 @@ class Projeto
         return $porTipo;
     }
 
+    /**
+     * Checklists vinculados a cada tipo de pentest, com os títulos dos itens,
+     * para o modal mostrar a prévia: [tipo_id => [['nome' => ..., 'itens' => [...]], ...]].
+     */
+    public function buscarChecklistsPorTipoPentest(): array
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT tipo_pentest_checklist.tipo_pentest_id, checklist.id AS checklist_id, checklist.nome,
+                    checklist_item_catalogo.titulo
+             FROM tipo_pentest_checklist
+             INNER JOIN checklist ON checklist.id = tipo_pentest_checklist.checklist_id AND checklist.habilitado = 1
+             LEFT JOIN checklist_item_vinculo ON checklist_item_vinculo.checklist_id = checklist.id
+                 AND checklist_item_vinculo.habilitado = 1
+             LEFT JOIN checklist_item_catalogo ON checklist_item_catalogo.id = checklist_item_vinculo.item_id
+                 AND checklist_item_catalogo.habilitado = 1
+             ORDER BY tipo_pentest_checklist.tipo_pentest_id, checklist.nome, checklist_item_vinculo.ordem"
+        );
+        $sql->execute();
+
+        $porTipo = [];
+        foreach ($sql->fetchAll(PDO::FETCH_ASSOC) as $linha) {
+            $idTipo = (int) $linha['tipo_pentest_id'];
+            $idChecklist = (int) $linha['checklist_id'];
+
+            $porTipo[$idTipo][$idChecklist] ??= ['nome' => $linha['nome'], 'itens' => []];
+
+            if ($linha['titulo'] !== null) {
+                $porTipo[$idTipo][$idChecklist]['itens'][] = $linha['titulo'];
+            }
+        }
+
+        return array_map('array_values', $porTipo);
+    }
+
     public function editarProjeto(array $dados)
     {
         try {

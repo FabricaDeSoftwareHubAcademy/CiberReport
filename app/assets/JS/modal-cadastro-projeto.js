@@ -671,9 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <span class="campo__mensagem-erro">Adicione ao menos um analista a este pentest.</span>
             </div>
-            <div class="campo">
+            <div class="campo" data-campo="checklist">
                 <label class="campo__label">Checklist</label>
-                <p class="campo__ajuda">Vinculado automaticamente a partir do tipo de pentest selecionado.</p>
+                <div data-papel="previa-checklist"></div>
             </div>
         `;
 
@@ -695,6 +695,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const itensTipo = tiposPentest.map(t => ({
             id: t.id, label: t.nome, categoria_nome: t.categoria_nome, frameworks_ids: t.frameworks_ids || [],
         }));
+
+        // Prévia (só leitura) dos checklists que o tipo de pentest traz junto.
+        const previaChecklist = raiz.querySelector('[data-papel="previa-checklist"]');
+
+        function renderizarPreviaChecklist() {
+            previaChecklist.innerHTML = '';
+
+            const tipo = tiposPentest.find(t => String(t.id) === String(bloco.tipoPentestId));
+            const checklists = tipo?.checklists || [];
+
+            if (checklists.length === 0) {
+                const aviso = document.createElement('p');
+                aviso.className = 'campo__ajuda';
+                aviso.textContent = tipo
+                    ? 'Este tipo de pentest não tem checklist vinculado.'
+                    : 'Selecione o tipo de pentest para ver o checklist vinculado.';
+                previaChecklist.appendChild(aviso);
+                return;
+            }
+
+            checklists.forEach(checklist => {
+                const detalhes = document.createElement('details');
+                detalhes.className = 'previa-checklist';
+
+                const titulo = document.createElement('summary');
+                titulo.className = 'previa-checklist__titulo';
+                titulo.append(checklist.nome + ' ');
+
+                const total = checklist.itens.length;
+                const contagem = document.createElement('span');
+                contagem.className = 'previa-checklist__contagem';
+                contagem.textContent = `(${total} ${total === 1 ? 'item' : 'itens'})`;
+                titulo.appendChild(contagem);
+                detalhes.appendChild(titulo);
+
+                const lista = document.createElement('ul');
+                lista.className = 'previa-checklist__itens';
+                checklist.itens.forEach(tituloItem => {
+                    const li = document.createElement('li');
+                    li.textContent = tituloItem;
+                    lista.appendChild(li);
+                });
+                detalhes.appendChild(lista);
+
+                previaChecklist.appendChild(detalhes);
+            });
+        }
+
+        bloco.renderizarPreviaChecklist = renderizarPreviaChecklist;
+        renderizarPreviaChecklist();
         criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, (item) => {
             bloco.tipoPentestId = item.id;
             tipoInput.value = item.label;
@@ -704,6 +754,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // A metodologia passa a ser a vinculada ao tipo escolhido (o
             // usuário ainda pode tirar ou acrescentar depois). Tipo sem
             // vínculo não mexe no que já estava selecionado.
+            renderizarPreviaChecklist();
+
             const vinculados = frameworks.filter(f => item.frameworks_ids.includes(Number(f.id)));
             if (vinculados.length > 0) {
                 bloco.frameworksSelecionados.length = 0;
@@ -1195,6 +1247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bloco.tipoPentestId = p.tipo_pentest_id ? Number(p.tipo_pentest_id) : null;
             bloco.tipoInput.value = p.tipo_pentest_nome ?? '';
             bloco.modalidadeEl.value = p.modalidade ?? '';
+            bloco.renderizarPreviaChecklist();
 
             bloco.raiz.querySelector('[data-campo="horas"] input').value = p.horas_contratadas
                 ? horasDecimalParaTexto(p.horas_contratadas)
