@@ -1,9 +1,5 @@
 # Convenções do Projeto CyberReport
 
-## Nomes de arquivos e pastas
-- Sempre **minúsculas** com **kebab-case**: `menu-lateral.css`, `foto-perfil.jpg`
-- Nunca usar espaços ou maiúsculas em nomes de arquivo (Linux/git diferenciam maiúsculo de minúsculo)
-
 ## JavaScript
 - Variáveis e funções: **camelCase** → `listarProjetos`, `dataCriacao`
 - Constantes fixas: **UPPER_SNAKE_CASE** → `URL_API`

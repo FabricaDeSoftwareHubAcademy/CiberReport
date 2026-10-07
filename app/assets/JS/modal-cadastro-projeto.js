@@ -64,27 +64,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTipoPentest = document.getElementById('modalNovoPentest');
     let blocoAguardandoTipo = null; // bloco cujo "+" abriu o modal de tipo de pentest
 
-    // Chamado pelo modal-tipo-pentest.js depois de salvar, no lugar do reload.
-    window.aoSalvarTipoPentest = async (tipoSalvo) => {
-        modalTipoPentest?.classList.remove('active');
-
+    // Chamado pelo modal-tipo-pentest.js no lugar do envio normal do formulário
+    // (que sairia desta página): manda os mesmos campos por fetch para a rota
+    // JSON do módulo de projetos e seleciona o tipo novo no bloco que pediu.
+    window.aoSalvarTipoPentest = async (formularioTipo) => {
         try {
-            const resposta  = await fetch(`${urlBaseProjeto}/tipos-pentest`);
+            const resposta  = await fetch(`${urlBaseProjeto}/cadastrar-tipo-pentest`, { method: 'POST', body: new FormData(formularioTipo) });
             const resultado = await resposta.json();
+
+            if (resultado.status !== 200) {
+                window.exibirToast?.('erro', resultado.msg || 'Não foi possível salvar o tipo de pentest.', undefined, 4000);
+                return;
+            }
 
             tiposPentest.length = 0;
             resultado.data.forEach(t => tiposPentest.push(t));
             atualizarItensTipo();
 
-            const novo = itensTipo.find(i => String(i.id) === String(tipoSalvo.id));
+            const novo = itensTipo.find(i => String(i.id) === String(resultado.id));
             if (novo && blocoAguardandoTipo) blocoAguardandoTipo.selecionarTipo(novo);
 
+            modalTipoPentest?.classList.remove('active');
+            blocoAguardandoTipo = null;
             window.exibirToast?.('sucesso', 'Tipo de pentest cadastrado e selecionado.');
         } catch (erro) {
             console.error(erro);
-            window.exibirToast?.('aviso', 'Tipo de pentest cadastrado, mas a lista não foi atualizada. Recarregue a página para vê-lo.', undefined, 5000);
-        } finally {
-            blocoAguardandoTipo = null;
+            window.exibirToast?.('erro', 'Não foi possível salvar o tipo de pentest. Tente novamente.', undefined, 4000);
         }
     };
 
@@ -987,7 +992,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // o cadastro de usuário ainda não funciona no próprio módulo: o <select>
         // de perfil envia "analista"/"administrador" em vez do id do perfil, e
         // GerenciamentoUsuarioController::cadastrar() passa senha e perfil_id em
-        // ordem trocada para GerenUsuario::cadastrarUsuario() (além de gravar a
+        // ordem trocada para GerenciamentoUsuarioModel::cadastrarUsuario() (além de gravar a
         // senha sem hash). Ligar o atalho antes disso criaria usuários inválidos.
         analistasCampo.querySelector('[data-acao="cadastrar-usuario"]').addEventListener('click', () => {
             if (typeof exibirToast === 'function') {

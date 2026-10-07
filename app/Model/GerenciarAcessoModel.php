@@ -1,6 +1,6 @@
 <?php
 
-class GerenciarAcesso
+class GerenciarAcessoModel
 {
     private $pdo;
     public $msgerro = '';

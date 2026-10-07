@@ -1,6 +1,6 @@
 <?php
 
-namespace config;
+namespace Config;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

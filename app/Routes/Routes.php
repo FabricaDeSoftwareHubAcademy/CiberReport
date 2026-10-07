@@ -20,7 +20,6 @@ Route::middleware([AuthMiddleware::class], function (): void {
 
     Route::GET('/gerenciar-pentest', 'TipoPentestController@index');
 
-    Route::GET('/tipo-pentest/listar', 'TipoPentestController@listar');
     Route::GET('/tipo-pentest/buscar', 'TipoPentestController@buscar');
     Route::POST('/tipo-pentest/cadastro', 'TipoPentestController@cadastro');
     Route::POST('/tipo-pentest/exclusao', 'TipoPentestController@exclusao');
@@ -36,8 +35,8 @@ Route::middleware([AuthMiddleware::class], function (): void {
     Route::POST('/vulnerabilidades', 'VulnerabilidadesController@index');
     Route::POST('/vulnerabilidades/salvar', 'VulnerabilidadesController@salvar');
 
-    Route::GET('/cliente-empresa', 'CadastroEmpresaController@index');
-    Route::POST('/cliente-empresa', 'CadastroEmpresaController@index');
+    Route::GET('/cliente-empresa', 'EmpresaController@index');
+    Route::POST('/cliente-empresa', 'EmpresaController@index');
 
     Route::GET('/gerenciamento-acesso', 'GerenciarAcessoController@index');
     Route::POST('/gerenciamento-acesso', 'GerenciarAcessoController@index');
@@ -46,6 +45,7 @@ Route::middleware([AuthMiddleware::class], function (): void {
     Route::POST('/gerenciamento-projeto', 'ProjetoController@index');
     Route::GET('/gerenciamento-projeto/tipos-pentest', 'ProjetoController@tiposPentestJson');
     Route::POST('/gerenciamento-projeto/cadastrar-empresa', 'ProjetoController@cadastrarEmpresaJson');
+    Route::POST('/gerenciamento-projeto/cadastrar-tipo-pentest', 'ProjetoController@cadastrarTipoPentestJson');
 
     Route::GET('/dashboard-gestor', 'DashboardGestorController@index');
     Route::POST('/dashboard-gestor', 'DashboardGestorController@index');

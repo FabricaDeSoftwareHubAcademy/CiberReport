@@ -6,14 +6,18 @@ require_once __DIR__ . "/../Model/ProjetoValidator.php";
 require_once __DIR__ . "/../Model/EmpresaModel.php";
 
 use Core\Controller;
+use Core\DAO;
+use DAO\ChecklistDAO;
 use Empresa;
 use Exception;
 use Model\Andamento;
-use Model\Framework;
-use Model\Projeto;
-use Model\TipoPentest;
+use Model\CategoriaPentestModel;
+use Model\FrameworkModel;
+use Model\ProjetoModel;
+use Model\TipoPentestModel;
 use Model\UsuarioModel;
 use ProjetoValidator;
+use Service\TipoPentestService;
 
 class ProjetoController extends Controller
 {
@@ -24,9 +28,8 @@ class ProjetoController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
-        $this->projeto = new Projeto($conexao);
+        $conexao = DAO::conexao();
+        $this->projeto = new ProjetoModel($conexao);
         $this->empresa = new Empresa($conexao);
         $this->usuario = new UsuarioModel($conexao);
         $this->andamento = new Andamento($conexao);
@@ -37,7 +40,7 @@ class ProjetoController extends Controller
         $dadosModal = [
             'empresas' => htmlspecialchars(json_encode($this->listarEmpresasAtivas(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'tiposPentest' => htmlspecialchars(json_encode($this->listarTiposPentestAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
-            'frameworks' => htmlspecialchars(json_encode((new Framework())->getAllRows(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
+            'frameworks' => htmlspecialchars(json_encode((new FrameworkModel())->getAllRows(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'usuarios' => htmlspecialchars(json_encode($this->listarUsuariosAtivos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
             'projetos' => htmlspecialchars(json_encode($this->listarCompletos(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'),
         ];
@@ -46,9 +49,58 @@ class ProjetoController extends Controller
 
         // Os atalhos "+" do modal de projeto abrem os modais de cadastro de
         // tipo de pentest e de empresa; o primeiro precisa destas variáveis.
-        $dadosModalTipoPentest = (new TipoPentestController())->dadosDoModal();
+        $this->view('gerenciamento_projeto', $this->dadosModalTipoPentest() + ['dadosModal' => $dadosModal, 'dadosAndamento' => $dadosAndamento]);
+    }
 
-        $this->view('gerenciamento_projeto', $dadosModalTipoPentest + ['dadosModal' => $dadosModal, 'dadosAndamento' => $dadosAndamento]);
+    /** Variáveis que Components/modais/tipo_pentest.php espera encontrar no escopo de quem o inclui. */
+    private function dadosModalTipoPentest(): array
+    {
+        return [
+            'categorias' => (new CategoriaPentestModel())->getAllRows(),
+            'frameworks' => (new FrameworkModel())->getAllRows(),
+            'checklists' => (new ChecklistDAO())->listarChecklistAtivos(),
+            'rotulosTecnica' => TipoPentestModel::ROTULOS_TECNICA,
+            'rotulosRisco' => TipoPentestModel::ROTULOS_RISCO,
+            'classesRisco' => TipoPentestModel::CLASSES_RISCO,
+            'rotulosProfundidade' => TipoPentestModel::ROTULOS_PROFUNDIDADE,
+        ];
+    }
+
+    /**
+     * POST /gerenciamento-projeto/cadastrar-tipo-pentest — cadastra o tipo de
+     * pentest pelo atalho do bloco de pentest, sem recarregar a página. A
+     * validação e a gravação são as do módulo de Pentest (TipoPentestService e
+     * TipoPentestModel); aqui só muda a forma da resposta, que lá é redirect.
+     */
+    public function cadastrarTipoPentestJson()
+    {
+        try {
+            $dados = TipoPentestService::processarCadastro($_POST);
+
+            $model = new TipoPentestModel();
+            foreach ($dados as $campo => $valor) {
+                $model->$campo = $valor;
+            }
+            $model->id = null; // o atalho só cria; edição continua na tela de Pentest
+
+            $model->save(); // o DAO preenche $model->id ao inserir
+            $id = $model->id;
+        } catch (Exception $e) {
+            $this->json(['status' => 400, 'msg' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            $this->json(['status' => 400, 'msg' => 'Não foi possível salvar o tipo de pentest.']);
+        }
+
+        if (!$id) {
+            $this->json(['status' => 400, 'msg' => 'Não foi possível salvar o tipo de pentest.']);
+        }
+
+        $this->json([
+            'status' => 200,
+            'msg' => 'Tipo de pentest cadastrado com sucesso.',
+            'id' => (int) $id,
+            'data' => $this->listarTiposPentestAtivos(),
+        ]);
     }
 
     /** GET /gerenciamento-projeto/tipos-pentest — lista atualizada depois de um cadastro pelo atalho. */
@@ -65,7 +117,7 @@ class ProjetoController extends Controller
     public function cadastrarEmpresaJson()
     {
         try {
-            $resultado = (new CadastroEmpresaController())->cadastrarEmpresa();
+            $resultado = (new EmpresaController())->cadastrarEmpresa();
         } catch (\Throwable $e) {
             // O cadastro de empresa não trata erro de banco; sem isto a resposta sairia como página de erro, não JSON.
             $this->json(['status' => 400, 'msg' => 'Não foi possível cadastrar a empresa. Confira os dados e tente novamente.']);
@@ -179,7 +231,7 @@ class ProjetoController extends Controller
 
     public function listarTiposPentestAtivos()
     {
-        $tipos = TipoPentest::listarAtivosParaSelecao();
+        $tipos = $this->projeto->buscarTiposPentestAtivos();
         $frameworksPorTipo = $this->projeto->buscarFrameworksPorTipoPentest();
         $checklistsPorTipo = $this->projeto->buscarChecklistsPorTipoPentest();
 

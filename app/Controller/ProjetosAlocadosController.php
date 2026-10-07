@@ -6,6 +6,7 @@ require_once __DIR__ . "/../Model/ProjetosAlocadosModel.php";
 
 use Core\Controller;
 use Model\ProjetosAlocadosModel;
+use Core\DAO;
 
 class ProjetosAlocadosController extends Controller
 {
@@ -13,8 +14,7 @@ class ProjetosAlocadosController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->model = new ProjetosAlocadosModel($conexao);
     }
 

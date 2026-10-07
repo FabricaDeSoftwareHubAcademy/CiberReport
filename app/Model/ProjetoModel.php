@@ -2,7 +2,7 @@
 namespace Model;
 
 use PDO;
-class Projeto
+class ProjetoModel
 {
     private $pdo;
 
@@ -269,6 +269,25 @@ class Projeto
         $sql->execute();
 
         return array_map('intval', array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'usuario_id'));
+    }
+
+    /**
+     * Tipos de pentest ativos com a categoria, que o modal mostra como
+     * "Modalidade". Consulta própria do módulo de projetos: só lê as tabelas
+     * do módulo de Pentest.
+     */
+    public function buscarTiposPentestAtivos(): array
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT tipo_pentest.id, tipo_pentest.nome, tipo_pentest.categoria_id, categoria_pentest.nome AS categoria_nome
+             FROM tipo_pentest
+             INNER JOIN categoria_pentest ON categoria_pentest.id = tipo_pentest.categoria_id
+             WHERE tipo_pentest.habilitado = 1
+             ORDER BY tipo_pentest.nome"
+        );
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /** Frameworks vinculados a cada tipo de pentest ([tipo_id => [framework_id, ...]]), para o modal sugerir a metodologia. */
