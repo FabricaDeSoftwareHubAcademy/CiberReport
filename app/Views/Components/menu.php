@@ -9,7 +9,9 @@ require_once __DIR__ . '/sobre_perfil.php';
     <?php
     $sidebarAberto = ($_COOKIE['sidebarOpen'] ?? 'true') === 'true';
     $classeMenu = $sidebarAberto ? 'open-sidebar' : '';
-    $rotaAtual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    // Último trecho do caminho (ex.: "/CiberReport/gerenciamento-projeto" → "gerenciamento-projeto"),
+    // para marcar o item da página atual independentemente da pasta base.
+    $rotaAtual = basename(rtrim((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
 
     $itemMenuAtivo = static function (string ...$rotas) use ($rotaAtual): string {
         return in_array($rotaAtual, $rotas, true) ? ' active' : '';
@@ -27,21 +29,21 @@ require_once __DIR__ . '/sobre_perfil.php';
                 </div>
             </div>
             <ul id="side_itens">
-                <li class="side_item<?= $itemMenuAtivo('dashboard_gestor.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('dashboard-gestor') ?>">
                     <a href="<?= BASE_URL ?>dashboard-gestor">
                         <i class="fa-solid fa-chart-column"></i>
                         <span class="item_description">Dashboard</span>
                     </a>
                     <div class="tooltip-item"><span>Dashboard</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('cliente_empresa.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('cliente-empresa') ?>">
                     <a href="<?= BASE_URL ?>cliente-empresa" class="margin-lef">
                         <i class="fa-solid fa-address-book"></i>
                         <span class="item_description">Clientes</span>
                     </a>
                     <div class="tooltip-item"><span>Clientes</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('gerenciamento_projeto.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('gerenciamento-projeto') ?>">
                     <a href="<?= BASE_URL ?>gerenciamento-projeto">
                         <i class="fa-solid fa-terminal"></i>
                         <span class="item_description">Projetos</span>
@@ -49,21 +51,21 @@ require_once __DIR__ . '/sobre_perfil.php';
                     <div class="tooltip-item"><span>Projetos</span></div>
 
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('gerenciar_tipo_pentest.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('gerenciar-pentest') ?>">
                     <a href="<?= BASE_URL ?>gerenciar-pentest">
                         <i class="fa-solid fa-user-secret"></i>
                         <span class="item_description">Pentest</span>
                     </a>
                     <div class="tooltip-item"><span>Pentest</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('checklist.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('checklist') ?>">
                     <a href="<?= BASE_URL ?>checklist">
                         <i class="fa-solid fa-list-check"></i>
                         <span class="item_description">Checklist</span>
                     </a>
                     <div class="tooltip-item"><span>Checklist</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('vulnerabilidades.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('vulnerabilidades') ?>">
                     <a href="<?= BASE_URL ?>vulnerabilidades">
                         <i class="fa-solid fa-bug"></i>
                         <span class="item_description">Vulnerabilidades</span>
@@ -77,21 +79,21 @@ require_once __DIR__ . '/sobre_perfil.php';
                     </a>
                     <div class="tooltip-item"><span>Conhecimento</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('usuario.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('usuario') ?>">
                     <a href="<?= BASE_URL ?>usuario" class="margin-lef">
                         <i class="fa-solid fa-users"></i>
                         <span class="item_description">Usuários</span>
                     </a>
                     <div class="tooltip-item"><span>Usuários</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('gerenciamento_acesso.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('gerenciamento-acesso') ?>">
                     <a href="<?= BASE_URL ?>gerenciamento-acesso">
                         <i class="fa-solid fa-gear"></i>
                         <span class="item_description">Perfis de Acesso</span>
                     </a>
                     <div class="tooltip-item"><span>Perfis de Acesso</span></div>
                 </li>
-                <li class="side_item<?= $itemMenuAtivo('relatorios.php') ?>">
+                <li class="side_item<?= $itemMenuAtivo('relatorio.php') ?>">
                     <a href="<?= BASE_URL ?>relatorio.php">
                         <i class="fa-solid fa-file-lines"></i>
                         <span class="item_description">Relatórios</span>

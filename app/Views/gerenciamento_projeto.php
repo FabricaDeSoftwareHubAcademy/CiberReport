@@ -34,6 +34,10 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/filtros-tabela.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/modal-cadastro-projeto.js" defer></script>
+    <!-- Atalhos "+" do modal de projeto: modais de cadastro de tipo de pentest e de empresa -->
+    <script src="<?= BASE_URL ?>app/assets/JS/componentes/modal-tipo-pentest.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/mascaras.js" defer></script>
+    <script src="<?= BASE_URL ?>app/assets/JS/Buscarcep.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/modal-andamento-projeto.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/toast.js" defer></script>
     <script src="<?= BASE_URL ?>app/assets/JS/componentes/popup-confirmacao.js" defer></script>
@@ -189,6 +193,9 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
 
     <?php include __DIR__ . '/Components/modal-cadastro-projeto/index.php'; ?>
     <?php include __DIR__ . '/Components/modal-andamento-projeto/index.php'; ?>
+    <?php // Depois do modal de projeto (abrem por cima dele) e antes do popup de salvar (que abre por cima dos dois). ?>
+    <?php include __DIR__ . '/Components/modais/tipo_pentest.php'; ?>
+    <?php include __DIR__ . '/Components/modais/cadastro_empresa.php'; ?>
     <?php include 'Components/popup_salvar.php'; ?>
     <?php include 'Components/toast.php'; ?>
 </body>

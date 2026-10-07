@@ -1,3 +1,12 @@
+// Usa o toast do sistema quando a página o carrega; sem ele, cai no alert do navegador.
+function avisarErroCep(mensagem) {
+    if (typeof window.exibirToast === 'function') {
+        window.exibirToast('erro', mensagem);
+    } else {
+        alert(mensagem);
+    }
+}
+
 function buscarCep() {
 
     var campoCep = document.getElementById("cep");
@@ -18,7 +27,7 @@ function buscarCep() {
         .then(function (dados) {
 
             if (dados.erro) {
-                alert("CEP não encontrado!");
+                avisarErroCep("CEP não encontrado!");
                 return;
             }
 
@@ -34,7 +43,7 @@ function buscarCep() {
 
         })
         .catch(function (erro) {
-            alert("Erro ao buscar o CEP. Tente novamente.");
+            avisarErroCep("Erro ao buscar o CEP. Tente novamente.");
             console.log(erro);
         });
 }
