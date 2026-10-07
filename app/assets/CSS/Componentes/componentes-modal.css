@@ -210,6 +210,32 @@
     outline: none;
 }
 
+.campo__combobox-limpar {
+    position: absolute;
+    top: 0;
+    right: 4.4rem;
+    width: 3.2rem;
+    height: 4.4rem;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: var(--cor-texto-secundario);
+    cursor: pointer;
+    transition: color var(--transicao-rapida);
+}
+
+.campo__combobox-limpar[hidden] { display: none; }
+
+.campo__combobox-limpar:hover,
+.campo__combobox-limpar:focus-visible {
+    color: var(--cor-vermelho-destaque);
+    outline: none;
+}
+
+.campo__combobox-campo--com-limpar .campo__combobox-input {
+    padding-right: 7.6rem;
+}
+
 .campo__combobox-lista {
     position: absolute;
     top: calc(100% + var(--espaco-xs));
@@ -275,6 +301,7 @@
     border-radius: var(--raio-md); display: flex; flex-wrap: wrap; gap: var(--espaco-xs);
     background-color: var(--cor-fundo-branco);
 }
+.campo__multi-chips:empty { display: none; }
 .campo__botao-adicionar {
     flex-shrink: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
     border: 1px solid var(--cor-borda-padrao); border-radius: var(--raio-md); background-color: var(--cor-fundo-branco);
@@ -282,7 +309,7 @@
     transition: background-color var(--transicao-rapida), color var(--transicao-rapida), border-color var(--transicao-rapida);
 }
 .campo__botao-adicionar:hover { background-color: var(--cor-azul-primaria); border-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); }
-.chip { display: inline-flex; align-items: center; gap: var(--espaco-xs); padding: var(--espaco-xs) var(--espaco-sm); background-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); border-radius: var(--raio-full); font-size: var(--fonte-legenda); font-weight: 500; }
+.chip { display: inline-flex; align-items: center; gap: var(--espaco-xs); padding: var(--espaco-xs) var(--espaco-sm); background-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); border-radius: var(--raio-md); font-size: var(--fonte-legenda); font-weight: 500; }
 .chip__remover { background: none; border: none; color: rgba(255, 255, 255, 0.75); cursor: pointer; display: flex; align-items: center; }
 .chip--leitura { background-color: var(--cor-branco-primario); color: var(--cor-texto-primario); border: 1px solid var(--cor-borda-padrao); }
 

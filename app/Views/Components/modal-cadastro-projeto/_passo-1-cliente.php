@@ -24,6 +24,9 @@
                             <button type="button" class="campo__combobox-alternar" aria-label="Mostrar clientes">
                                 <i class="fa-solid fa-chevron-down"></i>
                             </button>
+                            <button type="button" id="cp-cliente-limpar" class="campo__combobox-limpar" aria-label="Limpar cliente selecionado" hidden>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                             <div id="cp-cliente-lista" class="campo__combobox-lista" role="listbox" hidden></div>
                         </div>
                     </div>
