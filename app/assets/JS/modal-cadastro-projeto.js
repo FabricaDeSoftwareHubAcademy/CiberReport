@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="campo" data-campo="horas">
                     <label class="campo__label campo__label--obrigatorio">Horas de Pentest contratadas</label>
-                    <input type="text" class="campo__input" placeholder="hh:mm:ss" maxlength="8" inputmode="numeric">
+                    <input type="text" class="campo__input" placeholder="hh:mm:ss" maxlength="9" inputmode="numeric">
                     <span class="campo__mensagem-erro">Informe as horas deste pentest (ex: 40:00:00).</span>
                 </div>
                 <div class="campo">
@@ -1167,10 +1167,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 12. CAMPOS hh:mm:ss (horas totais do projeto e horas de cada pentest)
     // -------------------------------------------------------------------------
+    // Até 6 dígitos vira hh:mm:ss; o 7º dígito abre a terceira casa de hora
+    // (1200000 → 120:00:00), para contratos acima de 99 horas.
     function aplicarMascaraHoras(e) {
         let v = e.target.value.replace(/[^\d]/g, '');
-        if (v.length > 6) v = v.slice(0, 6);
-        if (v.length >= 5) {
+        if (v.length > 7) v = v.slice(0, 7);
+        if (v.length === 7) {
+            v = v.slice(0, 3) + ':' + v.slice(3, 5) + ':' + v.slice(5);
+        } else if (v.length >= 5) {
             v = v.slice(0, 2) + ':' + v.slice(2, 4) + ':' + v.slice(4);
         } else if (v.length >= 3) {
             v = v.slice(0, 2) + ':' + v.slice(2);
