@@ -121,9 +121,11 @@
                 <label class="campo__label campo__label--obrigatorio" for="cp-escopo">Resumo do projeto contratado</label>
                 <textarea id="cp-escopo"
                     name="escopo"
-                    class="campo__textarea"
-                    rows="6"
+                    class="campo__textarea campo__textarea--par-dropzone"
+                    rows="8"
+                    maxlength="2000"
                     placeholder="Descreva o objetivo e detalhe do projeto..."></textarea>
+                <span class="campo__contador" id="cp-escopo-contador">0 / 2000</span>
                 <span class="campo__mensagem-erro" id="erro-escopo">O resumo do projeto contratado é obrigatório.</span>
                 <!-- Alvos/IPs/URL/Domínio -->
                 <div class="campo" style="margin-top: var(--espaco-md)">
@@ -133,7 +135,7 @@
                             <input type="text"
                                 id="cp-alvo-input"
                                 class="campo__multi-input"
-                                placeholder="Escreva um ativo e adicione...">
+                                placeholder="Ex: 192.168.0.1, app.cliente.com.br">
                             <button type="button" id="cp-alvo-add" class="campo__botao-adicionar" aria-label="Adicionar ativo">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
@@ -146,7 +148,7 @@
             <div class="campo">
                 <label class="campo__label" style="display:block; margin-bottom: var(--espaco-xs)">Anexo do contrato</label>
                 <!-- Dropzone -->
-                <div class="campo__dropzone" id="cp-dropzone" role="button" tabindex="0" aria-label="Arraste ou selecione o contrato PDF">
+                <div class="campo__dropzone campo__dropzone--par-textarea" id="cp-dropzone" role="button" tabindex="0" aria-label="Arraste ou selecione o contrato PDF">
                     <i class="fa-solid fa-cloud-arrow-down campo__dropzone-icone"></i>
                     <p class="campo__dropzone-titulo" id="cp-dropzone-texto">Arraste e solte seu arquivo aqui</p>
                     <span class="campo__dropzone-ou">ou</span>

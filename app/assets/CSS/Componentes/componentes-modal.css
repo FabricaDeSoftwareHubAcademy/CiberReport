@@ -144,6 +144,10 @@
     box-sizing: border-box;
 }
 .campo__textarea::placeholder { color: var(--cor-texto-secundario); }
+/* Resumo do projeto e anexo do contrato ficam lado a lado: mesma altura nos dois. */
+.campo__textarea--par-dropzone, .campo__dropzone--par-textarea { height: 22rem; box-sizing: border-box; }
+.campo__dropzone--par-textarea { justify-content: center; }
+.campo__contador { align-self: flex-end; font-size: var(--fonte-legenda); color: var(--cor-texto-secundario); }
 
 /* Select / Dropdown Customizado */
 .campo__select-wrapper { position: relative; display: flex; align-items: center; gap: var(--espaco-sm); width: 100%; }
@@ -310,6 +314,10 @@
 }
 .campo__botao-adicionar:hover { background-color: var(--cor-azul-primaria); border-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); }
 .chip { display: inline-flex; align-items: center; gap: var(--espaco-xs); padding: var(--espaco-xs) var(--espaco-sm); background-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); border-radius: var(--raio-md); font-size: var(--fonte-legenda); font-weight: 500; }
+.chip__texto { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip--truncado { max-width: 100%; box-sizing: border-box; }
+.chip--truncado .chip__texto { max-width: 15ch; cursor: pointer; }
+.chip--truncado.chip--expandido .chip__texto { max-width: none; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .chip__remover { background: none; border: none; color: rgba(255, 255, 255, 0.75); cursor: pointer; display: flex; align-items: center; }
 .chip--leitura { background-color: var(--cor-branco-primario); color: var(--cor-texto-primario); border: 1px solid var(--cor-borda-padrao); }
 
