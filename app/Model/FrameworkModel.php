@@ -5,7 +5,7 @@ namespace Model;
 use Core\Model;
 use DAO\FrameworkDAO;
 
-final class Framework extends Model
+final class FrameworkModel extends Model
 {
     public function getAllRows(): array
     {

@@ -3,8 +3,9 @@
 namespace Controller;
 
 use Core\Controller;
+use Core\DAO;
 use Model\UsuarioModel;
-use function config\enviarEmailRecuperacao;
+use function Config\enviarEmailRecuperacao;
 
 class AuthController extends Controller
 {
@@ -12,8 +13,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        require_once __DIR__ . '/../DAO/DAO.php';
-        $conexao = \DAO\DAO::conexao();
+        $conexao = DAO::conexao();
         $this->auth = new UsuarioModel($conexao);
     }
 
@@ -214,7 +214,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'sucessoRedefinicao' => false
             ]);
-            
+
             return;
         }
 

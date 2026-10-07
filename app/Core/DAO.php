@@ -1,6 +1,6 @@
 <?php
 
-namespace DAO;
+namespace Core;
 
 use PDO;
 abstract class DAO

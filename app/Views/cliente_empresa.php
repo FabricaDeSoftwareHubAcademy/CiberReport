@@ -1,9 +1,9 @@
 <?php
-use Controller\CadastroEmpresaController;
+use Controller\EmpresaController;
 
-require_once __DIR__ . "/../Controller/CadastroEmpresaController.php";
+require_once __DIR__ . "/../Controller/EmpresaController.php";
 
-$controller = new CadastroEmpresaController();
+$controller = new EmpresaController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'alterarHabilitado') {
     $id = addslashes($_POST['id'] ?? '');

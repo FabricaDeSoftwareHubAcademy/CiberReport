@@ -28,7 +28,7 @@ qualquer edição "vaza" instantaneamente para todo mundo que já usava aquele r
 ## Diagnóstico no schema atual
 
 Projeto: PHP puro com PDO (sem Eloquent/Laravel, sem migrations). Schema em
-`app/Model/Database/banco.sql` (autoritativo — `banco_exportado.sql` é dump antigo
+`Database/banco.sql` (autoritativo — `banco_exportado.sql` é dump antigo
 e desatualizado, ignorar). Nenhuma FK está de fato ativa no banco (todas comentadas
 no SQL), então nada impede tecnicamente a solução proposta.
 

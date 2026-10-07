@@ -10,7 +10,7 @@ if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_U
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config/mailer.php';
+require_once __DIR__ . '/Config/mailer.php';
 
 session_set_cookie_params(['httponly' => true]);
 
@@ -23,7 +23,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-$config = require __DIR__ . '/config/app.php';
+$config = require __DIR__ . '/Config/app.php';
 
 $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 $dominio   = $_SERVER['HTTP_HOST'];

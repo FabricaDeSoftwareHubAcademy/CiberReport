@@ -7,7 +7,7 @@ use DAO\ChecklistItemDAO;
 use Model\ChecklistItemModel;
 
 require_once __DIR__ . '/../Core/Controller.php';
-require_once __DIR__ . '/../DAO/DAO.php';
+require_once __DIR__ . '/../Core/DAO.php';
 require_once __DIR__ . '/../DAO/ChecklistItemDAO.php';
 require_once __DIR__ . '/../Core/Model.php';
 require_once __DIR__ . '/../Model/ChecklistItemModel.php';

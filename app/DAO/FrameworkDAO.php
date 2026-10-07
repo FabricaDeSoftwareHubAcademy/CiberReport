@@ -2,6 +2,7 @@
 
 namespace DAO;
 
+use Core\DAO;
 use PDO;
 
 class FrameworkDAO extends DAO
