@@ -98,7 +98,13 @@
 .campo__input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
 .campo__input--com-icone-esq { padding-left: calc(var(--espaco-md) + 2.0rem + var(--espaco-sm)); }
 .campo__input-icone { position: absolute; left: var(--espaco-md); color: var(--cor-texto-secundario); font-size: 1.4rem; pointer-events: none; }
-.campo__input--hora, .campo__input--data { padding-right: 44px; }
+.campo__input--hora { padding-right: 44px; }
+/* O botão azul (.campo__input-botao-icone) já chama showPicker(), então o
+   calendário nativo do input fica duplicado. No Chrome dá pra esconder pelo
+   pseudo-elemento; o Firefox não tem seletor pra isso, então o padding curto
+   deixa o ícone nativo embaixo do botão, que é opaco e fica por cima. */
+.campo__input--data { padding-right: 12px; }
+.campo__input--data::-webkit-calendar-picker-indicator { display: none; }
 
 /* Botões integrados em inputs de data/hora */
 .campo__input-botao-icone {
