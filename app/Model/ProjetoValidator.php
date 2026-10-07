@@ -146,6 +146,10 @@ class ProjetoValidator
             $erros[] = 'O resumo do projeto contratado deve ter no máximo 2000 caracteres.';
         }
 
+        if (mb_strlen(str_replace("\r\n", "\n", $dadosLimpos['restricao'])) > 2000) {
+            $erros[] = 'As restrições devem ter no máximo 2000 caracteres.';
+        }
+
         if (empty($dadosLimpos['pentests'])) {
             $erros[] = 'Adicione ao menos um pentest ao projeto.';
         }

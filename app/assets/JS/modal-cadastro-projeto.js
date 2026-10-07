@@ -393,16 +393,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Contador de caracteres do resumo do projeto contratado
-    const escopoEl       = document.getElementById('cp-escopo');
-    const escopoContador = document.getElementById('cp-escopo-contador');
+    // Contador de caracteres dos textareas do passo 1 (resumo e restrições)
+    const camposComContador = [
+        ['cp-escopo', 'cp-escopo-contador'],
+        ['cp-restricao', 'cp-restricao-contador'],
+    ].map(([idCampo, idContador]) => ({
+        campo: document.getElementById(idCampo),
+        contador: document.getElementById(idContador),
+    })).filter(c => c.campo && c.contador);
 
-    function atualizarContadorEscopo() {
-        if (!escopoEl || !escopoContador) return;
-        escopoContador.textContent = `${escopoEl.value.length} / ${escopoEl.maxLength}`;
+    function atualizarContadores() {
+        camposComContador.forEach(({ campo, contador }) => {
+            contador.textContent = `${campo.value.length} / ${campo.maxLength}`;
+        });
     }
 
-    escopoEl?.addEventListener('input', atualizarContadorEscopo);
+    camposComContador.forEach(({ campo }) => campo.addEventListener('input', atualizarContadores));
 
     // -------------------------------------------------------------------------
     // 6. DROPZONE
@@ -965,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form?.reset();
         if (clienteInput) clienteInput.value = '';
         atualizarLimparCliente();
-        atualizarContadorEscopo();
+        atualizarContadores();
         if (dropzoneTxt)  dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
 
         overlay.querySelectorAll('.campo--erro').forEach(el => el.classList.remove('campo--erro'));
@@ -1072,8 +1078,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ? horasDecimalParaTexto(projeto.horas_contratadas)
             : '';
         document.getElementById('cp-escopo').value = projeto.escopo ?? '';
-        atualizarContadorEscopo();
         document.getElementById('cp-restricao').value = projeto.restricao ?? '';
+        atualizarContadores();
 
         (projeto.alvos || []).forEach(valor => alvos.push(valor));
         renderizarChipsAlvos();
