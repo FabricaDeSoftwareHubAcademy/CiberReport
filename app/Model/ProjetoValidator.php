@@ -182,9 +182,31 @@ class ProjetoValidator
         }
 
         self::validarPentests($dadosLimpos['pentests'], $erros);
+        self::validarSomaHoras($dadosLimpos, $erros);
 
         if (count($erros) > 0) {
             throw new Exception(implode('<br>', $erros));
+        }
+    }
+
+    /** As horas dos pentests saem das horas totais do projeto: a soma não pode ultrapassar o contratado. */
+    private static function validarSomaHoras(array $dadosLimpos, array &$erros): void
+    {
+        $total = $dadosLimpos['horas_contratadas'];
+        if ($total === false || empty($dadosLimpos['pentests'])) {
+            return;
+        }
+
+        $soma = 0.0;
+        foreach ($dadosLimpos['pentests'] as $pentest) {
+            $soma += $pentest['horas_contratadas'] === false ? 0.0 : (float) $pentest['horas_contratadas'];
+        }
+
+        // Cada valor chega arredondado em 2 casas (o front converte hh:mm:ss para decimal).
+        $tolerancia = 0.01 * (count($dadosLimpos['pentests']) + 1);
+
+        if ($soma > $total + $tolerancia) {
+            $erros[] = 'A soma das horas dos pentests não pode ultrapassar as horas totais contratadas do projeto.';
         }
     }
 

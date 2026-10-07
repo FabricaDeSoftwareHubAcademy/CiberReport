@@ -259,6 +259,20 @@ class Projeto
         return ['lider_id' => $liderId, 'analistas_ids' => $analistasIds];
     }
 
+    /** Frameworks vinculados a cada tipo de pentest ([tipo_id => [framework_id, ...]]), para o modal sugerir a metodologia. */
+    public function buscarFrameworksPorTipoPentest(): array
+    {
+        $sql = $this->pdo->prepare("SELECT tipo_pentest_id, framework_id FROM tipo_pentest_framework");
+        $sql->execute();
+
+        $porTipo = [];
+        foreach ($sql->fetchAll(PDO::FETCH_ASSOC) as $linha) {
+            $porTipo[(int) $linha['tipo_pentest_id']][] = (int) $linha['framework_id'];
+        }
+
+        return $porTipo;
+    }
+
     public function editarProjeto(array $dados)
     {
         try {

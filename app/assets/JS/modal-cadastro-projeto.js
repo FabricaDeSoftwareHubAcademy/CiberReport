@@ -177,9 +177,27 @@ document.addEventListener('DOMContentLoaded', () => {
             temErro = temErro || semBlocos;
 
             blocosPentest.forEach(bloco => temErro = !validarBlocoPentest(bloco) || temErro);
+
+            temErro = !validarSomaHorasPentests() || temErro;
         }
 
         return !temErro;
+    }
+
+    // As horas dos pentests saem das horas totais do projeto: a soma não pode ultrapassar.
+    function validarSomaHorasPentests() {
+        const campo = document.getElementById('campo-horas-pentests');
+        const total = horasTextoParaSegundos(document.getElementById('cp-horas-contratadas').value);
+        const soma  = blocosPentest.reduce((acc, bloco) =>
+            acc + (horasTextoParaSegundos(bloco.raiz.querySelector('[data-campo="horas"] input').value) || 0), 0);
+
+        const ultrapassou = total !== null && soma > total;
+        if (ultrapassou) {
+            document.getElementById('erro-horas-pentests').textContent =
+                `A soma das horas dos pentests (${segundosParaTexto(soma)}) ultrapassa as horas totais contratadas do projeto (${segundosParaTexto(total)}).`;
+        }
+        campo?.classList.toggle('campo--erro', ultrapassou);
+        return !ultrapassou;
     }
 
     function validarBlocoPentest(bloco) {
@@ -190,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ok = ok && !tipoInvalido;
 
         const horasEl = bloco.raiz.querySelector('[data-campo="horas"] input');
-        const horasInvalidas = !horasEl.value || parseFloat(horasEl.value) <= 0;
+        const horasInvalidas = !(horasTextoParaSegundos(horasEl.value) > 0);
         bloco.raiz.querySelector('[data-campo="horas"]').classList.toggle('campo--erro', horasInvalidas);
         ok = ok && !horasInvalidas;
 
@@ -532,8 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="campo" data-campo="horas">
                     <label class="campo__label campo__label--obrigatorio">Horas de Pentest contratadas</label>
-                    <input type="number" class="campo__input" min="0" step="0.5" placeholder="Ex: 40">
-                    <span class="campo__mensagem-erro">Informe as horas contratadas para este pentest.</span>
+                    <input type="text" class="campo__input" placeholder="hh:mm:ss" maxlength="8" inputmode="numeric">
+                    <span class="campo__mensagem-erro">Informe as horas deste pentest (ex: 40:00:00).</span>
                 </div>
                 <div class="campo">
                     <label class="campo__label">Modalidade</label>
@@ -622,12 +640,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const tipoToggle   = tipoCampo.querySelector('.campo__combobox-alternar');
         const modalidadeEl = raiz.querySelectorAll('.campo__input--readonly')[0];
 
-        const itensTipo = tiposPentest.map(t => ({ id: t.id, label: t.nome, categoria_nome: t.categoria_nome }));
+        const itensTipo = tiposPentest.map(t => ({
+            id: t.id, label: t.nome, categoria_nome: t.categoria_nome, frameworks_ids: t.frameworks_ids || [],
+        }));
         criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, (item) => {
             bloco.tipoPentestId = item.id;
             tipoInput.value = item.label;
             modalidadeEl.value = item.categoria_nome || '';
             tipoCampo.classList.remove('campo--erro');
+
+            // A metodologia passa a ser a vinculada ao tipo escolhido (o
+            // usuário ainda pode tirar ou acrescentar depois). Tipo sem
+            // vínculo não mexe no que já estava selecionado.
+            const vinculados = frameworks.filter(f => item.frameworks_ids.includes(Number(f.id)));
+            if (vinculados.length > 0) {
+                bloco.frameworksSelecionados.length = 0;
+                vinculados.forEach(f => bloco.frameworksSelecionados.push({ id: f.id, nome: f.nome }));
+                bloco.renderizarChipsMetodologia();
+                raiz.querySelector('[data-campo="metodologia"]').classList.remove('campo--erro');
+            }
         });
 
         // Abordagem / Ambiente
@@ -644,8 +675,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Horas / Escopo: só tira o erro quando o usuário mexe
-        raiz.querySelector('[data-campo="horas"] input').addEventListener('input', () => {
+        raiz.querySelector('[data-campo="horas"] input').addEventListener('input', (e) => {
+            aplicarMascaraHoras(e);
             raiz.querySelector('[data-campo="horas"]').classList.remove('campo--erro');
+            document.getElementById('campo-horas-pentests')?.classList.remove('campo--erro');
         });
         raiz.querySelector('[data-campo="escopo"] textarea').addEventListener('input', () => {
             raiz.querySelector('[data-campo="escopo"]').classList.remove('campo--erro');
@@ -894,7 +927,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         blocosPentest.forEach((bloco, idx) => {
             adicionarHidden(`pentests[${idx}][tipo_pentest_id]`, bloco.tipoPentestId ?? '');
-            adicionarHidden(`pentests[${idx}][horas_contratadas]`, bloco.raiz.querySelector('[data-campo="horas"] input').value);
+            adicionarHidden(`pentests[${idx}][horas_contratadas]`, horasTextoParaDecimal(bloco.raiz.querySelector('[data-campo="horas"] input').value));
             adicionarHidden(`pentests[${idx}][abordagem]`, bloco.abordagemSelect.value);
             adicionarHidden(`pentests[${idx}][ambiente]`, bloco.ambienteSelect.value);
             adicionarHidden(`pentests[${idx}][escopo]`, bloco.raiz.querySelector('[data-campo="escopo"] textarea').value);
@@ -910,10 +943,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Converte horas_contratadas de hh:mm:ss para decimal (80:00:00 → 80.00)
         const horasEl = document.getElementById('cp-horas-contratadas');
         if (horasEl) {
-            const partes = horasEl.value.split(':');
-            if (partes.length === 3) {
-                const decimal = parseInt(partes[0]) + parseInt(partes[1]) / 60 + parseInt(partes[2]) / 3600;
-                horasEl.value = decimal.toFixed(2);
+            if (horasTextoParaSegundos(horasEl.value) !== null) {
+                horasEl.value = horasTextoParaDecimal(horasEl.value);
             }
         }
     }
@@ -1020,10 +1051,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
-    // 12. MÁSCARA SIMPLES PARA CAMPO hh:mm:ss (horas totais do projeto)
+    // 12. CAMPOS hh:mm:ss (horas totais do projeto e horas de cada pentest)
     // -------------------------------------------------------------------------
-    const horasContratadas = document.getElementById('cp-horas-contratadas');
-    horasContratadas?.addEventListener('input', (e) => {
+    function aplicarMascaraHoras(e) {
         let v = e.target.value.replace(/[^\d]/g, '');
         if (v.length > 6) v = v.slice(0, 6);
         if (v.length >= 5) {
@@ -1032,7 +1062,26 @@ document.addEventListener('DOMContentLoaded', () => {
             v = v.slice(0, 2) + ':' + v.slice(2);
         }
         e.target.value = v;
-    });
+    }
+
+    /** "40:30:00" → 145800; null quando o texto não está no formato hh:mm:ss. */
+    function horasTextoParaSegundos(texto) {
+        const partes = /^(\d{1,3}):(\d{2}):(\d{2})$/.exec((texto || '').trim());
+        if (!partes) return null;
+        return Number(partes[1]) * 3600 + Number(partes[2]) * 60 + Number(partes[3]);
+    }
+
+    function horasTextoParaDecimal(texto) {
+        const segundos = horasTextoParaSegundos(texto);
+        return segundos === null ? '' : (segundos / 3600).toFixed(2);
+    }
+
+    function segundosParaTexto(totalSegundos) {
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${pad(Math.floor(totalSegundos / 3600))}:${pad(Math.floor((totalSegundos % 3600) / 60))}:${pad(totalSegundos % 60)}`;
+    }
+
+    document.getElementById('cp-horas-contratadas')?.addEventListener('input', aplicarMascaraHoras);
 
     // -------------------------------------------------------------------------
     // 13. ABRIR EM MODO EDITAR/VISUALIZAR (a partir dos botões da tabela)
@@ -1040,12 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projetos = JSON.parse(overlay.dataset.projetos || '[]');
 
     function horasDecimalParaTexto(decimal) {
-        const totalSegundos = Math.round(parseFloat(decimal) * 3600) || 0;
-        const h = Math.floor(totalSegundos / 3600);
-        const m = Math.floor((totalSegundos % 3600) / 60);
-        const s = totalSegundos % 60;
-        const pad = (n) => String(n).padStart(2, '0');
-        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+        return segundosParaTexto(Math.round(parseFloat(decimal) * 3600) || 0);
     }
 
     function definirSomenteLeitura(valor) {
@@ -1100,7 +1144,9 @@ document.addEventListener('DOMContentLoaded', () => {
             bloco.tipoInput.value = p.tipo_pentest_nome ?? '';
             bloco.modalidadeEl.value = p.modalidade ?? '';
 
-            bloco.raiz.querySelector('[data-campo="horas"] input').value = p.horas_contratadas ?? '';
+            bloco.raiz.querySelector('[data-campo="horas"] input').value = p.horas_contratadas
+                ? horasDecimalParaTexto(p.horas_contratadas)
+                : '';
             bloco.abordagemSelect.value = p.abordagem ?? '';
             bloco.ambienteSelect.value = p.ambiente ?? '';
             bloco.raiz.querySelector('[data-campo="escopo"] textarea').value = p.escopo ?? '';
