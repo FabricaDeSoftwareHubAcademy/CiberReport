@@ -130,7 +130,7 @@
                         name="horas_contratadas"
                         class="campo__input campo__input--hora"
                         placeholder="hh:mm:ss"
-                        maxlength="8"
+                        maxlength="9"
                         inputmode="numeric">
                     <button type="button" class="campo__input-botao-icone" aria-label="Campo de hora">
                         <i class="fa-solid fa-clock"></i>
