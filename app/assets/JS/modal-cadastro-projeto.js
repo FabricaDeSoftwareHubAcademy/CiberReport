@@ -315,6 +315,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const clienteInput  = document.getElementById('cp-cliente-busca');
     const clienteLista  = document.getElementById('cp-cliente-lista');
     const clienteToggle = clienteInput?.nextElementSibling;
+    const clienteLimpar = document.getElementById('cp-cliente-limpar');
+
+    function atualizarLimparCliente() {
+        if (!clienteLimpar) return;
+        const temSelecao = !!clienteSelecionado.id;
+        clienteLimpar.hidden = !temSelecao;
+        clienteInput?.closest('.campo__combobox-campo')?.classList.toggle('campo__combobox-campo--com-limpar', temSelecao);
+    }
+
+    clienteLimpar?.addEventListener('click', () => {
+        clienteSelecionado = { id: null, nome: '' };
+        clienteInput.value = '';
+        document.getElementById('cp-empresa-id').value = '';
+        atualizarLimparCliente();
+        clienteInput.focus();
+    });
 
     if (clienteInput && clienteLista && clienteToggle) {
         const itensCliente = empresas.map(e => ({
@@ -327,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clienteInput.value = item.label;
             document.getElementById('cp-empresa-id').value = item.id;
             document.getElementById('campo-cliente')?.classList.remove('campo--erro');
+            atualizarLimparCliente();
         });
     }
 
@@ -918,6 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form?.reset();
         if (clienteInput) clienteInput.value = '';
+        atualizarLimparCliente();
         if (dropzoneTxt)  dropzoneTxt.textContent = 'Arraste e solte seu arquivo aqui';
 
         overlay.querySelectorAll('.campo--erro').forEach(el => el.classList.remove('campo--erro'));
@@ -1012,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const empresa = empresas.find(e => String(e.id) === String(projeto.empresa_id));
         clienteSelecionado = { id: projeto.empresa_id, nome: empresa ? (empresa.nome_fantasia || empresa.razao_social) : '' };
         if (clienteInput) clienteInput.value = clienteSelecionado.nome;
+        atualizarLimparCliente();
         document.getElementById('cp-empresa-id').value = projeto.empresa_id ?? '';
 
         document.getElementById('cp-nome-projeto').value = projeto.nome ?? '';
