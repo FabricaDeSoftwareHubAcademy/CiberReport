@@ -384,11 +384,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const liderLista  = document.getElementById('cp-lider-lista');
     const liderToggle = liderInput?.nextElementSibling;
 
+    const liderLimpar = document.getElementById('cp-lider-limpar');
+
     function definirLider(id, nome) {
         liderSelecionado = { id, nome };
         if (liderInput) liderInput.value = nome;
         document.getElementById('cp-lider-id').value = id ?? '';
+
+        if (liderLimpar) liderLimpar.hidden = !id;
+        liderInput?.closest('.campo__combobox-campo')?.classList.toggle('campo__combobox-campo--com-limpar', !!id);
     }
+
+    liderLimpar?.addEventListener('click', () => {
+        definirLider(null, '');
+        liderInput.focus();
+    });
 
     if (liderInput && liderLista && liderToggle) {
         const itensLider = usuarios.map(u => ({ id: u.id, label: u.nome }));
@@ -636,12 +646,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 <label class="campo__label campo__label--obrigatorio">Analista(s)</label>
                 <div class="campo__multi">
                     <div class="campo__multi-busca">
-                        <input type="text" class="campo__multi-input" placeholder="Pesquise e adicione um analista...">
-                        <button type="button" class="campo__botao-adicionar" aria-label="Adicionar analista">
+                        <div class="campo__combobox" style="flex:1">
+                            <div class="campo__combobox-linha">
+                                <div class="campo__combobox-campo">
+                                    <input type="text" class="campo__input campo__combobox-input"
+                                        placeholder="Pesquise e selecione um analista..." role="combobox"
+                                        aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+                                    <button type="button" class="campo__combobox-alternar" aria-label="Mostrar analistas">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
+                                    <button type="button" class="campo__combobox-limpar" aria-label="Limpar busca de analista" hidden>
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                    <div class="campo__combobox-lista" role="listbox" hidden></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="campo__botao-adicionar" data-acao="cadastrar-usuario"
+                            aria-label="Cadastrar novo usuário" title="Cadastrar novo usuário (ainda não disponível nesta tela)">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="campo__multi-chips" aria-label="Equipe deste pentest"></div>
+                    <div class="campo__multi-chips" aria-label="Analistas deste pentest"></div>
                 </div>
                 <span class="campo__mensagem-erro">Adicione ao menos um analista a este pentest.</span>
             </div>
@@ -739,11 +765,12 @@ document.addEventListener('DOMContentLoaded', () => {
             metodologiaCampo.classList.remove('campo--erro');
         });
 
-        // Analistas (multi-select)
-        const analistasCampo = raiz.querySelector('[data-campo="analistas"]');
-        const analistaBusca  = analistasCampo.querySelector('.campo__multi-input');
-        const analistaAdd    = analistasCampo.querySelector('.campo__botao-adicionar');
-        const analistasChips = analistasCampo.querySelector('.campo__multi-chips');
+        // Analistas (multi-select: escolher na lista já adiciona o chip)
+        const analistasCampo  = raiz.querySelector('[data-campo="analistas"]');
+        const analistaBusca   = analistasCampo.querySelector('.campo__combobox-input');
+        const analistaLista   = analistasCampo.querySelector('.campo__combobox-lista');
+        const analistaToggle  = analistasCampo.querySelector('.campo__combobox-alternar');
+        const analistasChips  = analistasCampo.querySelector('.campo__multi-chips');
 
         function renderizarChipsAnalistas() {
             analistasChips.innerHTML = '';
@@ -755,25 +782,42 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        function adicionarAnalista() {
-            const query = analistaBusca.value.trim().toLowerCase();
-            if (!query) return;
+        const analistaLimpar = analistasCampo.querySelector('.campo__combobox-limpar');
 
-            const encontrado = usuarios.find(u =>
-                u.nome.toLowerCase().includes(query) &&
-                !bloco.equipe.find(m => m.id === u.id)
-            );
-            if (!encontrado) return;
-
-            bloco.equipe.push({ id: encontrado.id, nome: encontrado.nome });
-            analistaBusca.value = '';
-            renderizarChipsAnalistas();
-            analistasCampo.classList.remove('campo--erro');
+        function atualizarLimparAnalista() {
+            const temTexto = analistaBusca.value !== '';
+            analistaLimpar.hidden = !temTexto;
+            analistaBusca.closest('.campo__combobox-campo').classList.toggle('campo__combobox-campo--com-limpar', temTexto);
         }
 
-        analistaAdd.addEventListener('click', adicionarAnalista);
-        analistaBusca.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); adicionarAnalista(); }
+        analistaBusca.addEventListener('input', atualizarLimparAnalista);
+        analistaLimpar.addEventListener('click', () => {
+            analistaBusca.value = '';
+            atualizarLimparAnalista();
+            analistaBusca.focus();
+        });
+
+        // PENDENTE: o "+" deve abrir o modal de cadastro de usuário aqui mesmo.
+        // Hoje não dá: esse modal está escrito dentro de Views/usuario.php (não é
+        // um componente que se inclua em outra tela) e o salvamento dele recarrega
+        // a página, o que faria o usuário perder o projeto em preenchimento. Para
+        // ligar, o módulo de Usuários precisa expor o modal como componente e um
+        // salvamento que responda em JSON. O mesmo vale para o "+" de Cliente.
+        analistasCampo.querySelector('[data-acao="cadastrar-usuario"]').addEventListener('click', () => {
+            if (typeof exibirToast === 'function') {
+                exibirToast('info', 'O cadastro de usuário por aqui ainda não está disponível. Use a tela de Usuários.', undefined, 4000);
+            }
+        });
+
+        const itensAnalista = usuarios.map(u => ({ id: u.id, label: u.nome }));
+        criarCombobox(analistaBusca, analistaLista, analistaToggle, itensAnalista, (item) => {
+            analistaBusca.value = '';
+            atualizarLimparAnalista();
+            if (bloco.equipe.find(m => m.id === item.id)) return;
+
+            bloco.equipe.push({ id: item.id, nome: item.label });
+            renderizarChipsAnalistas();
+            analistasCampo.classList.remove('campo--erro');
         });
 
         // Remover bloco

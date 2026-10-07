@@ -75,6 +75,9 @@
                             <button type="button" class="campo__combobox-alternar" aria-label="Mostrar pentesters">
                                 <i class="fa-solid fa-chevron-down"></i>
                             </button>
+                            <button type="button" id="cp-lider-limpar" class="campo__combobox-limpar" aria-label="Limpar líder técnico selecionado" hidden>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                             <div id="cp-lider-lista" class="campo__combobox-lista" role="listbox" hidden></div>
                         </div>
                     </div>
@@ -160,8 +163,8 @@
                                 id="cp-alvo-input"
                                 class="campo__multi-input"
                                 placeholder="Ex: 192.168.0.1, app.cliente.com.br">
-                            <button type="button" id="cp-alvo-add" class="campo__botao-adicionar" aria-label="Adicionar ativo">
-                                <i class="fa-solid fa-plus"></i>
+                            <button type="button" id="cp-alvo-add" class="campo__botao-adicionar campo__botao-adicionar--texto">
+                                Adicionar
                             </button>
                         </div>
                         <div class="campo__multi-chips" id="cp-alvos-chips" aria-label="Alvos adicionados"></div>
