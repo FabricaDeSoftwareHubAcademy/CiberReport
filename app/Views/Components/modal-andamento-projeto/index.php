@@ -23,9 +23,8 @@
 
         <div class="modal-meta-grid">
             <div class="modal-meta-celula">
-                <span class="modal-meta-celula__rotulo">Nome/ID</span>
+                <span class="modal-meta-celula__rotulo">Nome</span>
                 <span class="modal-meta-celula__valor" id="and-nome">—</span>
-                <span class="modal__footer-info" id="and-id"></span>
             </div>
             <div class="modal-meta-celula">
                 <span class="modal-meta-celula__rotulo">Tipo de Teste</span>

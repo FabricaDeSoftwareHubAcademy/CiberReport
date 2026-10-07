@@ -85,9 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function preencherModal(projeto) {
-        const idExibicao = 'PT-' + String(projeto.id).padStart(10, '0');
         setText('and-nome', projeto.nome);
-        setText('and-id', idExibicao);
         setText('and-tipos', projeto.tipos_pentest.join(', ') || '—');
         setText('and-sigilo', projeto.nivel_sigilo === 'EXTERNO' ? 'Externo' : 'Interno');
         setText('and-modalidade', paraTituloCase(projeto.modalidade));
