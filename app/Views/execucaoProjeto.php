@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/CSS/Componentes/execucaoProjeto.css">
 </head>
 <body class="dashboard-projeto">
-  <?php $tituloPagina = 'Dashboard do Projeto'; include __DIR__ . '/Components/menu.php'; ?>
+  <?php $tituloPagina = 'Execução do Projeto'; include __DIR__ . '/Components/menu.php'; ?>
       <main class="projeto-conteudo">
         <section class="projeto-resumo" aria-label="Resumo do projeto">
           <div class="projeto-card projeto-info">
