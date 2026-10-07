@@ -44,7 +44,45 @@ class ProjetoController extends Controller
 
         $dadosAndamento = htmlspecialchars(json_encode($this->listarAndamentoCompleto(), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
 
-        $this->view('gerenciamento_projeto', ['dadosModal' => $dadosModal, 'dadosAndamento' => $dadosAndamento]);
+        // Os atalhos "+" do modal de projeto abrem os modais de cadastro de
+        // tipo de pentest e de empresa; o primeiro precisa destas variáveis.
+        $dadosModalTipoPentest = (new TipoPentestController())->dadosDoModal();
+
+        $this->view('gerenciamento_projeto', $dadosModalTipoPentest + ['dadosModal' => $dadosModal, 'dadosAndamento' => $dadosAndamento]);
+    }
+
+    /** GET /gerenciamento-projeto/tipos-pentest — lista atualizada depois de um cadastro pelo atalho. */
+    public function tiposPentestJson()
+    {
+        $this->json(['status' => 200, 'data' => $this->listarTiposPentestAtivos()]);
+    }
+
+    /**
+     * POST /gerenciamento-projeto/cadastrar-empresa — cadastra a empresa pelo
+     * atalho do campo Cliente, sem recarregar a página. A regra de cadastro é
+     * a do próprio módulo de Clientes; aqui só muda a forma da resposta.
+     */
+    public function cadastrarEmpresaJson()
+    {
+        try {
+            $resultado = (new CadastroEmpresaController())->cadastrarEmpresa();
+        } catch (\Throwable $e) {
+            // O cadastro de empresa não trata erro de banco; sem isto a resposta sairia como página de erro, não JSON.
+            $this->json(['status' => 400, 'msg' => 'Não foi possível cadastrar a empresa. Confira os dados e tente novamente.']);
+        }
+
+        if ($resultado !== true) {
+            $this->json(['status' => 400, 'msg' => is_string($resultado) ? $resultado : 'Não foi possível cadastrar a empresa.']);
+        }
+
+        $nova = $this->empresa->buscarPorCnpj(addslashes($_POST['cnpj'] ?? ''));
+
+        $this->json([
+            'status' => 200,
+            'msg' => 'Empresa cadastrada com sucesso.',
+            'id' => $nova ? (int) $nova['id'] : null,
+            'data' => $this->listarEmpresasAtivas(),
+        ]);
     }
 
     public function listarAndamentoCompleto()

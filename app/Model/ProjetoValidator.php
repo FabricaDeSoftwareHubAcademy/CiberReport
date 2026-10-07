@@ -242,6 +242,10 @@ class ProjetoValidator
                 $erros[] = "Pentest {$numero}: o escopo é obrigatório.";
             }
 
+            if (mb_strlen(str_replace("\r\n", "\n", $pentest['escopo'])) > 2000) {
+                $erros[] = "Pentest {$numero}: o escopo deve ter no máximo 2000 caracteres.";
+            }
+
             if (empty($pentest['frameworks_ids'])) {
                 $erros[] = "Pentest {$numero}: selecione ao menos uma metodologia.";
             }

@@ -41,6 +41,53 @@ document.addEventListener('DOMContentLoaded', () => {
     let liderSelecionado   = { id: null, nome: '' }; // líder técnico é um só por projeto
     const alvos            = []; // strings
 
+    // Rotas JSON do próprio módulo (mesma URL do form, que já traz a BASE_URL).
+    const urlBaseProjeto = document.getElementById('form-cadastro-projeto').getAttribute('action');
+
+    // Popup de confirmação de salvamento: compartilhado com o modal de tipo de pentest.
+    const popupSalvar = document.getElementById('popupSalvar');
+    let aguardandoConfirmacaoEdicao = false;
+
+    // Itens do combobox de tipo de pentest: lista única para todos os blocos,
+    // refeita quando um tipo é cadastrado pelo atalho "+".
+    const itensTipo = [];
+
+    function atualizarItensTipo() {
+        itensTipo.length = 0;
+        tiposPentest.forEach(t => itensTipo.push({
+            id: t.id, label: t.nome, categoria_nome: t.categoria_nome, frameworks_ids: t.frameworks_ids || [],
+        }));
+    }
+
+    atualizarItensTipo();
+
+    const modalTipoPentest = document.getElementById('modalNovoPentest');
+    let blocoAguardandoTipo = null; // bloco cujo "+" abriu o modal de tipo de pentest
+
+    // Chamado pelo modal-tipo-pentest.js depois de salvar, no lugar do reload.
+    window.aoSalvarTipoPentest = async (tipoSalvo) => {
+        modalTipoPentest?.classList.remove('active');
+
+        try {
+            const resposta  = await fetch(`${urlBaseProjeto}/tipos-pentest`);
+            const resultado = await resposta.json();
+
+            tiposPentest.length = 0;
+            resultado.data.forEach(t => tiposPentest.push(t));
+            atualizarItensTipo();
+
+            const novo = itensTipo.find(i => String(i.id) === String(tipoSalvo.id));
+            if (novo && blocoAguardandoTipo) blocoAguardandoTipo.selecionarTipo(novo);
+
+            window.exibirToast?.('sucesso', 'Tipo de pentest cadastrado e selecionado.');
+        } catch (erro) {
+            console.error(erro);
+            window.exibirToast?.('aviso', 'Tipo de pentest cadastrado, mas a lista não foi atualizada. Recarregue a página para vê-lo.', undefined, 5000);
+        } finally {
+            blocoAguardandoTipo = null;
+        }
+    };
+
     // Blocos de Pentest (passo 2) — cada item é o estado de um bloco.
     const blocosPentest = [];
     let proximoUidBloco = 0;
@@ -174,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             temErro = temErro || escopoInvalido;
 
             const horas = document.getElementById('cp-horas-contratadas');
-            const horasInvalidas = !horas.value.trim() || !/^\d{1,3}:\d{2}:\d{2}$/.test(horas.value.trim());
+            const horasInvalidas = !(horasTextoParaSegundos(horas.value) > 0);
             marcarErroCampo('cp-horas-contratadas', horasInvalidas);
             temErro = temErro || horasInvalidas;
         }
@@ -357,16 +404,74 @@ document.addEventListener('DOMContentLoaded', () => {
         clienteInput?.closest('.campo__combobox-campo')?.classList.toggle('campo__combobox-campo--com-limpar', temSelecao);
     }
 
-    // PENDENTE: o "+" deve abrir o modal de cadastro de empresa aqui mesmo.
-    // Hoje não dá: o modal está escrito dentro de Views/cliente_empresa.php (não
-    // é um componente que se inclua em outra tela) e o salvamento dele recarrega
-    // a página, o que faria o usuário perder o projeto em preenchimento. As
-    // máscaras e a busca de CEP já são arquivos separados (mascaras.js e
-    // Buscarcep.js); falta o módulo de Clientes expor o modal como componente
-    // e um salvamento que responda em JSON.
+    // Itens do combobox de cliente: lista única, refeita quando uma empresa é
+    // cadastrada pelo atalho "+".
+    const itensCliente = [];
+
+    function atualizarItensCliente() {
+        itensCliente.length = 0;
+        empresas.forEach(e => itensCliente.push({
+            id:    e.id,
+            label: e.nome_fantasia || e.razao_social || `Empresa #${e.id}`,
+        }));
+    }
+
+    function selecionarCliente(item) {
+        clienteSelecionado = { id: item.id, nome: item.label };
+        clienteInput.value = item.label;
+        document.getElementById('cp-empresa-id').value = item.id;
+        document.getElementById('campo-cliente')?.classList.remove('campo--erro');
+        atualizarLimparCliente();
+    }
+
+    atualizarItensCliente();
+
+    // "+" do Cliente: abre o modal de cadastro de empresa do módulo de Clientes
+    // (Components/modais/cadastro_empresa.php) por cima deste. O <form> dele
+    // envia para a própria página e recarrega; aqui o envio é interceptado e
+    // vai por fetch, para o projeto em preenchimento não se perder.
+    const modalEmpresa = document.getElementById('modalClientes');
+    const formEmpresa  = modalEmpresa?.querySelector('form');
+
     document.getElementById('cp-cliente-cadastrar')?.addEventListener('click', () => {
-        if (typeof exibirToast === 'function') {
-            exibirToast('info', 'O cadastro de cliente por aqui ainda não está disponível. Use a tela de Clientes.', undefined, 4000);
+        if (!formEmpresa) {
+            window.exibirToast?.('info', 'O cadastro de cliente não está disponível nesta tela. Use a tela de Clientes.');
+            return;
+        }
+        formEmpresa.reset();
+        modalEmpresa.classList.add('active');
+    });
+
+    formEmpresa?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const botaoSalvar = formEmpresa.querySelector('[type="submit"]');
+        botaoSalvar.disabled = true;
+
+        try {
+            const resposta  = await fetch(`${urlBaseProjeto}/cadastrar-empresa`, { method: 'POST', body: new FormData(formEmpresa) });
+            const resultado = await resposta.json();
+
+            if (resultado.status !== 200) {
+                window.exibirToast?.('erro', resultado.msg || 'Não foi possível cadastrar a empresa.', undefined, 4000);
+                return;
+            }
+
+            empresas.length = 0;
+            resultado.data.forEach(e => empresas.push(e));
+            atualizarItensCliente();
+
+            const nova = itensCliente.find(i => String(i.id) === String(resultado.id));
+            if (nova) selecionarCliente(nova);
+
+            modalEmpresa.classList.remove('active');
+            formEmpresa.reset();
+            window.exibirToast?.('sucesso', 'Empresa cadastrada e selecionada no projeto.');
+        } catch (erro) {
+            console.error(erro);
+            window.exibirToast?.('erro', 'Não foi possível cadastrar a empresa. Tente novamente.', undefined, 4000);
+        } finally {
+            botaoSalvar.disabled = false;
         }
     });
 
@@ -379,18 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (clienteInput && clienteLista && clienteToggle) {
-        const itensCliente = empresas.map(e => ({
-            id:    e.id,
-            label: e.nome_fantasia || e.razao_social || `Empresa #${e.id}`,
-        }));
-
-        criarCombobox(clienteInput, clienteLista, clienteToggle, itensCliente, (item) => {
-            clienteSelecionado = { id: item.id, nome: item.label };
-            clienteInput.value = item.label;
-            document.getElementById('cp-empresa-id').value = item.id;
-            document.getElementById('campo-cliente')?.classList.remove('campo--erro');
-            atualizarLimparCliente();
-        });
+        criarCombobox(clienteInput, clienteLista, clienteToggle, itensCliente, selecionarCliente);
     }
 
     // -------------------------------------------------------------------------
@@ -597,6 +691,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </button>
                                 <div class="campo__combobox-lista" role="listbox" hidden></div>
                             </div>
+                            <button type="button" class="campo__botao-adicionar" data-acao="cadastrar-tipo-pentest"
+                                aria-label="Cadastrar novo tipo de pentest" title="Cadastrar novo tipo de pentest (ainda não disponível nesta tela)">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
                         </div>
                     </div>
                     <span class="campo__mensagem-erro">Selecione o tipo de pentest.</span>
@@ -604,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="campo" data-campo="horas">
                     <label class="campo__label campo__label--obrigatorio">Horas de Pentest contratadas</label>
                     <input type="text" class="campo__input" placeholder="hh:mm:ss" maxlength="9" inputmode="numeric">
-                    <span class="campo__mensagem-erro">Informe as horas deste pentest (ex: 40:00:00).</span>
+                    <span class="campo__mensagem-erro">Informe as horas deste pentest no formato hh:mm:ss (ex: 40:00:00), com minutos e segundos até 59.</span>
                 </div>
                 <div class="campo">
                     <label class="campo__label">Modalidade</label>
@@ -655,7 +753,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="campo" data-campo="escopo">
                 <label class="campo__label campo__label--obrigatorio">Escopo</label>
-                <textarea class="campo__textarea" rows="4" placeholder="Descreva o escopo deste pentest..."></textarea>
+                <textarea class="campo__textarea" rows="4" maxlength="2000" placeholder="Descreva o escopo deste pentest..."></textarea>
+                <span class="campo__contador">0 / 2000</span>
                 <span class="campo__mensagem-erro">O escopo deste pentest é obrigatório.</span>
             </div>
             <div class="campo" data-campo="analistas">
@@ -708,10 +807,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tipoToggle   = tipoCampo.querySelector('.campo__combobox-alternar');
         const modalidadeEl = raiz.querySelectorAll('.campo__input--readonly')[0];
 
-        const itensTipo = tiposPentest.map(t => ({
-            id: t.id, label: t.nome, categoria_nome: t.categoria_nome, frameworks_ids: t.frameworks_ids || [],
-        }));
-
         // Prévia (só leitura) dos checklists que o tipo de pentest traz junto.
         const previaChecklist = raiz.querySelector('[data-papel="previa-checklist"]');
 
@@ -761,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bloco.renderizarPreviaChecklist = renderizarPreviaChecklist;
         renderizarPreviaChecklist();
-        criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, (item) => {
+        bloco.selecionarTipo = (item) => {
             bloco.tipoPentestId = item.id;
             tipoInput.value = item.label;
             modalidadeEl.value = item.categoria_nome || '';
@@ -779,7 +874,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 bloco.renderizarChipsMetodologia();
                 raiz.querySelector('[data-campo="metodologia"]').classList.remove('campo--erro');
             }
-        });
+        };
+
+        criarCombobox(tipoInput, tipoLista, tipoToggle, itensTipo, bloco.selecionarTipo);
 
         // Abordagem / Ambiente
         const abordagemSelect = raiz.querySelector('[data-campo="abordagem"] select');
@@ -800,6 +897,26 @@ document.addEventListener('DOMContentLoaded', () => {
             raiz.querySelector('[data-campo="horas"]').classList.remove('campo--erro');
             document.getElementById('campo-horas-pentests')?.classList.remove('campo--erro');
         });
+        const escopoPentest         = raiz.querySelector('[data-campo="escopo"] textarea');
+        const escopoPentestContador = raiz.querySelector('[data-campo="escopo"] .campo__contador');
+        bloco.atualizarContadorEscopo = () => {
+            escopoPentestContador.textContent = `${escopoPentest.value.length} / ${escopoPentest.maxLength}`;
+        };
+        escopoPentest.addEventListener('input', bloco.atualizarContadorEscopo);
+
+        // "+" do Tipo de Pentest: abre o modal de cadastro do módulo de Pentest
+        // por cima deste. Ao salvar, window.aoSalvarTipoPentest (mais abaixo)
+        // recarrega a lista e seleciona o tipo novo neste bloco.
+        raiz.querySelector('[data-acao="cadastrar-tipo-pentest"]').addEventListener('click', () => {
+            if (!modalTipoPentest || typeof window.limparFormularioPentest !== 'function') {
+                window.exibirToast?.('info', 'O cadastro de tipo de pentest não está disponível nesta tela. Use a tela de Pentest.');
+                return;
+            }
+            blocoAguardandoTipo = bloco;
+            window.limparFormularioPentest();
+            modalTipoPentest.classList.add('active');
+        });
+
         raiz.querySelector('[data-campo="escopo"] textarea').addEventListener('input', () => {
             raiz.querySelector('[data-campo="escopo"]').classList.remove('campo--erro');
         });
@@ -865,15 +982,16 @@ document.addEventListener('DOMContentLoaded', () => {
             analistaBusca.focus();
         });
 
-        // PENDENTE: o "+" deve abrir o modal de cadastro de usuário aqui mesmo.
-        // Hoje não dá: esse modal está escrito dentro de Views/usuario.php (não é
-        // um componente que se inclua em outra tela) e o salvamento dele recarrega
-        // a página, o que faria o usuário perder o projeto em preenchimento. Para
-        // ligar, o módulo de Usuários precisa expor o modal como componente e um
-        // salvamento que responda em JSON. O mesmo vale para o "+" de Cliente.
+        // PENDENTE: o "+" deve abrir o modal de cadastro de usuário aqui mesmo,
+        // como já fazem os de Cliente e de Tipo de Pentest. Não foi ligado porque
+        // o cadastro de usuário ainda não funciona no próprio módulo: o <select>
+        // de perfil envia "analista"/"administrador" em vez do id do perfil, e
+        // GerenciamentoUsuarioController::cadastrar() passa senha e perfil_id em
+        // ordem trocada para GerenUsuario::cadastrarUsuario() (além de gravar a
+        // senha sem hash). Ligar o atalho antes disso criaria usuários inválidos.
         analistasCampo.querySelector('[data-acao="cadastrar-usuario"]').addEventListener('click', () => {
             if (typeof exibirToast === 'function') {
-                exibirToast('info', 'O cadastro de usuário por aqui ainda não está disponível. Use a tela de Usuários.', undefined, 4000);
+                exibirToast('info', 'O cadastro de usuário por aqui ainda não está disponível. Use a tela de Usuários.');
             }
         });
 
@@ -1075,22 +1193,32 @@ document.addEventListener('DOMContentLoaded', () => {
             bloco.equipe.forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
         });
 
-        // Converte horas_contratadas de hh:mm:ss para decimal (80:00:00 → 80.00)
-        const horasEl = document.getElementById('cp-horas-contratadas');
-        if (horasEl) {
-            if (horasTextoParaSegundos(horasEl.value) !== null) {
-                horasEl.value = horasTextoParaDecimal(horasEl.value);
-            }
-        }
+        // O campo visível fica em hh:mm:ss e não tem name: o servidor recebe o
+        // decimal (80:00:00 → 80.00) por este hidden. Converter o próprio campo
+        // deixava "80.00" na tela se o usuário cancelasse a confirmação do Editar.
+        adicionarHidden('horas_contratadas', horasTextoParaDecimal(document.getElementById('cp-horas-contratadas').value));
     }
 
     form?.addEventListener('submit', (e) => {
-        if (!validarPasso(1)) { e.preventDefault(); return; }
+        // No Editar o Salvar aparece em qualquer passo: valida os dois e leva
+        // o usuário ao primeiro que tiver pendência.
+        const passoComErro = [0, 1].find(passo => !validarPasso(passo));
+        if (passoComErro !== undefined) {
+            e.preventDefault();
+            if (passoComErro !== passoAtual) irParaPasso(passoComErro);
+            return;
+        }
 
         if (modoEdicaoOuVisualizacao) {
             e.preventDefault();
             prepararCamposDinamicos();
-            document.getElementById('popupSalvar')?.classList.add('active');
+
+            // O popup de salvar é compartilhado com o modal de tipo de pentest,
+            // que deixa o nome da função dele no botão de confirmar.
+            const botaoConfirmar = popupSalvar?.querySelector('[data-popup-confirmar]');
+            if (botaoConfirmar) botaoConfirmar.dataset.popupCallback = '';
+            aguardandoConfirmacaoEdicao = true;
+            popupSalvar?.classList.add('active');
             return;
         }
 
@@ -1100,8 +1228,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 9. CONFIRMAÇÃO ANTES DE SALVAR (só em modo editar)
     // -------------------------------------------------------------------------
-    const popupSalvar = document.getElementById('popupSalvar');
-    popupSalvar?.querySelector('[data-popup-confirmar]')?.addEventListener('click', () => {
+    popupSalvar?.querySelector('[data-popup-confirmar]')?.addEventListener('click', (e) => {
+        // Só envia o projeto quando o popup foi aberto pelo Editar; se quem
+        // abriu foi o modal de tipo de pentest, a confirmação é dele.
+        const eDaEdicao = aguardandoConfirmacaoEdicao && !e.currentTarget.dataset.popupCallback;
+        aguardandoConfirmacaoEdicao = false;
+        if (!eDaEdicao) return;
+
         popupSalvar.classList.remove('active');
         form?.submit();
     });
@@ -1109,6 +1242,71 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 10. RESET AO FECHAR O MODAL
     // -------------------------------------------------------------------------
+    // Fechar pelo "X" ou clicando fora só pede confirmação quando há algo a
+    // perder. Quem fecha o modal é o modal.js (global), então a checagem roda
+    // na fase de captura, antes dele: se houver dados, o clique é barrado e o
+    // popup decide; se não houver, o clique segue e o modal fecha como antes.
+    let estadoInicial = '';
+
+    function capturarEstado() {
+        return JSON.stringify({
+            campos: [...overlay.querySelectorAll('.modal__body input, .modal__body textarea, .modal__body select')]
+                .map(el => (el.type === 'file' ? (el.files[0]?.name || '') : el.value)),
+            cliente: clienteSelecionado.id,
+            lider: liderSelecionado.id,
+            alvos,
+            blocos: blocosPentest.map(b => ({
+                tipo: b.tipoPentestId,
+                frameworks: b.frameworksSelecionados.map(f => f.id),
+                analistas: b.equipe.map(m => m.id),
+            })),
+        });
+    }
+
+    function registrarEstadoInicial() {
+        estadoInicial = capturarEstado();
+    }
+
+    function temAlgoPreenchido() {
+        const algumCampo = [...overlay.querySelectorAll('.modal__body input, .modal__body textarea, .modal__body select')]
+            .some(el => (el.type === 'file' ? el.files.length > 0 : el.value.trim() !== ''));
+
+        return algumCampo
+            || !!clienteSelecionado.id
+            || !!liderSelecionado.id
+            || alvos.length > 0
+            || blocosPentest.some(b => b.tipoPentestId || b.frameworksSelecionados.length > 0 || b.equipe.length > 0);
+    }
+
+    // Cadastro: qualquer coisa preenchida. Editar: só se algo mudou em relação
+    // ao que veio do servidor. Visualizar: nunca.
+    function haDadosAPerder() {
+        if (somenteLeitura) return false;
+        return modoEdicaoOuVisualizacao ? capturarEstado() !== estadoInicial : temAlgoPreenchido();
+    }
+
+    const popupCancelar = document.getElementById('popupCancelarProjeto');
+
+    document.addEventListener('click', (e) => {
+        if (!overlay.classList.contains('active')) return;
+
+        const clicouFora   = e.target === overlay;
+        const clicouFechar = overlay.contains(e.target) && !!e.target.closest('[data-modal-close]');
+        if (!clicouFora && !clicouFechar) return;
+        if (!popupCancelar || !haDadosAPerder()) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+        popupCancelar.classList.add('active');
+    }, true);
+
+    document.getElementById('cp-confirmar-cancelamento')?.addEventListener('click', () => {
+        popupCancelar.classList.remove('active');
+        overlay.classList.remove('active');
+        resetModal();
+        adicionarBlocoPentest();
+    });
+
     overlay.querySelectorAll('[data-modal-close]').forEach(btn => {
         btn.addEventListener('click', () => {
             resetModal();
@@ -1211,7 +1409,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function horasTextoParaSegundos(texto) {
         const partes = /^(\d{1,3}):(\d{2}):(\d{2})$/.exec((texto || '').trim());
         if (!partes) return null;
-        return Number(partes[1]) * 3600 + Number(partes[2]) * 60 + Number(partes[3]);
+
+        const [horas, minutos, segundos] = partes.slice(1).map(Number);
+        if (minutos > 59 || segundos > 59) return null; // 80:75:00 não é um horário válido
+
+        return horas * 3600 + minutos * 60 + segundos;
     }
 
     function horasTextoParaDecimal(texto) {
@@ -1298,6 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bloco.abordagemSelect.value = p.abordagem ?? '';
             bloco.ambienteSelect.value = p.ambiente ?? '';
             bloco.raiz.querySelector('[data-campo="escopo"] textarea').value = p.escopo ?? '';
+            bloco.atualizarContadorEscopo();
             bloco.raiz.querySelector('[data-campo="referencia"] input').value = p.referencia ?? '';
 
             (p.frameworks_ids || []).forEach(idFw => {
@@ -1325,6 +1528,8 @@ document.addEventListener('DOMContentLoaded', () => {
         stepperItens.forEach((item, idx) => {
             if (idx !== passoAtual) item.classList.add('cad-projeto-stepper__item--concluido');
         });
+
+        registrarEstadoInicial();
     }
 
     document.querySelectorAll('[data-projeto-id][data-modo]').forEach(botao => {
@@ -1338,16 +1543,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 14. EXCLUIR PROJETO (soft delete, com confirmação)
     // -------------------------------------------------------------------------
-    const formExcluir = document.getElementById('form-excluir-projeto');
+    const formExcluir  = document.getElementById('form-excluir-projeto');
+    const popupExcluir = document.getElementById('popupExcluirProjeto');
+
     document.querySelectorAll('.btn-excluir[data-projeto-id]').forEach(botao => {
         botao.addEventListener('click', () => {
-            const nome = botao.dataset.projetoNome || 'este projeto';
-            if (!confirm(`Tem certeza que deseja excluir "${nome}"? Essa ação pode ser desfeita apenas por um administrador.`)) {
-                return;
-            }
             document.getElementById('excluir-projeto-id').value = botao.dataset.projetoId;
-            formExcluir.submit();
+            document.getElementById('excluir-projeto-nome').textContent = botao.dataset.projetoNome || 'selecionado';
+            popupExcluir?.classList.add('active');
         });
+    });
+
+    document.getElementById('confirmar-exclusao-projeto')?.addEventListener('click', () => {
+        popupExcluir.classList.remove('active');
+        formExcluir.submit();
     });
 
     // Inicialização: primeiro bloco de pentest já visível no cadastro, e
