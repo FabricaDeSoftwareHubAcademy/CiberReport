@@ -312,6 +312,8 @@
     color: var(--cor-texto-primario); font-size: 1.4rem; cursor: pointer; box-sizing: border-box;
     transition: background-color var(--transicao-rapida), color var(--transicao-rapida), border-color var(--transicao-rapida);
 }
+/* "+" no projeto é sempre "abrir o modal de cadastro do campo"; quem só insere o texto digitado usa rótulo. */
+.campo__botao-adicionar--texto { width: auto; padding: 0 var(--espaco-md); font-family: var(--fonte-familia-corpo); font-size: var(--fonte-apoio); font-weight: 600; }
 .campo__botao-adicionar:hover { background-color: var(--cor-azul-primaria); border-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); }
 .chip { display: inline-flex; align-items: center; gap: var(--espaco-xs); padding: var(--espaco-xs) var(--espaco-sm); background-color: var(--cor-azul-primaria); color: var(--cor-fundo-branco); border-radius: var(--raio-md); font-size: var(--fonte-legenda); font-weight: 500; }
 .chip__texto { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
