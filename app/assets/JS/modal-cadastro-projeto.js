@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passos[passoAtual].classList.add('ativo');
         stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--ativo');
 
+        if (passoAtual === 1) atualizarResumoHorasPentests();
         if (passoAtual === 2) preencherRevisao();
 
         atualizarBotoes();
@@ -190,13 +191,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // A mensagem de erro só era reavaliada no "Avançar": some assim que o
     // usuário mexe no campo, e volta na próxima validação se ainda faltar algo.
-    ['cp-nome-projeto', 'cp-escopo', 'cp-horas-contratadas', 'cp-sigilo'].forEach(id => {
+    ['cp-nome-projeto', 'cp-escopo', 'cp-horas-contratadas', 'cp-sigilo', 'cp-restricao'].forEach(id => {
         const el = document.getElementById(id);
         el?.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => marcarErroCampo(id, false));
     });
+    ['cp-data-inicio', 'cp-data-fim'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', () => {
+            marcarErroCampo('cp-data-inicio', false);
+            marcarErroCampo('cp-data-fim', false);
+        });
+    });
+    document.getElementById('cp-contrato-input')?.addEventListener('change', () => marcarErroCampo('cp-contrato-input', false));
+
+    // Mensagens que o servidor devolve trocam o texto do campo; antes de cada
+    // validação da tela, o texto original volta, para não sobrar mensagem velha.
+    function restaurarMensagensPadrao() {
+        overlay.querySelectorAll('.campo__mensagem-erro[data-mensagem-padrao]').forEach(span => {
+            span.textContent = span.dataset.mensagemPadrao;
+        });
+    }
+
+    /** Marca o .campo com erro e mostra a mensagem nele (criando o espaço da mensagem se o campo não tiver). */
+    function definirErroCampo(campo, mensagem) {
+        if (!campo) return false;
+
+        let span = [...campo.children].find(el => el.classList.contains('campo__mensagem-erro'));
+        if (!span) {
+            span = document.createElement('span');
+            span.className = 'campo__mensagem-erro';
+            campo.appendChild(span);
+        }
+        if (span.dataset.mensagemPadrao === undefined) span.dataset.mensagemPadrao = span.textContent;
+        span.textContent = mensagem;
+
+        campo.classList.add('campo--erro');
+        return true;
+    }
 
     function validarPasso(passo) {
         let temErro = false;
+        restaurarMensagensPadrao();
 
         if (passo === 0) {
             if (!clienteSelecionado.id) {
@@ -229,6 +263,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const horasInvalidas = !(horasTextoParaSegundos(horas.value) > 0);
             marcarErroCampo('cp-horas-contratadas', horasInvalidas);
             temErro = temErro || horasInvalidas;
+
+            // Mesma regra do servidor: as datas são opcionais, mas o término não pode vir antes do início.
+            const inicio = document.getElementById('cp-data-inicio').value;
+            const fim    = document.getElementById('cp-data-fim').value;
+            const datasInvalidas = !!(inicio && fim && fim < inicio);
+            marcarErroCampo('cp-data-fim', datasInvalidas);
+            temErro = temErro || datasInvalidas;
         }
 
         if (passo === 1) {
@@ -291,9 +332,26 @@ document.addEventListener('DOMContentLoaded', () => {
         bloco.raiz.querySelector('[data-campo="metodologia"]').classList.toggle('campo--erro', metodologiaInvalida);
         ok = ok && !metodologiaInvalida;
 
+        const campoAnalistas = bloco.raiz.querySelector('[data-campo="analistas"]');
         const semAnalista = bloco.equipe.length === 0;
-        bloco.raiz.querySelector('[data-campo="analistas"]').classList.toggle('campo--erro', semAnalista);
+        campoAnalistas.classList.toggle('campo--erro', semAnalista);
         ok = ok && !semAnalista;
+
+        if (!semAnalista) {
+            // Horas do analista podem ficar vazias (valem 0), mas o que for digitado precisa ser válido
+            // e a soma não pode passar das horas do pentest — mesma regra do ProjetoValidator.
+            const invalida = bloco.equipe.some(m => m.horas && horasTextoParaSegundos(m.horas) === null);
+            const doPentest = horasTextoParaSegundos(horasEl.value);
+            const alocadas  = bloco.equipe.reduce((acc, m) => acc + (horasTextoParaSegundos(m.horas) || 0), 0);
+
+            if (invalida) {
+                definirErroCampo(campoAnalistas, 'Informe as horas de cada analista no formato hh:mm:ss (ex: 20:00:00); deixe em branco se ainda não estiverem definidas.');
+                ok = false;
+            } else if (doPentest !== null && alocadas > doPentest) {
+                definirErroCampo(campoAnalistas, `A soma das horas dos analistas (${segundosParaTexto(alocadas)}) ultrapassa as horas deste pentest (${segundosParaTexto(doPentest)}). Reduza as horas de algum analista ou aumente as do pentest.`);
+                ok = false;
+            }
+        }
 
         return ok;
     }
@@ -702,12 +760,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             </button>
                         </div>
                     </div>
-                    <span class="campo__mensagem-erro">Selecione o tipo de pentest.</span>
+                    <span class="campo__mensagem-erro">Selecione o tipo de pentest na lista (ou cadastre um novo pelo +).</span>
                 </div>
                 <div class="campo" data-campo="horas">
                     <label class="campo__label campo__label--obrigatorio">Horas de Pentest contratadas</label>
                     <input type="text" class="campo__input" placeholder="hh:mm:ss" maxlength="9" inputmode="numeric">
-                    <span class="campo__mensagem-erro">Informe as horas deste pentest no formato hh:mm:ss (ex: 40:00:00), com minutos e segundos até 59.</span>
+                    <span class="campo__mensagem-erro">Informe as horas deste pentest no formato hh:mm:ss (ex: 40:00:00), maiores que zero e com minutos e segundos até 59.</span>
                 </div>
                 <div class="campo">
                     <label class="campo__label">Modalidade</label>
@@ -719,7 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <select class="campo__select"></select>
                         <i class="fa-solid fa-chevron-down campo__select-seta"></i>
                     </div>
-                    <span class="campo__mensagem-erro">Selecione a abordagem.</span>
+                    <span class="campo__mensagem-erro">Escolha a abordagem: Black Box, Gray Box ou White Box.</span>
                 </div>
                 <div class="campo" data-campo="ambiente">
                     <label class="campo__label campo__label--obrigatorio">Ambiente</label>
@@ -727,11 +785,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <select class="campo__select"></select>
                         <i class="fa-solid fa-chevron-down campo__select-seta"></i>
                     </div>
-                    <span class="campo__mensagem-erro">Selecione o ambiente.</span>
+                    <span class="campo__mensagem-erro">Escolha o ambiente do teste: Desenvolvimento, Homologação ou Produção.</span>
                 </div>
                 <div class="campo" data-campo="referencia">
                     <label class="campo__label">Referência</label>
-                    <input type="text" class="campo__input" placeholder="Ex: CVE-2024-1234, CWE-79...">
+                    <input type="text" class="campo__input" maxlength="255" placeholder="Ex: CVE-2024-1234, CWE-79...">
+                    <span class="campo__mensagem-erro"></span>
                 </div>
             </div>
             <div class="campo" data-campo="metodologia">
@@ -754,13 +813,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="campo__multi-chips" aria-label="Metodologias selecionadas"></div>
                 </div>
-                <span class="campo__mensagem-erro">Selecione ao menos uma metodologia.</span>
+                <span class="campo__mensagem-erro">Selecione ao menos uma metodologia na lista.</span>
             </div>
             <div class="campo" data-campo="escopo">
-                <label class="campo__label campo__label--obrigatorio">Escopo</label>
+                <label class="campo__label campo__label--obrigatorio">Escopo do pentest</label>
                 <textarea class="campo__textarea" rows="4" maxlength="2000" placeholder="Descreva o escopo deste pentest..."></textarea>
                 <span class="campo__contador">0 / 2000</span>
-                <span class="campo__mensagem-erro">O escopo deste pentest é obrigatório.</span>
+                <span class="campo__mensagem-erro">Descreva o que será testado neste pentest (até 2000 caracteres).</span>
             </div>
             <div class="campo" data-campo="analistas">
                 <label class="campo__label campo__label--obrigatorio">Analista(s)</label>
@@ -787,9 +846,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="campo__multi-chips" aria-label="Analistas deste pentest"></div>
+                    <div class="analistas-horas" aria-label="Analistas deste pentest e suas horas"></div>
                 </div>
-                <span class="campo__mensagem-erro">Adicione ao menos um analista a este pentest.</span>
+                <p class="resumo-horas" data-papel="resumo-horas-analistas"></p>
+                <span class="campo__mensagem-erro">Adicione ao menos um analista que vai executar este pentest.</span>
             </div>
             <div class="campo" data-campo="checklist">
                 <label class="campo__label">Checklist</label>
@@ -901,6 +961,8 @@ document.addEventListener('DOMContentLoaded', () => {
             aplicarMascaraHoras(e);
             raiz.querySelector('[data-campo="horas"]').classList.remove('campo--erro');
             document.getElementById('campo-horas-pentests')?.classList.remove('campo--erro');
+            bloco.atualizarResumoAnalistas?.();
+            atualizarResumoHorasPentests();
         });
         const escopoPentest         = raiz.querySelector('[data-campo="escopo"] textarea');
         const escopoPentestContador = raiz.querySelector('[data-campo="escopo"] .campo__contador');
@@ -924,6 +986,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         raiz.querySelector('[data-campo="escopo"] textarea').addEventListener('input', () => {
             raiz.querySelector('[data-campo="escopo"]').classList.remove('campo--erro');
+        });
+        raiz.querySelector('[data-campo="referencia"] input').addEventListener('input', () => {
+            raiz.querySelector('[data-campo="referencia"]').classList.remove('campo--erro');
         });
 
         // Metodologia (multi-select de frameworks com chips)
@@ -960,17 +1025,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const analistaBusca   = analistasCampo.querySelector('.campo__combobox-input');
         const analistaLista   = analistasCampo.querySelector('.campo__combobox-lista');
         const analistaToggle  = analistasCampo.querySelector('.campo__combobox-alternar');
-        const analistasChips  = analistasCampo.querySelector('.campo__multi-chips');
+        const analistasLista  = analistasCampo.querySelector('.analistas-horas');
+        const resumoAnalistas = analistasCampo.querySelector('[data-papel="resumo-horas-analistas"]');
 
+        // Linha por analista: nome, horas dele dentro deste pentest (hh:mm:ss) e remover.
         function renderizarChipsAnalistas() {
-            analistasChips.innerHTML = '';
+            analistasLista.innerHTML = '';
             bloco.equipe.forEach((membro, idx) => {
-                analistasChips.appendChild(criarChip(membro.nome, () => {
+                const linha = document.createElement('div');
+                linha.className = 'analista-horas';
+
+                const nome = document.createElement('span');
+                nome.className = 'analista-horas__nome';
+                nome.textContent = membro.nome;
+
+                const horas = document.createElement('input');
+                horas.type = 'text';
+                horas.className = 'campo__input analista-horas__input';
+                horas.placeholder = 'hh:mm:ss';
+                horas.maxLength = 9;
+                horas.inputMode = 'numeric';
+                horas.value = membro.horas || '';
+                horas.setAttribute('aria-label', `Horas de ${membro.nome} neste pentest`);
+                horas.disabled = somenteLeitura;
+                horas.addEventListener('input', (e) => {
+                    aplicarMascaraHoras(e);
+                    membro.horas = e.target.value;
+                    analistasCampo.classList.remove('campo--erro');
+                    atualizarResumoAnalistas();
+                });
+
+                const remover = document.createElement('button');
+                remover.type = 'button';
+                remover.className = 'analista-horas__remover';
+                remover.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                remover.setAttribute('aria-label', `Remover ${membro.nome}`);
+                remover.disabled = somenteLeitura;
+                remover.addEventListener('click', () => {
                     bloco.equipe.splice(idx, 1);
                     renderizarChipsAnalistas();
-                }));
+                });
+
+                linha.append(nome, horas, remover);
+                analistasLista.appendChild(linha);
             });
+            atualizarResumoAnalistas();
         }
+
+        // Alerta ao vivo: horas já distribuídas entre os analistas x horas do pentest.
+        function atualizarResumoAnalistas() {
+            const doPentest = horasTextoParaSegundos(raiz.querySelector('[data-campo="horas"] input').value);
+            const alocadas  = bloco.equipe.reduce((acc, m) => acc + (horasTextoParaSegundos(m.horas) || 0), 0);
+
+            if (bloco.equipe.length === 0) {
+                resumoAnalistas.textContent = '';
+                resumoAnalistas.classList.remove('resumo-horas--excedido');
+                return;
+            }
+
+            const excedeu = doPentest !== null && alocadas > doPentest;
+            resumoAnalistas.textContent = doPentest === null
+                ? `Horas dos analistas: ${segundosParaTexto(alocadas)} (informe as horas do pentest para comparar).`
+                : `Horas dos analistas: ${segundosParaTexto(alocadas)} de ${segundosParaTexto(doPentest)} do pentest`
+                  + (excedeu ? ' — ultrapassou. Reduza as horas de algum analista.' : '.');
+            resumoAnalistas.classList.toggle('resumo-horas--excedido', excedeu);
+        }
+        bloco.atualizarResumoAnalistas = atualizarResumoAnalistas;
 
         const analistaLimpar = analistasCampo.querySelector('.campo__combobox-limpar');
 
@@ -1006,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             atualizarLimparAnalista();
             if (bloco.equipe.find(m => m.id === item.id)) return;
 
-            bloco.equipe.push({ id: item.id, nome: item.label });
+            bloco.equipe.push({ id: item.id, nome: item.label, horas: '' });
             renderizarChipsAnalistas();
             analistasCampo.classList.remove('campo--erro');
         });
@@ -1018,6 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             blocosPentest.splice(idx, 1);
             raiz.remove();
             atualizarNumerosDosBlocos();
+            atualizarResumoHorasPentests();
         });
 
         bloco.renderizarChipsMetodologia = renderizarChipsMetodologia;
@@ -1038,11 +1159,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Alerta ao vivo no passo 2: horas somadas dos pentests x horas totais do projeto.
+    function atualizarResumoHorasPentests() {
+        const resumo = document.getElementById('cp-resumo-horas-pentests');
+        if (!resumo) return;
+
+        const total = horasTextoParaSegundos(document.getElementById('cp-horas-contratadas').value);
+        const soma  = blocosPentest.reduce((acc, b) =>
+            acc + (horasTextoParaSegundos(b.raiz.querySelector('[data-campo="horas"] input').value) || 0), 0);
+        const excedeu = total !== null && soma > total;
+
+        resumo.textContent = total === null
+            ? `Horas dos pentests: ${segundosParaTexto(soma)} (informe as horas totais do projeto no passo 1 para comparar).`
+            : `Horas dos pentests: ${segundosParaTexto(soma)} de ${segundosParaTexto(total)} contratadas no projeto`
+              + (excedeu ? ' — ultrapassou. Reduza as horas de algum pentest ou aumente as do projeto.' : '.');
+        resumo.classList.toggle('resumo-horas--excedido', excedeu);
+    }
+
     function adicionarBlocoPentest() {
         const bloco = criarBlocoPentest();
         blocosPentest.push(bloco);
         listaPentests.appendChild(bloco.raiz);
         atualizarNumerosDosBlocos();
+        atualizarResumoHorasPentests();
         document.getElementById('campo-pentests')?.classList.remove('campo--erro');
         return bloco;
     }
@@ -1112,7 +1251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         revPentestsLista.innerHTML = '';
 
         blocosPentest.forEach((bloco, idx) => {
-            const analistas = bloco.equipe.map(m => m.nome);
+            const analistas = bloco.equipe.map(m => (horasTextoParaSegundos(m.horas) ? `${m.nome} (${m.horas})` : m.nome));
             const tipoDoBloco = tiposPentest.find(t => String(t.id) === String(bloco.tipoPentestId));
             const checklists = (tipoDoBloco?.checklists || []).map(c => c.nome);
 
@@ -1149,7 +1288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="referencia"] input').value) || '—'}</span>
                     </div>
                     <div class="revisao-campo revisao-campo--full">
-                        <span class="revisao-campo__rotulo">Escopo</span>
+                        <span class="revisao-campo__rotulo">Escopo do pentest</span>
                         <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="escopo"] textarea').value) || '—'}</span>
                     </div>
                     <div class="revisao-campo revisao-campo--full">
@@ -1195,7 +1334,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             bloco.frameworksSelecionados.forEach(fw => adicionarHidden(`pentests[${idx}][frameworks_ids][]`, fw.id));
 
-            bloco.equipe.forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
+            bloco.equipe.forEach(m => {
+                adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id);
+                adicionarHidden(`pentests[${idx}][analistas_horas][${m.id}]`, horasTextoParaDecimal(m.horas || ''));
+            });
         });
 
         // O campo visível fica em hh:mm:ss e não tem name: o servidor recebe o
@@ -1214,8 +1356,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        e.preventDefault();
+
         if (modoEdicaoOuVisualizacao) {
-            e.preventDefault();
             prepararCamposDinamicos();
 
             // O popup de salvar é compartilhado com o modal de tipo de pentest,
@@ -1228,7 +1371,121 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         prepararCamposDinamicos();
+        enviarProjeto();
     });
+
+    // -------------------------------------------------------------------------
+    // 8b. ENVIO SEM RECARREGAR + ERROS DO SERVIDOR NO PRÓPRIO CAMPO
+    // -------------------------------------------------------------------------
+    // Antes o formulário era enviado do jeito comum: com erro no servidor a
+    // página recarregava, o modal fechava e o usuário perdia o preenchimento.
+    // Agora vai por fetch pedindo JSON; o servidor devolve os erros por campo.
+
+    // Chave do erro (a mesma do ProjetoValidator) → elemento .campo do passo 1/2.
+    const CAMPOS_DO_PROJETO = {
+        empresa_id: 'campo-cliente',
+        nome: 'cp-nome-projeto',
+        nivel_sigilo: 'cp-sigilo',
+        lider_id: 'campo-lider',
+        data_inicio: 'cp-data-inicio',
+        data_fim_prevista: 'cp-data-fim',
+        horas_contratadas: 'cp-horas-contratadas',
+        escopo: 'cp-escopo',
+        restricao: 'cp-restricao',
+        contrato: 'cp-contrato-input',
+        pentests: 'campo-pentests',
+        soma_horas_pentests: 'campo-horas-pentests',
+    };
+    const CAMPOS_DO_PENTEST = {
+        tipo_pentest_id: 'tipo',
+        horas_contratadas: 'horas',
+        abordagem: 'abordagem',
+        ambiente: 'ambiente',
+        escopo: 'escopo',
+        referencia: 'referencia',
+        frameworks_ids: 'metodologia',
+        analistas_ids: 'analistas',
+    };
+
+    function localizarCampo(chave) {
+        const doPentest = /^pentests\.(\d+)\.(\w+)$/.exec(chave);
+        if (doPentest) {
+            const bloco = blocosPentest[Number(doPentest[1])];
+            const nome  = CAMPOS_DO_PENTEST[doPentest[2]];
+            return bloco && nome ? { campo: bloco.raiz.querySelector(`[data-campo="${nome}"]`), passo: 1 } : null;
+        }
+
+        const id = CAMPOS_DO_PROJETO[chave];
+        const el = id ? document.getElementById(id) : null;
+        if (!el) return null;
+        return { campo: el.classList.contains('campo') ? el : el.closest('.campo'), passo: el.closest('#cp-passo-1') ? 1 : 0 };
+    }
+
+    function mostrarErrosDoServidor(erros) {
+        const passosComErro = [];
+        Object.entries(erros || {}).forEach(([chave, mensagem]) => {
+            const alvo = localizarCampo(chave);
+            if (alvo && definirErroCampo(alvo.campo, mensagem)) passosComErro.push(alvo.passo);
+        });
+
+        if (passosComErro.length > 0) {
+            const primeiro = Math.min(...passosComErro);
+            if (primeiro !== passoAtual) irParaPasso(primeiro);
+            overlay.querySelector(`#cp-passo-${primeiro} .campo--erro`)?.scrollIntoView({ block: 'center' });
+        }
+
+        return passosComErro.length;
+    }
+
+    async function enviarProjeto() {
+        btnSalvar.disabled = true;
+
+        try {
+            const resposta = await fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { Accept: 'application/json' },
+            });
+
+            let resultado = null;
+            try { resultado = await resposta.json(); } catch { resultado = null; }
+
+            if (!resultado) {
+                // Sem JSON: em geral a sessão expirou e o servidor mandou a tela de login.
+                window.exibirToast?.('erro', 'Não foi possível salvar: sua sessão pode ter expirado. Entre de novo e tente outra vez.', undefined, 6000);
+                return;
+            }
+
+            if (resultado.ok) {
+                // A tabela precisa ser recarregada; o aviso de sucesso aparece depois do recarregamento.
+                try { sessionStorage.setItem('avisoProjeto', resultado.msg); } catch { /* sem storage, só não mostra o aviso */ }
+                window.location.assign(form.getAttribute('action'));
+                return;
+            }
+
+            // Erro de campo já aparece no próprio campo; o aviso flutuante fica para
+            // o que não tem campo (ex.: falha ao gravar) — ele cobre o rodapé do modal.
+            const exibidosNosCampos = mostrarErrosDoServidor(resultado.erros);
+            const geral = resultado.erros?.geral;
+            if (geral || exibidosNosCampos === 0) {
+                window.exibirToast?.('erro', geral || resultado.msg, undefined, 6000);
+            }
+        } catch (erro) {
+            console.error(erro);
+            window.exibirToast?.('erro', 'Não foi possível falar com o servidor. Confira a conexão e tente salvar de novo.', undefined, 6000);
+        } finally {
+            btnSalvar.disabled = false;
+        }
+    }
+
+    // Aviso de sucesso guardado antes de recarregar a página.
+    try {
+        const aviso = sessionStorage.getItem('avisoProjeto');
+        if (aviso) {
+            sessionStorage.removeItem('avisoProjeto');
+            window.exibirToast?.('sucesso', aviso);
+        }
+    } catch { /* sem storage: segue sem o aviso */ }
 
     // -------------------------------------------------------------------------
     // 9. CONFIRMAÇÃO ANTES DE SALVAR (só em modo editar)
@@ -1241,7 +1498,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!eDaEdicao) return;
 
         popupSalvar.classList.remove('active');
-        form?.submit();
+        enviarProjeto();
     });
 
     // -------------------------------------------------------------------------
@@ -1519,7 +1776,8 @@ document.addEventListener('DOMContentLoaded', () => {
             (p.analistas_ids || []).forEach(idUsuario => {
                 const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
                 if (usuario && !bloco.equipe.find(m => m.id === usuario.id)) {
-                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome });
+                    const horas = Number(p.analistas_horas?.[idUsuario] ?? 0);
+                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome, horas: horas > 0 ? horasDecimalParaTexto(horas) : '' });
                 }
             });
             bloco.renderizarChipsAnalistas();

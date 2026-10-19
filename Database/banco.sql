@@ -295,6 +295,8 @@ CREATE TABLE IF NOT EXISTS projeto_pentest_usuario (
   projeto_pentest_id INT NOT NULL,
   usuario_id INT NOT NULL,
   papel ENUM('LIDER', 'ESPECIALISTA') NOT NULL,
+  -- Horas do analista dentro do pentest; a soma dos analistas não pode passar das horas do pentest.
+  horas_alocadas DECIMAL(8, 2) NOT NULL DEFAULT 0.00,
   habilitado TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (projeto_pentest_id, usuario_id, papel),
   FOREIGN KEY (projeto_pentest_id) REFERENCES projeto_pentest(id),

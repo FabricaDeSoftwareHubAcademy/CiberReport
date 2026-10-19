@@ -17,6 +17,7 @@ use Model\ProjetoModel;
 use Model\TipoPentestModel;
 use Model\UsuarioModel;
 use ProjetoValidator;
+use ValidacaoProjetoException;
 use Service\TipoPentestService;
 
 class ProjetoController extends Controller
@@ -252,20 +253,51 @@ class ProjetoController extends Controller
     private function validarEquipeElegivel(array $dadosLimpos): void
     {
         $idsPermitidos = array_map('intval', array_column($this->listarUsuariosAtivos(), 'id'));
-        $idsInformados = [(int) $dadosLimpos['lider_id']];
+        $erros = [];
 
-        foreach ($dadosLimpos['pentests'] as $pentest) {
-            $idsInformados = array_merge($idsInformados, $pentest['analistas_ids']);
+        if (!in_array((int) $dadosLimpos['lider_id'], $idsPermitidos, true)) {
+            $erros['lider_id'] = 'O líder técnico precisa ser um usuário ativo com perfil Pentester. Escolha outro na lista.';
         }
 
-        foreach ($idsInformados as $id) {
-            if (!in_array((int) $id, $idsPermitidos, true)) {
-                throw new Exception('A equipe só pode ter usuários ativos com perfil Pentester.');
+        foreach ($dadosLimpos['pentests'] as $indice => $pentest) {
+            foreach ($pentest['analistas_ids'] as $id) {
+                if (!in_array((int) $id, $idsPermitidos, true)) {
+                    $erros["pentests.{$indice}.analistas_ids"] = 'Há analista que não é um pentester ativo. Remova-o e escolha outro na lista.';
+                }
             }
+        }
+
+        if ($erros) {
+            throw new ValidacaoProjetoException($erros);
         }
     }
 
+    /**
+     * Resposta do salvar quando o modal envia por fetch (Accept: application/json):
+     * em vez de recarregar a página, devolve os erros por campo para o modal
+     * mostrar cada um no lugar certo, sem perder o que foi preenchido.
+     */
+    public function salvarJson(string $acao): void
+    {
+        $resultado = $acao === 'editar' ? $this->executarEdicao() : $this->executarCadastro();
+
+        http_response_code($resultado['ok'] ? 200 : 422);
+        $this->json($resultado);
+    }
+
+    /** Envio sem JavaScript (formulário comum): devolve só a mensagem para o aviso da página. */
     public function cadastrar()
+    {
+        return $this->executarCadastro()['msg'];
+    }
+
+    public function editar()
+    {
+        return $this->executarEdicao()['msg'];
+    }
+
+    /** @return array{ok: bool, msg: string, erros: array<string, string>} */
+    private function executarCadastro(): array
     {
         try {
             $dadosLimpos = ProjetoValidator::processarCadastro($_POST);
@@ -282,16 +314,19 @@ class ProjetoController extends Controller
                 $idUsuarioLogado = (int) ($_SESSION['usuario_id'] ?? $dadosLimpos['lider_id']);
                 $this->andamento->registrarLog($idProjeto, $idUsuarioLogado, 'PROJETO_CRIADO', 'Projeto criado e equipe alocada com sucesso.');
 
-                return "Projeto cadastrado com sucesso!";
-            } else {
-                return "Erro ao cadastrar projeto: " . $this->projeto->msgErro;
+                return ['ok' => true, 'msg' => 'Projeto cadastrado com sucesso!', 'erros' => []];
             }
+
+            return $this->falhaDeGravacao('Erro ao cadastrar projeto.');
+        } catch (ValidacaoProjetoException $e) {
+            return $this->falhaDeValidacao($e);
         } catch (Exception $e) {
-            return $e->getMessage();
+            return ['ok' => false, 'msg' => 'Erro: ' . $e->getMessage(), 'erros' => ['geral' => $e->getMessage()]];
         }
     }
 
-    public function editar()
+    /** @return array{ok: bool, msg: string, erros: array<string, string>} */
+    private function executarEdicao(): array
     {
         try {
             $dadosLimpos = ProjetoValidator::processarEdicao($_POST);
@@ -313,13 +348,40 @@ class ProjetoController extends Controller
             }
 
             if ($this->projeto->editarProjeto($dadosLimpos)) {
-                return "Projeto atualizado com sucesso!";
-            } else {
-                return "Erro ao atualizar projeto: " . $this->projeto->msgErro;
+                return ['ok' => true, 'msg' => 'Projeto atualizado com sucesso!', 'erros' => []];
             }
+
+            return $this->falhaDeGravacao('Erro ao atualizar projeto.');
+        } catch (ValidacaoProjetoException $e) {
+            return $this->falhaDeValidacao($e);
         } catch (Exception $e) {
-            return $e->getMessage();
+            return ['ok' => false, 'msg' => 'Erro: ' . $e->getMessage(), 'erros' => ['geral' => $e->getMessage()]];
         }
+    }
+
+    private function falhaDeValidacao(ValidacaoProjetoException $e): array
+    {
+        $total = count($e->erros);
+
+        return [
+            'ok' => false,
+            'msg' => $total === 1
+                ? 'Erro: corrija o campo destacado e tente salvar de novo.'
+                : "Erro: corrija os {$total} campos destacados e tente salvar de novo.",
+            'erros' => $e->erros,
+        ];
+    }
+
+    /** Falha do banco: o detalhe técnico vai para o log do servidor, não para a tela. */
+    private function falhaDeGravacao(string $mensagem): array
+    {
+        error_log("[ProjetoController] {$mensagem} " . $this->projeto->msgErro);
+
+        return [
+            'ok' => false,
+            'msg' => "{$mensagem} Tente novamente; se continuar, avise o administrador.",
+            'erros' => ['geral' => "{$mensagem} Tente novamente; se continuar, avise o administrador."],
+        ];
     }
 
     public function excluir($id)
@@ -333,12 +395,18 @@ class ProjetoController extends Controller
 
     private function processarUploadContrato()
     {
-        if (!isset($_FILES['contrato']) || $_FILES['contrato']['error'] !== UPLOAD_ERR_OK) {
+        $erroUpload = $_FILES['contrato']['error'] ?? UPLOAD_ERR_NO_FILE;
+
+        if ($erroUpload === UPLOAD_ERR_NO_FILE) {
             return false;
         }
 
-        if ($_FILES['contrato']['size'] > 5 * 1024 * 1024) {
-            throw new Exception("O arquivo do contrato excede o limite de 5MB.");
+        if (in_array($erroUpload, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) || $_FILES['contrato']['size'] > 5 * 1024 * 1024) {
+            throw new ValidacaoProjetoException(['contrato' => 'O contrato passou de 5MB. Envie um PDF menor (por exemplo, comprimido).']);
+        }
+
+        if ($erroUpload !== UPLOAD_ERR_OK) {
+            throw new ValidacaoProjetoException(['contrato' => 'O envio do contrato falhou. Selecione o arquivo de novo.']);
         }
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -346,7 +414,7 @@ class ProjetoController extends Controller
         finfo_close($finfo);
 
         if ($mimeType !== 'application/pdf') {
-            throw new Exception("Formato inválido. Apenas arquivos PDF são permitidos para o contrato.");
+            throw new ValidacaoProjetoException(['contrato' => 'O contrato precisa ser um arquivo PDF. Selecione um arquivo .pdf.']);
         }
 
         $extensao = 'pdf';

@@ -270,12 +270,12 @@ INSERT INTO projeto_pentest_framework (projeto_pentest_id, framework_id) VALUES
 (2, 12),
 (3, 8), (3, 9);
 
-INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel) VALUES
-(1, 2, 'ESPECIALISTA'),
-(1, 4, 'ESPECIALISTA'),
-(2, 4, 'ESPECIALISTA'),
-(3, 3, 'ESPECIALISTA'),
-(3, 2, 'ESPECIALISTA');
+INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel, horas_alocadas) VALUES
+(1, 2, 'ESPECIALISTA', 30.00),
+(1, 4, 'ESPECIALISTA', 20.00),
+(2, 4, 'ESPECIALISTA', 30.00),
+(3, 3, 'ESPECIALISTA', 80.00),
+(3, 2, 'ESPECIALISTA', 40.00);
 
 -- insert 03/07/2026
 
