@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passos[passoAtual].classList.add('ativo');
         stepperItens[passoAtual].classList.add('cad-projeto-stepper__item--ativo');
 
+        if (passoAtual === 1) atualizarResumoHorasPentests();
         if (passoAtual === 2) preencherRevisao();
 
         atualizarBotoes();
@@ -331,9 +332,26 @@ document.addEventListener('DOMContentLoaded', () => {
         bloco.raiz.querySelector('[data-campo="metodologia"]').classList.toggle('campo--erro', metodologiaInvalida);
         ok = ok && !metodologiaInvalida;
 
+        const campoAnalistas = bloco.raiz.querySelector('[data-campo="analistas"]');
         const semAnalista = bloco.equipe.length === 0;
-        bloco.raiz.querySelector('[data-campo="analistas"]').classList.toggle('campo--erro', semAnalista);
+        campoAnalistas.classList.toggle('campo--erro', semAnalista);
         ok = ok && !semAnalista;
+
+        if (!semAnalista) {
+            // Horas do analista podem ficar vazias (valem 0), mas o que for digitado precisa ser válido
+            // e a soma não pode passar das horas do pentest — mesma regra do ProjetoValidator.
+            const invalida = bloco.equipe.some(m => m.horas && horasTextoParaSegundos(m.horas) === null);
+            const doPentest = horasTextoParaSegundos(horasEl.value);
+            const alocadas  = bloco.equipe.reduce((acc, m) => acc + (horasTextoParaSegundos(m.horas) || 0), 0);
+
+            if (invalida) {
+                definirErroCampo(campoAnalistas, 'Informe as horas de cada analista no formato hh:mm:ss (ex: 20:00:00); deixe em branco se ainda não estiverem definidas.');
+                ok = false;
+            } else if (doPentest !== null && alocadas > doPentest) {
+                definirErroCampo(campoAnalistas, `A soma das horas dos analistas (${segundosParaTexto(alocadas)}) ultrapassa as horas deste pentest (${segundosParaTexto(doPentest)}). Reduza as horas de algum analista ou aumente as do pentest.`);
+                ok = false;
+            }
+        }
 
         return ok;
     }
@@ -828,8 +846,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="campo__multi-chips" aria-label="Analistas deste pentest"></div>
+                    <div class="analistas-horas" aria-label="Analistas deste pentest e suas horas"></div>
                 </div>
+                <p class="resumo-horas" data-papel="resumo-horas-analistas"></p>
                 <span class="campo__mensagem-erro">Adicione ao menos um analista que vai executar este pentest.</span>
             </div>
             <div class="campo" data-campo="checklist">
@@ -942,6 +961,8 @@ document.addEventListener('DOMContentLoaded', () => {
             aplicarMascaraHoras(e);
             raiz.querySelector('[data-campo="horas"]').classList.remove('campo--erro');
             document.getElementById('campo-horas-pentests')?.classList.remove('campo--erro');
+            bloco.atualizarResumoAnalistas?.();
+            atualizarResumoHorasPentests();
         });
         const escopoPentest         = raiz.querySelector('[data-campo="escopo"] textarea');
         const escopoPentestContador = raiz.querySelector('[data-campo="escopo"] .campo__contador');
@@ -1004,17 +1025,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const analistaBusca   = analistasCampo.querySelector('.campo__combobox-input');
         const analistaLista   = analistasCampo.querySelector('.campo__combobox-lista');
         const analistaToggle  = analistasCampo.querySelector('.campo__combobox-alternar');
-        const analistasChips  = analistasCampo.querySelector('.campo__multi-chips');
+        const analistasLista  = analistasCampo.querySelector('.analistas-horas');
+        const resumoAnalistas = analistasCampo.querySelector('[data-papel="resumo-horas-analistas"]');
 
+        // Linha por analista: nome, horas dele dentro deste pentest (hh:mm:ss) e remover.
         function renderizarChipsAnalistas() {
-            analistasChips.innerHTML = '';
+            analistasLista.innerHTML = '';
             bloco.equipe.forEach((membro, idx) => {
-                analistasChips.appendChild(criarChip(membro.nome, () => {
+                const linha = document.createElement('div');
+                linha.className = 'analista-horas';
+
+                const nome = document.createElement('span');
+                nome.className = 'analista-horas__nome';
+                nome.textContent = membro.nome;
+
+                const horas = document.createElement('input');
+                horas.type = 'text';
+                horas.className = 'campo__input analista-horas__input';
+                horas.placeholder = 'hh:mm:ss';
+                horas.maxLength = 9;
+                horas.inputMode = 'numeric';
+                horas.value = membro.horas || '';
+                horas.setAttribute('aria-label', `Horas de ${membro.nome} neste pentest`);
+                horas.disabled = somenteLeitura;
+                horas.addEventListener('input', (e) => {
+                    aplicarMascaraHoras(e);
+                    membro.horas = e.target.value;
+                    analistasCampo.classList.remove('campo--erro');
+                    atualizarResumoAnalistas();
+                });
+
+                const remover = document.createElement('button');
+                remover.type = 'button';
+                remover.className = 'analista-horas__remover';
+                remover.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                remover.setAttribute('aria-label', `Remover ${membro.nome}`);
+                remover.disabled = somenteLeitura;
+                remover.addEventListener('click', () => {
                     bloco.equipe.splice(idx, 1);
                     renderizarChipsAnalistas();
-                }));
+                });
+
+                linha.append(nome, horas, remover);
+                analistasLista.appendChild(linha);
             });
+            atualizarResumoAnalistas();
         }
+
+        // Alerta ao vivo: horas já distribuídas entre os analistas x horas do pentest.
+        function atualizarResumoAnalistas() {
+            const doPentest = horasTextoParaSegundos(raiz.querySelector('[data-campo="horas"] input').value);
+            const alocadas  = bloco.equipe.reduce((acc, m) => acc + (horasTextoParaSegundos(m.horas) || 0), 0);
+
+            if (bloco.equipe.length === 0) {
+                resumoAnalistas.textContent = '';
+                resumoAnalistas.classList.remove('resumo-horas--excedido');
+                return;
+            }
+
+            const excedeu = doPentest !== null && alocadas > doPentest;
+            resumoAnalistas.textContent = doPentest === null
+                ? `Horas dos analistas: ${segundosParaTexto(alocadas)} (informe as horas do pentest para comparar).`
+                : `Horas dos analistas: ${segundosParaTexto(alocadas)} de ${segundosParaTexto(doPentest)} do pentest`
+                  + (excedeu ? ' — ultrapassou. Reduza as horas de algum analista.' : '.');
+            resumoAnalistas.classList.toggle('resumo-horas--excedido', excedeu);
+        }
+        bloco.atualizarResumoAnalistas = atualizarResumoAnalistas;
 
         const analistaLimpar = analistasCampo.querySelector('.campo__combobox-limpar');
 
@@ -1050,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             atualizarLimparAnalista();
             if (bloco.equipe.find(m => m.id === item.id)) return;
 
-            bloco.equipe.push({ id: item.id, nome: item.label });
+            bloco.equipe.push({ id: item.id, nome: item.label, horas: '' });
             renderizarChipsAnalistas();
             analistasCampo.classList.remove('campo--erro');
         });
@@ -1062,6 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             blocosPentest.splice(idx, 1);
             raiz.remove();
             atualizarNumerosDosBlocos();
+            atualizarResumoHorasPentests();
         });
 
         bloco.renderizarChipsMetodologia = renderizarChipsMetodologia;
@@ -1082,11 +1159,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Alerta ao vivo no passo 2: horas somadas dos pentests x horas totais do projeto.
+    function atualizarResumoHorasPentests() {
+        const resumo = document.getElementById('cp-resumo-horas-pentests');
+        if (!resumo) return;
+
+        const total = horasTextoParaSegundos(document.getElementById('cp-horas-contratadas').value);
+        const soma  = blocosPentest.reduce((acc, b) =>
+            acc + (horasTextoParaSegundos(b.raiz.querySelector('[data-campo="horas"] input').value) || 0), 0);
+        const excedeu = total !== null && soma > total;
+
+        resumo.textContent = total === null
+            ? `Horas dos pentests: ${segundosParaTexto(soma)} (informe as horas totais do projeto no passo 1 para comparar).`
+            : `Horas dos pentests: ${segundosParaTexto(soma)} de ${segundosParaTexto(total)} contratadas no projeto`
+              + (excedeu ? ' — ultrapassou. Reduza as horas de algum pentest ou aumente as do projeto.' : '.');
+        resumo.classList.toggle('resumo-horas--excedido', excedeu);
+    }
+
     function adicionarBlocoPentest() {
         const bloco = criarBlocoPentest();
         blocosPentest.push(bloco);
         listaPentests.appendChild(bloco.raiz);
         atualizarNumerosDosBlocos();
+        atualizarResumoHorasPentests();
         document.getElementById('campo-pentests')?.classList.remove('campo--erro');
         return bloco;
     }
@@ -1156,7 +1251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         revPentestsLista.innerHTML = '';
 
         blocosPentest.forEach((bloco, idx) => {
-            const analistas = bloco.equipe.map(m => m.nome);
+            const analistas = bloco.equipe.map(m => (horasTextoParaSegundos(m.horas) ? `${m.nome} (${m.horas})` : m.nome));
             const tipoDoBloco = tiposPentest.find(t => String(t.id) === String(bloco.tipoPentestId));
             const checklists = (tipoDoBloco?.checklists || []).map(c => c.nome);
 
@@ -1239,7 +1334,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             bloco.frameworksSelecionados.forEach(fw => adicionarHidden(`pentests[${idx}][frameworks_ids][]`, fw.id));
 
-            bloco.equipe.forEach(m => adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id));
+            bloco.equipe.forEach(m => {
+                adicionarHidden(`pentests[${idx}][analistas_ids][]`, m.id);
+                adicionarHidden(`pentests[${idx}][analistas_horas][${m.id}]`, horasTextoParaDecimal(m.horas || ''));
+            });
         });
 
         // O campo visível fica em hh:mm:ss e não tem name: o servidor recebe o
@@ -1678,7 +1776,8 @@ document.addEventListener('DOMContentLoaded', () => {
             (p.analistas_ids || []).forEach(idUsuario => {
                 const usuario = usuarios.find(u => String(u.id) === String(idUsuario));
                 if (usuario && !bloco.equipe.find(m => m.id === usuario.id)) {
-                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome });
+                    const horas = Number(p.analistas_horas?.[idUsuario] ?? 0);
+                    bloco.equipe.push({ id: usuario.id, nome: usuario.nome, horas: horas > 0 ? horasDecimalParaTexto(horas) : '' });
                 }
             });
             bloco.renderizarChipsAnalistas();

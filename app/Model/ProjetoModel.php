@@ -132,7 +132,7 @@ class ProjetoModel
             $idPentest = (int) $this->pdo->lastInsertId();
 
             $this->salvarPentestFrameworks($idPentest, $pentest['frameworks_ids'] ?? []);
-            $this->salvarPentestAnalistas($idPentest, $pentest['analistas_ids'] ?? []);
+            $this->salvarPentestAnalistas($idPentest, $pentest['analistas_ids'] ?? [], $pentest['analistas_horas'] ?? []);
         }
     }
 
@@ -151,14 +151,19 @@ class ProjetoModel
         }
     }
 
-    private function salvarPentestAnalistas(int $idPentest, array $analistasIds): void
+    private function salvarPentestAnalistas(int $idPentest, array $analistasIds, array $horasPorAnalista): void
     {
         $sql = $this->pdo->prepare(
-            "INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel) VALUES (:id, :usuario_id, 'ESPECIALISTA')"
+            "INSERT INTO projeto_pentest_usuario (projeto_pentest_id, usuario_id, papel, horas_alocadas)
+             VALUES (:id, :usuario_id, 'ESPECIALISTA', :horas)"
         );
 
         foreach ($analistasIds as $idAnalista) {
-            $sql->execute([':id' => $idPentest, ':usuario_id' => $idAnalista]);
+            $sql->execute([
+                ':id' => $idPentest,
+                ':usuario_id' => $idAnalista,
+                ':horas' => (string) ($horasPorAnalista[$idAnalista] ?? 0),
+            ]);
         }
     }
 
@@ -245,6 +250,7 @@ class ProjetoModel
             $idPentest = (int) $pentest['id'];
             $pentest['frameworks_ids'] = $this->buscarPentestFrameworksIds($idPentest);
             $pentest['analistas_ids'] = $this->buscarPentestAnalistasIds($idPentest);
+            $pentest['analistas_horas'] = $this->buscarPentestHorasAnalistas($idPentest);
         }
 
         return $pentests;
@@ -269,6 +275,26 @@ class ProjetoModel
         $sql->execute();
 
         return array_map('intval', array_column($sql->fetchAll(PDO::FETCH_ASSOC), 'usuario_id'));
+    }
+
+    /** Horas de cada analista do pentest: [usuario_id => horas em decimal]. */
+    private function buscarPentestHorasAnalistas(int $idPentest): array
+    {
+        $sql = $this->pdo->prepare(
+            "SELECT usuario_id, MAX(horas_alocadas) AS horas
+             FROM projeto_pentest_usuario
+             WHERE projeto_pentest_id = :id AND habilitado = 1
+             GROUP BY usuario_id"
+        );
+        $sql->bindValue(":id", $idPentest, PDO::PARAM_INT);
+        $sql->execute();
+
+        $horas = [];
+        foreach ($sql->fetchAll(PDO::FETCH_ASSOC) as $linha) {
+            $horas[(int) $linha['usuario_id']] = (float) $linha['horas'];
+        }
+
+        return $horas;
     }
 
     /**

@@ -147,6 +147,19 @@
 /* Resumo do projeto e anexo do contrato ficam lado a lado: mesma altura nos dois. */
 .campo__textarea--par-dropzone, .campo__dropzone--par-textarea { height: 22rem; box-sizing: border-box; }
 .campo__dropzone--par-textarea { justify-content: center; }
+/* Analistas do pentest com as horas de cada um */
+.analistas-horas:empty { display: none; }
+.analistas-horas { display: flex; flex-direction: column; gap: var(--espaco-xs); }
+.analista-horas { display: flex; align-items: center; gap: var(--espaco-sm); padding: var(--espaco-xs) var(--espaco-sm); border: 1px solid var(--cor-borda-padrao); border-radius: var(--raio-md); background-color: var(--cor-fundo-branco); }
+.analista-horas__nome { flex: 1; min-width: 0; font-size: var(--fonte-apoio); font-weight: 500; color: var(--cor-texto-primario); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.analista-horas__input { width: 12rem; flex: 0 0 auto; height: 3.6rem; }
+.analista-horas__remover { background: none; border: none; cursor: pointer; color: var(--cor-texto-secundario); padding: var(--espaco-xs); display: inline-flex; }
+.analista-horas__remover:hover { color: var(--cor-vermelho-destaque); }
+
+/* Alerta ao vivo de horas (pentests x projeto, analistas x pentest) */
+.resumo-horas { margin: 0; font-size: var(--fonte-legenda); color: var(--cor-texto-secundario); }
+.resumo-horas:empty { display: none; }
+.resumo-horas--excedido { color: var(--cor-vermelho-destaque); font-weight: 600; }
 .campo__contador { align-self: flex-end; font-size: var(--fonte-legenda); color: var(--cor-texto-secundario); }
 
 /* Select / Dropdown Customizado */

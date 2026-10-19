@@ -106,6 +106,7 @@ class ProjetoValidator
 
         return array_map(function ($pentest) {
             $pentest = is_array($pentest) ? $pentest : [];
+            $analistasIds = self::sanitizarIds($pentest['analistas_ids'] ?? []);
 
             return [
                 'tipo_pentest_id' => filter_var($pentest['tipo_pentest_id'] ?? null, FILTER_VALIDATE_INT),
@@ -115,9 +116,37 @@ class ProjetoValidator
                 'escopo' => trim((string) ($pentest['escopo'] ?? '')),
                 'referencia' => trim((string) ($pentest['referencia'] ?? '')) ?: null,
                 'frameworks_ids' => self::sanitizarIds($pentest['frameworks_ids'] ?? []),
-                'analistas_ids' => self::sanitizarIds($pentest['analistas_ids'] ?? []),
+                'analistas_ids' => $analistasIds,
+                'analistas_horas' => self::sanitizarHorasAnalistas($pentest['analistas_horas'] ?? [], $analistasIds),
             ];
         }, array_values($pentests));
+    }
+
+    /**
+     * Horas de cada analista do pentest, chaveadas pelo id do usuário
+     * (analistas_horas[id] = horas em decimal). Vazio vale 0: as horas do
+     * analista podem ficar para depois. Valor inválido ou negativo vira false.
+     */
+    private static function sanitizarHorasAnalistas($horas, array $analistasIds): array
+    {
+        $horas = is_array($horas) ? $horas : [];
+        $limpas = [];
+
+        foreach ($analistasIds as $id) {
+            $valor = trim((string) ($horas[$id] ?? ''));
+            $numero = $valor === '' ? 0.0 : filter_var($valor, FILTER_VALIDATE_FLOAT);
+            $limpas[$id] = ($numero === false || $numero < 0) ? false : (float) $numero;
+        }
+
+        return $limpas;
+    }
+
+    /** 80.5 → "80:30:00", no mesmo formato que o usuário digita na tela. */
+    private static function formatarHoras(float $horas): string
+    {
+        $minutos = (int) round($horas * 60);
+
+        return sprintf('%02d:%02d:00', intdiv($minutos, 60), $minutos % 60);
     }
 
     private static function sanitizarIds($ids): array
@@ -244,6 +273,27 @@ class ProjetoValidator
         }
     }
 
+    /** As horas dos analistas saem das horas do pentest: a soma não pode ultrapassar. */
+    private static function validarHorasAnalistas(array $pentest, array &$erros, string $chave): void
+    {
+        if (in_array(false, $pentest['analistas_horas'], true)) {
+            $erros[$chave] = 'Informe as horas de cada analista no formato hh:mm:ss (ex: 20:00:00); deixe em branco se ainda não estiverem definidas.';
+            return;
+        }
+
+        if ($pentest['horas_contratadas'] === false) {
+            return; // o erro das horas do pentest já aparece no campo dele
+        }
+
+        $soma = array_sum($pentest['analistas_horas']);
+        $tolerancia = 0.01 * (count($pentest['analistas_horas']) + 1); // cada valor chega arredondado em 2 casas
+
+        if ($soma > $pentest['horas_contratadas'] + $tolerancia) {
+            $erros[$chave] = 'A soma das horas dos analistas (' . self::formatarHoras($soma) . ') ultrapassa as horas deste pentest ('
+                . self::formatarHoras($pentest['horas_contratadas']) . '). Reduza as horas de algum analista ou aumente as do pentest.';
+        }
+    }
+
     private static function validarPentests(array $pentests, array &$erros): void
     {
         foreach ($pentests as $indice => $pentest) {
@@ -281,6 +331,8 @@ class ProjetoValidator
 
             if (empty($pentest['analistas_ids'])) {
                 $erros[$campo('analistas_ids')] = 'Adicione ao menos um analista que vai executar este pentest.';
+            } else {
+                self::validarHorasAnalistas($pentest, $erros, $campo('analistas_ids'));
             }
         }
     }
