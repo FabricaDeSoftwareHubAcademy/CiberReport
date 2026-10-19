@@ -7,6 +7,11 @@ $resultadoCadastro = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['action'] ?? '';
 
+    // O modal envia por fetch pedindo JSON: responde com os erros por campo e encerra.
+    if (in_array($acao, ['cadastrar', 'editar'], true) && str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json')) {
+        $controller->salvarJson($acao);
+    }
+
     if ($acao === 'cadastrar') {
         $resultadoCadastro = $controller->cadastrar();
     } elseif ($acao === 'editar') {
@@ -53,7 +58,7 @@ $dadosAndamento = htmlspecialchars(json_encode($controller->listarAndamentoCompl
             <?php $tipoToast = str_starts_with($resultadoCadastro, 'Erro') ? 'erro' : 'sucesso'; ?>
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
-                    exibirToast('<?= $tipoToast ?>', '<?= addslashes($resultadoCadastro) ?>');
+                    exibirToast('<?= $tipoToast ?>', <?= json_encode($resultadoCadastro, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>);
                 });
             </script>
         <?php endif; ?>

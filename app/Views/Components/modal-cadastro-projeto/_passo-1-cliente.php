@@ -35,7 +35,7 @@
                         </button>
                     </div>
                 </div>
-                <span class="campo__mensagem-erro" id="erro-cliente">Selecione um cliente.</span>
+                <span class="campo__mensagem-erro" id="erro-cliente">Selecione o cliente na lista. Se ele ainda não existir, cadastre pelo botão +.</span>
             </div>
             <!-- Nome do Projeto -->
             <div class="campo" id="campo-nome-projeto">
@@ -46,7 +46,7 @@
                     class="campo__input"
                     placeholder="Ex: Pentest WEB - Gazin"
                     maxlength="80">
-                <span class="campo__mensagem-erro" id="erro-nome-projeto">Informe o nome do projeto.</span>
+                <span class="campo__mensagem-erro" id="erro-nome-projeto">Informe o nome do projeto (até 80 caracteres).</span>
             </div>
             <!-- Nível de Sigilo -->
             <div class="campo" id="campo-sigilo">
@@ -59,7 +59,7 @@
                     </select>
                     <i class="fa-solid fa-chevron-down campo__select-seta"></i>
                 </div>
-                <span class="campo__mensagem-erro" id="erro-sigilo">Selecione o nível de sigilo.</span>
+                <span class="campo__mensagem-erro" id="erro-sigilo">Escolha o nível de sigilo: Interno ou Externo.</span>
             </div>
             <!-- Líder Técnico do projeto (combobox, seleção única) -->
             <div class="campo" id="campo-lider">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <span class="campo__mensagem-erro" id="erro-lider">Selecione o líder técnico do projeto.</span>
+                <span class="campo__mensagem-erro" id="erro-lider">Selecione o líder técnico do projeto na lista de pentesters.</span>
             </div>
         </div>
     </div>
@@ -120,6 +120,7 @@
                         <i class="fa-solid fa-calendar"></i>
                     </button>
                 </div>
+                <span class="campo__mensagem-erro" id="erro-data-fim">A data de término deve ser igual ou posterior à data de início.</span>
             </div>
             <!-- Horas totais contratadas -->
             <div class="campo" id="campo-horas-contratadas">
@@ -135,7 +136,7 @@
                         <i class="fa-solid fa-clock"></i>
                     </button>
                 </div>
-                <span class="campo__mensagem-erro" id="erro-horas">Informe as horas contratadas no formato hh:mm:ss (ex: 80:00:00), com minutos e segundos até 59.</span>
+                <span class="campo__mensagem-erro" id="erro-horas">Informe as horas totais no formato hh:mm:ss (ex: 80:00:00), maiores que zero e com minutos e segundos até 59.</span>
             </div>
         </div>
     </div>
@@ -158,7 +159,7 @@
                     maxlength="2000"
                     placeholder="Descreva o objetivo e detalhe do projeto..."></textarea>
                 <span class="campo__contador" id="cp-escopo-contador">0 / 2000</span>
-                <span class="campo__mensagem-erro" id="erro-escopo">O resumo do projeto contratado é obrigatório.</span>
+                <span class="campo__mensagem-erro" id="erro-escopo">Descreva o objetivo do projeto contratado (até 2000 caracteres).</span>
             </div>
             <div class="campo" id="campo-contrato">
                 <label class="campo__label" for="cp-contrato-input">Anexo do contrato</label>
