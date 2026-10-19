@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="campo__mensagem-erro">Selecione ao menos uma metodologia.</span>
             </div>
             <div class="campo" data-campo="escopo">
-                <label class="campo__label campo__label--obrigatorio">Escopo</label>
+                <label class="campo__label campo__label--obrigatorio">Escopo do pentest</label>
                 <textarea class="campo__textarea" rows="4" maxlength="2000" placeholder="Descreva o escopo deste pentest..."></textarea>
                 <span class="campo__contador">0 / 2000</span>
                 <span class="campo__mensagem-erro">O escopo deste pentest é obrigatório.</span>
@@ -1149,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="referencia"] input').value) || '—'}</span>
                     </div>
                     <div class="revisao-campo revisao-campo--full">
-                        <span class="revisao-campo__rotulo">Escopo</span>
+                        <span class="revisao-campo__rotulo">Escopo do pentest</span>
                         <span class="revisao-campo__valor">${escapeHtml(bloco.raiz.querySelector('[data-campo="escopo"] textarea').value) || '—'}</span>
                     </div>
                     <div class="revisao-campo revisao-campo--full">
