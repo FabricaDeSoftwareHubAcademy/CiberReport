@@ -145,8 +145,10 @@
             <i class="fa-solid fa-file-lines modal-secao__titulo-icone"></i>
             Escopo e Contrato
         </h3>
+        <!-- Grade 2x2: cada linha começa na mesma altura nas duas colunas
+             (antes o contador do resumo deslocava Ativos em relação a Restrições). -->
         <div class="modal-grade">
-            <!-- Resumo do projeto contratado (esquerda) -->
+            <!-- Linha 1: Resumo do projeto contratado | Anexo do contrato -->
             <div class="campo" id="campo-escopo">
                 <label class="campo__label campo__label--obrigatorio" for="cp-escopo">Resumo do projeto contratado</label>
                 <textarea id="cp-escopo"
@@ -157,27 +159,9 @@
                     placeholder="Descreva o objetivo e detalhe do projeto..."></textarea>
                 <span class="campo__contador" id="cp-escopo-contador">0 / 2000</span>
                 <span class="campo__mensagem-erro" id="erro-escopo">O resumo do projeto contratado é obrigatório.</span>
-                <!-- Alvos/IPs/URL/Domínio -->
-                <div class="campo" style="margin-top: var(--espaco-md)">
-                    <label class="campo__label" for="cp-alvo-input">Ativos/Alvos/IPs/URL/Domínio</label>
-                    <div class="campo__multi">
-                        <div class="campo__multi-busca">
-                            <input type="text"
-                                id="cp-alvo-input"
-                                class="campo__multi-input"
-                                placeholder="Ex: 192.168.0.1, app.cliente.com.br">
-                            <button type="button" id="cp-alvo-add" class="campo__botao-adicionar campo__botao-adicionar--texto">
-                                Adicionar
-                            </button>
-                        </div>
-                        <div class="campo__multi-chips" id="cp-alvos-chips" aria-label="Alvos adicionados"></div>
-                    </div>
-                </div>
             </div>
-            <!-- Contrato + Restrições (direita) -->
-            <div class="campo">
-                <label class="campo__label" style="display:block; margin-bottom: var(--espaco-xs)">Anexo do contrato</label>
-                <!-- Dropzone -->
+            <div class="campo" id="campo-contrato">
+                <label class="campo__label" for="cp-contrato-input">Anexo do contrato</label>
                 <div class="campo__dropzone campo__dropzone--par-textarea" id="cp-dropzone" role="button" tabindex="0" aria-label="Arraste ou selecione o contrato PDF">
                     <i class="fa-solid fa-cloud-arrow-down campo__dropzone-icone"></i>
                     <p class="campo__dropzone-titulo" id="cp-dropzone-texto">Arraste e solte seu arquivo aqui</p>
@@ -185,17 +169,32 @@
                     <label class="campo__dropzone-botao" for="cp-contrato-input" style="cursor:pointer">Selecionar Arquivo</label>
                     <input type="file" id="cp-contrato-input" name="contrato" class="campo__dropzone-input" accept="application/pdf">
                 </div>
-                <!-- Restrições -->
-                <div class="campo" style="margin-top: var(--espaco-md)">
-                    <label class="campo__label" for="cp-restricao">Restrições</label>
-                    <textarea id="cp-restricao"
-                        name="restricao"
-                        class="campo__textarea"
-                        rows="5"
-                        maxlength="2000"
-                        placeholder="Descreva as restrições..."></textarea>
-                    <span class="campo__contador" id="cp-restricao-contador">0 / 2000</span>
+            </div>
+            <!-- Linha 2: Ativos | Restrições -->
+            <div class="campo">
+                <label class="campo__label" for="cp-alvo-input">Ativos/Alvos/IPs/URL/Domínio</label>
+                <div class="campo__multi">
+                    <div class="campo__multi-busca">
+                        <input type="text"
+                            id="cp-alvo-input"
+                            class="campo__multi-input"
+                            placeholder="Ex: 192.168.0.1, app.cliente.com.br">
+                        <button type="button" id="cp-alvo-add" class="campo__botao-adicionar campo__botao-adicionar--texto">
+                            Adicionar
+                        </button>
+                    </div>
+                    <div class="campo__multi-chips" id="cp-alvos-chips" aria-label="Alvos adicionados"></div>
                 </div>
+            </div>
+            <div class="campo">
+                <label class="campo__label" for="cp-restricao">Restrições</label>
+                <textarea id="cp-restricao"
+                    name="restricao"
+                    class="campo__textarea"
+                    rows="5"
+                    maxlength="2000"
+                    placeholder="Descreva as restrições..."></textarea>
+                <span class="campo__contador" id="cp-restricao-contador">0 / 2000</span>
             </div>
         </div>
     </div>
